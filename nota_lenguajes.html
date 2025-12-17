@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Porcentajes de Evaluación</title>
+    <style>
+        /* --- Reset y Variables --- */
+        :root {
+            --primary-color: #2563eb; /* Azul académico */
+            --secondary-color: #1e40af;
+            --accent-color: #f59e0b; /* Color para destacados */
+            --bg-color: #f3f4f6;
+            --card-bg: #ffffff;
+            --text-main: #1f2937;
+            --text-light: #6b7280;
+            --success-color: #10b981;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* --- Cabecera y Navegación --- */
+        header {
+            background-color: var(--card-bg);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            padding: 1rem 1.5rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-container {
+            max-width: 900px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        h1 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--secondary-color);
+        }
+
+        .btn-volver {
+            background-color: var(--primary-color);
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: background-color 0.2s;
+        }
+
+        .btn-volver:hover {
+            background-color: var(--secondary-color);
+        }
+
+        /* --- Contenido Principal --- */
+        main {
+            flex: 1;
+            padding: 2rem 1rem;
+            width: 100%;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--text-main);
+            border-bottom: 2px solid var(--bg-color);
+            padding-bottom: 0.5rem;
+        }
+
+        /* --- Estilos de la Lista de Evaluación --- */
+        .eval-list {
+            list-style: none;
+        }
+
+        .eval-item {
+            margin-bottom: 1.5rem;
+        }
+
+        .item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 0.5rem;
+        }
+
+        .item-name {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .item-percentage {
+            font-weight: 700;
+            color: var(--primary-color);
+            font-size: 1.2rem;
+        }
+
+        /* Barras de progreso */
+        .progress-bg {
+            background-color: #e5e7eb;
+            height: 10px;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background-color: var(--primary-color);
+            border-radius: 5px;
+        }
+
+        /* Colores específicos para variedad */
+        .fill-70 { width: 70%; background-color: var(--primary-color); }
+        .fill-20 { width: 20%; background-color: var(--success-color); }
+        .fill-10 { width: 10%; background-color: var(--accent-color); }
+
+        /* --- Caja de Información Especial (Examen Final) --- */
+        .info-box {
+            background-color: #eff6ff; /* Azul muy claro */
+            border-left: 5px solid var(--primary-color);
+            padding: 1.5rem;
+            border-radius: 0 8px 8px 0;
+            margin-top: 2rem;
+        }
+
+        .info-box h3 {
+            color: var(--secondary-color);
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .info-box p {
+            color: var(--text-main);
+            font-size: 0.95rem;
+        }
+
+        .highlight {
+            font-weight: bold;
+            color: var(--secondary-color);
+        }
+
+        /* --- Pie de Página --- */
+        footer {
+            text-align: center;
+            padding: 1.5rem;
+            color: var(--text-light);
+            font-size: 0.85rem;
+            border-top: 1px solid #e5e7eb;
+            margin-top: auto;
+        }
+
+        /* --- Responsive --- */
+        @media (max-width: 600px) {
+            h1 { font-size: 1.1rem; }
+            .card { padding: 1.5rem; }
+            .section-title { font-size: 1.25rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="nav-container">
+            <h1>Porcentajes de Evaluación</h1>
+            <a href="index.html" class="btn-volver" aria-label="Volver al inicio">&#8592; Volver</a>
+        </div>
+    </header>
+
+    <main>
+        <article class="card">
+            <h2 class="section-title">Evaluación Continua - Lenguajes Formales y Automatas</h2>
+            <p style="margin-bottom: 1.5rem; color: var(--text-light);">Desglose de la nota final acumulativa (Total: 100%)</p>
+            
+            <ul class="eval-list">
+                <li class="eval-item">
+                    <div class="item-header">
+                        <span class="item-name">Primero + Segundo Parcial</span>
+                        <span class="item-percentage">70%</span>
+                    </div>
+                    <div class="progress-bg">
+                        <div class="progress-fill fill-70"></div>
+                    </div>
+                </li>
+
+                <li class="eval-item">
+                    <div class="item-header">
+                        <span class="item-name">Presentación en Grupo</span>
+                        <span class="item-percentage">20%</span>
+                    </div>
+                    <div class="progress-bg">
+                        <div class="progress-fill fill-20"></div>
+                    </div>
+                </li>
+
+                <li class="eval-item">
+                    <div class="item-header">
+                        <span class="item-name">Los 4 Retos</span>
+                        <span class="item-percentage">10%</span>
+                    </div>
+                    <div class="progress-bg">
+                        <div class="progress-fill fill-10"></div>
+                    </div>
+                </li>
+            </ul>
+        </article>
+
+        <section class="info-box">
+            <h3>&#9888; Información sobre el Examen Final</h3>
+            <p>
+                El <strong>Examen Final</strong> tiene una ponderación del <span class="highlight">70%</span>. 
+                <br><br>
+                <em>Nota importante:</em> Esta calificación <strong>substituye</strong> a la nota obtenida en los parciales (Evaluación Continua) en caso de presentarse a esta modalidad o recuperación.
+            </p>
+        </section>
+
+    </main>
+
+    <footer>
+        <p>&copy; 2024 - Información Académica</p>
+    </footer>
+
+</body>
+</html>

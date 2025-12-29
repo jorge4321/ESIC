@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Explicación de la Jerarquía de Chomsky, Alfabetos y Lenguajes Formales">
+    <title>Jerarquía de Chomsky y Lenguajes Formales</title>
+    <style>
+        /* --- VARIABLES DE DISEÑO --- */
+        :root {
+            --primary: #1a252f;    /* Azul oscuro noche */
+            --secondary: #2980b9;  /* Azul brillante */
+            --accent: #e74c3c;     /* Rojo para énfasis */
+            --light-bg: #ecf0f1;   /* Gris claro fondo */
+            --white: #ffffff;
+            --code-bg: #f8f9fa;
+            --border-radius: 8px;
+            --box-shadow: 0 4px 6px rgba(0,0,0,0.08);
+        }
+
+        /* --- RESET BÁSICO --- */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--light-bg);
+            color: #333;
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* --- ENCABEZADO (HEADER) --- */
+        header {
+            background-color: var(--primary);
+            color: var(--white);
+            padding: 1rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+
+        header h1 {
+            font-size: 1.4rem;
+            font-weight: 600;
+        }
+
+        /* Botón Volver */
+        .btn-volver {
+            background-color: rgba(255,255,255,0.15);
+            color: var(--white);
+            padding: 0.5rem 1rem;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            border: 1px solid rgba(255,255,255,0.2);
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .btn-volver:hover {
+            background-color: var(--accent);
+            border-color: var(--accent);
+        }
+
+        /* --- CONTENIDO PRINCIPAL --- */
+        main {
+            flex: 1;
+            width: 100%;
+            max-width: 1100px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+
+        /* --- TARJETAS DE CONTENIDO --- */
+        article {
+            background: var(--white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 2rem;
+            border-top: 4px solid var(--secondary);
+        }
+
+        h2 {
+            color: var(--primary);
+            border-bottom: 2px solid var(--light-bg);
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+        }
+
+        h3 {
+            color: var(--secondary);
+            margin: 1.5rem 0 0.5rem 0;
+            font-size: 1.2rem;
+        }
+
+        p {
+            margin-bottom: 1rem;
+            text-align: justify;
+        }
+
+        /* Estilos para notación matemática/lógica */
+        .math {
+            font-family: "Consolas", "Monaco", "Courier New", monospace;
+            background-color: var(--code-bg);
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: #c0392b; /* Rojo oscuro para símbolos */
+            font-weight: bold;
+        }
+
+        /* --- LISTAS DE DEFINICIONES --- */
+        dl {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        dt {
+            font-weight: bold;
+            color: var(--primary);
+            min-width: 120px;
+        }
+
+        dd {
+            margin-left: 0;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 0.5rem;
+        }
+
+        /* --- TABLA JERARQUÍA --- */
+        .table-wrapper {
+            overflow-x: auto;
+            margin-top: 1rem;
+            border-radius: var(--border-radius);
+            border: 1px solid #ddd;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 600px;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: var(--primary);
+            color: var(--white);
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 0.5px;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+
+        tr:hover {
+            background-color: #e8f4f8;
+        }
+
+        /* Etiquetas visuales para los tipos */
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            color: white;
+            text-align: center;
+            min-width: 60px;
+        }
+        .type-0 { background-color: #95a5a6; } /* Gris */
+        .type-1 { background-color: #f39c12; } /* Naranja */
+        .type-2 { background-color: #3498db; } /* Azul */
+        .type-3 { background-color: #2ecc71; } /* Verde */
+
+        /* --- VISUALIZACIÓN DE CONJUNTOS (Círculos concéntricos CSS) --- */
+        .hierarchy-visual {
+            margin: 2rem auto;
+            position: relative;
+            height: 300px;
+            max-width: 500px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .circle {
+            position: absolute;
+            border-radius: 50%;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            padding-top: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+        
+        .circle:hover { transform: scale(1.02); }
+
+        .c0 { width: 100%; height: 100%; background: #dfe6e9; color: #2d3436; z-index: 1; border: 1px solid #b2bec3; }
+        .c1 { width: 80%; height: 80%; background: #ffeaa7; color: #d35400; z-index: 2; top: 10%; border: 1px solid #fdcb6e; }
+        .c2 { width: 60%; height: 60%; background: #74b9ff; color: #0984e3; z-index: 3; top: 20%; border: 1px solid #0984e3; }
+        .c3 { width: 40%; height: 40%; background: #55efc4; color: #00b894; z-index: 4; top: 30%; border: 1px solid #00b894; align-items: center; padding-top: 0;}
+
+        .label { font-size: 0.85rem; font-weight: bold; text-align: center;}
+
+        /* --- FOOTER --- */
+        footer {
+            background-color: var(--primary);
+            color: rgba(255,255,255,0.7);
+            text-align: center;
+            padding: 1.5rem;
+            margin-top: auto;
+            font-size: 0.85rem;
+        }
+
+        /* --- RESPONSIVE --- */
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+            
+            dl {
+                grid-template-columns: 1fr;
+            }
+            
+            dt {
+                border-bottom: none;
+                margin-bottom: 0.2rem;
+                text-decoration: underline;
+                text-decoration-color: var(--secondary);
+            }
+            
+            .hierarchy-visual {
+                height: 250px; /* Más pequeño en móviles */
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1 id="top">Teoría de Lenguajes Formales</h1>
+        <a href="javascript:history.back()" class="btn-volver" aria-label="Volver a la página anterior">&#8592; Volver</a>
+    </header>
+
+    <main>
+        
+        <article>
+            <h2>1. Conceptos Fundamentales</h2>
+            <p>Antes de abordar la jerarquía, es necesario definir formalmente los elementos constitutivos de un lenguaje.</p>
+            
+            <dl>
+                <dt>Alfabeto (<span class="math">&Sigma;</span>)</dt>
+                <dd>Un conjunto finito y no vacío de símbolos. <br>
+                    Ejemplo binario: <span class="math">&Sigma; = {0, 1}</span><br>
+                    Ejemplo español: <span class="math">&Sigma; = {a, b, c, ..., z}</span>
+                </dd>
+
+                <dt>Cadena (<span class="math">w</span>)</dt>
+                <dd>Una secuencia finita de símbolos tomados de un alfabeto.<br>
+                    Ejemplo: Si <span class="math">&Sigma; = {0, 1}</span>, entonces <span class="math">w = 0010</span> es una cadena.
+                </dd>
+
+                <dt>Longitud (<span class="math">|w|</span>)</dt>
+                <dd>El número de símbolos que contiene una cadena.<br>
+                    Ejemplo: Si <span class="math">w = hola</span>, entonces <span class="math">|w| = 4</span>.
+                </dd>
+
+                <dt>Cadena Vacía (<span class="math">&epsilon;</span> o <span class="math">&lambda;</span>)</dt>
+                <dd>Es la cadena que no contiene símbolos. Su longitud es 0. Es el elemento neutro de la concatenación.</dd>
+
+                <dt>Lenguaje (<span class="math">L</span>)</dt>
+                <dd>Un conjunto de cadenas formadas sobre un alfabeto <span class="math">&Sigma;</span>. Un lenguaje puede ser finito o infinito.</dd>
+            </dl>
+        </article>
+
+        <article>
+            <h2>2. Operaciones Básicas sobre Lenguajes</h2>
+            <p>Dados dos lenguajes A y B, podemos realizar las siguientes operaciones:</p>
+
+            <h3>Concatenación (<span class="math">A &sdot; B</span>)</h3>
+            <p>Combina cadenas de A con cadenas de B. <br>
+            <span class="math">A &sdot; B = {xy | x &isin; A, y &isin; B}</span></p>
+
+            <h3>Unión (<span class="math">A &cup; B</span>)</h3>
+            <p>El conjunto de cadenas que pertenecen a A o pertenecen a B.</p>
+
+            <h3>Cierre de Kleene o Estrella (<span class="math">&Sigma;*</span>)</h3>
+            <p>Representa el conjunto de todas las cadenas posibles (de cualquier longitud, incluida la vacía) que se pueden formar con los símbolos de un alfabeto.<br>
+            <span class="math">A* = &cup;<sub>i=0</sub><sup>&infin;</sup> A<sup>i</sup></span> (Unión de la potencia 0 hasta infinito).</p>
+
+            <h3>Cierre Positivo (<span class="math">&Sigma;+</span>)</h3>
+            <p>Similar al Cierre de Kleene, pero excluye la cadena vacía (a menos que el lenguaje original ya la contenga). <br>
+            <span class="math">A+ = A* - {&epsilon;}</span> (Generalmente).</p>
+        </article>
+
+        <article>
+            <h2>3. La Jerarquía de Chomsky</h2>
+            <p>Propuesta por Noam Chomsky en 1956, clasifica las gramáticas formales en cuatro niveles según sus restricciones generativas. Cada nivel es un subconjunto estricto del nivel superior.</p>
+
+            <div class="hierarchy-visual">
+                <div class="circle c0">
+                    <span class="label">Tipo 0<br>Recursivamente<br>Enumerables</span>
+                    <div class="circle c1">
+                        <span class="label">Tipo 1<br>Sensibles al<br>Contexto</span>
+                        <div class="circle c2">
+                            <span class="label">Tipo 2<br>Libres de<br>Contexto</span>
+                            <div class="circle c3">
+                                <span class="label">Tipo 3<br>Regulares</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Nivel</th>
+                            <th>Nombre del Lenguaje</th>
+                            <th>Autómata que lo reconoce</th>
+                            <th>Restricciones de Producción</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="badge type-3">Tipo 3</span></td>
+                            <td><strong>Regulares</strong></td>
+                            <td>Autómata Finito (Determinista o No Determinista)</td>
+                            <td>
+                                <span class="math">A &rarr; a</span> o <span class="math">A &rarr; aB</span><br>
+                                (Lado izquierdo un no-terminal, lado derecho un terminal seguido opcionalmente de un no-terminal).
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><span class="badge type-2">Tipo 2</span></td>
+                            <td><strong>Libres de Contexto</strong> (Independientes del contexto)</td>
+                            <td>Autómata de Pila (Pushdown)</td>
+                            <td>
+                                <span class="math">A &rarr; &gamma;</span><br>
+                                (Lado izquierdo debe ser un único no-terminal. El derecho puede ser cualquier combinación).
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><span class="badge type-1">Tipo 1</span></td>
+                            <td><strong>Sensibles al Contexto</strong></td>
+                            <td>Autómata Linealmente Acotado</td>
+                            <td>
+                                <span class="math">&alpha;A&beta; &rarr; &alpha;&gamma;&beta;</span><br>
+                                (La longitud del lado derecho es mayor o igual que la del izquierdo: <span class="math">|izq| &le; |der|</span>).
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><span class="badge type-0">Tipo 0</span></td>
+                            <td><strong>Recursivamente Enumerables</strong> (Sin restricciones)</td>
+                            <td>Máquina de Turing</td>
+                            <td>
+                                Sin restricciones estrictas (mientras el lado izquierdo no sea vacío).
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <p style="margin-top: 1rem; font-size: 0.9rem; color: #666;">
+                <em>Nota: En la notación, las mayúsculas (A, B) representan símbolos No-Terminales, las minúsculas (a, b) símbolos Terminales, y las letras griegas (&alpha;, &beta;, &gamma;) cadenas de terminales y no-terminales.</em>
+            </p>
+        </article>
+
+    </main>
+
+    <footer>
+        <p>Generado para fines educativos &copy; 2025. HTML5 Semántico y CSS3.</p>
+    </footer>
+
+</body>
+</html>

@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Diferencias entre Autómatas Finitos Deterministas (AFD) y No Deterministas (AFN)">
+    <title>AFD vs AFN: Determinismo y Ambigüedad</title>
+    <style>
+        /* --- ESTÉTICA UNIFICADA --- */
+        :root {
+            --primary: #2c3e50;    /* Azul oscuro base */
+            --dfa: #2980b9;        /* Azul (Orden/Determinismo) */
+            --nfa: #e74c3c;        /* Rojo (Caos/No-determinismo) */
+            --white: #ffffff;
+            --light-bg: #f4f6f7;
+            --code-bg: #ecf0f1;
+            --radius: 8px;
+            --shadow: 0 4px 10px rgba(0,0,0,0.08);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--light-bg);
+            color: #333;
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* --- HEADER --- */
+        header {
+            background-color: var(--primary);
+            color: var(--white);
+            padding: 1rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        header h1 { font-size: 1.3rem; font-weight: 600; }
+
+        .btn-volver {
+            background-color: rgba(255,255,255,0.15);
+            color: var(--white);
+            padding: 0.5rem 1rem;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            border: 1px solid rgba(255,255,255,0.2);
+            transition: all 0.3s ease;
+        }
+
+        .btn-volver:hover {
+            background-color: var(--dfa);
+        }
+
+        /* --- LAYOUT --- */
+        main {
+            flex: 1;
+            width: 100%;
+            max-width: 1100px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+            display: grid;
+            gap: 2rem;
+        }
+
+        /* Grid de 2 columnas para comparación */
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .full-width { grid-column: 1 / -1; }
+
+        section {
+            background: var(--white);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 2rem;
+            border-top: 5px solid #ccc;
+        }
+
+        h2 {
+            margin-bottom: 1rem;
+            font-size: 1.4rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        p { margin-bottom: 1rem; text-align: justify; }
+
+        /* --- VISUALIZACIÓN DE AUTÓMATAS (CSS DRAWING) --- */
+        .automaton-canvas {
+            height: 200px;
+            background-color: var(--light-bg);
+            border-radius: var(--radius);
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center; /* Centrar contenido */
+            overflow: hidden;
+            margin-bottom: 1rem;
+            border: 1px dashed #ccc;
+        }
+
+        /* Nodos (Estados) */
+        .state {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: white;
+            border: 2px solid #333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            z-index: 2;
+            position: relative;
+        }
+
+        /* Estilos específicos */
+        .dfa-style .state { border-color: var(--dfa); color: var(--dfa); }
+        .nfa-style .state { border-color: var(--nfa); color: var(--nfa); }
+
+        /* Flechas y Conectores */
+        .connector {
+            height: 2px;
+            background-color: #333;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .connector::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: -4px;
+            border-left: 6px solid #333;
+            border-top: 5px solid transparent;
+            border-bottom: 5px solid transparent;
+        }
+
+        .label {
+            position: absolute;
+            top: -20px;
+            font-family: monospace;
+            font-weight: bold;
+            background: var(--light-bg);
+            padding: 0 4px;
+        }
+
+        /* --- ESCENA AFD (Lineal) --- */
+        .scene-dfa { width: 100%; display: flex; justify-content: center; align-items: center; gap: 0; }
+        .connector.straight { width: 100px; }
+
+        /* --- ESCENA AFN (Ramificada) --- */
+        .scene-nfa { position: relative; width: 250px; height: 150px; }
+        
+        /* Nodo inicial */
+        .q0-nfa { position: absolute; left: 0; top: 50%; transform: translateY(-50%); }
+        
+        /* Nodos destino */
+        .q1-nfa { position: absolute; right: 0; top: 10px; }
+        .q2-nfa { position: absolute; right: 0; bottom: 10px; }
+
+        /* Ramas */
+        .branch-up {
+            position: absolute;
+            width: 130px;
+            height: 2px;
+            background: var(--nfa);
+            top: 40%;
+            left: 55px;
+            transform: rotate(-25deg);
+            transform-origin: left center;
+        }
+        .branch-down {
+            position: absolute;
+            width: 130px;
+            height: 2px;
+            background: var(--nfa);
+            top: 60%;
+            left: 55px;
+            transform: rotate(25deg);
+            transform-origin: left center;
+        }
+        /* Flechas en ramas */
+        .branch-up::after, .branch-down::after {
+            content: ''; position: absolute; right: 0; top: -4px;
+            border-left: 6px solid var(--nfa);
+            border-top: 5px solid transparent; border-bottom: 5px solid transparent;
+        }
+
+        /* --- TABLAS COMPARATIVAS --- */
+        .math-box {
+            font-family: "Consolas", monospace;
+            background-color: var(--code-bg);
+            padding: 10px;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            margin-top: auto; /* Empujar abajo en flex container */
+        }
+
+        /* Badge visual */
+        .badge {
+            font-size: 0.7rem;
+            padding: 3px 8px;
+            border-radius: 12px;
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* --- RESPONSIVE --- */
+        @media (max-width: 768px) {
+            .comparison-grid { grid-template-columns: 1fr; }
+            .scene-nfa { width: 100%; transform: scale(0.9); }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Autómatas: AFD vs. AFN</h1>
+        <a href="javascript:history.back()" class="btn-volver">&#8592; Volver</a>
+    </header>
+
+    <main>
+
+        <section class="full-width">
+            <h2>El Concepto de Determinismo</h2>
+            <p>En la teoría de autómatas, la diferencia fundamental radica en la <strong>capacidad de predicción</strong>. ¿Sabemos exactamente a qué estado vamos con una entrada específica, o tenemos múltiples opciones?</p>
+        </section>
+
+        <div class="comparison-grid">
+            
+            <section style="border-top-color: var(--dfa);" class="dfa-style">
+                <h2>
+                    AFD
+                    <span class="badge" style="background: var(--dfa);">Determinista</span>
+                </h2>
+                <p>Para cada estado y cada símbolo de entrada, existe <strong>exactamente una</strong> transición posible.</p>
+                
+                <div class="automaton-canvas">
+                    <div class="scene-dfa">
+                        <div class="state">A</div>
+                        <div class="connector straight">
+                            <span class="label">1</span>
+                        </div>
+                        <div class="state">B</div>
+                    </div>
+                </div>
+                <p style="font-size: 0.9rem; color: #666; text-align: center;">
+                    <em>"Si estoy en A y llega un 1, voy a B. No hay duda."</em>
+                </p>
+
+                <div class="math-box">
+                    <strong>Función de Transición (&delta;):</strong><br>
+                    &delta;(estado, símbolo) = <strong>estado</strong><br>
+                    Devuelve un único elemento.
+                </div>
+            </section>
+
+            <section style="border-top-color: var(--nfa);" class="nfa-style">
+                <h2>
+                    AFN
+                    <span class="badge" style="background: var(--nfa);">No Determinista</span>
+                </h2>
+                <p>Para un estado y un símbolo, pueden existir <strong>cero, una o múltiples</strong> transiciones. También permite transiciones vacías (&epsilon;).</p>
+
+                <div class="automaton-canvas">
+                    <div class="scene-nfa">
+                        <div class="state q0-nfa">A</div>
+                        
+                        <div class="branch-up"><span class="label" style="transform: rotate(25deg); top: -25px;">1</span></div>
+                        <div class="branch-down"><span class="label" style="transform: rotate(-25deg);">1</span></div>
+
+                        <div class="state q1-nfa">B</div>
+                        <div class="state q2-nfa">C</div>
+                    </div>
+                </div>
+                <p style="font-size: 0.9rem; color: #666; text-align: center;">
+                    <em>"Si estoy en A y llega un 1, puedo ir a B <strong>O</strong> a C."</em>
+                </p>
+
+                <div class="math-box">
+                    <strong>Función de Transición (&delta;):</strong><br>
+                    &delta;(estado, símbolo) = <strong>{conjunto}</strong><br>
+                    Devuelve un subconjunto de estados (Potencia).
+                </div>
+            </section>
+        </div>
+
+        <section class="full-width">
+            <h2>Equivalencia y Conversión</h2>
+            <p>A pesar de la flexibilidad del AFN, ambos tienen la <strong>misma capacidad computacional</strong>. Todo lenguaje reconocido por un AFN puede ser reconocido por un AFD.</p>
+            
+            <div style="background-color: #fff8e1; border-left: 5px solid #ffc107; padding: 1rem; border-radius: 4px;">
+                <strong>Teorema de Equivalencia:</strong><br>
+                Para todo AFN existe un AFD equivalente. Sin embargo, la conversión puede resultar en una explosión exponencial de estados. Si el AFN tiene <em>n</em> estados, el AFD podría llegar a tener <em>2<sup>n</sup></em> estados.
+            </div>
+
+            <h3 style="margin-top: 1.5rem; color: var(--primary);">¿Por qué usar AFN?</h3>
+            <ul style="padding-left: 1.5rem;">
+                <li>Son mucho más <strong>fáciles de diseñar</strong> para los humanos (podemos "adivinar" caminos).</li>
+                <li>Son más compactos (menos estados para representar la misma lógica).</li>
+                <li>Son el paso intermedio estándar para convertir Expresiones Regulares a Autómatas.</li>
+            </ul>
+        </section>
+
+    </main>
+
+    <footer>
+        <p>Prof. Jorge López-Cifre, PhD &copy; 2025</p>
+    </footer>
+
+</body>
+</html>

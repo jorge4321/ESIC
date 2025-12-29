@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cronograma del Curso - Teoría de la Computación</title>
+    <style>
+        /* --- RESET Y VARIABLES --- */
+        :root {
+            --primary-color: #2c3e50;
+            --accent-color: #3498db;
+            --secondary-color: #ecf0f1;
+            --text-color: #333;
+            --light-text: #666;
+            --success-color: #27ae60;
+            --warning-color: #e67e22;
+            --font-main: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            --shadow: 0 4px 6px rgba(0,0,0,0.1);
+            --radius: 8px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-main);
+            background-color: #f4f7f6;
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        /* --- HEADER --- */
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow);
+        }
+
+        header h1 {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .btn-volver {
+            background-color: var(--accent-color);
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1.2rem;
+            border-radius: var(--radius);
+            font-weight: bold;
+            transition: background 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .btn-volver:hover {
+            background-color: #2980b9;
+        }
+
+        /* --- CONTENEDOR PRINCIPAL --- */
+        main {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .intro-text {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: var(--light-text);
+        }
+
+        /* --- GRID LAYOUT --- */
+        .schedule-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        /* --- TARJETAS DE BLOQUES --- */
+        .block-card {
+            background: white;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            border-top: 5px solid var(--accent-color);
+        }
+
+        /* Colores específicos para bordes de bloques */
+        .block-1 { border-color: var(--accent-color); }
+        .block-2 { border-color: var(--success-color); }
+        .block-3 { border-color: var(--warning-color); }
+        .block-4 { border-color: #8e44ad; }
+
+        .block-header {
+            padding: 1.5rem;
+            background-color: rgba(0,0,0,0.02);
+            border-bottom: 1px solid #eee;
+        }
+
+        .block-header h2 {
+            font-size: 1.25rem;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .block-desc {
+            font-size: 0.9rem;
+            color: var(--light-text);
+            font-style: italic;
+        }
+
+        .block-content {
+            padding: 1.5rem;
+        }
+
+        /* --- SEMANAS --- */
+        .week-item {
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .week-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .week-title {
+            font-weight: bold;
+            color: var(--primary-color);
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 1.05rem;
+        }
+
+        .week-details {
+            list-style-type: none;
+        }
+
+        .week-details li {
+            position: relative;
+            padding-left: 1.2rem;
+            margin-bottom: 0.3rem;
+            font-size: 0.95rem;
+            color: #555;
+        }
+
+        .week-details li::before {
+            content: "•";
+            color: var(--accent-color);
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+        }
+
+        /* --- FINAL EVENT (Semana 14-15) --- */
+        .final-event {
+            grid-column: 1 / -1; /* Ocupa todo el ancho */
+            background: linear-gradient(135deg, var(--primary-color), #34495e);
+            color: white;
+            padding: 2rem;
+            border-radius: var(--radius);
+            text-align: center;
+            margin-top: 2rem;
+            box-shadow: var(--shadow);
+        }
+
+        .final-event h2 {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .final-event p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: var(--light-text);
+            font-size: 0.8rem;
+            margin-top: 2rem;
+            border-top: 1px solid #eee;
+        }
+
+        /* --- RESPONSIVE --- */
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+            
+            .schedule-grid {
+                grid-template-columns: 1fr; /* Una sola columna en móvil */
+            }
+
+            .final-event {
+                padding: 1.5rem;
+            }
+
+            .final-event h2 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Planificación Académica</h1>
+        <a href="index.html" class="btn-volver" aria-label="Volver a la página principal">← Volver</a>
+    </header>
+
+    <main>
+        <div class="intro-text">
+            <p>Cronograma detallado del curso de 15 semanas. <br>Las primeras 13 semanas cubren el contenido teórico-práctico y las últimas 2 se dedican a evaluaciones.</p>
+        </div>
+
+        <div class="schedule-grid">
+
+            <article class="block-card block-1">
+                <div class="block-header">
+                    <h2>Bloque 1: Fundamentos y Lenguajes</h2>
+                    <p class="block-desc">Introductorio: Vocabulario matemático y bases teóricas.</p>
+                </div>
+                <div class="block-content">
+                    <div class="week-item">
+                        <span class="week-title">Semana 1: Introducción y Jerarquía de Chomsky</span>
+                        <ul class="week-details">
+                            <li>Definición de alfabetos, cadenas y operaciones básicas.</li>
+                            <li>Concatenación y clausura de Kleene.</li>
+                            <li>Mapa visual de la Jerarquía de Chomsky (Tipos 0-3).</li>
+                            <li>Reglas de producción y derivaciones.</li>
+                        </ul>
+                    </div>
+                </div>
+            </article>
+
+            <article class="block-card block-2">
+                <div class="block-header">
+                    <h2>Bloque 2: El Nivel Regular</h2>
+                    <p class="block-desc">Diseño de circuitos, búsqueda de texto y autómatas finitos.</p>
+                </div>
+                <div class="block-content">
+                    <div class="week-item">
+                        <span class="week-title">Semana 2: Máquinas Secuenciales</span>
+                        <ul class="week-details">
+                            <li>Concepto de estado como memoria.</li>
+                            <li>Máquinas de Mealy y Moore.</li>
+                            <li>Modelado real: semáforos, ascensores.</li>
+                        </ul>
+                    </div>
+                    <div class="week-item">
+                        <span class="week-title">Semana 3: Autómatas Finitos</span>
+                        <ul class="week-details">
+                            <li>Autómatas Finitos Deterministas (AFD) y No Deterministas (AFN).</li>
+                            <li>Caminos únicos vs. múltiples.</li>
+                        </ul>
+                    </div>
+                    <div class="week-item">
+                        <span class="week-title">Semana 4: Optimización</span>
+                        <ul class="week-details">
+                            <li>Conversión de AFN a AFD.</li>
+                            <li>Minimización de estados.</li>
+                            <li>Diseño de reconocedores (emails, fechas).</li>
+                        </ul>
+                    </div>
+                    <div class="week-item">
+                        <span class="week-title">Semana 5: Expresiones Regulares</span>
+                        <ul class="week-details">
+                            <li>Álgebra Regex y uso en programación.</li>
+                            <li>Equivalencia entre Autómatas y Regex.</li>
+                        </ul>
+                    </div>
+                    <div class="week-item">
+                        <span class="week-title">Semana 6: Límites</span>
+                        <ul class="week-details">
+                            <li>Propiedades de Clausura.</li>
+                            <li>Lema de Bombeo (Pumping Lemma).</li>
+                        </ul>
+                    </div>
+                </div>
+            </article>
+
+            <article class="block-card block-3">
+                <div class="block-header">
+                    <h2>Bloque 3: Nivel Independiente del Contexto</h2>
+                    <p class="block-desc">Estructuras anidadas, sintaxis y compiladores.</p>
+                </div>
+                <div class="block-content">
+                    <div class="week-item">
+                        <span class="week-title">Semana 7: Gramáticas (GIC)</span>
+                        <ul class="week-details">
+                            <li>Sintaxis y Forma Backus-Naur (BNF).</li>
+                            <li>Derivaciones de gramáticas.</li>
+                        </ul>
+                    </div>
+                    <div class="week-item">
+                        <span class="week-title">Semana 8: Análisis Sintáctico</span>
+                        <ul class="week-details">
+                            <li>Árboles de derivación (Parsing).</li>
+                            <li>Ambigüedad y su impacto en compiladores.</li>
+                        </ul>
+                    </div>
+                    <div class="week-item">
+                        <span class="week-title">Semana 9: Autómatas a Pila</span>
+                        <ul class="week-details">
+                            <li>Memoria LIFO (Pushdown Automata).</li>
+                            <li>Reconocimiento de palíndromos y paréntesis.</li>
+                        </ul>
+                    </div>
+                    <div class="week-item">
+                        <span class="week-title">Semana 10: Equivalencias</span>
+                        <ul class="week-details">
+                            <li>Equivalencia entre GIC y Autómatas a Pila.</li>
+                            <li>Repaso del bloque.</li>
+                        </ul>
+                    </div>
+                </div>
+            </article>
+
+            <article class="block-card block-4">
+                <div class="block-header">
+                    <h2>Bloque 4: Computación Universal</h2>
+                    <p class="block-desc">Abstracción y límites de la computabilidad.</p>
+                </div>
+                <div class="block-content">
+                    <div class="week-item">
+                        <span class="week-title">Semana 11: Máquinas de Turing</span>
+                        <ul class="week-details">
+                            <li>Arquitectura: Cinta infinita y cabezal.</li>
+                            <li>Ejemplos de computación básica.</li>
+                        </ul>
+                    </div>
+                    <div class="week-item">
+                        <span class="week-title">Semana 12: La Máquina Universal</span>
+                        <ul class="week-details">
+                            <li>Concepto de Máquina Universal (origen del software).</li>
+                            <li>Variantes y no determinismo.</li>
+                        </ul>
+                    </div>
+                    <div class="week-item">
+                        <span class="week-title">Semana 13: Decidibilidad</span>
+                        <ul class="week-details">
+                            <li>Tesis de Church-Turing.</li>
+                            <li>El Problema de la Parada.</li>
+                            <li>Problemas decidibles vs no computables.</li>
+                        </ul>
+                    </div>
+                </div>
+            </article>
+
+            <section class="final-event">
+                <h2>Semanas 14 y 15</h2>
+                <p>Presentaciones de Grupos y Evaluación Final del Curso</p>
+            </section>
+
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Departamento de Ciencias de la Computación.</p>
+    </footer>
+
+</body>
+</html>

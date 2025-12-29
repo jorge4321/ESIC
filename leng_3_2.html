@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Visualización de trazas de ejecución: Caminos únicos vs Árboles de computación">
+    <meta name="description" content="Visualización práctica: Caminos únicos (AFD) vs Múltiples (AFN) con ejemplos reales">
     <title>Caminos: Únicos vs. Múltiples</title>
     <style>
         /* --- ESTÉTICA UNIFICADA --- */
@@ -12,6 +12,7 @@
             --path-def: #2980b9;   /* Azul Camino */
             --success: #27ae60;    /* Verde Éxito */
             --fail: #c0392b;       /* Rojo Fallo */
+            --example-bg: #fff8e1; /* Fondo amarillo suave para ejemplos */
             --white: #ffffff;
             --light-bg: #fdfefe;
             --line-color: #bdc3c7;
@@ -82,14 +83,14 @@
         }
 
         h2 {
-            margin-bottom: 1.5rem;
+            margin-bottom: 0.5rem;
             color: var(--primary);
             border-bottom: 1px solid #eee;
             padding-bottom: 0.5rem;
         }
 
-        h3 { margin-bottom: 1rem; font-size: 1.1rem; color: #555; }
-
+        h3 { margin: 1.5rem 0 1rem 0; font-size: 1.1rem; color: #555; font-weight: 600; }
+        
         p { margin-bottom: 1rem; text-align: justify; }
 
         /* --- VISUALIZACIÓN 1: CAMINO ÚNICO (DFA) --- */
@@ -100,22 +101,25 @@
             gap: 0;
             margin: 2rem 0;
             overflow-x: auto;
-            padding: 10px;
+            padding: 20px 10px;
         }
 
         .node {
-            width: 50px;
+            min-width: 50px;
             height: 50px;
-            border-radius: 50%;
+            padding: 0 10px;
+            border-radius: 25px; /* Redondeado pero adaptable a texto */
             border: 2px solid var(--primary);
             background: white;
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: bold;
+            font-size: 0.8rem;
             position: relative;
             z-index: 2;
             flex-shrink: 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
 
         .edge {
@@ -123,15 +127,19 @@
             height: 2px;
             background: var(--primary);
             position: relative;
+            flex-shrink: 0;
         }
         .edge::after {
             content: attr(data-input);
             position: absolute;
-            top: -20px;
+            top: -25px;
             left: 50%;
             transform: translateX(-50%);
             font-weight: bold;
             color: var(--path-def);
+            background: #fff;
+            padding: 0 4px;
+            font-size: 0.8rem;
         }
         .edge::before {
             content: '►';
@@ -147,7 +155,6 @@
         .node.reject { border-color: var(--fail); color: var(--fail); opacity: 0.6; }
 
         /* --- VISUALIZACIÓN 2: ÁRBOL DE COMPUTACIÓN (NFA) --- */
-        /* Técnica de árbol genealógico CSS */
         .tree-wrapper {
             overflow-x: auto;
             padding-bottom: 1rem;
@@ -163,7 +170,7 @@
         .level {
             display: flex;
             justify-content: center;
-            gap: 2rem; /* Separación entre ramas */
+            gap: 3rem; 
             margin-top: 2rem;
             position: relative;
         }
@@ -175,50 +182,14 @@
             position: relative;
         }
 
-        /* Líneas conectoras verticales */
         .connector-line {
             width: 1px;
             background-color: var(--line-color);
-            height: 30px; /* Altura entre niveles */
-            margin-bottom: -2px; /* Unir con el nodo */
+            height: 30px;
+            margin-bottom: -2px;
         }
         
-        /* Líneas horizontales para ramificación */
-        .branch-connector {
-            position: absolute;
-            top: -15px;
-            height: 15px;
-            border-left: 1px solid var(--line-color);
-            border-right: 1px solid var(--line-color);
-            border-top: 1px solid var(--line-color);
-            width: 100%;
-        }
-        
-        /* Ajustes específicos para conectar ramas */
-        .branch-group {
-            display: flex;
-            gap: 3rem; /* Espacio entre hermanos */
-            position: relative;
-        }
-        /* Línea horizontal que une hermanos */
-        .branch-group::before {
-            content: '';
-            position: absolute;
-            top: -15px;
-            left: 25%; /* Ajuste aproximado visual */
-            right: 25%;
-            border-top: 1px solid var(--line-color);
-        }
-        .branch-group .branch::before {
-            content: '';
-            position: absolute;
-            top: -15px;
-            left: 50%;
-            height: 15px;
-            border-left: 1px solid var(--line-color);
-        }
-
-        /* Input Labels en el árbol */
+        /* Badges */
         .input-badge {
             background: #eee;
             font-size: 0.7rem;
@@ -227,27 +198,39 @@
             position: absolute;
             top: -25px;
             z-index: 5;
+            font-weight: bold;
+            color: #555;
+            border: 1px solid #ccc;
         }
 
-        /* Estado muerto (callejón sin salida) */
-        .dead-end {
-            background-color: #ffecec;
-            border-color: var(--fail);
-            color: var(--fail);
-        }
-        .dead-msg {
-            font-size: 0.7rem;
-            color: var(--fail);
-            margin-top: 5px;
-        }
+        /* Estados especiales */
+        .dead-end { background-color: #ffecec; border-color: var(--fail); color: var(--fail); }
+        .dead-msg { font-size: 0.7rem; color: var(--fail); margin-top: 5px; }
+        
+        .success-node { background-color: #e8f8f5; border-color: var(--success); color: var(--success); }
 
-        /* --- CAJA DE CONCLUSIÓN --- */
-        .logic-box {
-            background-color: #f9f9f9;
-            padding: 1rem;
-            border-radius: 4px;
-            border-left: 4px solid var(--success);
+        /* --- CAJA DE EJEMPLO PRÁCTICO --- */
+        .example-box {
+            background-color: var(--example-bg);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 5px solid #f1c40f;
             margin-top: 1rem;
+        }
+        
+        .example-title {
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            color: #d35400;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        /* --- RESPONSIVE --- */
+        @media (max-width: 600px) {
+            .linear-path { justify-content: flex-start; }
+            .level { gap: 1rem; }
         }
 
     </style>
@@ -262,79 +245,97 @@
     <main>
 
         <section>
-            <h2>1. Camino Único (AFD)</h2>
-            <p>En un Autómata Finito Determinista, dado un estado y una entrada, solo existe <strong>un único camino posible</strong>. La computación es una línea recta.</p>
+            <h2>1. Camino Único (Determinismo)</h2>
+            <p>En un Autómata Finito Determinista (AFD), no hay lugar para la duda. Dada una situación actual y una acción, solo hay <strong>un resultado posible</strong>.</p>
             
-            <h3>Entrada: "1 0 1"</h3>
-            
-            <div class="linear-path">
-                <div class="node">q0</div>
-                
-                <div class="edge" data-input="1"></div>
-                <div class="node">q1</div>
-                
-                <div class="edge" data-input="0"></div>
-                <div class="node">q2</div>
-                
-                <div class="edge" data-input="1"></div>
-                <div class="node final">q3</div>
+            <div class="example-box">
+                <span class="example-title">Ejemplo Práctico: El Cajero Automático</span>
+                <p>Imagina sacar dinero. Es un proceso lineal estricto. No puedes estar en "Introducir PIN" y "Recoger Dinero" a la vez. Si fallas un paso, el proceso se rompe.</p>
+                <ul>
+                    <li><strong>Entrada:</strong> Tarjeta &rarr; PIN Correcto &rarr; Saldo OK.</li>
+                </ul>
             </div>
 
-            <div class="logic-box" style="border-left-color: var(--path-def);">
-                <strong>Lógica de Aceptación:</strong><br>
-                La cadena se acepta si y solo si el <strong>último estado</strong> del único camino recorrido es un Estado Final.
+            <h3>Visualización del Flujo</h3>
+            
+            <div class="linear-path">
+                <div class="node">Inicio</div>
+                
+                <div class="edge" data-input="Tarjeta"></div>
+                <div class="node">Leyendo</div>
+                
+                <div class="edge" data-input="PIN OK"></div>
+                <div class="node">Menú</div>
+                
+                <div class="edge" data-input="Saldo OK"></div>
+                <div class="node final">Dinero</div>
             </div>
+            
+            <p style="font-size: 0.9rem; text-align: center; color: #7f8c8d;">
+                <em>El sistema sigue una única línea temporal. No hay bifurcaciones.</em>
+            </p>
         </section>
 
         <section>
-            <h2>2. Árbol de Computación (AFN)</h2>
-            <p>En un Autómata No Determinista, la computación no es una línea, sino un árbol. Ante una ambigüedad, la máquina "se clona" y explora <strong>todos los caminos posibles simultáneamente</strong>.</p>
+            <h2>2. Múltiples Caminos (No Determinismo)</h2>
+            <p>En un Autómata No Determinista (AFN), la máquina puede "adivinar" o procesar múltiples futuros en paralelo. Ante una entrada ambigua, la computación se ramifica.</p>
 
-            <h3>Entrada: "0 1"</h3>
-            <p style="font-size: 0.9rem; color: #666;">Observa cómo una rama muere (rechazo) mientras otra continúa hacia el éxito.</p>
+            <div class="example-box">
+                <span class="example-title">Ejemplo Práctico: Autocompletar Texto</span>
+                <p>Imagina que escribes la sílaba <strong>"CAS"</strong> en tu móvil. El sistema no sabe aún qué palabra quieres, así que activa múltiples caminos simultáneamente:</p>
+                <ul>
+                    <li>Camino A: ¿Es <strong>CAS</strong>A? (Probable)</li>
+                    <li>Camino B: ¿Es <strong>CAS</strong>O? (Probable)</li>
+                    <li>Camino C: ¿Es <strong>CAS</strong>CA? (Menos probable, pero posible)</li>
+                </ul>
+                <p>Todas estas posibilidades están "vivas" hasta que escribes la siguiente letra.</p>
+            </div>
+
+            <h3>Visualización del Árbol de Posibilidades</h3>
+            <p style="font-size: 0.9rem; color: #666;">Entrada actual: El usuario escribió "A"</p>
 
             <div class="tree-wrapper">
                 <div class="tree">
                     
                     <div class="level">
-                        <div class="node">q0</div>
+                        <div class="node">Inicio</div>
                     </div>
 
-                    <div style="position:relative; width: 200px; height: 30px; margin: 0 auto;">
+                    <div style="position:relative; width: 250px; height: 30px; margin: 0 auto;">
                          <div style="position:absolute; left:50%; top:0; height:15px; border-left:1px solid #ccc;"></div>
-                         <div style="position:absolute; left:25%; right:25%; top:15px; border-top:1px solid #ccc;"></div>
-                         <div style="position:absolute; left:25%; top:15px; height:15px; border-left:1px solid #ccc;"></div>
-                         <div style="position:absolute; right:25%; top:15px; height:15px; border-left:1px solid #ccc;"></div>
+                         <div style="position:absolute; left:20%; right:20%; top:15px; border-top:1px solid #ccc;"></div>
+                         <div style="position:absolute; left:20%; top:15px; height:15px; border-left:1px solid #ccc;"></div>
+                         <div style="position:absolute; right:20%; top:15px; height:15px; border-left:1px solid #ccc;"></div>
                          
-                         <span class="input-badge" style="left: 15%; top: 5px;">0</span>
-                         <span class="input-badge" style="right: 15%; top: 5px;">0</span>
+                         <span class="input-badge" style="left: 10%; top: 5px;">Input 'A'</span>
+                         <span class="input-badge" style="right: 10%; top: 5px;">Input 'A'</span>
                     </div>
 
-                    <div class="level" style="gap: 100px; margin-top:0;">
+                    <div class="level">
                         
                         <div class="branch">
-                            <div class="node dead-end">q1</div>
-                            <span class="dead-msg">Muerte</span>
-                            <div style="font-size:0.8rem; margin-top:5px; color:#999;">(No hay salida para '1')</div>
+                            <div class="node dead-end">X</div>
+                            <span class="dead-msg">No coincide</span>
+                            <div style="font-size:0.75rem; margin-top:5px; color:#999;">(Buscaba 'T')</div>
                         </div>
 
                         <div class="branch">
-                            <div class="node">q2</div>
+                            <div class="node success-node">Posible</div>
                             
                             <div class="connector-line"></div>
-                            <span class="input-badge" style="position:relative; top:-20px;">1</span>
+                            <span class="input-badge" style="position:relative; top:-20px;">Input 'U'</span>
                             
-                            <div class="node final">q3</div>
-                            <span style="color:var(--success); font-weight:bold; font-size:0.8rem; margin-top:5px;">¡Aceptado!</span>
+                            <div class="node final">Aceptado</div>
+                            <span style="color:var(--success); font-weight:bold; font-size:0.8rem; margin-top:5px;">Palabra: "AUTO"</span>
                         </div>
                     </div>
 
                 </div>
             </div>
 
-            <div class="logic-box">
-                <strong>Lógica de Aceptación (Paralelismo):</strong><br>
-                La cadena se acepta si <strong>AL MENOS UNA</strong> de las ramas vivas termina en un Estado Final. No importa si las otras 99 ramas fallaron o murieron por el camino.
+            <div class="example-box" style="margin-top: 2rem; background-color: #e8f6f3; border-left-color: var(--success);">
+                <strong>Conclusión Clave:</strong><br>
+                En el AFN, basta con que <strong>UNA</strong> de las ramas tenga éxito para que la cadena sea aceptada. El autómata "mágico" siempre elige el camino correcto o los explora todos a la vez.
             </div>
         </section>
 

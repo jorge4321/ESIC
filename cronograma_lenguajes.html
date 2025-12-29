@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cronograma del Curso - Teoría de la Computación</title>
+    <title>Cronograma Lineal - Teoría de la Computación</title>
     <style>
         /* --- RESET Y VARIABLES --- */
         :root {
@@ -14,6 +14,7 @@
             --light-text: #666;
             --success-color: #27ae60;
             --warning-color: #e67e22;
+            --purple-color: #8e44ad;
             --font-main: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             --shadow: 0 4px 6px rgba(0,0,0,0.1);
             --radius: 8px;
@@ -51,6 +52,7 @@
             font-weight: 600;
         }
 
+        /* Botón con JavaScript para volver atrás */
         .btn-volver {
             background-color: var(--accent-color);
             color: white;
@@ -60,6 +62,8 @@
             font-weight: bold;
             transition: background 0.3s ease;
             font-size: 0.9rem;
+            cursor: pointer;
+            border: none;
         }
 
         .btn-volver:hover {
@@ -68,22 +72,23 @@
 
         /* --- CONTENEDOR PRINCIPAL --- */
         main {
-            max-width: 1200px;
+            max-width: 900px; /* Ancho limitado para mejorar lectura vertical */
             margin: 2rem auto;
             padding: 0 1rem;
         }
 
         .intro-text {
             text-align: center;
-            margin-bottom: 2rem;
+            margin-bottom: 3rem;
             color: var(--light-text);
+            font-size: 1.1rem;
         }
 
-        /* --- GRID LAYOUT --- */
-        .schedule-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 1.5rem;
+        /* --- LAYOUT VERTICAL (STACK) --- */
+        .schedule-stack {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem; /* Espacio entre bloques */
         }
 
         /* --- TARJETAS DE BLOQUES --- */
@@ -94,29 +99,36 @@
             overflow: hidden;
             display: flex;
             flex-direction: column;
-            border-top: 5px solid var(--accent-color);
+            border-left: 6px solid var(--accent-color); /* Borde lateral en vez de superior para diseño lista */
+            transition: transform 0.2s ease;
         }
 
-        /* Colores específicos para bordes de bloques */
+        .block-card:hover {
+            transform: translateY(-2px); /* Pequeño efecto al pasar el mouse */
+        }
+
+        /* Colores específicos para bordes laterales */
         .block-1 { border-color: var(--accent-color); }
         .block-2 { border-color: var(--success-color); }
         .block-3 { border-color: var(--warning-color); }
-        .block-4 { border-color: #8e44ad; }
+        .block-4 { border-color: var(--purple-color); }
 
         .block-header {
             padding: 1.5rem;
-            background-color: rgba(0,0,0,0.02);
-            border-bottom: 1px solid #eee;
+            background-color: #fff;
+            border-bottom: 1px solid #f0f0f0;
+            display: flex;
+            flex-direction: column;
         }
 
         .block-header h2 {
-            font-size: 1.25rem;
+            font-size: 1.4rem;
             color: var(--primary-color);
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.2rem;
         }
 
         .block-desc {
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             color: var(--light-text);
             font-style: italic;
         }
@@ -127,23 +139,24 @@
 
         /* --- SEMANAS --- */
         .week-item {
-            margin-bottom: 1.5rem;
-            padding-bottom: 1rem;
-            border-bottom: 1px solid #f0f0f0;
+            margin-bottom: 2rem;
         }
 
         .week-item:last-child {
-            border-bottom: none;
             margin-bottom: 0;
-            padding-bottom: 0;
         }
 
         .week-title {
-            font-weight: bold;
+            font-weight: 700;
             color: var(--primary-color);
             display: block;
-            margin-bottom: 0.5rem;
-            font-size: 1.05rem;
+            margin-bottom: 0.8rem;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 0.3rem;
+            width: fit-content;
         }
 
         .week-details {
@@ -153,25 +166,38 @@
         .week-details li {
             position: relative;
             padding-left: 1.2rem;
-            margin-bottom: 0.3rem;
-            font-size: 0.95rem;
-            color: #555;
+            margin-bottom: 0.6rem;
         }
 
         .week-details li::before {
-            content: "•";
-            color: var(--accent-color);
+            content: "➜"; /* Icono de flecha */
+            color: var(--light-text);
             position: absolute;
             left: 0;
-            font-weight: bold;
+            font-size: 0.8rem;
+            top: 4px;
+        }
+
+        /* ESTILOS DE LOS ENLACES EN LA LISTA */
+        .week-details li a {
+            text-decoration: none;
+            color: #444;
+            border-bottom: 1px dashed #ccc; /* Subrayado sutil */
+            transition: all 0.2s ease;
+            display: inline-block;
+        }
+
+        .week-details li a:hover {
+            color: var(--accent-color);
+            border-bottom: 1px solid var(--accent-color);
+            background-color: rgba(52, 152, 219, 0.05); /* Fondo muy sutil al hover */
         }
 
         /* --- FINAL EVENT (Semana 14-15) --- */
         .final-event {
-            grid-column: 1 / -1; /* Ocupa todo el ancho */
             background: linear-gradient(135deg, var(--primary-color), #34495e);
             color: white;
-            padding: 2rem;
+            padding: 3rem;
             border-radius: var(--radius);
             text-align: center;
             margin-top: 2rem;
@@ -179,43 +205,38 @@
         }
 
         .final-event h2 {
-            font-size: 1.8rem;
-            margin-bottom: 0.5rem;
+            font-size: 2rem;
+            margin-bottom: 1rem;
         }
 
         .final-event p {
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             opacity: 0.9;
         }
 
         /* --- FOOTER --- */
         footer {
             text-align: center;
-            padding: 2rem;
+            padding: 3rem 1rem;
             color: var(--light-text);
             font-size: 0.8rem;
             margin-top: 2rem;
-            border-top: 1px solid #eee;
         }
 
         /* --- RESPONSIVE --- */
-        @media (max-width: 768px) {
+        @media (max-width: 600px) {
             header {
                 flex-direction: column;
                 gap: 1rem;
                 text-align: center;
             }
-            
-            .schedule-grid {
-                grid-template-columns: 1fr; /* Una sola columna en móvil */
+
+            .block-header h2 {
+                font-size: 1.2rem;
             }
 
             .final-event {
-                padding: 1.5rem;
-            }
-
-            .final-event h2 {
-                font-size: 1.5rem;
+                padding: 2rem 1rem;
             }
         }
     </style>
@@ -223,16 +244,16 @@
 <body>
 
     <header>
-        <h1>Planificación Académica</h1>
-        <a href="index.html" class="btn-volver" aria-label="Volver a la página principal">← Volver</a>
+        <h1>Cronograma Académico</h1>
+        <button onclick="history.back()" class="btn-volver" aria-label="Volver a la página anterior">← Volver</button>
     </header>
 
     <main>
         <div class="intro-text">
-            <p>Cronograma detallado del curso de 15 semanas. <br>Las primeras 13 semanas cubren el contenido teórico-práctico y las últimas 2 se dedican a evaluaciones.</p>
+            <p>Guía secuencial del curso de 15 semanas. Haga clic en los temas para acceder a los recursos.</p>
         </div>
 
-        <div class="schedule-grid">
+        <div class="schedule-stack">
 
             <article class="block-card block-1">
                 <div class="block-header">
@@ -243,10 +264,10 @@
                     <div class="week-item">
                         <span class="week-title">Semana 1: Introducción y Jerarquía de Chomsky</span>
                         <ul class="week-details">
-                            <li>Definición de alfabetos, cadenas y operaciones básicas.</li>
-                            <li>Concatenación y clausura de Kleene.</li>
-                            <li>Mapa visual de la Jerarquía de Chomsky (Tipos 0-3).</li>
-                            <li>Reglas de producción y derivaciones.</li>
+                            <li><a href="#">Definición de alfabetos, cadenas y operaciones básicas.</a></li>
+                            <li><a href="#">Concatenación y clausura de Kleene.</a></li>
+                            <li><a href="#">Mapa visual de la Jerarquía de Chomsky (Tipos 0-3).</a></li>
+                            <li><a href="#">Reglas de producción y derivaciones.</a></li>
                         </ul>
                     </div>
                 </div>
@@ -261,38 +282,38 @@
                     <div class="week-item">
                         <span class="week-title">Semana 2: Máquinas Secuenciales</span>
                         <ul class="week-details">
-                            <li>Concepto de estado como memoria.</li>
-                            <li>Máquinas de Mealy y Moore.</li>
-                            <li>Modelado real: semáforos, ascensores.</li>
+                            <li><a href="#">Concepto de estado como memoria.</a></li>
+                            <li><a href="#">Máquinas de Mealy y Moore.</a></li>
+                            <li><a href="#">Modelado real: semáforos, ascensores.</a></li>
                         </ul>
                     </div>
                     <div class="week-item">
                         <span class="week-title">Semana 3: Autómatas Finitos</span>
                         <ul class="week-details">
-                            <li>Autómatas Finitos Deterministas (AFD) y No Deterministas (AFN).</li>
-                            <li>Caminos únicos vs. múltiples.</li>
+                            <li><a href="#">Autómatas Finitos Deterministas (AFD) y No Deterministas (AFN).</a></li>
+                            <li><a href="#">Caminos únicos vs. múltiples.</a></li>
                         </ul>
                     </div>
                     <div class="week-item">
                         <span class="week-title">Semana 4: Optimización</span>
                         <ul class="week-details">
-                            <li>Conversión de AFN a AFD.</li>
-                            <li>Minimización de estados.</li>
-                            <li>Diseño de reconocedores (emails, fechas).</li>
+                            <li><a href="#">Conversión de AFN a AFD.</a></li>
+                            <li><a href="#">Minimización de estados.</a></li>
+                            <li><a href="#">Diseño de reconocedores (emails, fechas).</a></li>
                         </ul>
                     </div>
                     <div class="week-item">
                         <span class="week-title">Semana 5: Expresiones Regulares</span>
                         <ul class="week-details">
-                            <li>Álgebra Regex y uso en programación.</li>
-                            <li>Equivalencia entre Autómatas y Regex.</li>
+                            <li><a href="#">Álgebra Regex y uso en programación.</a></li>
+                            <li><a href="#">Equivalencia entre Autómatas y Regex.</a></li>
                         </ul>
                     </div>
                     <div class="week-item">
                         <span class="week-title">Semana 6: Límites</span>
                         <ul class="week-details">
-                            <li>Propiedades de Clausura.</li>
-                            <li>Lema de Bombeo (Pumping Lemma).</li>
+                            <li><a href="#">Propiedades de Clausura.</a></li>
+                            <li><a href="#">Lema de Bombeo (Pumping Lemma).</a></li>
                         </ul>
                     </div>
                 </div>
@@ -307,29 +328,29 @@
                     <div class="week-item">
                         <span class="week-title">Semana 7: Gramáticas (GIC)</span>
                         <ul class="week-details">
-                            <li>Sintaxis y Forma Backus-Naur (BNF).</li>
-                            <li>Derivaciones de gramáticas.</li>
+                            <li><a href="#">Sintaxis y Forma Backus-Naur (BNF).</a></li>
+                            <li><a href="#">Derivaciones de gramáticas.</a></li>
                         </ul>
                     </div>
                     <div class="week-item">
                         <span class="week-title">Semana 8: Análisis Sintáctico</span>
                         <ul class="week-details">
-                            <li>Árboles de derivación (Parsing).</li>
-                            <li>Ambigüedad y su impacto en compiladores.</li>
+                            <li><a href="#">Árboles de derivación (Parsing).</a></li>
+                            <li><a href="#">Ambigüedad y su impacto en compiladores.</a></li>
                         </ul>
                     </div>
                     <div class="week-item">
                         <span class="week-title">Semana 9: Autómatas a Pila</span>
                         <ul class="week-details">
-                            <li>Memoria LIFO (Pushdown Automata).</li>
-                            <li>Reconocimiento de palíndromos y paréntesis.</li>
+                            <li><a href="#">Memoria LIFO (Pushdown Automata).</a></li>
+                            <li><a href="#">Reconocimiento de palíndromos y paréntesis.</a></li>
                         </ul>
                     </div>
                     <div class="week-item">
                         <span class="week-title">Semana 10: Equivalencias</span>
                         <ul class="week-details">
-                            <li>Equivalencia entre GIC y Autómatas a Pila.</li>
-                            <li>Repaso del bloque.</li>
+                            <li><a href="#">Equivalencia entre GIC y Autómatas a Pila.</a></li>
+                            <li><a href="#">Repaso del bloque.</a></li>
                         </ul>
                     </div>
                 </div>
@@ -344,23 +365,23 @@
                     <div class="week-item">
                         <span class="week-title">Semana 11: Máquinas de Turing</span>
                         <ul class="week-details">
-                            <li>Arquitectura: Cinta infinita y cabezal.</li>
-                            <li>Ejemplos de computación básica.</li>
+                            <li><a href="#">Arquitectura: Cinta infinita y cabezal.</a></li>
+                            <li><a href="#">Ejemplos de computación básica.</a></li>
                         </ul>
                     </div>
                     <div class="week-item">
                         <span class="week-title">Semana 12: La Máquina Universal</span>
                         <ul class="week-details">
-                            <li>Concepto de Máquina Universal (origen del software).</li>
-                            <li>Variantes y no determinismo.</li>
+                            <li><a href="#">Concepto de Máquina Universal (origen del software).</a></li>
+                            <li><a href="#">Variantes y no determinismo.</a></li>
                         </ul>
                     </div>
                     <div class="week-item">
                         <span class="week-title">Semana 13: Decidibilidad</span>
                         <ul class="week-details">
-                            <li>Tesis de Church-Turing.</li>
-                            <li>El Problema de la Parada.</li>
-                            <li>Problemas decidibles vs no computables.</li>
+                            <li><a href="#">Tesis de Church-Turing.</a></li>
+                            <li><a href="#">El Problema de la Parada.</a></li>
+                            <li><a href="#">Problemas decidibles vs no computables.</a></li>
                         </ul>
                     </div>
                 </div>

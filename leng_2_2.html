@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Comparativa detallada entre Máquinas de Mealy y Máquinas de Moore">
+    <title>Máquinas de Mealy y Moore</title>
+    <style>
+        /* --- ESTÉTICA UNIFICADA --- */
+        :root {
+            --primary: #2c3e50;    /* Azul oscuro */
+            --moore: #2980b9;      /* Azul Moore */
+            --mealy: #e67e22;      /* Naranja Mealy */
+            --logic: #95a5a6;      /* Gris para lógica */
+            --white: #ffffff;
+            --light-bg: #fdfefe;
+            --radius: 8px;
+            --shadow: 0 4px 10px rgba(0,0,0,0.08);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: #ecf0f1;
+            color: #333;
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* --- HEADER --- */
+        header {
+            background-color: var(--primary);
+            color: var(--white);
+            padding: 1rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        header h1 { font-size: 1.3rem; font-weight: 600; }
+
+        .btn-volver {
+            background-color: rgba(255,255,255,0.15);
+            color: var(--white);
+            padding: 0.5rem 1rem;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            border: 1px solid rgba(255,255,255,0.2);
+            transition: all 0.3s ease;
+        }
+
+        .btn-volver:hover {
+            background-color: var(--moore);
+        }
+
+        /* --- CONTENIDO --- */
+        main {
+            flex: 1;
+            width: 100%;
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+            display: grid;
+            gap: 2rem;
+            /* Layout Grid: 2 columnas en escritorio */
+            grid-template-columns: 1fr 1fr; 
+        }
+
+        /* Clase para ocupar todo el ancho */
+        .full-width { grid-column: 1 / -1; }
+
+        section {
+            background: var(--white);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 2rem;
+            border-top: 5px solid var(--logic);
+            display: flex;
+            flex-direction: column;
+        }
+
+        h2 {
+            margin-bottom: 1rem;
+            font-size: 1.4rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .tag {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: white;
+            vertical-align: middle;
+        }
+
+        p { margin-bottom: 1rem; text-align: justify; font-size: 0.95rem; }
+
+        /* --- VISUALIZACIÓN DE NODOS (GRAFOS) --- */
+        .node-example {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 1.5rem 0;
+            padding: 1rem;
+            background-color: #f9f9f9;
+            border-radius: var(--radius);
+        }
+
+        .node-label {
+            font-size: 0.8rem;
+            color: #7f8c8d;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+
+        /* Nodo Moore: Círculo dividido */
+        .moore-circle {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 2px solid var(--moore);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: white;
+            position: relative;
+            box-shadow: 0 4px 0 rgba(41, 128, 185, 0.2);
+        }
+        .moore-circle hr {
+            width: 100%;
+            border: 0;
+            border-top: 1px solid var(--moore);
+            margin: 2px 0;
+        }
+
+        /* Nodo Mealy: Círculo simple + Flecha */
+        .mealy-circle {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: 2px solid var(--mealy);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: white;
+            margin-right: 60px; /* Espacio para la flecha */
+            box-shadow: 0 4px 0 rgba(230, 126, 34, 0.2);
+            position: relative;
+        }
+        
+        /* Flecha CSS para Mealy */
+        .arrow-container {
+            position: absolute;
+            right: -60px;
+            top: 50%;
+            width: 60px;
+            height: 2px;
+            background: #333;
+        }
+        .arrow-container::after {
+            content: '';
+            position: absolute;
+            right: 0; top: -4px;
+            border-left: 6px solid #333;
+            border-top: 5px solid transparent;
+            border-bottom: 5px solid transparent;
+        }
+        .arrow-text {
+            position: absolute;
+            top: -20px;
+            left: 10px;
+            font-family: monospace;
+            font-weight: bold;
+            font-size: 0.9rem;
+            color: var(--mealy);
+        }
+
+        /* --- DIAGRAMAS DE BLOQUES (Mini Arquitectura) --- */
+        .arch-diagram {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: auto; /* Empujar al fondo */
+            padding-top: 1rem;
+            font-size: 0.8rem;
+        }
+
+        .block {
+            padding: 8px;
+            border: 2px solid #7f8c8d;
+            border-radius: 4px;
+            background: white;
+            text-align: center;
+            z-index: 2;
+        }
+
+        .wire {
+            width: 20px;
+            height: 2px;
+            background: #7f8c8d;
+        }
+
+        /* Wire especial para Mealy (Feed-forward) */
+        .bypass-wire {
+            position: absolute;
+            top: -15px;
+            left: 0;
+            width: 100%;
+            height: 25px;
+            border-top: 2px dashed var(--mealy);
+            border-left: 2px dashed var(--mealy);
+            border-right: 2px dashed var(--mealy); /* Flecha bajando */
+            z-index: 1;
+            pointer-events: none;
+        }
+        
+        .mealy-container { position: relative; display: flex; align-items: center; margin-top: 15px; }
+
+        /* --- TABLA --- */
+        .table-container {
+            overflow-x: auto;
+            margin-top: 1rem;
+        }
+        table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+        th, td { padding: 10px; border-bottom: 1px solid #eee; text-align: left; }
+        th { background-color: var(--primary); color: white; }
+        
+        /* Math inline */
+        .math { font-family: monospace; font-weight: bold; background: #eee; padding: 0 4px; border-radius: 3px; }
+
+        /* --- RESPONSIVE --- */
+        @media (max-width: 768px) {
+            main { grid-template-columns: 1fr; }
+            .arch-diagram { flex-direction: column; gap: 10px; }
+            .wire { width: 2px; height: 15px; } /* Wires verticales en móvil */
+            .mealy-container { flex-direction: column; }
+            .bypass-wire { display: none; } /* Ocultar cable complejo en móvil */
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Arquitectura: Mealy vs. Moore</h1>
+        <a href="javascript:history.back()" class="btn-volver">&#8592; Volver</a>
+    </header>
+
+    <main>
+
+        <section class="full-width" style="border-top-color: var(--primary);">
+            <h2>Fundamentos</h2>
+            <p>Aunque ambas son máquinas de estados finitos y tienen la misma capacidad computacional (cualquier problema que resuelva una puede ser resuelto por la otra), difieren fundamentalmente en <strong>cómo y cuándo</strong> se genera la salida.</p>
+        </section>
+
+        <section style="border-top-color: var(--moore);">
+            <h2 style="color: var(--moore);">
+                Máquina de Moore
+                <span class="tag" style="background: var(--moore);">Estable</span>
+            </h2>
+            
+            <p>La salida depende <strong>únicamente del estado actual</strong>.</p>
+            <p>Esto significa que mientras la máquina permanezca en el mismo estado, la salida será constante, ignorando cambios rápidos en la entrada.</p>
+            <p class="math">Salida = &lambda;(Estado)</p>
+
+            <div class="node-example">
+                <span class="node-label">Representación en Grafo:</span>
+                <div class="moore-circle">
+                    <strong>q<sub>0</sub></strong>
+                    <hr>
+                    <strong style="color:var(--moore)">1</strong>
+                </div>
+                <small style="margin-top:5px; color:#666">Estado / Salida</small>
+            </div>
+
+            <div class="arch-diagram">
+                <span style="margin-right:5px">E</span>
+                <div class="wire"></div>
+                <div class="block">Lógica<br>Estado</div>
+                <div class="wire"></div>
+                <div class="block">Memoria<br>(FlipFlop)</div>
+                <div class="wire"></div>
+                <div class="block" style="border-color:var(--moore)">Lógica<br>Salida</div>
+                <div class="wire"></div>
+                <span style="margin-left:5px; font-weight:bold; color:var(--moore)">S</span>
+            </div>
+        </section>
+
+        <section style="border-top-color: var(--mealy);">
+            <h2 style="color: var(--mealy);">
+                Máquina de Mealy
+                <span class="tag" style="background: var(--mealy);">Reactiva</span>
+            </h2>
+            
+            <p>La salida depende del <strong>estado actual Y de la entrada actual</strong>.</p>
+            <p>Si la entrada cambia, la salida puede cambiar inmediatamente (asíncronamente) sin esperar al siguiente pulso de reloj.</p>
+            <p class="math">Salida = &lambda;(Estado, Entrada)</p>
+
+            <div class="node-example">
+                <span class="node-label">Representación en Grafo:</span>
+                <div style="position: relative; display:flex; align-items:center;">
+                    <div class="mealy-circle">
+                        <strong>q<sub>0</sub></strong>
+                    </div>
+                    <div class="arrow-container">
+                        <span class="arrow-text">1 / 0</span>
+                    </div>
+                </div>
+                <small style="margin-top:5px; color:#666; margin-left: 60px;">Entrada / Salida (en el arco)</small>
+            </div>
+
+            <div class="arch-diagram">
+                <div class="mealy-container">
+                    <div class="bypass-wire"></div>
+                    
+                    <span style="margin-right:5px">E</span>
+                    <div class="wire"></div>
+                    <div class="block">Lógica<br>Estado</div>
+                    <div class="wire"></div>
+                    <div class="block">Memoria<br>(FlipFlop)</div>
+                    <div class="wire"></div>
+                    <div class="block" style="border-color:var(--mealy)">Lógica<br>Salida</div>
+                    <div class="wire"></div>
+                    <span style="margin-left:5px; font-weight:bold; color:var(--mealy)">S</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="full-width">
+            <h2>Cuadro Comparativo</h2>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Característica</th>
+                            <th>Moore</th>
+                            <th>Mealy</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Seguridad / Ruido</strong></td>
+                            <td><strong>Alta.</strong> Inmune a fluctuaciones en la entrada durante el ciclo de reloj.</td>
+                            <td><strong>Baja.</strong> El ruido en la entrada puede pasar directamente a la salida.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Respuesta</strong></td>
+                            <td>Retardada (cambia en el siguiente flanco de reloj).</td>
+                            <td>Inmediata (reacciona al instante al cambio de entrada).</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Número de Estados</strong></td>
+                            <td>Generalmente requiere <strong>más estados</strong>.</td>
+                            <td>Generalmente requiere <strong>menos estados</strong>.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Uso Típico</strong></td>
+                            <td>Contadores, semáforos, lógica de control segura.</td>
+                            <td>Reconocedores de secuencia, controladores de alta velocidad.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+    </main>
+
+    <footer>
+        <p>Diseño Lógico Digital &copy; 2025</p>
+    </footer>
+
+</body>
+</html>

@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>8 - Autómatas finitos - Diseño de reconocedores - Prof. Jorge López-Cifre</title>
+    <style>
+        :root {
+            --primary: #003366;
+            --accent: #d4af37;
+            --bg: #fdfdfd;
+            --text: #333;
+            --card-bg: #fff;
+            --border: #e0e0e0;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+        header {
+            background: var(--primary);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        h1 { margin: 0; font-size: 1.3rem; }
+        @media (min-width: 768px) { h1 { font-size: 1.5rem; } }
+
+        .btn-volver {
+            background: var(--accent);
+            color: var(--primary);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            transition: background 0.3s;
+        }
+        .btn-volver:hover { background: #fff; }
+
+        main {
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .subtema {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            margin-bottom: 3rem;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        .subtema-header {
+            background: #f4f4f4;
+            padding: 1rem 2rem;
+            border-bottom: 1px solid var(--border);
+        }
+        .subtema-header h2 { margin: 0; color: var(--primary); font-size: 1.4rem; }
+
+        .seccion-contenido {
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+
+        @media (min-width: 768px) {
+            .seccion-contenido { grid-template-columns: repeat(2, 1fr); }
+            .full-width { grid-column: span 2; }
+        }
+
+        .card h3 {
+            color: var(--primary);
+            border-bottom: 2px solid var(--accent);
+            display: inline-block;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .formal-box {
+            background-color: #f9fbfd;
+            border-left: 4px solid var(--primary);
+            padding: 1rem;
+        }
+
+        .diagrama-container {
+            text-align: center;
+            margin: 1.5rem 0;
+            padding: 1rem;
+            background: white;
+            border: 1px dashed #ccc;
+            border-radius: 4px;
+        }
+        svg { max-width: 100%; height: auto; }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            background: var(--primary);
+            color: white;
+            margin-top: 3rem;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>8 - Autómatas finitos - Diseño de reconocedores</h1>
+        <a href="javascript:history.back()" class="btn-volver">← Volver</a>
+    </header>
+
+    <main>
+
+        <article class="subtema">
+            <div class="subtema-header">
+                <h2>Introducción a los Autómatas Finitos Deterministas (AFD)</h2>
+            </div>
+            <div class="seccion-contenido">
+
+                <div class="card full-width">
+                    <h3>Historia</h3>
+                    <p>El concepto de autómata finito se gestó a mediados del siglo XX, en el fervor del desarrollo de la computación moderna. Aunque Alan Turing en los años 30 ya sentaba las bases con su máquina abstracta, los autómatas finitos emergieron como modelos más sencillos para problemas específicos. El trabajo pionero de Warren McCulloch y Walter Pitts en 1943, que modelaron redes neuronales booleanas, es a menudo citado como un precursor. Sin embargo, fue en la década de 1950 cuando los Autómatas Finitos Deterministas (AFD) tomaron forma definitiva, con contribuciones clave de Stephen C. Kleene, quien en 1956 estableció la equivalencia entre las expresiones regulares y los lenguajes reconocibles por autómatas finitos. Otros investigadores como George H. Mealy (1955) y Edward F. Moore (1956) también hicieron aportaciones significativas a la teoría de las máquinas de estado finito, sentando las bases para el análisis léxico en compiladores y el diseño de circuitos digitales.</p>
+                </div>
+
+                <div class="card full-width formal-box">
+                    <h3>Descripción Formal</h3>
+                    <p>Un Autómata Finito Determinista (AFD) es un modelo matemático de computación que consta de un conjunto finito de estados y transiciones entre ellos. Se define formalmente como una 5-tupla M = (Q, Σ, δ, q₀, F), donde:
+
+*   Q es un conjunto finito no vacío de estados.
+*   Σ es el alfabeto de entrada, un conjunto finito no vacío de símbolos.
+*   δ es la función de transición, una función δ: Q × Σ → Q. Para cada estado q y cada símbolo de entrada a, existe exactamente un estado siguiente δ(q, a).
+*   q₀ ∈ Q es el estado inicial.
+*   F ⊆ Q es el conjunto de estados finales o de aceptación.
+
+Un AFD procesa una cadena de entrada leyendo sus símbolos uno por uno y cambiando de estado según la función δ. La cadena es aceptada si, después de leer todos los símbolos, el autómata se encuentra en un estado que pertenece al conjunto F. El lenguaje L(M) reconocido por el AFD M es el conjunto de todas las cadenas aceptadas por M. La función de transición se puede extender a cadenas δ*: Q × Σ* → Q, donde δ*(q, ε) = q y δ*(q, wa) = δ(δ*(q, w), a) para w ∈ Σ* y a ∈ Σ. Un lenguaje es regular si y solo si es reconocido por algún AFD.
+
+<svg viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    .state { fill: #e0f2f7; stroke: black; stroke-width: 1; }
+    .final-state { fill: #e0f2f7; stroke: black; stroke-width: 2; }
+    .start-arrow { stroke: black; stroke-width: 1; fill: none; marker-end: url(#arrowhead); }
+    .transition-arrow { stroke: black; stroke-width: 1; fill: none; marker-end: url(#arrowhead); }
+    .text { font-family: sans-serif; font-size: 16px; text-anchor: middle; }
+    .label { font-family: sans-serif; font-size: 14px; text-anchor: middle; }
+  </style>
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" />
+    </marker>
+  </defs>
+
+  <!-- States -->
+  <circle cx="150" cy="100" r="30" class="state" id="q0" />
+  <text x="150" y="105" class="text">q₀</text>
+
+  <circle cx="300" cy="100" r="30" class="state" id="q1" />
+  <text x="300" y="105" class="text">q₁</text>
+
+  <circle cx="450" cy="100" r="30" class="final-state" id="q2" />
+  <circle cx="450" cy="100" r="25" class="final-state" />
+  <text x="450" y="105" class="text">q₂</text>
+
+  <!-- Start arrow -->
+  <path d="M 80 100 L 120 100" class="start-arrow" />
+
+  <!-- Transitions -->
+  <path d="M 180 100 L 270 100" class="transition-arrow" />
+  <text x="225" y="90" class="label">a</text>
+
+  <path d="M 330 100 L 420 100" class="transition-arrow" />
+  <text x="375" y="90" class="label">b</text>
+
+  <path d="M 460 125 A 30 30 0 1 1 440 125" class="transition-arrow" />
+  <text x="470" y="145" class="label">a, b</text>
+  
+  <path d="M 300 130 A 60 60 0 0 1 150 130" class="transition-arrow" />
+  <text x="225" y="155" class="label">b</text>
+
+</svg></p>
+                    <div class="diagrama-container">
+                        
+                        <p style="font-size:0.8rem; color:#666; margin-top:0.5rem;"><em>Fig: Representación visual del concepto.</em></p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Intuición</h3>
+                    <p>Imaginemos un autómata finito determinista como una máquina muy simple, pero con un propósito claro: decidir si una secuencia de símbolos (una 'palabra') es válida o no. Piensen en ella como una pequeña caja negra con un conjunto limitado de 'modos de operación' (los estados). Empieza siempre en un modo inicial. Cuando le damos un símbolo de entrada, la máquina cambia a un nuevo modo de operación, y este cambio es totalmente predecible: siempre hay un único modo siguiente para cada símbolo en cada modo actual. No hay dudas ni opciones. La máquina va 'leyendo' la palabra, símbolo a símbolo, y su estado interno va reflejando lo que ha 'visto' hasta el momento. Si, al terminar de leer la palabra, la máquina se encuentra en uno de sus 'modos de aceptación' (estados finales), la palabra es considerada válida; de lo contrario, es inválida. Es como un validador de patrones estricto y sin ambigüedades, incapaz de "recordar" más allá de su estado actual.</p>
+                </div>
+
+                <div class="card">
+                    <h3>Aplicación Real</h3>
+                    <p>Los Autómatas Finitos Deterministas son la columna vertebral de numerosos sistemas de software y hardware. Su aplicación más prominente y quizás más conocida es en el análisis léxico de los compiladores e intérpretes. Cuando escribimos código fuente en un lenguaje de programación, la primera fase del compilador, el 'escáner' o 'tokenizer', usa AFDs para reconocer las unidades léxicas (tokens) como palabras clave (if, else, while), identificadores de variables, operadores aritméticos, números enteros o de punto flotante. Cada uno de estos patrones puede ser especificado por un AFD. También son fundamentales en el diseño de hardware digital, donde los circuitos de control a menudo se modelan como máquinas de estado finitas. En la ingeniería de redes, los protocolos de comunicación que definen secuencias de mensajes válidas para establecer conexiones o transferir datos a menudo se especifican usando conceptos de AFD. Además, son la base para el reconocimiento de patrones simples en el procesamiento de texto, como la validación de formatos de direcciones de correo electrónico o números de teléfono.</p>
+                </div>
+
+            </div>
+        </article>
+        
+        <article class="subtema">
+            <div class="subtema-header">
+                <h2>Autómatas Finitos No Deterministas (AFND) y la Equivalencia de Moore</h2>
+            </div>
+            <div class="seccion-contenido">
+
+                <div class="card full-width">
+                    <h3>Historia</h3>
+                    <p>Los Autómatas Finitos No Deterministas (AFND) fueron introducidos por Michael Rabin y Dana Scott en su influyente artículo de 1959, "Finite Automata and Their Decision Problems". Este trabajo fue revolucionario porque, aunque los AFNDs parecían a primera vista más potentes que los AFDs debido a su capacidad de tener múltiples transiciones para un mismo símbolo o transiciones espontáneas (ε-transiciones), Rabin y Scott demostraron formalmente que cualquier lenguaje reconocido por un AFND también puede ser reconocido por un AFD. Esta "equivalencia" es uno de los resultados fundamentales de la teoría de los lenguajes formales, conocida como la construcción de subconjuntos. Simplificó enormemente el diseño y la comprensión de autómatas, ya que a menudo es mucho más sencillo construir un AFND para un lenguaje dado, y luego, si es necesario, convertirlo a un AFD equivalente para su implementación eficiente.</p>
+                </div>
+
+                <div class="card full-width formal-box">
+                    <h3>Descripción Formal</h3>
+                    <p>Un Autómata Finito No Determinista (AFND) es una generalización del AFD. Se define formalmente como una 5-tupla M = (Q, Σ, δ, q₀, F), donde:
+
+*   Q es un conjunto finito no vacío de estados.
+*   Σ es el alfabeto de entrada, un conjunto finito no vacío de símbolos.
+*   δ es la función de transición, una función δ: Q × (Σ ∪ {ε}) → P(Q). Aquí, P(Q) es el conjunto potencia de Q (el conjunto de todos los subconjuntos de Q). Esto significa que para un estado q y un símbolo a (o ε), δ(q, a) puede ser un conjunto de cero, uno o más estados. La adición de ε permite transiciones espontáneas sin consumir un símbolo de entrada.
+*   q₀ ∈ Q es el estado inicial.
+*   F ⊆ Q es el conjunto de estados finales o de aceptación.
+
+Un AFND acepta una cadena si existe al menos una secuencia de transiciones desde el estado inicial q₀ hasta algún estado final f ∈ F, consumiendo la cadena de entrada. La función de transición extendida δ*: Q × Σ* → P(Q) se define considerando la ε-cerradura (el conjunto de estados alcanzables desde un estado q solo a través de ε-transiciones). La "equivalencia de Moore" (comúnmente atribuida a la construcción de Rabin y Scott, aunque Moore trabajó en minimización) se refiere a que para cada AFND existe un AFD que acepta exactamente el mismo lenguaje. Esta conversión se realiza mediante la construcción de subconjuntos, donde cada estado del AFD resultante corresponde a un subconjunto de estados del AFND.
+
+<svg viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    .state { fill: #e0f2f7; stroke: black; stroke-width: 1; }
+    .final-state { fill: #e0f2f7; stroke: black; stroke-width: 2; }
+    .start-arrow { stroke: black; stroke-width: 1; fill: none; marker-end: url(#arrowhead); }
+    .transition-arrow { stroke: black; stroke-width: 1; fill: none; marker-end: url(#arrowhead); }
+    .text { font-family: sans-serif; font-size: 16px; text-anchor: middle; }
+    .label { font-family: sans-serif; font-size: 14px; text-anchor: middle; }
+  </style>
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" />
+    </marker>
+  </defs>
+
+  <!-- States -->
+  <circle cx="150" cy="100" r="30" class="state" id="q0" />
+  <text x="150" y="105" class="text">q₀</text>
+
+  <circle cx="300" cy="60" r="30" class="state" id="q1" />
+  <text x="300" y="65" class="text">q₁</text>
+
+  <circle cx="300" cy="140" r="30" class="state" id="q2" />
+  <text x="300" y="145" class="text">q₂</text>
+
+  <circle cx="450" cy="100" r="30" class="final-state" id="q3" />
+  <circle cx="450" cy="100" r="25" class="final-state" />
+  <text x="450" y="105" class="text">q₃</text>
+
+  <!-- Start arrow -->
+  <path d="M 80 100 L 120 100" class="start-arrow" />
+
+  <!-- Transitions -->
+  <path d="M 180 100 L 270 60" class="transition-arrow" />
+  <text x="225" y="75" class="label">a</text>
+
+  <path d="M 180 100 L 270 140" class="transition-arrow" />
+  <text x="225" y="125" class="label">a</text>
+
+  <path d="M 330 60 L 420 100" class="transition-arrow" />
+  <text x="375" y="75" class="label">b</text>
+  
+  <path d="M 330 140 L 420 100" class="transition-arrow" />
+  <text x="375" y="125" class="label">ε</text>
+
+</svg></p>
+                    <div class="diagrama-container">
+                        
+                        <p style="font-size:0.8rem; color:#666; margin-top:0.5rem;"><em>Fig: Representación visual del concepto.</em></p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Intuición</h3>
+                    <p>Piensen en un AFND como un AFD que puede 'adivinar' o tomar múltiples caminos simultáneamente. A diferencia de un AFD, donde cada combinación de estado y símbolo de entrada lleva a un único estado siguiente, un AFND puede: 1) ir a varios estados a la vez para un mismo símbolo, o 2) cambiar de estado 'espontáneamente' sin consumir ningún símbolo de entrada (esto se llama una ε-transición). Es como si la máquina se duplicara y siguiera todos los posibles caminos al mismo tiempo. Una cadena es aceptada si al menos una de estas 'copias' de la máquina termina en un estado final. La no determinismo hace que el diseño de un autómata sea a menudo mucho más intuitivo y directo, especialmente cuando se parte de una descripción del lenguaje o de una expresión regular. Aunque parece más complejo, la genialidad es que cualquier comportamiento que un AFND pueda describir, un AFD también puede, aunque el AFD equivalente pueda ser mucho más grande y complejo.</p>
+                </div>
+
+                <div class="card">
+                    <h3>Aplicación Real</h3>
+                    <p>Los AFNDs son herramientas inmensamente valiosas en la fase de diseño y especificación de reconocedores, especialmente cuando se trabaja con expresiones regulares. La conversión de una expresión regular a un AFND es un proceso algorítmico relativamente sencillo (algoritmo de Thompson). Esto los hace ideales para construir prototipos de analizadores léxicos o herramientas de búsqueda de patrones. Herramientas como `grep` en sistemas Unix o las bibliotecas de expresiones regulares en lenguajes de programación como Python, Java o JavaScript, internamente suelen convertir las expresiones regulares a AFNDs para luego simularlos o transformarlos a AFDs. Aunque un AFD es generalmente más eficiente para la ejecución directa, el AFND ofrece una flexibilidad y una facilidad de construcción que son incomparables en las etapas iniciales del desarrollo de un reconocedor. Son esenciales para comprender cómo se construyen los motores de expresiones regulares que usamos a diario.</p>
+                </div>
+
+            </div>
+        </article>
+        
+        <article class="subtema">
+            <div class="subtema-header">
+                <h2>Estrategias de Diseño y Aplicaciones Avanzadas de Reconocedores Finitos</h2>
+            </div>
+            <div class="seccion-contenido">
+
+                <div class="card full-width">
+                    <h3>Historia</h3>
+                    <p>Desde los primeros días de la informática, la necesidad de procesar y validar lenguajes artificiales, como los lenguajes de programación, llevó al desarrollo de metodologías sistemáticas para el diseño de reconocedores. Los trabajos de teóricos como Noam Chomsky en la jerarquía de lenguajes (1956) y Kleene en la relación con expresiones regulares (1956) sentaron las bases. Sin embargo, fue en la década de 1960 y 1970 con la proliferación de lenguajes de programación y compiladores cuando las "estrategias de diseño" se volvieron cruciales. La creación de herramientas generadoras de analizadores léxicos como Lex (Lesk, 1975) automatizó el proceso de transformar especificaciones de patrones (expresiones regulares) en autómatas finitos (generalmente AFDs), revolucionando el desarrollo de software. Estas herramientas demostraron la viabilidad práctica y la eficiencia de los autómatas finitos como reconocedores en entornos de producción.</p>
+                </div>
+
+                <div class="card full-width formal-box">
+                    <h3>Descripción Formal</h3>
+                    <p>El diseño de reconocedores de lenguajes regulares implica varias etapas formales. Partiendo de una descripción del lenguaje (a menudo una expresión regular R), el proceso más común es el siguiente:
+
+1.  **Construcción del AFND**: Se construye un Autómata Finito No Determinista (AFND) que acepta el lenguaje especificado por R. El algoritmo de Thompson es un método estándar para este paso, construyendo un AFND con ε-transiciones.
+2.  **Conversión a AFD**: El AFND resultante se convierte a un Autómata Finito Determinista (AFD) equivalente mediante la construcción de subconjuntos. Cada estado del nuevo AFD representa un conjunto de estados del AFND original. Este AFD acepta el mismo lenguaje que el AFND inicial.
+3.  **Minimización del AFD**: El AFD puede ser minimizado para reducir el número de estados, lo que resulta en un reconocedor más eficiente. Algoritmos como el de Hopcroft o el de la tabla de distinción de estados fusionan estados indistinguibles. Dos estados p y q son indistinguibles si para todas las cadenas w, δ*(p, w) es un estado final si y solo si δ*(q, w) es un estado final.
+
+El reconocedor final es un AFD minimizado que puede implementarse directamente mediante una tabla de transiciones (estado actual, símbolo de entrada → estado siguiente), lo que permite una ejecución rápida y determinista. La función de un reconocedor es, dada una cadena de entrada, recorrer la tabla de transiciones y determinar si el estado final alcanzado es de aceptación o no, respondiendo así a la pregunta: ¿la cadena pertenece al lenguaje?
+
+<svg viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    .node { fill: #e0f2f7; stroke: black; stroke-width: 1; }
+    .arrow { stroke: black; stroke-width: 1; fill: none; marker-end: url(#arrowhead); }
+    .text { font-family: sans-serif; font-size: 16px; text-anchor: middle; }
+    .label { font-family: sans-serif; font-size: 14px; text-anchor: middle; }
+  </style>
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" />
+    </marker>
+  </defs>
+
+  <!-- Nodes -->
+  <rect x="50" y="80" width="100" height="40" rx="5" ry="5" class="node" />
+  <text x="100" y="105" class="text">Expresión Regular</text>
+
+  <rect x="200" y="80" width="100" height="40" rx="5" ry="5" class="node" />
+  <text x="250" y="105" class="text">AFND</text>
+
+  <rect x="350" y="80" width="100" height="40" rx="5" ry="5" class="node" />
+  <text x="400" y="105" class="text">AFD</text>
+
+  <rect x="500" y="80" width="100" height="40" rx="5" ry="5" class="node" />
+  <text x="550" y="105" class="text">AFD Minimizado</text>
+
+  <!-- Arrows -->
+  <path d="M 150 100 L 200 100" class="arrow" />
+  <text x="175" y="120" class="label">Thompson</text>
+
+  <path d="M 300 100 L 350 100" class="arrow" />
+  <text x="325" y="120" class="label">Subconjuntos</text>
+
+  <path d="M 450 100 L 500 100" class="arrow" />
+  <text x="475" y="120" class="label">Hopcroft</text>
+
+</svg></p>
+                    <div class="diagrama-container">
+                        
+                        <p style="font-size:0.8rem; color:#666; margin-top:0.5rem;"><em>Fig: Representación visual del concepto.</em></p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Intuición</h3>
+                    <p>El diseño de reconocedores finitos va más allá de entender qué es un AFD o un AFND; se trata de cómo los construimos de manera efectiva para resolver problemas reales. Las estrategias giran en torno a la idea de que podemos partir de una descripción de un patrón (una expresión regular, por ejemplo) y sistemáticamente transformarla en una 'máquina' capaz de detectar ese patrón. Empezamos con el AFND porque es más fácil de construir a partir de una idea abstracta o una expresión regular: es como un borrador flexible. Luego, lo 'endurecemos' y lo hacemos 'determinista' (AFD) para que sea eficiente y predecible. Finalmente, lo 'adelgazamos' o 'minimizamos' para que sea lo más pequeño y rápido posible sin perder su funcionalidad. Es el proceso de ingeniería de transformar una especificación en una implementación óptima, garantizando que nuestra 'máquina' de reconocimiento sea robusta y eficiente.</p>
+                </div>
+
+                <div class="card">
+                    <h3>Aplicación Real</h3>
+                    <p>Las estrategias de diseño de reconocedores finitos tienen un impacto monumental en la ingeniería de software moderna. Su aplicación más destacada es en la construcción de analizadores léxicos (scanners) para compiladores e intérpretes de lenguajes de programación. Herramientas como Lex y Flex toman descripciones de patrones léxicos (expresiones regulares) y automáticamente generan código C o C++ que implementa un AFD optimizado para reconocer esos patrones. Esto simplifica drásticamente la creación de compiladores. Más allá de los compiladores, los reconocedores finitos se utilizan en: 1. **Procesamiento de texto**: para búsquedas avanzadas (grep), validación de datos (URL, emails, fechas) y filtrado de contenido. 2. **Sistemas de seguridad**: para detectar patrones maliciosos en tráfico de red o entradas de usuario. 3. **Diseño de protocolos**: para validar secuencias de mensajes en sistemas distribuidos. 4. **Inteligencia Artificial**: en el análisis morfológico de lenguajes naturales, donde se tokenizan palabras y se reconocen sus estructuras base. Son una base fundamental para cualquier tarea que implique la identificación eficiente de patrones en flujos de símbolos discretos.</p>
+                </div>
+
+            </div>
+        </article>
+        
+    </main>
+
+    <footer>
+        <p>Prof. Jorge López-Cifre, PhD © 2026</p>
+    </footer>
+
+</body>
+</html>

@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>22 - Tesis de Church/Turing - Decidibilidad y el Problema de la Parada - Prof. Jorge López-Cifre</title>
+    <style>
+        :root {
+            --primary: #003366;
+            --accent: #d4af37;
+            --bg: #fdfdfd;
+            --text: #333;
+            --card-bg: #fff;
+            --border: #e0e0e0;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+        header {
+            background: var(--primary);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        h1 { margin: 0; font-size: 1.3rem; }
+        @media (min-width: 768px) { h1 { font-size: 1.5rem; } }
+
+        .btn-volver {
+            background: var(--accent);
+            color: var(--primary);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            transition: background 0.3s;
+        }
+        .btn-volver:hover { background: #fff; }
+
+        main {
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .subtema {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            margin-bottom: 3rem;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        .subtema-header {
+            background: #f4f4f4;
+            padding: 1rem 2rem;
+            border-bottom: 1px solid var(--border);
+        }
+        .subtema-header h2 { margin: 0; color: var(--primary); font-size: 1.4rem; }
+
+        .seccion-contenido {
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+
+        @media (min-width: 768px) {
+            .seccion-contenido { grid-template-columns: repeat(2, 1fr); }
+            .full-width { grid-column: span 2; }
+        }
+
+        .card h3 {
+            color: var(--primary);
+            border-bottom: 2px solid var(--accent);
+            display: inline-block;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .formal-box {
+            background-color: #f9fbfd;
+            border-left: 4px solid var(--primary);
+            padding: 1rem;
+        }
+
+        .diagrama-container {
+            text-align: center;
+            margin: 1.5rem 0;
+            padding: 1rem;
+            background: white;
+            border: 1px dashed #ccc;
+            border-radius: 4px;
+        }
+        svg { max-width: 100%; height: auto; }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            background: var(--primary);
+            color: white;
+            margin-top: 3rem;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>22 - Tesis de Church/Turing - Decidibilidad y el Problema de la Parada</h1>
+        <a href="javascript:history.back()" class="btn-volver">← Volver</a>
+    </header>
+
+    <main>
+
+        <article class="subtema">
+            <div class="subtema-header">
+                <h2>La Tesis de Church-Turing: Fundamentos de la Computabilidad</h2>
+            </div>
+            <div class="seccion-contenido">
+
+                <div class="card full-width">
+                    <h3>Historia</h3>
+                    <p>La Tesis de Church-Turing emergió en la década de 1930, un período de intensa investigación en los fundamentos de las matemáticas y la lógica. Antes de la existencia de las computadoras electrónicas, lógicos y matemáticos buscaban una definición rigurosa y universal de lo que significaba ser 'computable' o 'efectivamente calculable'. Alonzo Church, en 1936, propuso su cálculo lambda como un modelo para la computabilidad, mientras que, independientemente, Alan Turing introdujo su concepto de la 'máquina de computación' (Máquina de Turing) ese mismo año. Ambos modelos, junto con otros como las funciones recursivas generales de Kurt Gödel y Stephen Kleene, demostraron ser equivalentes en su poder computacional. Esta convergencia fue crucial, llevando a la formulación de la Tesis, que postula que cualquier función que pueda ser 'efectivamente calculable' por un algoritmo es computable por una Máquina de Turing.</p>
+                </div>
+
+                <div class="card full-width formal-box">
+                    <h3>Descripción Formal</h3>
+                    <p>La Tesis de Church-Turing es una afirmación fundamental no demostrable formalmente, ya que relaciona un concepto intuitivo ('efectivamente calculable') con uno formal ('computable por una Máquina de Turing'). Una Máquina de Turing (MT) se define como una 7-tupla M = (Q, Σ, Γ, δ, q₀, ⬜, F), donde Q es un conjunto finito de estados, Σ es el alfabeto de entrada, Γ es el alfabeto de la cinta (Σ ⊆ Γ), δ es la función de transición (Q × Γ → Q × Γ × {L, R}), q₀ es el estado inicial, ⬜ es el símbolo blanco, y F es el conjunto de estados finales. La Tesis establece que cualquier procedimiento algorítmico, por complejo que sea, que pueda ser realizado por un ser humano siguiendo un conjunto finito de reglas discretas, puede ser simulado por una MT. Esto implica que la clase de funciones computables por una MT es la misma que la clase de funciones que son recursivas parciales, lambda-computables, o que pueden ser implementadas por cualquier otro modelo de computación 'razonable'. La robustez de esta tesis radica en la equivalencia de todos los modelos de computación conocidos, sugiriendo que la Máquina de Turing captura la esencia misma de la computación algorítmica. Un lenguaje L es computable (o recursivo) si existe una MT que decide L; es decir, siempre para y acepta cadenas en L o rechaza cadenas no en L.</p>
+                    <div class="diagrama-container">
+                        <svg viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg"><rect x="0" y="0" width="600" height="200" fill="#f9f9f9"/><circle cx="120" cy="100" r="60" fill="#CCE5FF" stroke="black" stroke-width="1"/><text x="120" y="105" font-family="Arial" font-size="14" text-anchor="middle">Máquina de Turing</text><circle cx="300" cy="100" r="60" fill="#FFF3CD" stroke="black" stroke-width="1"/><text x="300" y="105" font-family="Arial" font-size="14" text-anchor="middle">Cálculo Lambda</text><circle cx="480" cy="100" r="60" fill="#D4EDDA" stroke="black" stroke-width="1"/><text x="480" y="105" font-family="Arial" font-size="14" text-anchor="middle">Funciones Recursivas</text><path d="M180 100 H240" stroke="black" stroke-width="2" marker-end="url(#arrowhead)"/><path d="M240 100 H180" stroke="black" stroke-width="2" marker-end="url(#arrowhead)"/><path d="M360 100 H420" stroke="black" stroke-width="2" marker-end="url(#arrowhead)"/><path d="M420 100 H360" stroke="black" stroke-width="2" marker-end="url(#arrowhead)"/><path d="M150 155 Q240 190 300 155" fill="none" stroke="black" stroke-width="2" marker-end="url(#arrowhead)"/><path d="M270 155 Q240 190 180 155" fill="none" stroke="black" stroke-width="2" marker-end="url(#arrowhead)"/><path d="M450 155 Q360 190 300 155" fill="none" stroke="black" stroke-width="2" marker-end="url(#arrowhead)"/><path d="M330 155 Q360 190 420 155" fill="none" stroke="black" stroke-width="2" marker-end="url(#arrowhead)"/><defs><marker id="arrowhead" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" /></marker></defs></svg>
+                        <p style="font-size:0.8rem; color:#666; margin-top:0.5rem;"><em>Fig: Representación visual del concepto.</em></p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Intuición</h3>
+                    <p>La Tesis de Church-Turing es, en esencia, la creencia de que hemos capturado la noción fundamental de 'algoritmo'. Imagina que cualquier tarea que puedas instruir a alguien para que la realice siguiendo pasos precisos y finitos, sin ambigüedades, puede ser expresada como un programa para una computadora universal. La tesis dice que no importa cómo diseñes esa computadora o cómo formules los pasos (siempre que sigan ciertas reglas básicas), el conjunto de problemas que puede resolver será el mismo. Esto significa que si algo no puede ser computado por una Máquina de Turing, no puede ser computado por *ninguna* computadora o algoritmo posible. Es una frontera teórica sobre lo que es intrínsecamente calculable, y su importancia radica en establecer los límites de la computación, diciéndonos qué problemas podemos esperar resolver con algoritmos y cuáles están más allá de nuestras capacidades computacionales.</p>
+                </div>
+
+                <div class="card">
+                    <h3>Aplicación Real</h3>
+                    <p>La Tesis de Church-Turing es el pilar fundamental de la ciencia de la computación. Subyace a la idea de que cualquier lenguaje de programación (Python, Java, C++, etc.) o cualquier arquitectura de CPU es, en principio, equivalente en su poder computacional a una Máquina de Turing universal, ignorando limitaciones prácticas de tiempo y memoria. Esto significa que si un problema puede ser resuelto en un lenguaje, puede ser resuelto en cualquier otro, asumiendo que todos son 'Turing-completos'. En la ingeniería de software, esto valida el esfuerzo en desarrollar compiladores, intérpretes y máquinas virtuales, ya que sabemos que, en teoría, todos pueden ejecutar cualquier algoritmo computable. Además, la comprensión de los límites impuestos por la tesis nos ayuda a reconocer cuándo un problema es fundamentalmente intratable algorítmicamente, guiando la investigación hacia enfoques heurísticos o no algorítmicos para tales desafíos.</p>
+                </div>
+
+            </div>
+        </article>
+        
+        <article class="subtema">
+            <div class="subtema-header">
+                <h2>Decidibilidad: ¿Podemos Siempre Encontrar una Respuesta?</h2>
+            </div>
+            <div class="seccion-contenido">
+
+                <div class="card full-width">
+                    <h3>Historia</h3>
+                    <p>El concepto de decidibilidad tiene profundas raíces en la lógica y las matemáticas, particularmente con el 'Entscheidungsproblem' (Problema de Decisión) planteado por David Hilbert en 1928. Hilbert buscaba un algoritmo universal que pudiera decidir la verdad o falsedad de cualquier proposición lógica dentro de un sistema formal dado. La decidibilidad se convirtió en una cuestión central con el surgimiento de modelos formales de computación. Alan Turing y Alonzo Church, de manera independiente en 1936, demostraron la imposibilidad de tal algoritmo universal, probando que el Entscheidungsproblem era indecidible. Esto marcó un punto de inflexión, mostrando que no todos los problemas matemáticamente bien definidos tienen una solución algorítmica, y sentó las bases para distinguir entre problemas que pueden ser resueltos algorítmicamente y aquellos que no.</p>
+                </div>
+
+                <div class="card full-width formal-box">
+                    <h3>Descripción Formal</h3>
+                    <p>Un problema es 'decidible' si existe un algoritmo (una Máquina de Turing que siempre se detiene) que, dada cualquier instancia del problema, produce una respuesta correcta ('sí' o 'no') en un tiempo finito. Formalmente, un lenguaje L ⊆ Σ* es decidible (o recursivo) si existe una Máquina de Turing M que para en todas las entradas y, para cada cadena w ∈ Σ*, si w ∈ L, entonces M acepta w, y si w ∉ L, entonces M rechaza w. Si una Máquina de Turing para en todas las entradas, se dice que es un 'decisor'. Un lenguaje L es 'semi-decidible' (o recursivamente enumerable) si existe una Máquina de Turing M que acepta todas las cadenas en L, pero puede no parar (es decir, buclearse infinitamente) para las cadenas que no están en L. Esto significa que si la respuesta es 'sí', el algoritmo la encontrará eventualmente; pero si la respuesta es 'no', el algoritmo puede nunca terminar. La clase de lenguajes recursivos está estrictamente contenida en la clase de lenguajes recursivamente enumerables. Los problemas decidibles son aquellos para los cuales podemos construir un algoritmo que siempre nos dará una respuesta definitiva, garantizando su terminación.</p>
+                    <div class="diagrama-container">
+                        <svg viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg"><rect x="0" y="0" width="600" height="200" fill="#f9f9f9"/><circle cx="300" cy="100" r="80" fill="#CCE5FF" stroke="black" stroke-width="1"/><text x="300" y="100" font-family="Arial" font-size="14" text-anchor="middle">Problemas</text><text x="300" y="115" font-family="Arial" font-size="14" text-anchor="middle">Recursivamente Ennumerables</text><circle cx="300" cy="100" r="50" fill="#D4EDDA" stroke="black" stroke-width="1"/><text x="300" y="90" font-family="Arial" font-size="14" text-anchor="middle">Problemas</text><text x="300" y="105" font-family="Arial" font-size="14" text-anchor="middle">Decidibles</text><rect x="10" y="10" width="580" height="180" fill="none" stroke="gray" stroke-dasharray="5,5" stroke-width="1"/><text x="300" y="30" font-family="Arial" font-size="12" fill="gray" text-anchor="middle">Universo de Todos los Problemas</text></svg>
+                        <p style="font-size:0.8rem; color:#666; margin-top:0.5rem;"><em>Fig: Representación visual del concepto.</em></p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Intuición</h3>
+                    <p>Imagina que tienes una pregunta, y quieres un algoritmo que siempre te dé una respuesta 'sí' o 'no'. Si el problema es decidible, existe ese algoritmo. Por ejemplo, '¿este número es primo?' es decidible, porque puedes crear un algoritmo que siempre terminará y te dirá si el número es primo o no. Ahora, piensa en un problema semi-decidible: '¿Existe una solución para esta ecuación diofántica?' Puedes tener un algoritmo que busque soluciones y, si encuentra una, te diga 'sí'. Pero si no la encuentra, podría seguir buscando indefinidamente sin poder decirte 'no' con certeza. La diferencia clave es la garantía de terminación: un decisor siempre para, mientras que un reconocedor (para problemas semi-decidibles) solo garantiza parar si la respuesta es afirmativa. Esto nos dice que no siempre podemos construir un 'oráculo' que responda todas nuestras preguntas con una 'sí' o 'no' definitiva.</p>
+                </div>
+
+                <div class="card">
+                    <h3>Aplicación Real</h3>
+                    <p>La decidibilidad es crucial en el diseño y análisis de sistemas de software. Por ejemplo, la verificación de la sintaxis de un programa es un problema decidible: un compilador siempre puede determinar si un programa es sintácticamente válido o no en un tiempo finito. Los sistemas de gestión de bases de datos confían en la decidibilidad para asegurar que las consultas SQL siempre terminen y devuelvan un resultado o un error. Sin embargo, muchos problemas interesantes en la informática no son decidibles. Por ejemplo, determinar si dos programas son equivalentes (es decir, producen la misma salida para todas las entradas) es un problema indecidible. Esta comprensión informa la ingeniería de software, ayudando a los desarrolladores a saber cuándo un problema puede ser completamente automatizado y cuándo se requieren soluciones heurísticas, la intervención humana o la aceptación de que ciertas propiedades no pueden ser verificadas algorítmicamente de manera universal.</p>
+                </div>
+
+            </div>
+        </article>
+        
+        <article class="subtema">
+            <div class="subtema-header">
+                <h2>El Problema de la Parada: La Inevitable Indecidibilidad</h2>
+            </div>
+            <div class="seccion-contenido">
+
+                <div class="card full-width">
+                    <h3>Historia</h3>
+                    <p>El Problema de la Parada (Halting Problem) fue presentado por Alan Turing en su seminal artículo de 1936, 'On Computable Numbers, with an Application to the Entscheidungsproblem'. En este trabajo, Turing no solo formalizó el concepto de algoritmo con sus máquinas, sino que también demostró una de las limitaciones más profundas de la computación: la existencia de problemas que son fundamentalmente indecidibles. Su demostración, elegantemente construida a través de un argumento de diagonalización similar al de Cantor, mostró que no puede existir un algoritmo general que determine si otro algoritmo cualquiera, con una entrada dada, terminará o se ejecutará indefinidamente. Este resultado tuvo un impacto monumental en la lógica matemática y la naciente teoría de la computación, cerrando la esperanza de un 'algoritmo universal' para la decisión de cualquier problema.</p>
+                </div>
+
+                <div class="card full-width formal-box">
+                    <h3>Descripción Formal</h3>
+                    <p>El Problema de la Parada (HP) es el siguiente: Dada una descripción de un programa arbitrario P y una entrada I para ese programa, ¿determinará P(I) si P termina (para) o se ejecutará infinitamente (no para)? La demostración de la indecidibilidad del HP es un clásico argumento por contradicción. Se asume que existe una Máquina de Turing H que decide el HP. Es decir, H(P, I) = 'sí' si P(I) para, y H(P, I) = 'no' si P(I) no para. Luego, se construye una nueva Máquina de Turing, D (para 'Diagonal'), que toma como entrada una descripción de un programa P. D hace lo siguiente: 1. Llama a H con entrada (P, P) (es decir, el programa P ejecutado sobre su propia descripción). 2. Si H(P, P) = 'sí' (P(P) para), entonces D entra en un bucle infinito. 3. Si H(P, P) = 'no' (P(P) no para), entonces D para. Ahora, consideramos el comportamiento de D cuando se ejecuta sobre sí misma, D(D): - Si D(D) para, entonces, por definición de D, H(D, D) debe haber devuelto 'no' (P(P) no para). Esto implica que D(D) no para, lo cual es una contradicción. - Si D(D) no para, entonces, por definición de D, H(D, D) debe haber devuelto 'sí' (P(P) para). Esto implica que D(D) para, lo cual también es una contradicción. Dado que ambas suposiciones llevan a una contradicción, la suposición original de que existe H debe ser falsa. Por lo tanto, el Problema de la Parada es indecidible.</p>
+                    <div class="diagrama-container">
+                        <svg viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg"><rect x="0" y="0" width="600" height="200" fill="#f9f9f9"/><rect x="50" y="50" width="100" height="100" fill="#CCE5FF" stroke="black" stroke-width="1"/><text x="100" y="100" font-family="Arial" font-size="14" text-anchor="middle">Programa P</text><text x="100" y="115" font-family="Arial" font-size="12" text-anchor="middle">(código)</text><rect x="250" y="50" width="100" height="100" fill="#D4EDDA" stroke="black" stroke-width="1"/><text x="300" y="90" font-family="Arial" font-size="14" text-anchor="middle">Máquina H</text><text x="300" y="105" font-family="Arial" font-size="12" text-anchor="middle">(Asumido Decisor)</text><text x="300" y="120" font-family="Arial" font-size="12" text-anchor="middle">del HP</text><path d="M150 100 H250" stroke="black" stroke-width="2" marker-end="url(#arrowhead)"/><path d="M100 150 Q200 180 280 150" fill="none" stroke="black" stroke-width="2" marker-end="url(#arrowhead)"/><text x="200" y="170" font-family="Arial" font-size="12" text-anchor="middle">Entrada I</text><text x="200" y="90" font-family="Arial" font-size="12" text-anchor="middle">Programa P</text><circle cx="450" cy="100" r="40" fill="#FFF3CD" stroke="black" stroke-width="1"/><text x="450" y="95" font-family="Arial" font-size="14" text-anchor="middle">Salida:</text><text x="450" y="110" font-family="Arial" font-size="14" text-anchor="middle">¿Para o No?</text><path d="M350 100 H410" stroke="black" stroke-width="2" marker-end="url(#arrowhead)"/><defs><marker id="arrowhead" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" /></marker></defs></svg>
+                        <p style="font-size:0.8rem; color:#666; margin-top:0.5rem;"><em>Fig: Representación visual del concepto.</em></p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Intuición</h3>
+                    <p>Imagina que eres un programador y quieres crear la herramienta de depuración definitiva. Esta herramienta mágica, a la que llamaremos 'HaltoChecker', debería poder tomar cualquier programa y cualquier entrada, y decirte con total certeza si ese programa terminará su ejecución o se quedará en un bucle infinito para esa entrada. El Problema de la Parada nos dice que 'HaltoChecker' es imposible de construir. No es que sea increíblemente difícil, o que necesitemos más potencia de cálculo, sino que es fundamentalmente imposible, por una cuestión de lógica. La demostración de Turing es una de las pruebas más poderosas de los límites de la computación, similar a cómo el principio de incertidumbre de Heisenberg o el teorema de incompletitud de Gödel revelaron límites fundamentales en la física y las matemáticas, respectivamente. Nos enseña que la computación tiene límites inherentes, y no podemos construir una máquina que lo sepa todo sobre el comportamiento de cualquier otro programa.</p>
+                </div>
+
+                <div class="card">
+                    <h3>Aplicación Real</h3>
+                    <p>La indecidibilidad del Problema de la Parada tiene implicaciones profundas y prácticas en la ingeniería de software. Significa que no se puede construir un analizador de código estático universal que pueda determinar, para *cualquier* programa, si contiene bucles infinitos para *cualquier* entrada. Tampoco se puede crear un compilador que detecte y prevenga *todos* los posibles errores de bucles infinitos o condiciones de carrera que causen que un programa se congele. Esto obliga a los ingenieros a usar técnicas más limitadas, como la verificación formal para subconjuntos específicos de programas, pruebas extensivas, heurísticas, o sistemas de tipos restrictivos que eliminan ciertas clases de bucles. En ciberseguridad, significa que no podemos tener un 'detector de malware perfecto' que determine si cualquier programa arbitrario es malicioso o benigno simplemente analizando su código sin ejecutarlo, ya que muchos comportamientos maliciosos dependen de si el programa termina o no bajo ciertas condiciones.</p>
+                </div>
+
+            </div>
+        </article>
+        
+    </main>
+
+    <footer>
+        <p>Prof. Jorge López-Cifre, PhD © 2026</p>
+    </footer>
+
+</body>
+</html>

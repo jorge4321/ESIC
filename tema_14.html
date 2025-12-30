@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>14 - Lenguajes independientes del contexto - Ambigüedad - Prof. Jorge López-Cifre</title>
+    <style>
+        :root {
+            --primary: #003366;
+            --accent: #d4af37;
+            --bg: #fdfdfd;
+            --text: #333;
+            --card-bg: #fff;
+            --border: #e0e0e0;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+        header {
+            background: var(--primary);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        h1 { margin: 0; font-size: 1.3rem; }
+        @media (min-width: 768px) { h1 { font-size: 1.5rem; } }
+
+        .btn-volver {
+            background: var(--accent);
+            color: var(--primary);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            transition: background 0.3s;
+        }
+        .btn-volver:hover { background: #fff; }
+
+        main {
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .subtema {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            margin-bottom: 3rem;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        .subtema-header {
+            background: #f4f4f4;
+            padding: 1rem 2rem;
+            border-bottom: 1px solid var(--border);
+        }
+        .subtema-header h2 { margin: 0; color: var(--primary); font-size: 1.4rem; }
+
+        .seccion-contenido {
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+
+        @media (min-width: 768px) {
+            .seccion-contenido { grid-template-columns: repeat(2, 1fr); }
+            .full-width { grid-column: span 2; }
+        }
+
+        .card h3 {
+            color: var(--primary);
+            border-bottom: 2px solid var(--accent);
+            display: inline-block;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .formal-box {
+            background-color: #f9fbfd;
+            border-left: 4px solid var(--primary);
+            padding: 1rem;
+        }
+
+        .diagrama-container {
+            text-align: center;
+            margin: 1.5rem 0;
+            padding: 1rem;
+            background: white;
+            border: 1px dashed #ccc;
+            border-radius: 4px;
+        }
+        svg { max-width: 100%; height: auto; }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            background: var(--primary);
+            color: white;
+            margin-top: 3rem;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>14 - Lenguajes independientes del contexto - Ambigüedad</h1>
+        <a href="javascript:history.back()" class="btn-volver">← Volver</a>
+    </header>
+
+    <main>
+
+        <article class="subtema">
+            <div class="subtema-header">
+                <h2>Gramáticas Independientes del Contexto: La Base de los LIC</h2>
+            </div>
+            <div class="seccion-contenido">
+
+                <div class="card full-width">
+                    <h3>Historia</h3>
+                    <p>Los orígenes de los Lenguajes Independientes del Contexto (LIC) y sus gramáticas (GIC) se remontan a los años 50 con el trabajo del lingüista Noam Chomsky. Chomsky buscaba un formalismo matemático para describir la sintaxis de los lenguajes naturales, proponiendo una jerarquía de gramáticas que incluía las gramáticas de tipo 2, posteriormente conocidas como GIC. Su propósito era modelar cómo se construyen las oraciones en un lenguaje humano de manera recursiva y estructural. Aunque inicialmente concebidas para la lingüística, estas gramáticas demostraron ser extraordinariamente útiles para la naciente ciencia de la computación. A medida que los lenguajes de programación como ALGOL 60 comenzaron a desarrollarse, se hizo evidente la necesidad de una forma precisa de describir su sintaxis. John Backus y Peter Naur, al definir ALGOL 60, popularizaron una notación basada en las ideas de Chomsky, conocida como Backus-Naur Form (BNF), que es esencialmente una GIC. Esta notación proporcionó la rigurosidad necesaria para la especificación y construcción de compiladores, consolidando a las GIC como una herramienta fundamental en la informática teórica y práctica.</p>
+                </div>
+
+                <div class="card full-width formal-box">
+                    <h3>Descripción Formal</h3>
+                    <p>Una Gramática Independiente del Contexto (GIC) G se define formalmente como una 4-tupla (V, Σ, R, S), donde:
+1. V es un conjunto finito de variables (o no terminales), que representan categorías sintácticas (ej., "Sentencia", "Expresión").
+2. Σ es un conjunto finito de símbolos terminales, que constituyen el alfabeto del lenguaje y son los símbolos "reales" del lenguaje (ej., palabras clave, operadores, identificadores). V ∩ Σ = ∅.
+3. R es un conjunto finito de reglas de producción (o reescritura), cada una de la forma A → β, donde A ∈ V y β es una cadena de símbolos de (V ∪ Σ)*. La característica "independiente del contexto" reside en que A es siempre una única variable, y su reemplazo por β no depende del contexto en el que aparece A.
+4. S ∈ V es el símbolo inicial (o axioma), que representa la categoría sintáctica más alta del lenguaje (ej., "Programa").
+
+Una derivación en G se denota por αAβ ⇒ αγβ si A → γ es una regla de R. Un lenguaje independiente del contexto L(G) es el conjunto de todas las cadenas de terminales que pueden derivarse de S. Es decir, L(G) = {w ∈ Σ* | S ⇒* w}, donde ⇒* denota cero o más pasos de derivación. Las GIC son capaces de describir estructuras recursivas y anidadas, como las que se encuentran en las expresiones aritméticas o las estructuras de control de los lenguajes de programación.</p>
+                    <div class="diagrama-container">
+                        <svg viewBox="0 0 600 200"><defs><marker id="arrowhead" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="black" /></marker></defs><rect x="10" y="10" width="100" height="30" rx="5" ry="5" fill="#e0f2f7" stroke="black" stroke-width="1"/><text x="60" y="30" text-anchor="middle" font-family="Arial" font-size="14">S</text><rect x="10" y="60" width="100" height="30" rx="5" ry="5" fill="#e0f2f7" stroke="black" stroke-width="1"/><text x="60" y="80" text-anchor="middle" font-family="Arial" font-size="14">E</text><rect x="10" y="110" width="100" height="30" rx="5" ry="5" fill="#e0f2f7" stroke="black" stroke-width="1"/><text x="60" y="130" text-anchor="middle" font-family="Arial" font-size="14">id</text><path d="M 120 25 H 170" stroke="black" stroke-width="1" marker-end="url(#arrowhead)"/><text x="145" y="20" font-family="Arial" font-size="12">Reglas (ej.)</text><rect x="180" y="10" width="200" height="30" rx="5" ry="5" fill="#fff8e1" stroke="black" stroke-width="1"/><text x="280" y="30" text-anchor="middle" font-family="Arial" font-size="14">S → E</text><rect x="180" y="60" width="200" height="30" rx="5" ry="5" fill="#fff8e1" stroke="black" stroke-width="1"/><text x="280" y="80" text-anchor="middle" font-family="Arial" font-size="14">E → E + E | id</text><rect x="400" y="10" width="180" height="150" rx="5" ry="5" fill="#e8f5e9" stroke="black" stroke-width="1"/><text x="490" y="30" text-anchor="middle" font-family="Arial" font-size="14">Derivación:</text><text x="490" y="55" text-anchor="middle" font-family="Arial" font-size="12">S</text><text x="490" y="75" text-anchor="middle" font-family="Arial" font-size="12">⇒ E</text><text x="490" y="95" text-anchor="middle" font-family="Arial" font-size="12">⇒ E + E</text><text x="490" y="115" text-anchor="middle" font-family="Arial" font-size="12">⇒ id + E</text><text x="490" y="135" text-anchor="middle" font-family="Arial" font-size="12">⇒ id + id</text><text x="490" y="165" text-anchor="middle" font-family="Arial" font-size="14">(w = id + id)</text></svg>
+                        <p style="font-size:0.8rem; color:#666; margin-top:0.5rem;"><em>Fig: Representación visual del concepto.</em></p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Intuición</h3>
+                    <p>Imagina un lenguaje de programación como un conjunto de instrucciones que le das a una computadora. Para que la computadora entienda estas instrucciones, deben seguir una estructura muy específica, como las reglas de gramática en un idioma humano. Una Gramática Independiente del Contexto (GIC) es como el "libro de reglas de gramática" para ese lenguaje. Cada regla dice cómo puedes construir una parte de la instrucción a partir de componentes más pequeños, sin importar lo que haya alrededor. Por ejemplo, una regla podría decir que una "expresión" puede ser un "número", o "expresión + expresión". Esta regla es válida siempre, no importa si la expresión está dentro de una función, un bucle o una asignación. Esta independencia hace que las gramáticas sean poderosas para describir la sintaxis anidada y recursiva de los lenguajes de programación, permitiendo construir frases complejas a partir de elementos simples de manera sistemática, tal como se construyen programas a partir de variables, operadores y declaraciones.</p>
+                </div>
+
+                <div class="card">
+                    <h3>Aplicación Real</h3>
+                    <p>La aplicación más directa y fundamental de las GIC se encuentra en el diseño y construcción de compiladores e intérpretes para lenguajes de programación. La fase de análisis sintáctico (parsing) de un compilador utiliza una GIC para verificar que el código fuente escrito por un programador se ajusta a las reglas sintácticas del lenguaje. Si el código cumple con la gramática, se construye un árbol de análisis sintáctico (parse tree o abstract syntax tree, AST), que es una representación estructurada del programa. Este AST es entonces utilizado por fases posteriores del compilador para la generación de código objeto o la interpretación. Además de los lenguajes de programación, las GIC son cruciales en la definición de formatos de datos estructurados como XML y JSON, donde la validación de un documento contra un esquema (que es esencialmente una GIC) asegura que los datos tienen la forma esperada. También se utilizan en el procesamiento de lenguajes naturales, aunque con desafíos adicionales debido a la inherente ambigüedad y complejidad del lenguaje humano. En esencia, cualquier sistema que necesite comprender y procesar entradas con una estructura recursiva bien definida se beneficia de la teoría de las GIC.</p>
+                </div>
+
+            </div>
+        </article>
+        
+        <article class="subtema">
+            <div class="subtema-header">
+                <h2>Ambigüedad: Múltiples Interpretaciones y Árboles de Derivación</h2>
+            </div>
+            <div class="seccion-contenido">
+
+                <div class="card full-width">
+                    <h3>Historia</h3>
+                    <p>El problema de la ambigüedad en los lenguajes formales y, específicamente, en las Gramáticas Independientes del Contexto (GIC) emergió de forma prominente a medida que los investigadores y desarrolladores intentaban aplicar las GIC a problemas prácticos, primero en la lingüística y luego en la informática. En el contexto de los lenguajes naturales, la ambigüedad es un fenómeno bien conocido; frases como "Time flies like an arrow" pueden tener múltiples interpretaciones. Cuando las GIC se adoptaron para definir lenguajes de programación, los diseñadores de compiladores se enfrentaron rápidamente a la realidad de que ciertas reglas gramaticales podían llevar a que una única secuencia de símbolos (código) tuviera dos o más "significados" estructurales válidos. Este problema fue particularmente crítico en los primeros lenguajes, como ALGOL 60, donde las reglas del "dangling else" (if-then-else ambiguo) se convirtieron en un ejemplo clásico de ambigüedad. La identificación de la ambigüedad y sus consecuencias fue un paso crucial en el desarrollo de técnicas de análisis sintáctico robustas y en la formulación de gramáticas de programación que fueran no solo correctas sino también deterministas para los compiladores.</p>
+                </div>
+
+                <div class="card full-width formal-box">
+                    <h3>Descripción Formal</h3>
+                    <p>Una Gramática Independiente del Contexto G es ambigua si existe al menos una cadena w en el lenguaje L(G) generado por G para la cual se pueden construir dos o más árboles de derivación (parse trees) distintos. Alternativamente, una GIC es ambigua si existe una cadena w ∈ L(G) que tiene dos o más derivaciones más a la izquierda (leftmost derivations) distintas, o dos o más derivaciones más a la derecha (rightmost derivations) distintas. Una derivación más a la izquierda es aquella en la que, en cada paso, la variable más a la izquierda de la forma sentencial actual es reemplazada. De manera similar, una derivación más a la derecha reemplaza la variable más a la derecha. La existencia de múltiples árboles de derivación para la misma cadena implica que la estructura sintáctica de esa cadena no está unívocamente determinada por la gramática. Esto es problemático porque el significado semántico o la ejecución de una expresión a menudo dependen de su estructura sintáctica subyacente. Por ejemplo, en expresiones aritméticas, la ambigüedad puede llevar a diferentes órdenes de operación, mientras que en estructuras de control (como el "dangling else"), puede alterar el flujo lógico del programa.</p>
+                    <div class="diagrama-container">
+                        <svg viewBox="0 0 600 200"><defs><marker id="arrow" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="black" /></marker></defs><text x="100" y="20" text-anchor="middle" font-family="Arial" font-size="14">Gramática Amb. (ej.): E → E + E | E * E | id</text><text x="100" y="40" text-anchor="middle" font-family="Arial" font-size="14">Cadena: id + id * id</text><text x="150" y="60" text-anchor="middle" font-family="Arial" font-size="12">Árbol 1</text><circle cx="150" cy="80" r="10" fill="#add8e6" stroke="black"/><text x="150" y="85" text-anchor="middle" font-family="Arial" font-size="10">E</text><path d="M150 90 L100 110" stroke="black" stroke-width="1"/><circle cx="100" cy="115" r="10" fill="#add8e6" stroke="black"/><text x="100" y="120" text-anchor="middle" font-family="Arial" font-size="10">E</text><path d="M150 90 L200 110" stroke="black" stroke-width="1"/><circle cx="200" cy="115" r="10" fill="#add8e6" stroke="black"/><text x="200" y="120" text-anchor="middle" font-family="Arial" font-size="10">E</text><text x="150" y="115" font-family="Arial" font-size="10">*</text><path d="M100 125 L50 145" stroke="black" stroke-width="1"/><circle cx="50" cy="150" r="10" fill="#e0ffe0" stroke="black"/><text x="50" y="155" text-anchor="middle" font-family="Arial" font-size="10">E</text><text x="100" y="150" font-family="Arial" font-size="10">+</text><path d="M100 125 L150 145" stroke="black" stroke-width="1"/><circle cx="150" cy="150" r="10" fill="#e0ffe0" stroke="black"/><text x="150" y="155" text-anchor="middle" font-family="Arial" font-size="10">E</text><path d="M50 160 L50 180" stroke="black" stroke-width="1"/><circle cx="50" cy="185" r="10" fill="#ffcccb" stroke="black"/><text x="50" y="190" text-anchor="middle" font-family="Arial" font-size="10">id</text><path d="M150 160 L150 180" stroke="black" stroke-width="1"/><circle cx="150" cy="185" r="10" fill="#ffcccb" stroke="black"/><text x="150" y="190" text-anchor="middle" font-family="Arial" font-size="10">id</text><path d="M200 125 L200 180" stroke="black" stroke-width="1"/><circle cx="200" cy="185" r="10" fill="#ffcccb" stroke="black"/><text x="200" y="190" text-anchor="middle" font-family="Arial" font-size="10">id</text><text x="450" y="60" text-anchor="middle" font-family="Arial" font-size="12">Árbol 2</text><circle cx="450" cy="80" r="10" fill="#add8e6" stroke="black"/><text x="450" y="85" text-anchor="middle" font-family="Arial" font-size="10">E</text><path d="M450 90 L400 110" stroke="black" stroke-width="1"/><circle cx="400" cy="115" r="10" fill="#add8e6" stroke="black"/><text x="400" y="120" text-anchor="middle" font-family="Arial" font-size="10">E</text><path d="M450 90 L500 110" stroke="black" stroke-width="1"/><circle cx="500" cy="115" r="10" fill="#add8e6" stroke="black"/><text x="500" y="120" text-anchor="middle" font-family="Arial" font-size="10">E</text><text x="450" y="115" font-family="Arial" font-size="10">+</text><path d="M500 125 L450 145" stroke="black" stroke-width="1"/><circle cx="450" cy="150" r="10" fill="#e0ffe0" stroke="black"/><text x="450" y="155" text-anchor="middle" font-family="Arial" font-size="10">E</text><text x="500" y="150" font-family="Arial" font-size="10">*</text><path d="M500 125 L550 145" stroke="black" stroke-width="1"/><circle cx="550" cy="150" r="10" fill="#e0ffe0" stroke="black"/><text x="550" y="155" text-anchor="middle" font-family="Arial" font-size="10">E</text><path d="M400 125 L400 180" stroke="black" stroke-width="1"/><circle cx="400" cy="185" r="10" fill="#ffcccb" stroke="black"/><text x="400" y="190" text-anchor="middle" font-family="Arial" font-size="10">id</text><path d="M450 160 L450 180" stroke="black" stroke-width="1"/><circle cx="450" cy="185" r="10" fill="#ffcccb" stroke="black"/><text x="450" y="190" text-anchor="middle" font-family="Arial" font-size="10">id</text><path d="M550 160 L550 180" stroke="black" stroke-width="1"/><circle cx="550" cy="185" r="10" fill="#ffcccb" stroke="black"/><text x="550" y="190" text-anchor="middle" font-family="Arial" font-size="10">id</text></svg>
+                        <p style="font-size:0.8rem; color:#666; margin-top:0.5rem;"><em>Fig: Representación visual del concepto.</em></p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Intuición</h3>
+                    <p>Piensa en la ambigüedad como una frase o una expresión que puede entenderse de más de una manera, incluso si las palabras o símbolos son los mismos. En el lenguaje natural, si digo "Vi al hombre con el telescopio", ¿fui yo quien usó el telescopio para ver al hombre, o el hombre que vi ya tenía un telescopio? Ambas interpretaciones son gramaticalmente posibles. En el contexto de los lenguajes de programación, una gramática ambigua significa que un trozo de código, como "3 + 4 * 5", podría ser interpretado de dos maneras distintas si la gramática no especifica el orden de las operaciones. Podría ser (3 + 4) * 5 = 35 o 3 + (4 * 5) = 23. La ambigüedad es un problema grave porque un compilador o intérprete necesita tomar una única decisión sobre cómo estructurar y ejecutar el código. Si hay dos árboles de derivación válidos, el sistema no sabe cuál elegir, lo que puede llevar a errores lógicos, comportamientos inesperados o incluso vulnerabilidades de seguridad. Por eso, en el diseño de lenguajes de programación, es crucial tener gramáticas no ambiguas o, al menos, reglas claras para resolver cualquier ambigüedad inherente.</p>
+                </div>
+
+                <div class="card">
+                    <h3>Aplicación Real</h3>
+                    <p>La ambigüedad es un enemigo acérrimo en el desarrollo de herramientas de software que procesan lenguajes formales, como compiladores, intérpretes, IDEs y parsers de formatos de datos. Si la gramática de un lenguaje de programación es ambigua, diferentes compiladores podrían interpretar el mismo fragmento de código de manera distinta, llevando a resultados inconsistentes y dificultando la portabilidad del software. Por ejemplo, la famosa ambigüedad del "dangling else" (if C1 then if C2 then S1 else S2) puede hacer que un `else` se asocie con el `if` más cercano o con el más lejano, cambiando drásticamente la lógica del programa. En la ingeniería de software actual, es imperativo que los lenguajes estén definidos por gramáticas sin ambigüedad o que las ambigüedades se resuelvan mediante reglas de precedencia y asociatividad (como en las expresiones aritméticas) o directivas sintácticas específicas. Los generadores de parsers como Yacc/Bison o ANTLR están diseñados para detectar y, en muchos casos, resolver ambigüedades mediante declaraciones adicionales del usuario, asegurando que el análisis sintáctico produzca siempre un único árbol de derivación para cualquier entrada válida, lo que es esencial para la fiabilidad y el comportamiento predecible del software.</p>
+                </div>
+
+            </div>
+        </article>
+        
+        <article class="subtema">
+            <div class="subtema-header">
+                <h2>Consecuencias y Estrategias para la Eliminación de Ambigüedad</h2>
+            </div>
+            <div class="seccion-contenido">
+
+                <div class="card full-width">
+                    <h3>Historia</h3>
+                    <p>El reconocimiento de que la ambigüedad en las Gramáticas Independientes del Contexto (GIC) era un impedimento significativo para la construcción de compiladores eficientes y confiables se consolidó durante las décadas de 1960 y 1970. Con el auge de los lenguajes de programación de alto nivel y la necesidad de herramientas automatizadas para procesarlos, se hizo evidente que los algoritmos de análisis sintáctico (parsing), como los métodos LL y LR, requerían gramáticas que fueran deterministas, es decir, no ambiguas o con ambigüedades resueltas. Los pioneros de la teoría de los compiladores, como Donald Knuth (creador de los parsers LR), investigaron profundamente las propiedades de las gramáticas y cómo la ambigüedad afectaba su analizabilidad. Descubrieron que la detección algorítmica general de la ambigüedad era un problema indecidible, lo que significaba que no se podía construir un algoritmo universal para determinar si una GIC arbitraria era ambigua. Esto llevó a un enfoque práctico: en lugar de detectar todas las ambigüedades, se buscaron patrones comunes de ambigüedad y se desarrollaron técnicas sistemáticas para reescribir gramáticas y añadir reglas que las hicieran aptas para los parsers, garantizando una única interpretación sintáctica.</p>
+                </div>
+
+                <div class="card full-width formal-box">
+                    <h3>Descripción Formal</h3>
+                    <p>La detección de ambigüedad para una GIC arbitraria es un problema algorítmicamente indecidible. Esto significa que no existe un algoritmo general que pueda tomar cualquier GIC y determinar si es ambigua en un tiempo finito. Sin embargo, en la práctica, se pueden identificar y resolver muchas fuentes comunes de ambigüedad mediante la reescritura de la gramática. Las estrategias incluyen:
+1.  **Precedencia de Operadores:** Se resuelve introduciendo niveles adicionales de no terminales. Por ejemplo, para E → E + E | E * E | id, se pueden crear:
+    E → E + T | T
+    T → T * F | F
+    F → id
+    Esto fuerza a la multiplicación (T) a tener mayor precedencia que la suma (E).
+2.  **Asociatividad de Operadores:** Se resuelve con recursión izquierda o derecha. Para un operador asociativo a la izquierda (como + o -), se usa recursión izquierda (E → E + T | T). Para un operador asociativo a la derecha (como el operador de asignación), se usaría recursión derecha (E → T + E | T).
+3.  **Dangling Else:** Se resuelve haciendo la gramática libre de este tipo de ambigüedad, por ejemplo, definiendo explícitamente sentencias `if` que deben tener `else`, o sentencias `if` que no lo tienen, y controlando su anidamiento. Por ejemplo, mediante el uso de non-terminales para "Matched Statement" (con `else`) y "Open Statement" (sin `else`).
+Estas técnicas transforman una gramática ambigua en una gramática equivalente (generan el mismo lenguaje) pero no ambigua, o al menos menos ambigua para los parsers deterministas.</p>
+                    <div class="diagrama-container">
+                        <svg viewBox="0 0 600 200"><defs><marker id="arrow" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="black" /></marker></defs><rect x="10" y="10" width="280" height="180" rx="5" ry="5" fill="#fbe9e7" stroke="black" stroke-width="1"/><text x="150" y="30" text-anchor="middle" font-family="Arial" font-size="14">Gramática Amb. (ej.):</text><text x="150" y="55" text-anchor="middle" font-family="Arial" font-size="12">Exp → Exp + Exp | Exp * Exp | num</text><text x="150" y="80" text-anchor="middle" font-family="Arial" font-size="12">Problemas: Precedencia, Asociatividad</text><path d="M290 90 H 340" stroke="black" stroke-width="1" marker-end="url(#arrow)"/><text x="315" y="85" font-family="Arial" font-size="12">Transformar</text><rect x="310" y="10" width="280" height="180" rx="5" ry="5" fill="#e8f5e9" stroke="black" stroke-width="1"/><text x="450" y="30" text-anchor="middle" font-family="Arial" font-size="14">Gramática No Amb. (ej.):</text><text x="450" y="55" text-anchor="middle" font-family="Arial" font-size="12">Exp → Exp + Term | Term</text><text x="450" y="80" text-anchor="middle" font-family="Arial" font-size="12">Term → Term * Factor | Factor</text><text x="450" y="105" text-anchor="middle" font-family="Arial" font-size="12">Factor → num</text><text x="450" y="130" text-anchor="middle" font-family="Arial" font-size="12">Solución: Nuevos no terminales</text><text x="450" y="155" text-anchor="middle" font-family="Arial" font-size="12">para niveles de precedencia.</text><text x="450" y="175" text-anchor="middle" font-family="Arial" font-size="12">Recursión izquierda para asociatividad.</text></svg>
+                        <p style="font-size:0.8rem; color:#666; margin-top:0.5rem;"><em>Fig: Representación visual del concepto.</em></p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Intuición</h3>
+                    <p>Imagina que estás escribiendo un manual de instrucciones. Si una instrucción se puede entender de varias maneras, los usuarios podrían hacer cosas diferentes, llevando a resultados impredecibles. Eso es lo que pasa con la ambigüedad en un lenguaje de programación. Un compilador es como un lector muy literal de ese manual, y si ve una ambigüedad, no sabe qué hacer. Las consecuencias son desastrosas: un programa podría funcionar bien en una máquina y fallar en otra, o peor, podría tener errores sutiles que solo aparecen bajo ciertas condiciones. Dado que no podemos tener una "varita mágica" para eliminar automáticamente toda ambigüedad (debido a la indecibilidad del problema), la solución es ser un "ingeniero gramatical" cuidadoso. Esto implica diseñar las reglas de la gramática de forma que no permitan múltiples interpretaciones. Por ejemplo, al definir cómo se combinan las operaciones matemáticas, se establecen niveles de prioridad (multiplicación antes que suma) y de dirección (si hay dos sumas seguidas, se evalúan de izquierda a derecha), asegurando que siempre haya una única manera de entender cada expresión.</p>
+                </div>
+
+                <div class="card">
+                    <h3>Aplicación Real</h3>
+                    <p>En el desarrollo de compiladores, la eliminación de la ambigüedad es una tarea crítica que impacta directamente la robustez y la portabilidad del código. Los diseñadores de lenguajes deben definir sus gramáticas de forma no ambigua para garantizar que cualquier programa escrito en el lenguaje tenga una única interpretación sintáctica. Cuando una ambigüedad no puede eliminarse completamente de la gramática formal sin hacerla excesivamente compleja, se utilizan mecanismos externos para resolverla. Por ejemplo, la mayoría de los analizadores sintácticos generados por herramientas como Yacc/Bison o ANTLR permiten al programador especificar reglas de precedencia y asociatividad para los operadores, o reglas de desambiguación para construcciones como el `if-else`. Estas reglas externas le dicen al parser qué árbol de derivación debe preferir cuando la gramática permite múltiples opciones. Esta combinación de diseño de gramática y reglas de desambiguación es esencial para construir compiladores que produzcan código predecible y correcto, asegurando que un programa se ejecute de la misma manera independientemente del compilador o la plataforma. También es vital en el diseño de DSLs (Domain-Specific Languages) y en la validación de formatos de datos para evitar interpretaciones erróneas.</p>
+                </div>
+
+            </div>
+        </article>
+        
+    </main>
+
+    <footer>
+        <p>Prof. Jorge López-Cifre, PhD © 2026</p>
+    </footer>
+
+</body>
+</html>

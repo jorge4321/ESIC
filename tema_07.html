@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>7 - Autómatas finitos - Conversión y Minimización - Prof. Jorge López-Cifre</title>
+    <style>
+        :root {
+            --primary: #003366;
+            --accent: #d4af37;
+            --bg: #fdfdfd;
+            --text: #333;
+            --card-bg: #fff;
+            --border: #e0e0e0;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+        header {
+            background: var(--primary);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        h1 { margin: 0; font-size: 1.3rem; }
+        @media (min-width: 768px) { h1 { font-size: 1.5rem; } }
+
+        .btn-volver {
+            background: var(--accent);
+            color: var(--primary);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            transition: background 0.3s;
+        }
+        .btn-volver:hover { background: #fff; }
+
+        main {
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .subtema {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            margin-bottom: 3rem;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        .subtema-header {
+            background: #f4f4f4;
+            padding: 1rem 2rem;
+            border-bottom: 1px solid var(--border);
+        }
+        .subtema-header h2 { margin: 0; color: var(--primary); font-size: 1.4rem; }
+
+        .seccion-contenido {
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+
+        @media (min-width: 768px) {
+            .seccion-contenido { grid-template-columns: repeat(2, 1fr); }
+            .full-width { grid-column: span 2; }
+        }
+
+        .card h3 {
+            color: var(--primary);
+            border-bottom: 2px solid var(--accent);
+            display: inline-block;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .formal-box {
+            background-color: #f9fbfd;
+            border-left: 4px solid var(--primary);
+            padding: 1rem;
+        }
+
+        .diagrama-container {
+            text-align: center;
+            margin: 1.5rem 0;
+            padding: 1rem;
+            background: white;
+            border: 1px dashed #ccc;
+            border-radius: 4px;
+        }
+        svg { max-width: 100%; height: auto; }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            background: var(--primary);
+            color: white;
+            margin-top: 3rem;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>7 - Autómatas finitos - Conversión y Minimización</h1>
+        <a href="javascript:history.back()" class="btn-volver">← Volver</a>
+    </header>
+
+    <main>
+
+        <article class="subtema">
+            <div class="subtema-header">
+                <h2>Conversión de Autómatas Finitos No Deterministas a Deterministas (AFND a AFD)</h2>
+            </div>
+            <div class="seccion-contenido">
+
+                <div class="card full-width">
+                    <h3>Historia</h3>
+                    <p>La teoría de los autómatas finitos tuvo sus inicios en los años 40 con el trabajo pionero de Warren McCulloch y Walter Pitts (1943) sobre redes neuronales que podían modelarse con lógica booleana, sentando las bases de lo que hoy conocemos como autómatas finitos. Sin embargo, la formalización rigurosa de los autómatas finitos no deterministas (AFND) y la demostración de su equivalencia con los autómatas finitos deterministas (AFD) se atribuye principalmente a Michael O. Rabin y Dana Scott en su influyente artículo "Finite Automata and Their Decision Problems" de 1959. Este trabajo fue un hito, ya que probó que, a pesar de su aparente mayor flexibilidad al permitir múltiples transiciones para un mismo símbolo o transiciones epsilon, los AFND no poseen un poder computacional superior al de los AFD. Es decir, cualquier lenguaje que pueda ser reconocido por un AFND, también puede serlo por un AFD. El algoritmo clave para esta conversión, conocido como "construcción del subconjunto" o "power set construction", fue una contribución central de Rabin y Scott, demostrando constructivamente cómo un AFND puede ser transformado en un AFD equivalente, aunque potencialmente con un número exponencial de estados. Esto solidificó la comprensión de la naturaleza de los lenguajes regulares y sus reconocedores.</p>
+                </div>
+
+                <div class="card full-width formal-box">
+                    <h3>Descripción Formal</h3>
+                    <p>La conversión de un Autómata Finito No Determinista (AFND) a un Autómata Finito Determinista (AFD) se realiza mediante la construcción del subconjunto.
+Un AFND se define como una 5-tupla M = (Q, Σ, δ, q₀, F), donde:
+*   Q es un conjunto finito de estados.
+*   Σ es el alfabeto de entrada.
+*   δ es la función de transición, δ: Q × (Σ ∪ {ε}) → P(Q) (P(Q) es el conjunto de potencias de Q).
+*   q₀ ∈ Q es el estado inicial.
+*   F ⊆ Q es el conjunto de estados finales.
+
+El AFD equivalente M' = (Q', Σ, δ', q'₀, F') se construye de la siguiente manera:
+*   Q' = P(Q), el conjunto de estados del AFD son subconjuntos de los estados del AFND.
+*   q'₀ = ε-clausura(q₀), donde ε-clausura(S) para un conjunto de estados S es el conjunto de todos los estados alcanzables desde cualquier estado en S mediante cero o más transiciones ε. Si el AFND no tiene transiciones ε, q'₀ = {q₀}.
+*   Para cada S ∈ Q' y cada símbolo a ∈ Σ, la función de transición δ' se define como: δ'(S, a) = ε-clausura(∪_{p∈S} δ(p, a)). Esto significa que, desde el estado S del AFD, al leer 'a', se va a un nuevo estado que es la ε-clausura de la unión de todos los estados a los que se puede ir desde cualquier estado en S con 'a'.
+*   F' = {S ∈ Q' | S ∩ F ≠ ∅}, un estado S del AFD es final si contiene al menos un estado final del AFND original.
+
+El proceso implica explorar los estados alcanzables a partir de q'₀. Los estados de Q' que no son alcanzables se pueden descartar, resultando en un AFD que reconoce exactamente el mismo lenguaje que el AFND original.</p>
+                    <div class="diagrama-container">
+                        <svg viewBox="0 0 600 200" style="font-family: Arial, sans-serif; font-size: 14px;">
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#333"/>
+    </marker>
+  </defs>
+
+  <!-- AFND -->
+  <text x="70" y="20" font-weight="bold">AFND</text>
+  <circle cx="50" cy="60" r="15" fill="#f0f0f0" stroke="#333" stroke-width="1"/>
+  <text x="45" y="65">q0</text>
+  <circle cx="100" cy="60" r="15" fill="#f0f0f0" stroke="#333" stroke-width="1"/>
+  <text x="95" y="65">q1</text>
+  <circle cx="100" cy="120" r="15" fill="#f0f0f0" stroke="#333" stroke-width="1"/>
+  <text x="95" y="125">q2</text>
+  <circle cx="150" cy="90" r="15" fill="#e0ffe0" stroke="#333" stroke-width="1"/>
+  <circle cx="150" cy="90" r="12" fill="none" stroke="#333" stroke-width="1"/>
+  <text x="145" y="95">q3</text>
+
+  <path d="M65,60 H85" stroke="#333" stroke-width="1" marker-end="url(#arrow)"/>
+  <text x="75" y="55">a</text>
+  <path d="M100,75 V105" stroke="#333" stroke-width="1" marker-end="url(#arrow)"/>
+  <text x="105" y="90">ε</text>
+  <path d="M115,60 L135,85" stroke="#333" stroke-width="1" marker-end="url(#arrow)"/>
+  <text x="120" y="70">b</text>
+  <path d="M115,120 L135,95" stroke="#333" stroke-width="1" marker-end="url(#arrow)"/>
+  <text x="120" y="110">c</text>
+
+  <!-- Conversion arrow -->
+  <path d="M220,90 H280" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="235" y="85" font-weight="bold">Conversión</text>
+
+  <!-- AFD -->
+  <text x="440" y="20" font-weight="bold">AFD</text>
+  <rect x="350" y="40" width="100" height="40" rx="5" ry="5" fill="#f0f0f0" stroke="#333" stroke-width="1"/>
+  <text x="360" y="65">{q0}</text>
+  <rect x="480" y="40" width="100" height="40" rx="5" ry="5" fill="#f0f0f0" stroke="#333" stroke-width="1"/>
+  <text x="490" y="65">{q1,q2}</text>
+  <rect x="410" y="100" width="100" height="40" rx="5" ry="5" fill="#e0ffe0" stroke="#333" stroke-width="1"/>
+  <rect x="410" y="100" width="100" height="40" rx="5" ry="5" fill="none" stroke="#333" stroke-width="1" stroke-dasharray="3,3"/>
+  <text x="420" y="125">{q1,q2,q3}</text>
+
+  <path d="M455,60 H475" stroke="#333" stroke-width="1" marker-end="url(#arrow)"/>
+  <text x="465" y="55">a</text>
+  <path d="M400,80 V95 C400,105 405,110 410,110" stroke="#333" stroke-width="1" marker-end="url(#arrow)"/>
+  <text x="390" y="95">b, c</text>
+  <path d="M530,120 V140 H400 V120" stroke="#333" stroke-width="1" marker-end="url(#arrow)"/>
+  <text x="500" y="150">a, b, c</text>
+</svg>
+                        <p style="font-size:0.8rem; color:#666; margin-top:0.5rem;"><em>Fig: Representación visual del concepto.</em></p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Intuición</h3>
+                    <p>La idea detrás de la conversión de AFND a AFD reside en cómo un sistema "determinado" puede simular un comportamiento "no determinado". Imagina que tienes un mapa de carreteras (el AFND) donde algunas intersecciones te permiten tomar múltiples caminos simultáneamente (transiciones no deterministas) o incluso pasar a otra intersección sin moverte (transiciones ε). Para construir un mapa equivalente donde cada intersección solo tiene un camino definido para cada dirección (el AFD), lo que hacemos es crear nuevas "super-intersecciones". Cada una de estas super-intersecciones en el nuevo mapa representa *todos los posibles lugares* donde podrías estar en el mapa original después de una secuencia de movimientos. Si en el mapa original, al leer un símbolo, pudieras terminar en el estado q1 O en el estado q2, entonces en el nuevo mapa, hay un único estado que representa el "conocimiento" de que podrías estar en {q1, q2}. La clave es que el AFD no "adivina" qué camino tomará el AFND, sino que rastrea todas las posibilidades en paralelo. Si alguna de estas posibilidades lleva a un estado final, entonces el super-estado correspondiente en el AFD se considera final.</p>
+                </div>
+
+                <div class="card">
+                    <h3>Aplicación Real</h3>
+                    <p>La conversión de AFND a AFD es una técnica fundamental en la ingeniería de software, especialmente en la construcción de analizadores léxicos (scanners o tokenizers) para compiladores e intérpretes. Las expresiones regulares, que son ampliamente utilizadas para definir patrones de texto (ej. números de teléfono, direcciones de correo electrónico, identificadores de lenguaje de programación), se pueden convertir de forma natural a AFNDs. Sin embargo, ejecutar directamente un AFND es menos eficiente debido al no determinismo. Por ello, el AFND se convierte a un AFD equivalente. Este AFD, siendo determinista, se puede implementar de manera muy eficiente como una tabla de transiciones, lo que permite un procesamiento rápido de la entrada (código fuente, texto) con un solo "seguimiento" de estados. Herramientas como Lex o Flex automatizan este proceso, tomando una gramática de expresiones regulares, generando un AFND, convirtiéndolo a un AFD y luego minimizándolo, creando así un analizador léxico optimizado. Esta conversión es vital para la velocidad y fiabilidad de cualquier lenguaje de programación o herramienta de procesamiento de texto.</p>
+                </div>
+
+            </div>
+        </article>
+        
+        <article class="subtema">
+            <div class="subtema-header">
+                <h2>Minimización de Autómatas Finitos Deterministas (AFD)</h2>
+            </div>
+            <div class="seccion-contenido">
+
+                <div class="card full-width">
+                    <h3>Historia</h3>
+                    <p>La búsqueda de la eficiencia y la optimización ha sido una constante en la ciencia de la computación. En el contexto de los autómatas finitos, la minimización de AFD se refiere al proceso de encontrar el autómata determinista más pequeño que reconoce un lenguaje regular dado. El primer algoritmo significativo para este propósito fue desarrollado por Edward F. Moore en 1956, basándose en la idea de particionar los estados en conjuntos de estados distinguibles. Su enfoque sentó las bases para el estudio de la equivalencia de estados. Posteriormente, en 1971, John E. Hopcroft introdujo un algoritmo mucho más eficiente para la minimización de AFD, logrando una complejidad de tiempo de O(n log n), donde 'n' es el número de estados. El algoritmo de Hopcroft, basado en el refinamiento de particiones, se convirtió en el método estándar debido a su superior rendimiento. La capacidad de reducir la cantidad de estados no solo mejora la comprensión y el diseño de los autómatas, sino que también tiene implicaciones directas en la eficiencia de su implementación, haciendo que la minimización sea una piedra angular en la teoría de los autómatas y sus aplicaciones prácticas.</p>
+                </div>
+
+                <div class="card full-width formal-box">
+                    <h3>Descripción Formal</h3>
+                    <p>La minimización de un Autómata Finito Determinista (AFD) M = (Q, Σ, δ, q₀, F) tiene como objetivo construir un AFD M' = (Q', Σ, δ', q'₀, F') tal que L(M) = L(M') y |Q'| sea mínimo. La minimización se basa en la identificación y fusión de estados equivalentes.
+
+Dos estados p, q ∈ Q son *equivalentes* si, para cualquier cadena de entrada w ∈ Σ*, δ(p, w) ∈ F si y solo si δ(q, w) ∈ F. Es decir, desde p y desde q, se aceptan exactamente los mismos sufijos. Si no son equivalentes, se dicen *distinguibles*.
+
+El algoritmo de minimización más común (basado en el de Hopcroft) sigue estos pasos:
+1.  **Eliminar estados inalcanzables**: Primero, se eliminan todos los estados de Q que no son alcanzables desde el estado inicial q₀.
+2.  **Partición inicial**: Se divide el conjunto restante de estados en dos grupos (particiones):
+    *   P₀ = F (estados finales)
+    *   P₁ = Q \ F (estados no finales)
+3.  **Refinamiento iterativo**: Se construye una secuencia de particiones P₀, P₁, P₂, ... hasta que Pᵢ = Pᵢ₊₁. En cada paso Pᵢ → Pᵢ₊₁, se refina la partición actual. Para cada conjunto C en la partición actual Pᵢ y para cada símbolo a ∈ Σ:
+    *   Si los estados en C no tienen transiciones que los lleven a estados en diferentes conjuntos de Pᵢ, entonces C permanece como un solo conjunto en Pᵢ₊₁.
+    *   Si hay estados en C que, al leer 'a', transicionan a diferentes conjuntos de Pᵢ, entonces C se divide en subconjuntos más pequeños. Por ejemplo, C se divide en C₁ y C₂ si todos los estados en C₁ transicionan al mismo conjunto en Pᵢ con 'a', y todos los estados en C₂ transicionan a otro conjunto en Pᵢ con 'a'.
+4.  **Construcción del AFD minimizado**: Cada conjunto en la partición final P* se convierte en un estado del nuevo AFD Q'.
+    *   Si C es un conjunto en P*, entonces C ∈ Q'.
+    *   El estado inicial q'₀ es el conjunto que contiene q₀.
+    *   El conjunto de estados finales F' son todos los conjuntos de P* que están en F.
+    *   Para una transición, si δ(q, a) = r y q ∈ C_i, r ∈ C_j, entonces δ'(C_i, a) = C_j.
+
+El AFD minimizado es único (salvo por el nombre de los estados) para cada lenguaje regular.</p>
+                    <div class="diagrama-container">
+                        <svg viewBox="0 0 600 200" style="font-family: Arial, sans-serif; font-size: 14px;">
+  <defs>
+    <marker id="arrowMin" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#333"/>
+    </marker>
+  </defs>
+
+  <!-- AFD Original -->
+  <text x="120" y="20" font-weight="bold">AFD Original</text>
+  <circle cx="50" cy="60" r="15" fill="#f0f0f0" stroke="#333" stroke-width="1"/>
+  <text x="45" y="65">A</text>
+  <circle cx="120" cy="60" r="15" fill="#f0f0f0" stroke="#333" stroke-width="1"/>
+  <text x="115" y="65">B</text>
+  <circle cx="190" cy="60" r="15" fill="#e0ffe0" stroke="#333" stroke-width="1"/>
+  <circle cx="190" cy="60" r="12" fill="none" stroke="#333" stroke-width="1"/>
+  <text x="185" y="65">C</text>
+  <circle cx="120" cy="120" r="15" fill="#e0ffe0" stroke="#333" stroke-width="1"/>
+  <circle cx="120" cy="120" r="12" fill="none" stroke="#333" stroke-width="1"/>
+  <text x="115" y="125">D</text>
+
+  <path d="M65,60 H105" stroke="#333" stroke-width="1" marker-end="url(#arrowMin)"/>
+  <text x="80" y="55">a</text>
+  <path d="M135,60 H175" stroke="#333" stroke-width="1" marker-end="url(#arrowMin)"/>
+  <text x="150" y="55">a</text>
+  <path d="M120,75 V105" stroke="#333" stroke-width="1" marker-end="url(#arrowMin)"/>
+  <text x="125" y="90">b</text>
+  <path d="M190,75 L150,110" stroke="#333" stroke-width="1" marker-end="url(#arrowMin)"/>
+  <text x="175" y="90">b</text>
+  <path d="M50,75 L50,105 C50,120 100,120 105,120" stroke="#333" stroke-width="1" marker-end="url(#arrowMin)"/>
+  <text x="60" y="100">b</text>
+  <path d="M135,120 H170 A20 20 0 0 1 190 100 L190 75" stroke="#333" stroke-width="1" marker-end="url(#arrowMin)"/>
+  <text x="150" y="105">a</text>
+
+
+  <!-- Minimization arrow -->
+  <path d="M250,90 H310" stroke="#333" stroke-width="2" marker-end="url(#arrowMin)"/>
+  <text x="260" y="85" font-weight="bold">Minimización</text>
+
+  <!-- AFD Minimizado -->
+  <text x="440" y="20" font-weight="bold">AFD Minimizado</text>
+  <rect x="350" y="60" width="100" height="40" rx="5" ry="5" fill="#f0f0f0" stroke="#333" stroke-width="1"/>
+  <text x="360" y="85">{A,B}</text>
+  <rect x="480" y="60" width="100" height="40" rx="5" ry="5" fill="#e0ffe0" stroke="#333" stroke-width="1"/>
+  <rect x="480" y="60" width="100" height="40" rx="5" ry="5" fill="none" stroke="#333" stroke-width="1" stroke-dasharray="3,3"/>
+  <text x="490" y="85">{C,D}</text>
+
+  <path d="M455,80 H475" stroke="#333" stroke-width="1" marker-end="url(#arrowMin)"/>
+  <text x="465" y="75">a</text>
+  <path d="M400,100 V120 H530 V100" stroke="#333" stroke-width="1" marker-end="url(#arrowMin)"/>
+  <text x="450" y="130">b</text>
+
+</svg>
+                        <p style="font-size:0.8rem; color:#666; margin-top:0.5rem;"><em>Fig: Representación visual del concepto.</em></p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Intuición</h3>
+                    <p>Imagina un diagrama de flujo para tomar decisiones, donde cada círculo es un estado y cada flecha una decisión basada en una entrada. A veces, puedes tener dos o más estados que, a partir de ese punto, se comportan exactamente de la misma manera con respecto a si la secuencia de entradas restante lleva a un resultado final exitoso (aceptación) o no. Si dos estados 'p' y 'q' siempre conducen a los mismos resultados para cualquier secuencia de entradas subsiguiente, entonces son redundantes. Es como si dos cajeros en un banco tuvieran exactamente las mismas habilidades y procedimientos; podrías reemplazarlos por uno solo sin cambiar el servicio final. La minimización busca encontrar estos estados "equivalentes" y fusionarlos en un único estado. El AFD minimizado es la versión más "compacta" posible del autómata, sin perder ninguna capacidad de reconocer el lenguaje original. Es como simplificar una expresión matemática compleja a su forma más simple sin alterar su valor.</p>
+                </div>
+
+                <div class="card">
+                    <h3>Aplicación Real</h3>
+                    <p>La minimización de AFDs tiene un impacto significativo en diversas áreas de la informática. En el diseño de compiladores, los analizadores léxicos (que reconocen patrones como palabras clave, identificadores, números) se construyen a menudo a partir de expresiones regulares, que luego se convierten a AFNDs y posteriormente a AFDs. Minimizar estos AFDs resultantes es crucial para la eficiencia. Un AFD con menos estados significa un analizador léxico más pequeño en memoria, más rápido en ejecución (menos comparaciones de estado), y, por lo tanto, un compilador más eficiente. Esto es fundamental para procesar grandes volúmenes de código fuente rápidamente. Además, en el diseño de hardware, los circuitos secuenciales se pueden modelar como AFDs. La minimización de estos autómatas reduce el número de flip-flops y compuertas lógicas necesarias, lo que lleva a circuitos más pequeños, más rápidos y menos costosos. También se utiliza en la verificación formal de sistemas y en la bioinformática para procesar secuencias de ADN o proteínas, donde la eficiencia en el reconocimiento de patrones es clave.</p>
+                </div>
+
+            </div>
+        </article>
+        
+        <article class="subtema">
+            <div class="subtema-header">
+                <h2>Equivalencia de Autómatas Finitos y el AFD Mínimo Único</h2>
+            </div>
+            <div class="seccion-contenido">
+
+                <div class="card full-width">
+                    <h3>Historia</h3>
+                    <p>La cuestión de si dos modelos computacionales diferentes son fundamentalmente "lo mismo" ha sido un tema recurrente en la teoría de la computación desde sus inicios. Para los autómatas finitos, la noción de equivalencia fue establecida firmemente con la demostración de que, para cada lenguaje regular, existe un Autómata Finito Determinista (AFD) minimizado que es único hasta el isomorfismo de estados. Es decir, aunque los estados puedan tener diferentes nombres, la estructura subyacente y el comportamiento son idénticos. Este concepto se consolidó a través de los trabajos de Moore (1956) y Hopcroft (1971) sobre la minimización. La unicidad del AFD mínimo es una propiedad poderosa que permite no solo la optimización (buscando el autómata más simple), sino también la verificación formal (comparando dos autómatas para ver si reconocen el mismo lenguaje). Establecer esta unicidad fue un paso crucial para la teoría de los lenguajes formales, proporcionando una "forma canónica" para los lenguajes regulares y una herramienta robusta para la validación de diseños.</p>
+                </div>
+
+                <div class="card full-width formal-box">
+                    <h3>Descripción Formal</h3>
+                    <p>Dos Autómatas Finitos, M₁ y M₂, son *equivalentes* si reconocen el mismo lenguaje, es decir, L(M₁) = L(M₂). Esto significa que para cualquier cadena de entrada w ∈ Σ*, M₁ acepta w si y solo si M₂ acepta w.
+
+Para determinar si dos AFDs M₁ = (Q₁, Σ, δ₁, q₁₀, F₁) y M₂ = (Q₂, Σ, δ₂, q₂₀, F₂) son equivalentes, existen principalmente dos métodos:
+
+1.  **Construcción de Autómata Producto (Producto Cartesiano)**:
+    Se construye un tercer AFD M₃ = (Q₃, Σ, δ₃, q₃₀, F₃) donde:
+    *   Q₃ = Q₁ × Q₂ (pares ordenados de estados de M₁ y M₂).
+    *   q₃₀ = (q₁₀, q₂₀).
+    *   δ₃((q₁, q₂), a) = (δ₁(q₁, a), δ₂(q₂, a)) para cualquier (q₁, q₂) ∈ Q₃ y a ∈ Σ.
+    *   El conjunto de estados finales F₃ se define para encontrar "discordancias": F₃ = { (q₁, q₂) ∈ Q₃ | (q₁ ∈ F₁ ∧ q₂ ∉ F₂) ∨ (q₁ ∉ F₁ ∧ q₂ ∈ F₂) }.
+    *   M₁ y M₂ son equivalentes si y solo si el lenguaje L(M₃) es vacío (es decir, ningún estado de F₃ es alcanzable desde q₃₀). Si se puede llegar a un estado en F₃, significa que existe una cadena que es aceptada por un autómata pero no por el otro.
+
+2.  **Minimización y Comparación Isomórfica**:
+    Este es el método más elegante y generalmente preferido:
+    *   Minimizar M₁ para obtener M₁' = (Q₁', Σ, δ₁', q₁₀', F₁').
+    *   Minimizar M₂ para obtener M₂' = (Q₂', Σ, δ₂', q₂₀', F₂').
+    *   M₁ y M₂ son equivalentes si y solo si M₁' y M₂' son *isomorfos*. Dos AFDs son isomorfos si tienen el mismo número de estados, y existe una función biyectiva entre sus conjuntos de estados que preserva el estado inicial, las transiciones y los estados finales. Es decir, son estructuralmente idénticos, difiriendo solo quizás en los nombres de sus estados. La unicidad del AFD mínimo garantiza que si dos AFDs reconocen el mismo lenguaje, sus versiones minimizadas serán idénticas en su estructura.</p>
+                    <div class="diagrama-container">
+                        <svg viewBox="0 0 600 200" style="font-family: Arial, sans-serif; font-size: 14px;">
+  <defs>
+    <marker id="arrowEq" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#333"/>
+    </marker>
+  </defs>
+
+  <!-- AFD M1 -->
+  <text x="100" y="20" font-weight="bold">AFD M1</text>
+  <circle cx="50" cy="60" r="15" fill="#f0f0f0" stroke="#333" stroke-width="1"/>
+  <text x="45" y="65">q0</text>
+  <circle cx="150" cy="60" r="15" fill="#e0ffe0" stroke="#333" stroke-width="1"/>
+  <circle cx="150" cy="60" r="12" fill="none" stroke="#333" stroke-width="1"/>
+  <text x="145" y="65">q1</text>
+  <path d="M65,60 H135" stroke="#333" stroke-width="1" marker-end="url(#arrowEq)"/>
+  <text x="95" y="55">a</text>
+  <path d="M150,75 C160,100 140,100 150,75" stroke="#333" stroke-width="1" marker-end="url(#arrowEq)"/>
+  <text x="165" y="90">b</text>
+
+  <!-- Equivalency check -->
+  <path d="M220,70 L280,70" stroke="#333" stroke-width="2" marker-end="url(#arrowEq)"/>
+  <text x="230" y="65" font-weight="bold">¿Equivalentes?</text>
+
+  <!-- AFD M2 -->
+  <text x="490" y="20" font-weight="bold">AFD M2</text>
+  <circle cx="450" cy="60" r="15" fill="#f0f0f0" stroke="#333" stroke-width="1"/>
+  <text x="445" y="65">s0</text>
+  <circle cx="550" cy="60" r="15" fill="#e0ffe0" stroke="#333" stroke-width="1"/>
+  <circle cx="550" cy="60" r="12" fill="none" stroke="#333" stroke-width="1"/>
+  <text x="545" y="65">s1</text>
+  <path d="M465,60 H535" stroke="#333" stroke-width="1" marker-end="url(#arrowEq)"/>
+  <text x="495" y="55">a</text>
+  <path d="M550,75 C560,100 540,100 550,75" stroke="#333" stroke-width="1" marker-end="url(#arrowEq)"/>
+  <text x="565" y="90">b</text>
+
+  <!-- Product Construction visualization -->
+  <text x="290" y="120" font-weight="bold">Método: Construcción Producto</text>
+  <rect x="250" y="140" width="100" height="40" rx="5" ry="5" fill="#f0f0f0" stroke="#333" stroke-width="1"/>
+  <text x="260" y="165">(q0,s0)</text>
+  <rect x="400" y="140" width="100" height="40" rx="5" ry="5" fill="#e0ffe0" stroke="#333" stroke-width="1"/>
+  <rect x="400" y="140" width="100" height="40" rx="5" ry="5" fill="none" stroke="#333" stroke-width="1" stroke-dasharray="3,3"/>
+  <text x="410" y="165">(q1,s1)</text>
+
+  <path d="M355,160 H395" stroke="#333" stroke-width="1" marker-end="url(#arrowEq)"/>
+  <text x="375" y="155">a</text>
+</svg>
+                        <p style="font-size:0.8rem; color:#666; margin-top:0.5rem;"><em>Fig: Representación visual del concepto.</em></p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Intuición</h3>
+                    <p>La equivalencia de autómatas se trata de responder a la pregunta fundamental: ¿dos máquinas hacen exactamente lo mismo? Imagina que tienes dos cajas negras, cada una con un autómata finito dentro. No puedes ver cómo están construidos por dentro, solo puedes alimentarlos con secuencias de entrada y observar si aceptan o rechazan. Si, para *cada* posible secuencia de entrada, ambas cajas siempre dan la misma respuesta (ambas aceptan o ambas rechazan), entonces son equivalentes. La intuición detrás del método de minimización es que, si simplificamos cada autómata a su forma más compacta y eficiente (su AFD mínimo), y estas formas mínimas son idénticas en estructura, entonces los autómatas originales deben ser equivalentes. Es como tener dos versiones diferentes de una receta de cocina; si al seguir ambas recetas produces exactamente el mismo plato final, entonces son recetas equivalentes, incluso si usan diferentes ingredientes intermedios o pasos.</p>
+                </div>
+
+                <div class="card">
+                    <h3>Aplicación Real</h3>
+                    <p>La capacidad de determinar la equivalencia de autómatas finitos es una herramienta poderosa con múltiples aplicaciones prácticas. En el desarrollo de software, es fundamental para la *verificación formal*. Por ejemplo, podemos tener dos especificaciones de un protocolo de comunicación, una de alto nivel y otra de bajo nivel. Podemos modelar ambas como AFDs y luego verificar si son equivalentes, asegurándonos de que la implementación de bajo nivel se comporta exactamente como se esperaba en el diseño de alto nivel. Esto es crítico en sistemas de seguridad, aeroespaciales o médicos, donde los errores pueden tener consecuencias graves. También se utiliza en la *optimización de compiladores*, para verificar que las transformaciones aplicadas a un analizador léxico o sintáctico no alteren el lenguaje reconocido. En el *diseño de circuitos lógicos*, la equivalencia permite asegurar que diferentes diseños de hardware cumplen la misma función lógica, lo que es vital para la reutilización y validación. Finalmente, la unicidad del AFD mínimo proporciona una "forma canónica" para los lenguajes regulares, lo que es útil en la clasificación y gestión de patrones.</p>
+                </div>
+
+            </div>
+        </article>
+        
+    </main>
+
+    <footer>
+        <p>Prof. Jorge López-Cifre, PhD © 2026</p>
+    </footer>
+
+</body>
+</html>

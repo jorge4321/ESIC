@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>23 - Tesis de Church/Turing - Clasificación de problemas - Prof. Jorge López-Cifre</title>
+    <style>
+        :root {
+            --primary: #003366;
+            --accent: #d4af37;
+            --bg: #fdfdfd;
+            --text: #333;
+            --card-bg: #fff;
+            --border: #e0e0e0;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+        header {
+            background: var(--primary);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        h1 { margin: 0; font-size: 1.3rem; }
+        @media (min-width: 768px) { h1 { font-size: 1.5rem; } }
+
+        .btn-volver {
+            background: var(--accent);
+            color: var(--primary);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            transition: background 0.3s;
+        }
+        .btn-volver:hover { background: #fff; }
+
+        main {
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .subtema {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            margin-bottom: 3rem;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        .subtema-header {
+            background: #f4f4f4;
+            padding: 1rem 2rem;
+            border-bottom: 1px solid var(--border);
+        }
+        .subtema-header h2 { margin: 0; color: var(--primary); font-size: 1.4rem; }
+
+        .seccion-contenido {
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+
+        @media (min-width: 768px) {
+            .seccion-contenido { grid-template-columns: repeat(2, 1fr); }
+            .full-width { grid-column: span 2; }
+        }
+
+        .card h3 {
+            color: var(--primary);
+            border-bottom: 2px solid var(--accent);
+            display: inline-block;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .formal-box {
+            background-color: #f9fbfd;
+            border-left: 4px solid var(--primary);
+            padding: 1rem;
+        }
+
+        .diagrama-container {
+            text-align: center;
+            margin: 1.5rem 0;
+            padding: 1rem;
+            background: white;
+            border: 1px dashed #ccc;
+            border-radius: 4px;
+        }
+        svg { max-width: 100%; height: auto; }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            background: var(--primary);
+            color: white;
+            margin-top: 3rem;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>23 - Tesis de Church/Turing - Clasificación de problemas</h1>
+        <a href="javascript:history.back()" class="btn-volver">← Volver</a>
+    </header>
+
+    <main>
+
+        <article class="subtema">
+            <div class="subtema-header">
+                <h2>La Tesis de Church-Turing: El Fundamento de la Computabilidad</h2>
+            </div>
+            <div class="seccion-contenido">
+
+                <div class="card full-width">
+                    <h3>Historia</h3>
+                    <p>La Tesis de Church-Turing emerge en la década de 1930, un periodo de intensa investigación sobre los fundamentos de las matemáticas. El desafío era formalizar la noción intuitiva de un "algoritmo" para abordar el "Entscheidungsproblem" de Hilbert, que preguntaba si existía un método general para decidir la verdad de cualquier afirmación matemática. De forma independiente, Alonzo Church, con su λ-cálculo, y Alan Turing, con su concepto de Máquina de Turing, propusieron formalismos para la computación. Otros pioneros como Stephen Kleene y Emil Post también contribuyeron con formalismos equivalentes (funciones recursivas generales, sistemas de Post). La sorprendente equivalencia de estos modelos, a pesar de sus diferentes enfoques, llevó a la formulación de la Tesis de Church-Turing, postulando que estos modelos capturan de manera exhaustiva y exacta la noción de computación algorítmica.</p>
+                </div>
+
+                <div class="card full-width formal-box">
+                    <h3>Descripción Formal</h3>
+                    <p>La Tesis de Church-Turing es una afirmación fundamental no demostrable formalmente, que postula que cualquier función que pueda ser calculada por un procedimiento algorítmico efectivo (una secuencia de pasos finitos y determinísticos) puede ser calculada por una Máquina de Turing. Esta tesis establece una equivalencia profunda entre diferentes formalismos de computación que han surgido históricamente. Consideremos tres de los más prominentes:
+
+1.  **Máquinas de Turing (MT)**: Un modelo matemático abstracto de computación consistente en una cinta infinita, un cabezal de lectura/escritura y un conjunto finito de estados. Formalmente, una MT es una séptupla (Q, Σ, Γ, δ, q₀, qₐ, qᵣ), donde Q es un conjunto finito de estados, Σ es el alfabeto de entrada, Γ es el alfabeto de la cinta (Σ ⊂ Γ), δ es la función de transición (δ: Q × Γ → Q × Γ × {L, R}), q₀ es el estado inicial, qₐ es el estado de aceptación, y qᵣ es el estado de rechazo. Una función es Turing-computable si existe una MT que la calcula.
+
+2.  **λ-cálculo**: Un sistema formal desarrollado por Alonzo Church para investigar funciones y recursión. Se basa en abstracción funcional y aplicación, utilizando expresiones formadas por variables, abstracciones (λx.M), y aplicaciones (M N). Las funciones computables en el λ-cálculo son aquellas para las cuales existe una λ-expresión que, a través de reducciones beta, produce el resultado deseado.
+
+3.  **Funciones Recursivas Generales**: Un conjunto de funciones sobre los números naturales que pueden ser construidas a partir de funciones básicas (cero, sucesor, proyección) mediante operaciones de composición, recursión primitiva y minimización. Las funciones computables por estos medios son conocidas como funciones recursivas.
+
+La Tesis de Church-Turing afirma que la clase de funciones Turing-computables, λ-computables y recursivas generales es idéntica a la clase de funciones intuitivamente computables. Esto implica que la noción de "algoritmo" es capturada por cualquiera de estos modelos formales, y por extensión, por cualquier modelo computacional "razonable" que se proponga.</p>
+                    <div class="diagrama-container">
+                        <svg viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg"><defs><marker id="arrowhead" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="black" /></marker></defs><rect x="50" y="50" width="150" height="100" rx="10" ry="10" fill="#e0f7fa" stroke="black" stroke-width="1" /><text x="125" y="105" font-family="Arial" font-size="16" text-anchor="middle">Máquina de Turing</text><rect x="225" y="50" width="150" height="100" rx="10" ry="10" fill="#e8f5e9" stroke="black" stroke-width="1" /><text x="300" y="105" font-family="Arial" font-size="16" text-anchor="middle">λ-Cálculo</text><rect x="400" y="50" width="150" height="100" rx="10" ry="10" fill="#fff3e0" stroke="black" stroke-width="1" /><text x="475" y="105" font-family="Arial" font-size="16" text-anchor="middle">Funciones Recursivas</text><path d="M200 100 H225" stroke="black" stroke-width="1" marker-end="url(#arrowhead)" /><path d="M375 100 H400" stroke="black" stroke-width="1" marker-end="url(#arrowhead)" /><path d="M225 90 H200" stroke="black" stroke-width="1" marker-end="url(#arrowhead)" /><path d="M400 90 H375" stroke="black" stroke-width="1" marker-end="url(#arrowhead)" /><path d="M550 80 C570 60, 570 140, 550 120" stroke="black" stroke-width="1" marker-end="url(#arrowhead)" /><path d="M50 80 C30 60, 30 140, 50 120" stroke="black" stroke-width="1" marker-end="url(#arrowhead)" /></svg>
+                        <p style="font-size:0.8rem; color:#666; margin-top:0.5rem;"><em>Fig: Representación visual del concepto.</em></p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Intuición</h3>
+                    <p>La intuición central de la Tesis de Church-Turing es que no importa cómo se conceptualice o implemente un "computador" razonable, si puede llevar a cabo una serie de pasos lógicos y deterministas para resolver un problema, entonces cualquier otro "computador" razonable también podrá resolverlo. Piensa en ello como una ley fundamental de la computación: existe un límite universal a lo que cualquier máquina puede calcular algorítmicamente, y todos los modelos de computación lo alcanzan. Es decir, una calculadora, un smartphone, una supercomputadora, o incluso un ábaco operado por reglas fijas, tienen la misma "potencia computacional" fundamental en cuanto a lo que pueden resolver *algorítmicamente*. La Máquina de Turing, a pesar de su simplicidad, captura esta esencia mínima pero universal de un proceso algorítmico, convirtiéndose en el estándar de oro para definir qué significa "computar".</p>
+                </div>
+
+                <div class="card">
+                    <h3>Aplicación Real</h3>
+                    <p>La Tesis de Church-Turing es la piedra angular de toda la informática teórica y práctica. En la ingeniería de software actual, su aplicación más evidente reside en la comprensión de la potencia y las limitaciones de los lenguajes de programación. Prácticamente todos los lenguajes de programación modernos (C++, Java, Python, JavaScript, etc.) son "Turing-completos", lo que significa que tienen la misma capacidad computacional fundamental que una Máquina de Turing. Esto asegura que, si un problema tiene una solución algorítmica, puede ser implementado en cualquiera de estos lenguajes. Además, la tesis proporciona el marco teórico para comprender los límites inherentes de la automatización y la inteligencia artificial, estableciendo qué problemas son, en principio, resolubles por computadoras y cuáles no lo son, independientemente del avance tecnológico. Es la base para el diseño de compiladores, sistemas operativos y hardware, al definir lo que una CPU es capaz de realizar.</p>
+                </div>
+
+            </div>
+        </article>
+        
+        <article class="subtema">
+            <div class="subtema-header">
+                <h2>Problemas Decidibles e Indecidibles: Los Límites de la Computación Algorítmica</h2>
+            </div>
+            <div class="seccion-contenido">
+
+                <div class="card full-width">
+                    <h3>Historia</h3>
+                    <p>La cuestión de qué problemas pueden resolverse algorítmicamente y cuáles no, fue una preocupación central a principios del siglo XX, impulsada por el "Entscheidungsproblem" de David Hilbert. Alan Turing, en su seminal artículo de 1936, no solo formalizó la computación con su máquina, sino que también demostró que existen problemas fundamentalmente irresolubles por cualquier algoritmo. El ejemplo más famoso y trascendental fue el Problema de la Parada (Halting Problem), demostrando que no se puede construir un algoritmo general que determine si un programa arbitrario se detendrá o entrará en un bucle infinito para una entrada dada. Esta demostración, junto con la de Church sobre la indecidibilidad del λ-cálculo, disipó la esperanza de un método universal para resolver todas las cuestiones matemáticas y estableció los límites inherentes de la computación algorítmica.</p>
+                </div>
+
+                <div class="card full-width formal-box">
+                    <h3>Descripción Formal</h3>
+                    <p>La clasificación de problemas en decidibles e indecidibles es una consecuencia directa de la Tesis de Church-Turing y la existencia de límites en la computación.
+
+Un **problema decidible** (o recursivo) es aquel para el cual existe un algoritmo que siempre produce una respuesta correcta (sí o no) en un tiempo finito para cualquier instancia del problema. En términos de lenguajes formales, un lenguaje L es decidible si existe una Máquina de Turing (MT) M tal que M acepta todas las cadenas en L y rechaza todas las cadenas no en L, y M siempre se detiene (para) para cualquier entrada. Es decir, la MT M actúa como un "decisor" para L.
+
+Un **problema indecidible** es aquel para el cual no existe tal algoritmo. Es imposible construir una Máquina de Turing que siempre se detenga y resuelva correctamente el problema para todas las posibles entradas. El ejemplo canónico es el **Problema de la Parada (Halting Problem)**, formalizado como el lenguaje HP = {⟨M,w⟩ | M es una Máquina de Turing y M se detiene en la entrada w}. Turing demostró su indecidibilidad mediante un argumento de diagonalización: si existiera una MT H que decidiera HP, se podría construir otra MT D que, alimentada con su propia descripción, entraría en contradicción (pararía si no parara, y no pararía si parara), lo cual es absurdo. Por lo tanto, H no puede existir.
+
+La implicación es profunda: la indecidibilidad no es una limitación de nuestra tecnología actual, sino una propiedad intrínseca de ciertos problemas que están más allá de la capacidad de cualquier proceso algorítmico, sin importar cuán potente sea el hardware o cuán inteligente sea el programador.</p>
+                    <div class="diagrama-container">
+                        <svg viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg"><rect x="50" y="40" width="500" height="120" rx="10" ry="10" fill="#f0f4c3" stroke="black" stroke-width="1" /><text x="300" y="30" font-family="Arial" font-size="18" text-anchor="middle" font-weight="bold">Problemas de Computación</text><circle cx="200" cy="100" r="40" fill="#c8e6c9" stroke="black" stroke-width="1" /><text x="200" y="105" font-family="Arial" font-size="14" text-anchor="middle">Decidibles</text><circle cx="400" cy="100" r="70" fill="#ffccbc" stroke="black" stroke-width="1" /><text x="400" y="105" font-family="Arial" font-size="14" text-anchor="middle">Indecidibles</text><text x="400" y="130" font-family="Arial" font-size="12" text-anchor="middle">(Ej. Problema de la Parada)</text><path d="M240 100 H330" stroke="black" stroke-width="1" marker-end="url(#arrowhead)" /></svg>
+                        <p style="font-size:0.8rem; color:#666; margin-top:0.5rem;"><em>Fig: Representación visual del concepto.</em></p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Intuición</h3>
+                    <p>La distinción entre decidible e indecidible puede parecer abstracta, pero su intuición es muy práctica: algunos problemas tienen una "receta" (un algoritmo) que siempre funciona para cualquier caso, garantizando una respuesta sí o no. Estos son los problemas decidibles. Sin embargo, hay otros problemas para los que, fundamentalmente, no puede existir tal receta. El Problema de la Parada es el ejemplo perfecto: si pudieras escribir un programa que siempre dijera si cualquier otro programa se detiene o no, ¡sería increíblemente útil! Pero la intuición de Turing nos dice que tal programa no puede existir. Imagina intentar crear una caja mágica que prediga el futuro de cualquier sistema: para algunos futuros simples es fácil, pero para otros complejos y auto-referenciales, la caja se bloquearía a sí misma. Esto significa que hay límites intrínsecos a lo que los ordenadores pueden hacer, no por falta de potencia o tiempo, sino por la propia naturaleza de la lógica.</p>
+                </div>
+
+                <div class="card">
+                    <h3>Aplicación Real</h3>
+                    <p>La existencia de problemas indecidibles tiene implicaciones profundas en la ingeniería de software y la informática práctica. En la verificación formal de programas, la indecidibilidad del Problema de la Parada implica que no se puede construir un compilador o una herramienta de análisis estático que detecte si cualquier programa dado contiene bucles infinitos para todas las entradas posibles. Aunque se pueden diseñar herramientas para casos específicos o para programas bien estructurados, no existe una solución universal. Esto impacta también en la seguridad informática, donde determinar si un programa malicioso realizará una acción específica es a menudo un problema indecidible. En la inteligencia artificial, la indecidibilidad subraya que no podemos construir un algoritmo de propósito general que pueda razonar sobre propiedades arbitrarias de cualquier otro algoritmo o sistema, estableciendo limitaciones fundamentales para el alcance de la IA simbólica y del aprendizaje automático en ciertos dominios complejos.</p>
+                </div>
+
+            </div>
+        </article>
+        
+        <article class="subtema">
+            <div class="subtema-header">
+                <h2>Problemas Recursivamente Enumerables y No Recursivamente Enumerables: Una Clasificación Más Profunda</h2>
+            </div>
+            <div class="seccion-contenido">
+
+                <div class="card full-width">
+                    <h3>Historia</h3>
+                    <p>Más allá de la dicotomía decidible/indecidible, la teoría de la computabilidad profundiza en los "grados" de incomputabilidad. La noción de lenguajes o problemas Recursivamente Enumerables (RE) fue desarrollada en el contexto de la jerarquía de Chomsky (lenguajes de Tipo 0) y los trabajos de Post y Kleene en los años 30 y 40. Estos problemas capturan lo que una Máquina de Turing puede "reconocer" o "enumerar" si una solución existe, aunque no pueda siempre determinar la ausencia de una solución. La comprensión de los problemas no Recursivamente Enumerables, por otro lado, delimita los límites más extremos de la computación, donde ni siquiera la detección de una solución es posible de manera algorítmica. Esta clasificación es fundamental para entender la complejidad inherente de los sistemas formales y los límites teóricos del conocimiento algorítmico.</p>
+                </div>
+
+                <div class="card full-width formal-box">
+                    <h3>Descripción Formal</h3>
+                    <p>La clasificación de problemas se extiende más allá de la decidibilidad para incluir la clase de problemas recursivamente enumerables, que son reconocibles por Máquinas de Turing, aunque no necesariamente decidibles.
+
+Un **problema recursivamente enumerable (RE)**, también conocido como Turing-reconocible o semidecidible, es un problema para el cual existe una Máquina de Turing (MT) M que acepta las instancias que son parte del problema, pero para las instancias que no son parte del problema, M puede rechazar o entrar en un bucle infinito (no parará). Formalmente, un lenguaje L es RE si existe una MT M tal que L = L(M). Esto significa que si una cadena `w` pertenece a L, M eventualmente se detendrá y aceptará `w`. Sin embargo, si `w` no pertenece a L, M podría nunca parar. El Problema de la Parada (HP) es un ejemplo clásico de un problema RE pero no decidible.
+
+Un **problema no recursivamente enumerable (No-RE)** es un problema para el cual no existe ninguna Máquina de Turing que lo reconozca. Esto implica que no hay algoritmo que pueda siquiera identificar todas las instancias "sí" del problema. Es una clase de problemas inherentemente más difícil que los problemas indecidibles, ya que ni siquiera podemos "detectar" las soluciones. Un ejemplo prototípico de un problema No-RE es el complemento del Problema de la Parada (co-HP), es decir, el lenguaje {⟨M,w⟩ | M es una MT y M NO se detiene en la entrada w}. Si co-HP fuera RE, entonces podríamos construir una MT que decidiera HP, lo cual contradiría la indecidibilidad de HP. Esto demuestra que co-HP no puede ser RE.
+
+Estas clases forman una jerarquía: Todo problema decidible es RE, pero no todo problema RE es decidible. Los problemas No-RE son los más difíciles de todos desde la perspectiva de la computabilidad.</p>
+                    <div class="diagrama-container">
+                        <svg viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg"><rect x="50" y="40" width="500" height="120" rx="10" ry="10" fill="#f5f5f5" stroke="black" stroke-width="1" /><text x="300" y="30" font-family="Arial" font-size="18" text-anchor="middle" font-weight="bold">Universo de Problemas</text><circle cx="300" cy="100" r="70" fill="#ffe0b2" stroke="black" stroke-width="1" /><text x="300" y="100" font-family="Arial" font-size="14" text-anchor="middle">Recursivamente Enumerable (RE)</text><circle cx="300" cy="100" r="40" fill="#c8e6c9" stroke="black" stroke-width="1" /><text x="300" y="100" font-family="Arial" font-size="14" text-anchor="middle">Decidibles</text><rect x="450" y="80" width="120" height="40" fill="#ffcdd2" stroke="black" stroke-width="1" /><text x="510" y="105" font-family="Arial" font-size="14" text-anchor="middle">No RE</text></svg>
+                        <p style="font-size:0.8rem; color:#666; margin-top:0.5rem;"><em>Fig: Representación visual del concepto.</em></p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Intuición</h3>
+                    <p>Piensa en un problema como buscar algo. Si el problema es decidible, es como buscar una palabra en un diccionario: siempre puedes encontrarla o concluir que no está en un tiempo finito. Si el problema es Recursivamente Enumerable (RE), es como buscar una aguja en un pajar potencialmente infinito: si la aguja está ahí, eventualmente la encontrarás (la Máquina de Turing te dará un "sí"), pero si no está, podrías seguir buscando para siempre sin saber si ya la buscaste por todas partes o si simplemente está muy escondida (la MT podría nunca parar). Finalmente, si un problema es No Recursivamente Enumerable, es como si la aguja ni siquiera existiera o el concepto de "aguja" fuera tan elusivo que no puedes ni empezar a buscarla de manera sistemática. No tienes ni siquiera una estrategia para encontrar un "sí" si este existiera. Esta clasificación nos da una medida más fina de la intratabilidad de los problemas.</p>
+                </div>
+
+                <div class="card">
+                    <h3>Aplicación Real</h3>
+                    <p>La distinción entre problemas RE y No-RE es crucial en varias áreas. En el diseño de compiladores y el análisis de lenguajes formales, los lenguajes de Tipo 0 de la Jerarquía de Chomsky son precisamente los lenguajes RE. Esto es fundamental para entender la potencia de los analizadores sintácticos y las máquinas abstractas que los interpretan. En la teoría de bases de datos, por ejemplo, ciertas consultas o propiedades de integridad pueden caer en la categoría RE, lo que significa que podemos verificar si un registro cumple una propiedad si la cumple, pero no siempre saber si *no* la cumple. En la inteligencia artificial y los sistemas expertos, la clasificación ayuda a determinar qué tipo de inferencia o búsqueda es factible. Si un problema es No-RE, sugiere que no solo no hay un algoritmo para resolverlo, sino que tampoco hay un algoritmo para reconocer las soluciones, lo que implica limitaciones aún más severas para cualquier enfoque algorítmico, incluyendo el aprendizaje automático que busca patrones para reconocer o generar soluciones.</p>
+                </div>
+
+            </div>
+        </article>
+        
+    </main>
+
+    <footer>
+        <p>Prof. Jorge López-Cifre, PhD © 2026</p>
+    </footer>
+
+</body>
+</html>

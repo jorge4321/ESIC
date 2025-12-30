@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>19 - Máquinas de Turing - Máquina Universal de Turing - Prof. Jorge López-Cifre</title>
+    <style>
+        :root {
+            --primary: #003366;
+            --accent: #d4af37;
+            --bg: #fdfdfd;
+            --text: #333;
+            --card-bg: #fff;
+            --border: #e0e0e0;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+        header {
+            background: var(--primary);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        h1 { margin: 0; font-size: 1.3rem; }
+        @media (min-width: 768px) { h1 { font-size: 1.5rem; } }
+
+        .btn-volver {
+            background: var(--accent);
+            color: var(--primary);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            transition: background 0.3s;
+        }
+        .btn-volver:hover { background: #fff; }
+
+        main {
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .subtema {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            margin-bottom: 3rem;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        .subtema-header {
+            background: #f4f4f4;
+            padding: 1rem 2rem;
+            border-bottom: 1px solid var(--border);
+        }
+        .subtema-header h2 { margin: 0; color: var(--primary); font-size: 1.4rem; }
+
+        .seccion-contenido {
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+
+        @media (min-width: 768px) {
+            .seccion-contenido { grid-template-columns: repeat(2, 1fr); }
+            .full-width { grid-column: span 2; }
+        }
+
+        .card h3 {
+            color: var(--primary);
+            border-bottom: 2px solid var(--accent);
+            display: inline-block;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .formal-box {
+            background-color: #f9fbfd;
+            border-left: 4px solid var(--primary);
+            padding: 1rem;
+        }
+
+        .diagrama-container {
+            text-align: center;
+            margin: 1.5rem 0;
+            padding: 1rem;
+            background: white;
+            border: 1px dashed #ccc;
+            border-radius: 4px;
+        }
+        svg { max-width: 100%; height: auto; }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            background: var(--primary);
+            color: white;
+            margin-top: 3rem;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>19 - Máquinas de Turing - Máquina Universal de Turing</h1>
+        <a href="javascript:history.back()" class="btn-volver">← Volver</a>
+    </header>
+
+    <main>
+
+        <article class="subtema">
+            <div class="subtema-header">
+                <h2>Fundamentos de la Máquina de Turing Estándar</h2>
+            </div>
+            <div class="seccion-contenido">
+
+                <div class="card full-width">
+                    <h3>Historia</h3>
+                    <p>La Máquina de Turing (MT) fue conceptualizada por el brillante matemático británico Alan Turing en su seminal artículo de 1936, "On Computable Numbers, with an Application to the Entscheidungsproblem" (Sobre los números computables, con una aplicación al problema de la decisión). En un contexto donde David Hilbert había propuesto un programa ambicioso para formalizar toda la matemática y resolver el "Entscheidungsproblem" (problema de la decisión), Turing buscó definir de manera precisa qué significaba "calcular" o "resolver un algoritmo". Su modelo, aunque abstracto, capturaba la esencia de un procedimiento mecánico que cualquier ser humano podría llevar a cabo con lápiz y papel. Este trabajo fue contemporáneo al cálculo lambda de Alonzo Church y sentó las bases de la teoría de la computación, mucho antes de que las computadoras electrónicas fueran una realidad práctica.</p>
+                </div>
+
+                <div class="card full-width formal-box">
+                    <h3>Descripción Formal</h3>
+                    <p>Una Máquina de Turing (MT) estándar se define formalmente como una 7-tupla M = (Q, Σ, Γ, δ, q₀, qₐ, qᵣ), donde:
+
+*   Q es un conjunto finito de estados.
+*   Σ es el alfabeto de entrada, un conjunto finito de símbolos que no incluye el símbolo de blanco (⊔).
+*   Γ es el alfabeto de cinta, un conjunto finito de símbolos tal que Σ ⊆ Γ y ⊔ ∈ Γ.
+*   δ es la función de transición, δ: Q × Γ → Q × Γ × {L, R}. Esta función mapea un par (estado actual, símbolo leído) a un nuevo (estado, símbolo a escribir, dirección de movimiento del cabezal). L significa mover a la izquierda y R a la derecha.
+*   q₀ ∈ Q es el estado inicial.
+*   qₐ ∈ Q es el estado de aceptación.
+*   qᵣ ∈ Q es el estado de rechazo, con qₐ ≠ qᵣ.
+
+La cinta es infinita en ambas direcciones y está inicialmente llena con el símbolo de blanco, excepto por la entrada. El cabezal de lectura/escritura se mueve por la cinta, leyendo símbolos, escribiendo nuevos y cambiando de estado según la función de transición. El proceso se detiene si la máquina entra en el estado de aceptación (qₐ) o de rechazo (qᵣ). Un problema es decidible si existe una MT que lo resuelve y siempre se detiene para cualquier entrada.</p>
+                    <div class="diagrama-container">
+                        <svg viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg">
+  <rect x="50" y="70" width="120" height="60" fill="#E0F2F7" stroke="black" stroke-width="1" rx="8" ry="8"/>
+  <text x="110" y="105" text-anchor="middle" font-family="sans-serif" font-size="14">Control Finito</text>
+
+  <rect x="200" y="85" width="350" height="30" fill="#F0F0F0" stroke="black" stroke-width="1"/>
+  <line x1="250" y1="85" x2="250" y2="115" stroke="black" stroke-width="1"/>
+  <line x1="300" y1="85" x2="300" y2="115" stroke="black" stroke-width="1"/>
+  <line x1="350" y1="85" x2="350" y2="115" stroke="black" stroke-width="1"/>
+  <line x1="400" y1="85" x2="400" y2="115" stroke="black" stroke-width="1"/>
+  <line x1="450" y1="85" x2="450" y2="115" stroke="black" stroke-width="1"/>
+  <line x1="500" y1="85" x2="500" y2="115" stroke="black" stroke-width="1"/>
+  <text x="225" y="105" text-anchor="middle" font-family="sans-serif" font-size="12">...</text>
+  <text x="275" y="105" text-anchor="middle" font-family="sans-serif" font-size="12">a</text>
+  <text x="325" y="105" text-anchor="middle" font-family="sans-serif" font-size="12">b</text>
+  <text x="375" y="105" text-anchor="middle" font-family="sans-serif" font-size="12">c</text>
+  <text x="425" y="105" text-anchor="middle" font-family="sans-serif" font-size="12">⊔</text>
+  <text x="475" y="105" text-anchor="middle" font-family="sans-serif" font-size="12">⊔</text>
+  <text x="525" y="105" text-anchor="middle" font-family="sans-serif" font-size="12">...</text>
+
+  <polygon points="315,75 335,75 325,60" fill="#FFC107" stroke="black" stroke-width="1"/>
+  <text x="325" y="50" text-anchor="middle" font-family="sans-serif" font-size="12">Cabezal L/E</text>
+  <line x1="170" y1="100" x2="325" y2="75" stroke="black" stroke-width="1" marker-end="url(#arrow)"/>
+  <line x1="325" y1="75" x2="170" y2="100" stroke="black" stroke-width="1" marker-end="url(#arrow)"/>
+
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="black" />
+    </marker>
+  </defs>
+</svg>
+                        <p style="font-size:0.8rem; color:#666; margin-top:0.5rem;"><em>Fig: Representación visual del concepto.</em></p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Intuición</h3>
+                    <p>Imagine una persona con un conjunto limitado de instrucciones simples y una cinta infinitamente larga dividida en celdas, cada una con un símbolo. Esta persona solo puede mirar una celda a la vez. Basándose en el símbolo que ve y su estado mental actual, decide qué símbolo escribir en la celda, si moverse a la izquierda o a la derecha, y en qué nuevo estado mental entrar. A pesar de la simplicidad de estas operaciones, Turing demostró que una máquina así es capaz de realizar cualquier cálculo que pueda ser descrito por un algoritmo. Es una abstracción pura de lo que significa computar, despojando la complejidad de las máquinas modernas y llegando a la esencia de la "efectividad mecánica". Su poder radica en la capacidad de almacenar información en la cinta y cambiar su propio comportamiento basándose en esa información y en reglas fijas.</p>
+                </div>
+
+                <div class="card">
+                    <h3>Aplicación Real</h3>
+                    <p>Aunque la Máquina de Turing estándar no se implementa directamente en hardware, sus principios fundamentales son la base de toda la arquitectura de computadoras modernas. La separación entre la unidad de control (análoga al control finito) y la memoria (análoga a la cinta) es el corazón del modelo de Von Neumann, presente en cada CPU, RAM y disco duro. Cada instrucción de máquina ejecutada por un procesador, desde una suma simple hasta una operación compleja de gráficos, puede ser vista como una pequeña parte de una gran Máquina de Turing. Nos proporciona un marco teórico para entender las capacidades y, más importante, las limitaciones de lo que las computadoras pueden y no pueden hacer, fundamental para la teoría de la computabilidad y complejidad algorítmica.</p>
+                </div>
+
+            </div>
+        </article>
+        
+        <article class="subtema">
+            <div class="subtema-header">
+                <h2>La Máquina Universal de Turing: El Computador Programable</h2>
+            </div>
+            <div class="seccion-contenido">
+
+                <div class="card full-width">
+                    <h3>Historia</h3>
+                    <p>Tras definir la Máquina de Turing estándar, Alan Turing dio un paso más audaz en su mismo artículo de 1936: la concepción de la Máquina Universal de Turing (MUT). La idea revolucionaria fue que no solo una MT podía ejecutar un algoritmo específico, sino que otra MT podría simular el comportamiento de *cualquier otra* MT. Para lograr esto, la MUT necesita una descripción de la máquina a simular y la entrada para esa máquina. Esta conceptualización de una máquina que puede ser 'programada' para realizar cualquier tarea computable es la base teórica de la computadora de propósito general. Fue la inspiración para el modelo de arquitectura de computadora de Von Neumann, donde tanto los datos como las instrucciones (el "programa") se almacenan en la misma memoria, permitiendo flexibilidad y reconfigurabilidad sin cambiar el hardware físico.</p>
+                </div>
+
+                <div class="card full-width formal-box">
+                    <h3>Descripción Formal</h3>
+                    <p>Una Máquina Universal de Turing (MUT), denotada como U, es una Máquina de Turing M = (Q, Σ, Γ, δ, q₀, qₐ, qᵣ) que toma como entrada una descripción codificada de otra Máquina de Turing M' y una entrada w para M'. Es decir, la entrada a U es el par ⟨M'⟩w, donde ⟨M'⟩ es una codificación binaria (o sobre algún alfabeto fijo) de la 7-tupla de M', y w es la cadena de entrada de M'.
+
+El comportamiento de U es el siguiente: U lee la descripción ⟨M'⟩ y la almacena. Luego, U lee w y la "simula" como si fuera la MT M'. Esto implica que U debe mantener en su cinta, de manera organizada, el estado actual de M', el contenido de la cinta de M' y la posición del cabezal de M'. Cuando U simula un paso de M', consulta la descripción ⟨M'⟩ para determinar la transición δ de M' dado el estado y el símbolo actual de M', y luego actualiza el estado y la cinta de M' según corresponda. Si M' entra en qₐ o qᵣ, U también entra en qₐ o qᵣ, respectivamente, reflejando el resultado de la simulación. La MUT demuestra que una única máquina puede realizar las funciones de cualquier máquina de Turing concebible, dándole un poder computacional ilimitado en el sentido de la computabilidad.</p>
+                    <div class="diagrama-container">
+                        <svg viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg">
+  <rect x="50" y="40" width="120" height="120" fill="#D1C4E9" stroke="black" stroke-width="2" rx="10" ry="10"/>
+  <text x="110" y="105" text-anchor="middle" font-family="sans-serif" font-size="16" font-weight="bold">MUT</text>
+  <text x="110" y="125" text-anchor="middle" font-family="sans-serif" font-size="12">(Control Universal)</text>
+
+  <rect x="200" y="85" width="350" height="30" fill="#F0F0F0" stroke="black" stroke-width="1"/>
+  <line x1="270" y1="85" x2="270" y2="115" stroke="black" stroke-width="1"/>
+  <line x1="340" y1="85" x2="340" y2="115" stroke="black" stroke-width="1"/>
+  <text x="235" y="105" text-anchor="middle" font-family="sans-serif" font-size="12">...</text>
+  <text x="235" y="70" text-anchor="middle" font-family="sans-serif" font-size="12">Cinta de Entrada de la MUT:</text>
+  <text x="305" y="105" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="bold">&lt;M'&gt;</text>
+  <text x="445" y="105" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="bold">w</text>
+  <text x="515" y="105" text-anchor="middle" font-family="sans-serif" font-size="12">...</text>
+
+  <polygon points="330,75 350,75 340,60" fill="#FFC107" stroke="black" stroke-width="1"/>
+  <text x="340" y="50" text-anchor="middle" font-family="sans-serif" font-size="12">Cabezal L/E</text>
+
+  <line x1="170" y1="100" x2="330" y2="75" stroke="black" stroke-width="1" marker-end="url(#arrow)"/>
+  <line x1="330" y1="75" x2="170" y2="100" stroke="black" stroke-width="1" marker-end="url(#arrow)"/>
+
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="black" />
+    </marker>
+  </defs>
+</svg>
+                        <p style="font-size:0.8rem; color:#666; margin-top:0.5rem;"><em>Fig: Representación visual del concepto.</em></p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Intuición</h3>
+                    <p>Piense en la Máquina Universal de Turing como el primer concepto de "computadora programable". Antes, se podía imaginar una máquina diseñada para sumar, otra para multiplicar, etc. La MUT es la "máquina de las máquinas": una única máquina que, si le das las instrucciones de CUALQUIER otra máquina (en un formato codificado), actuará exactamente como esa máquina. Es como tener un único hardware que puede convertirse en una calculadora, un procesador de texto o un juego, simplemente cargándole un software diferente. Es la razón por la que no necesitas un ordenador diferente para cada tarea; un único ordenador, al ser una realización práctica de la MUT, puede ejecutar cualquier programa que le sea dado, siempre que esté correctamente codificado y sea computable.</p>
+                </div>
+
+                <div class="card">
+                    <h3>Aplicación Real</h3>
+                    <p>La Máquina Universal de Turing es el pilar conceptual de la computación moderna. Cada computadora, smartphone o servidor que usamos hoy es, en esencia, una realización física de una MUT. El sistema operativo (Windows, macOS, Linux, Android, iOS) es un programa que corre en el hardware y que, a su vez, puede cargar y ejecutar otros programas (aplicaciones). Un intérprete de Python, una máquina virtual de Java o un compilador de C++ son programas que toman una descripción de otro programa (el código fuente) y lo ejecutan o transforman, emulando el comportamiento de una MUT. El paradigma de la arquitectura de Von Neumann, con su concepto de "programa almacenado", es una aplicación directa de la idea de Turing de que las instrucciones pueden tratarse como datos y ser manipuladas por la propia máquina, lo que otorga a las computadoras su versatilidad fundamental.</p>
+                </div>
+
+            </div>
+        </article>
+        
+        <article class="subtema">
+            <div class="subtema-header">
+                <h2>Implicaciones Teóricas: Computabilidad, Decidibilidad y la Tesis de Church-Turing</h2>
+            </div>
+            <div class="seccion-contenido">
+
+                <div class="card full-width">
+                    <h3>Historia</h3>
+                    <p>La aparición de las Máquinas de Turing y, en paralelo, del cálculo lambda de Alonzo Church en la década de 1930, marcó un hito en la lógica matemática. Sorprendentemente, ambos formalismos, desarrollados de forma independiente, demostraron ser equivalentes en su poder computacional. Esta equivalencia dio origen a la "Tesis de Church-Turing", una afirmación fundamental sobre la naturaleza de la computación efectiva. Aunque es una tesis (una creencia o una hipótesis bien respaldada) y no un teorema matemáticamente demostrable, ha sido universalmente aceptada por la comunidad científica. La tesis ha tenido profundas repercusiones, guiando la comprensión de qué problemas son algorítmicamente solubles y cuáles son inherentemente insolubles, llevando a descubrimientos como la indecidibilidad del Problema de la Parada por Turing mismo y la solución al Décimo Problema de Hilbert por Yuri Matiyasevich en 1970.</p>
+                </div>
+
+                <div class="card full-width formal-box">
+                    <h3>Descripción Formal</h3>
+                    <p>La Tesis de Church-Turing establece que "toda función computable por un algoritmo o procedimiento efectivo puede ser computable por una Máquina de Turing". En otras palabras, la Máquina de Turing es el modelo computacional más potente posible bajo la definición intuitiva de algoritmo. Esto implica que si un problema no puede ser resuelto por una MT, entonces no puede ser resuelto por ningún algoritmo, sin importar la tecnología futura o el modelo computacional (incluidos los modelos cuánticos o biológicos que han sido propuestos hasta ahora).
+
+Dentro de este marco, distinguimos:
+*   **Problemas Decidibles**: Aquellos para los cuales existe una MT que siempre se detiene (acepta o rechaza) para cada entrada. El lenguaje asociado es un lenguaje recursivo.
+*   **Problemas Semidecidibles (o Recursivamente Enumerables)**: Aquellos para los cuales existe una MT que se detiene y acepta para las entradas que están en el lenguaje, pero puede no detenerse (quedar en bucle infinito) para las entradas que no están. El lenguaje asociado es un lenguaje recursivamente enumerable.
+*   **Problemas Indecidibles**: Aquellos para los cuales no existe ninguna MT que pueda determinar su pertenencia. Un ejemplo clásico es el Problema de la Parada (Halting Problem), que pregunta si una MT dada M' se detendrá o no en una entrada w. Turing demostró que no existe una MT que pueda resolver este problema para todos los pares (M', w).</p>
+                    <div class="diagrama-container">
+                        <svg viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg">
+  <rect x="50" y="20" width="500" height="160" fill="#F8F8F8" stroke="black" stroke-width="1" rx="10" ry="10"/>
+  <text x="300" y="45" text-anchor="middle" font-family="sans-serif" font-size="18" font-weight="bold">Universo de Problemas</text>
+
+  <circle cx="300" cy="110" r="70" fill="#E0F2F7" stroke="blue" stroke-width="2"/>
+  <text x="300" y="115" text-anchor="middle" font-family="sans-serif" font-size="16" fill="blue">Computables por MT</text>
+
+  <circle cx="300" cy="110" r="45" fill="#C8E6C9" stroke="green" stroke-width="2"/>
+  <text x="300" y="115" text-anchor="middle" font-family="sans-serif" font-size="14" fill="green">Decidibles</text>
+
+  <text x="450" y="170" text-anchor="end" font-family="sans-serif" font-size="14">Indecidibles (no computables por MT)</text>
+
+  <path d="M380 150 C450 160, 480 130, 470 90" stroke="gray" stroke-width="1" fill="none"/>
+  <line x1="470" y1="90" x2="475" y2="85" stroke="gray" stroke-width="1"/>
+  <line x1="470" y1="90" x2="465" y2="85" stroke="gray" stroke-width="1"/>
+</svg>
+                        <p style="font-size:0.8rem; color:#666; margin-top:0.5rem;"><em>Fig: Representación visual del concepto.</em></p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Intuición</h3>
+                    <p>La Tesis de Church-Turing es una de las ideas más profundas en la computación, porque no se trata solo de qué tan rápido o eficientemente podemos resolver un problema, sino de si podemos resolverlo *en absoluto* con un algoritmo. Intuitivamente, dice que si puedes escribir una serie de pasos claros y finitos para resolver un problema (un "algoritmo"), entonces una Máquina de Turing puede resolverlo. Y, a la inversa, si una MT no puede resolver algo, entonces ninguna computadora, ni siquiera una teórica del futuro más allá de nuestra imaginación actual (sin importar qué tan avanzada sea su tecnología), podrá resolverlo algorítmicamente. Esto establece los límites fundamentales de la computación, definiendo lo que es posible y lo que es inherentemente imposible de calcular, deslindando las fronteras entre el ámbito de lo computable y lo incomputable.</p>
+                </div>
+
+                <div class="card">
+                    <h3>Aplicación Real</h3>
+                    <p>Comprender la computabilidad y la Tesis de Church-Turing es vital para cualquier científico de la computación. Evita que los ingenieros inviertan recursos valiosos intentando crear algoritmos para problemas que se ha demostrado que son indecidibles. Por ejemplo, es imposible escribir un programa universal que pueda determinar si cualquier otro programa (con cualquier entrada) entrará en un bucle infinito o se detendrá (el Problema de la Parada). Esta limitación fundamental informa el diseño de lenguajes de programación, compiladores y sistemas operativos, así como la ciberseguridad y la criptografía. Además, la teoría de la computabilidad es la base para comprender la complejidad computacional, ayudando a clasificar problemas según los recursos (tiempo y memoria) necesarios para resolverlos, lo que a su vez guía el desarrollo de algoritmos eficientes para problemas prácticos en la inteligencia artificial, la optimización y el análisis de datos masivos.</p>
+                </div>
+
+            </div>
+        </article>
+        
+    </main>
+
+    <footer>
+        <p>Prof. Jorge López-Cifre, PhD © 2026</p>
+    </footer>
+
+</body>
+</html>

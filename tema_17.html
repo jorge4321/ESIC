@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>17 - Autómatas a pila (Pushdown Automata) - Equivalencia con Gramáticas - Prof. Jorge López-Cifre</title>
+    <style>
+        :root {
+            --primary: #003366;
+            --accent: #d4af37;
+            --bg: #fdfdfd;
+            --text: #333;
+            --card-bg: #fff;
+            --border: #e0e0e0;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+        header {
+            background: var(--primary);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        h1 { margin: 0; font-size: 1.3rem; }
+        @media (min-width: 768px) { h1 { font-size: 1.5rem; } }
+
+        .btn-volver {
+            background: var(--accent);
+            color: var(--primary);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            transition: background 0.3s;
+        }
+        .btn-volver:hover { background: #fff; }
+
+        main {
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .subtema {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            margin-bottom: 3rem;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        .subtema-header {
+            background: #f4f4f4;
+            padding: 1rem 2rem;
+            border-bottom: 1px solid var(--border);
+        }
+        .subtema-header h2 { margin: 0; color: var(--primary); font-size: 1.4rem; }
+
+        .seccion-contenido {
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+
+        @media (min-width: 768px) {
+            .seccion-contenido { grid-template-columns: repeat(2, 1fr); }
+            .full-width { grid-column: span 2; }
+        }
+
+        .card h3 {
+            color: var(--primary);
+            border-bottom: 2px solid var(--accent);
+            display: inline-block;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .formal-box {
+            background-color: #f9fbfd;
+            border-left: 4px solid var(--primary);
+            padding: 1rem;
+        }
+
+        .diagrama-container {
+            text-align: center;
+            margin: 1.5rem 0;
+            padding: 1rem;
+            background: white;
+            border: 1px dashed #ccc;
+            border-radius: 4px;
+        }
+        svg { max-width: 100%; height: auto; }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            background: var(--primary);
+            color: white;
+            margin-top: 3rem;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>17 - Autómatas a pila (Pushdown Automata) - Equivalencia con Gramáticas</h1>
+        <a href="javascript:history.back()" class="btn-volver">← Volver</a>
+    </header>
+
+    <main>
+
+        <article class="subtema">
+            <div class="subtema-header">
+                <h2>Autómatas a Pila: La Memoria Recurrente</h2>
+            </div>
+            <div class="seccion-contenido">
+
+                <div class="card full-width">
+                    <h3>Historia</h3>
+                    <p>La concepción de los Autómatas a Pila (AP) surge en la década de 1950, como una evolución necesaria frente a las limitaciones de los Autómatas Finitos (AF). Los AF eran incapaces de reconocer lenguajes que requerían "memoria" para recordar un número arbitrario de ocurrencias, como el clásico lenguaje aⁿbⁿ (n veces 'a' seguido de n veces 'b'). Figuras clave como Noam Chomsky, al desarrollar su jerarquía de lenguajes formales, sentaron las bases teóricas. La necesidad de una máquina que pudiera manejar la recursividad y las estructuras anidadas presentes en los lenguajes naturales y, posteriormente, en los lenguajes de programación, impulsó la creación de los AP. Investigadores como Michael Rabin y Dana Scott, con sus trabajos sobre autómatas no deterministas, también contribuyeron indirectamente, ya que el no determinismo es una característica fundamental de los AP que reconocen toda la clase de lenguajes libres de contexto. La formalización y consolidación de los AP como herramientas teóricas ocurrió a principios de los años 60, convirtiéndose en un pilar de la teoría de la computación.</p>
+                </div>
+
+                <div class="card full-width formal-box">
+                    <h3>Descripción Formal</h3>
+                    <p>Un Autómata a Pila (AP) es una séptupla M = (Q, Σ, Γ, δ, q₀, Z₀, F), donde:
+*   Q es un conjunto finito de estados.
+*   Σ es el alfabeto de entrada.
+*   Γ es el alfabeto de la pila.
+*   δ es la función de transición finita, mapeando Q × (Σ ∪ {ε}) × Γ a un conjunto finito de subconjuntos de Q × Γ* (es decir, δ: Q × (Σ ∪ {ε}) × Γ → P_fin(Q × Γ*)). Una transición consume un símbolo de entrada (o ε), lee el tope de la pila y reemplaza el tope de la pila por una cadena de símbolos de pila.
+*   q₀ ∈ Q es el estado inicial.
+*   Z₀ ∈ Γ es el símbolo inicial de la pila.
+*   F ⊆ Q es el conjunto de estados de aceptación o finales.
+
+Una configuración instantánea (CI) de un AP es una triple (q, w, γ), donde q es el estado actual, w es la parte restante de la cadena de entrada, y γ es el contenido actual de la pila (con el tope a la izquierda). El AP se mueve entre configuraciones mediante la relación ⊢. Si (q, a, X) ⊢ (q', γ') es una transición en δ, entonces (q, aw, Xα) ⊢ (q', w, γ'α) para cualquier w ∈ Σ* y α ∈ Γ*. Un lenguaje L es aceptado por un AP si, comenzando en (q₀, w, Z₀), el AP puede alcanzar una CI (q_f, ε, γ) donde q_f ∈ F (aceptación por estado final) o si la pila queda vacía (aceptación por pila vacía, que es equivalente en poder).</p>
+                    <div class="diagrama-container">
+                        <svg viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg"><rect x="50" y="50" width="100" height="100" fill="#D9EBF9" stroke="black" stroke-width="1"/><text x="100" y="105" text-anchor="middle" font-family="Arial" font-size="14">Control</text><rect x="200" y="50" width="150" height="100" fill="#FFFADD" stroke="black" stroke-width="1"/><text x="275" y="105" text-anchor="middle" font-family="Arial" font-size="14">Pila (Stack)</text><rect x="400" y="50" width="150" height="100" fill="#F9D9EC" stroke="black" stroke-width="1"/><text x="475" y="105" text-anchor="middle" font-family="Arial" font-size="14">Cinta de Entrada</text><path d="M150 100 H200" stroke="black" stroke-width="1" marker-end="url(#arrowhead)"/><path d="M350 100 H400" stroke="black" stroke-width="1" marker-end="url(#arrowhead)"/><path d="M275 150 V170 H475 V150" stroke="black" stroke-width="1" marker-start="url(#arrowhead)"/><path d="M475 150 V170 H275 V150" stroke="black" stroke-width="1" marker-start="url(#arrowhead)" style="display:none;"/><marker id="arrowhead" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="black"/></marker></svg>
+                        <p style="font-size:0.8rem; color:#666; margin-top:0.5rem;"><em>Fig: Representación visual del concepto.</em></p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Intuición</h3>
+                    <p>Imaginen un Autómata Finito con una capacidad extra: una pila de platos. Esta pila es una memoria ilimitada con una restricción fundamental: solo se puede acceder al plato superior (política LIFO: Last In, First Out). Cuando el autómata lee un símbolo de entrada, puede decidir, basándose en su estado actual y en el plato superior de la pila, qué hacer. Puede cambiar de estado, empujar nuevos platos a la pila, o quitar platos de la pila. Esta memoria adicional le permite "recordar" información contextual importante que los autómatas finitos no podían. Por ejemplo, para verificar el balanceo de paréntesis, cada vez que se ve un paréntesis de apertura '(', se "empuja" un símbolo a la pila. Cada vez que se ve un paréntesis de cierre ')', se "extrae" un símbolo de la pila. Si al final la pila está vacía y no hubo desequilibrios, la cadena es válida. La pila, por tanto, actúa como un contador flexible y un mecanismo para manejar estructuras anidadas o recursivas, superando las limitaciones de la memoria finita.</p>
+                </div>
+
+                <div class="card">
+                    <h3>Aplicación Real</h3>
+                    <p>La aplicación más prominente de los Autómatas a Pila reside en el campo de los compiladores e intérpretes de lenguajes de programación. La sintaxis de la mayoría de los lenguajes de programación (C++, Java, Python, etc.) se define mediante Gramáticas Libres de Contexto (GLC), y los AP son las máquinas ideales para reconocer estas gramáticas. Específicamente, los analizadores sintácticos (parsers) de los compiladores, que son responsables de verificar la corrección gramatical de un programa, se implementan a menudo como autómatas a pila (o algoritmos basados en ellos). Un parser descendente, por ejemplo, puede simular el proceso de derivación de una GLC usando una pila para mantener los símbolos no terminales esperados. Además de los compiladores, los AP también son fundamentales en el procesamiento del lenguaje natural (PLN) para el análisis sintáctico de oraciones y en la validación de lenguajes de marcado como XML o HTML, donde la estructura anidada es primordial. Su capacidad para manejar recursividad los hace indispensables para cualquier tarea que implique estructuras jerárquicas.</p>
+                </div>
+
+            </div>
+        </article>
+        
+        <article class="subtema">
+            <div class="subtema-header">
+                <h2>Gramáticas Libres de Contexto: La Estructura de los Lenguajes</h2>
+            </div>
+            <div class="seccion-contenido">
+
+                <div class="card full-width">
+                    <h3>Historia</h3>
+                    <p>Las Gramáticas Libres de Contexto (GLC) fueron introducidas por Noam Chomsky en la década de 1950, como parte de sus investigaciones pioneras en lingüística formal y la jerarquía de Chomsky. Su objetivo inicial era modelar la sintaxis de los lenguajes naturales, buscando reglas formales que pudieran generar oraciones gramaticalmente correctas. La notación Backus-Naur Form (BNF), desarrollada por John Backus y Peter Naur para describir la sintaxis del lenguaje de programación ALGOL 60 a finales de los 50, es esencialmente una GLC. Este fue un hito que demostró la aplicabilidad práctica de las GLCs en la informática, estableciendo un estándar para la descripción de lenguajes de programación. Las GLCs se convirtieron rápidamente en la herramienta por excelencia para especificar la sintaxis de lenguajes artificiales, marcando una profunda influencia en el diseño y la teoría de los lenguajes de programación y el desarrollo de compiladores.</p>
+                </div>
+
+                <div class="card full-width formal-box">
+                    <h3>Descripción Formal</h3>
+                    <p>Una Gramática Libre de Contexto (GLC) es una cuádrupla G = (V, Σ, P, S), donde:
+*   V es un conjunto finito de variables (también llamados símbolos no terminales).
+*   Σ es un conjunto finito de símbolos terminales (el alfabeto del lenguaje generado), disjunto de V.
+*   P es un conjunto finito de producciones (o reglas de reescritura), cada una de la forma A → β, donde A ∈ V y β ∈ (V ∪ Σ)*. Es decir, el lado izquierdo de una producción debe ser una única variable.
+*   S ∈ V es el símbolo inicial (o axioma) de la gramática.
+
+Una derivación se denota por el símbolo ⇒. Si A → β es una producción, entonces decimos que αAγ ⇒ αβγ para cualquier α, γ ∈ (V ∪ Σ)*. Una derivación S ⇒* w significa que w puede ser obtenido de S mediante cero o más pasos de derivación. El lenguaje generado por G, denotado L(G), es el conjunto de todas las cadenas de terminales que pueden ser derivadas a partir del símbolo inicial S: L(G) = {w ∈ Σ* | S ⇒* w}. Un lenguaje es libre de contexto si existe una GLC que lo genera.</p>
+                    <div class="diagrama-container">
+                        <svg viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg"><text x="290" y="30" text-anchor="middle" font-family="Arial" font-size="18" font-weight="bold">S</text><line x1="290" y1="40" x2="200" y2="80" stroke="black" stroke-width="1"/><line x1="290" y1="40" x2="380" y2="80" stroke="black" stroke-width="1"/><text x="200" y="95" text-anchor="middle" font-family="Arial" font-size="16">A</text><text x="380" y="95" text-anchor="middle" font-family="Arial" font-size="16">B</text><line x1="200" y1="105" x2="150" y2="145" stroke="black" stroke-width="1"/><line x1="200" y1="105" x2="250" y2="145" stroke="black" stroke-width="1"/><line x1="380" y1="105" x2="330" y2="145" stroke="black" stroke-width="1"/><line x1="380" y1="105" x2="430" y2="145" stroke="black" stroke-width="1"/><text x="150" y="160" text-anchor="middle" font-family="Arial" font-size="16">a</text><text x="250" y="160" text-anchor="middle" font-family="Arial" font-size="16">A</text><text x="330" y="160" text-anchor="middle" font-family="Arial" font-size="16">b</text><text x="430" y="160" text-anchor="middle" font-family="Arial" font-size="16">C</text></svg>
+                        <p style="font-size:0.8rem; color:#666; margin-top:0.5rem;"><em>Fig: Representación visual del concepto.</em></p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Intuición</h3>
+                    <p>Piensen en las Gramáticas Libres de Contexto como un conjunto de recetas o reglas para construir frases válidas en un lenguaje. Cada regla dice cómo una 'categoría' (una variable, como 'Oración' o 'SintagmaNominal') puede ser descompuesta en una secuencia de categorías más pequeñas o en palabras concretas (terminales). La característica 'libre de contexto' significa que la regla para reemplazar una categoría no depende de lo que hay alrededor de esa categoría en la frase. Esto permite una gran flexibilidad y recursividad, vital para la estructura jerárquica de los lenguajes humanos y artificiales. Por ejemplo, una regla para 'SintagmaNominal' podría ser 'Artículo Sustantivo' o 'Sustantivo'. La belleza de las GLCs reside en su capacidad para generar estructuras anidadas, como cláusulas dentro de cláusulas o expresiones dentro de expresiones, de manera elegante y concisa, sin tener que enumerar explícitamente cada posible combinación.</p>
+                </div>
+
+                <div class="card">
+                    <h3>Aplicación Real</h3>
+                    <p>Las Gramáticas Libres de Contexto son el pilar teórico y práctico en la definición y análisis de la sintaxis de prácticamente todos los lenguajes de programación modernos. La notación BNF (y su extensión EBNF) es usada para especificar las reglas gramaticales que un compilador debe seguir para entender un programa. Esto permite que el analizador sintáctico (parser) verifique si el código fuente está correctamente estructurado antes de intentar traducirlo. Además de los lenguajes de programación, las GLCs se utilizan extensivamente en el procesamiento del lenguaje natural (PLN) para modelar la sintaxis de las oraciones, permitiendo a las computadoras descomponer frases complejas en sus componentes gramaticales. También son cruciales en el diseño de lenguajes de marcado como XML o JSON, donde se definen reglas de anidamiento y estructura para los documentos. Su formalismo provee un marco robusto para diseñar, analizar y validar la estructura de sistemas complejos de información.</p>
+                </div>
+
+            </div>
+        </article>
+        
+        <article class="subtema">
+            <div class="subtema-header">
+                <h2>La Equivalencia Fundamental: APs y GLCs, Dos Caras de la Misma Moneda</h2>
+            </div>
+            <div class="seccion-contenido">
+
+                <div class="card full-width">
+                    <h3>Historia</h3>
+                    <p>La demostración de la equivalencia entre Autómatas a Pila (AP) y Gramáticas Libres de Contexto (GLC) es uno de los resultados más fundamentales y elegantes de la teoría de los lenguajes formales, establecida en la década de 1960. Este teorema, atribuido a varios investigadores como Anthony Oettinger (1961), Robert Floyd (1961) y, de manera más general, a los trabajos que consolidaron la Jerarquía de Chomsky, probó que los lenguajes reconocidos por los AP son exactamente los mismos que los lenguajes generados por las GLCs. Esta equivalencia proporcionó una base teórica sólida para el desarrollo de compiladores, demostrando que existe una máquina concreta (el AP) capaz de procesar la sintaxis de cualquier lenguaje que pueda ser descrito por una GLC. Su impacto fue inmenso, unificando la perspectiva generativa (GLC) con la perspectiva de reconocimiento (AP) y estableciendo el "poder" computacional de esta clase de lenguajes.</p>
+                </div>
+
+                <div class="card full-width formal-box">
+                    <h3>Descripción Formal</h3>
+                    <p>El teorema de la equivalencia establece que un lenguaje L es libre de contexto si y solo si L es reconocido por algún Autómata a Pila (AP). Esta equivalencia se demuestra en dos direcciones:
+
+1.  **De GLC a AP:** Dada una GLC G = (V, Σ, P, S), se puede construir un AP no determinista M que acepta L(G). Este AP típicamente simula una derivación por la izquierda de G. El AP usa su pila para mantener la forma sentencial que aún no ha sido generada o emparejada con la entrada. Inicialmente, la pila contiene S. Si el tope de la pila es una variable A, el AP elige no determinísticamente una producción A → β y reemplaza A por β en la pila. Si el tope de la pila es un terminal 'a', el AP consume un 'a' de la entrada y lo empareja con el tope de la pila. Si coinciden, el terminal es extraído de la pila; de lo contrario, la computación se detiene. La aceptación se da cuando la pila está vacía y la entrada ha sido completamente consumida.
+
+2.  **De AP a GLC:** Dado un AP M = (Q, Σ, Γ, δ, q₀, Z₀, F), se puede construir una GLC G que genera L(M) (aceptación por pila vacía). Las variables de la GLC son de la forma [q A p], lo que significa "el AP puede ir del estado q al estado p, consumiendo A de la pila". Para cada transición δ(q, a, X) ∋ (r, Y₁Y₂...Y_k), se construyen reglas de producción en G. El símbolo inicial de la GLC es [q₀ Z₀ q_f] para cualquier estado final q_f. La construcción es más compleja, pero garantiza que cualquier cadena reconocida por el AP será generada por la GLC, y viceversa.</p>
+                    <div class="diagrama-container">
+                        <svg viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg"><rect x="50" y="70" width="180" height="60" fill="#E0F7FA" stroke="black" stroke-width="1" rx="10" ry="10"/><text x="140" y="105" text-anchor="middle" font-family="Arial" font-size="16">Gramática Libre de Contexto</text><rect x="370" y="70" width="180" height="60" fill="#E3F2FD" stroke="black" stroke-width="1" rx="10" ry="10"/><text x="460" y="105" text-anchor="middle" font-family="Arial" font-size="16">Autómata a Pila</text><text x="290" y="50" text-anchor="middle" font-family="Arial" font-size="14">Reconocimiento</text><path d="M230 100 H370" stroke="black" stroke-width="2" marker-end="url(#arrowhead-big)" marker-start="url(#arrowhead-big-rev)"/><text x="290" y="150" text-anchor="middle" font-family="Arial" font-size="14">Generación</text><marker id="arrowhead-big" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="black"/></marker><marker id="arrowhead-big-rev" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto" ><polygon points="10 0, 0 3.5, 10 7" fill="black"/></marker></svg>
+                        <p style="font-size:0.8rem; color:#666; margin-top:0.5rem;"><em>Fig: Representación visual del concepto.</em></p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Intuición</h3>
+                    <p>La equivalencia entre APs y GLCs es como descubrir que tienes dos llaves diferentes que abren exactamente la misma puerta. Las GLCs son un método para *describir* la estructura de un lenguaje: cómo se construyen las palabras y las frases a partir de componentes más pequeños. Los APs son un método para *reconocer* si una cadena de texto pertenece a ese lenguaje: para verificar si sigue las reglas de construcción. La pila del AP es la herramienta perfecta para manejar la recursividad y las dependencias anidadas que caracterizan a los lenguajes libres de contexto. Cuando una GLC genera una estructura, el AP puede usar su pila para recordar qué partes de esa estructura aún esperan ser procesadas. Y, a la inversa, las transiciones de un AP pueden ser mapeadas a reglas gramaticales que describen cómo se mueven los símbolos en la pila. En esencia, ambos formalismos capturan el mismo nivel de complejidad sintáctica, pero desde perspectivas complementarias: uno genera, el otro reconoce.</p>
+                </div>
+
+                <div class="card">
+                    <h3>Aplicación Real</h3>
+                    <p>La equivalencia AP-GLC es la piedra angular para el diseño y la implementación de analizadores sintácticos (parsers) en compiladores. Los parsers son los componentes de un compilador que verifican si el código fuente de un programa sigue la gramática del lenguaje de programación. Esta equivalencia teórica valida la posibilidad de construir algoritmos eficientes para el parsing de lenguajes de programación, que son predominantemente libres de contexto. Algoritmos como LR (Left-to-right, Rightmost derivation) o LL (Left-to-right, Leftmost derivation) se basan directamente en esta equivalencia para construir un AP (implícito o explícito) que reconoce el lenguaje generado por una GLC. Esto permite la creación automática de parsers a partir de la especificación de una gramática, lo que simplifica enormemente el desarrollo de nuevos lenguajes y herramientas de software, y es crucial en campos como el procesamiento de lenguajes naturales, la validación de formatos de datos y la ingeniería de lenguajes de dominio específico.</p>
+                </div>
+
+            </div>
+        </article>
+        
+    </main>
+
+    <footer>
+        <p>Prof. Jorge López-Cifre, PhD © 2026</p>
+    </footer>
+
+</body>
+</html>

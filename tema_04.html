@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>4 - Máquinas secuenciales - Concepto de Estado - Prof. Jorge López-Cifre</title>
+    <style>
+        :root {
+            --primary: #003366;
+            --accent: #d4af37;
+            --bg: #fdfdfd;
+            --text: #333;
+            --card-bg: #fff;
+            --border: #e0e0e0;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+        header {
+            background: var(--primary);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        h1 { margin: 0; font-size: 1.3rem; }
+        @media (min-width: 768px) { h1 { font-size: 1.5rem; } }
+
+        .btn-volver {
+            background: var(--accent);
+            color: var(--primary);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            transition: background 0.3s;
+        }
+        .btn-volver:hover { background: #fff; }
+
+        main {
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .subtema {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            margin-bottom: 3rem;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        .subtema-header {
+            background: #f4f4f4;
+            padding: 1rem 2rem;
+            border-bottom: 1px solid var(--border);
+        }
+        .subtema-header h2 { margin: 0; color: var(--primary); font-size: 1.4rem; }
+
+        .seccion-contenido {
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+
+        @media (min-width: 768px) {
+            .seccion-contenido { grid-template-columns: repeat(2, 1fr); }
+            .full-width { grid-column: span 2; }
+        }
+
+        .card h3 {
+            color: var(--primary);
+            border-bottom: 2px solid var(--accent);
+            display: inline-block;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .formal-box {
+            background-color: #f9fbfd;
+            border-left: 4px solid var(--primary);
+            padding: 1rem;
+        }
+
+        .diagrama-container {
+            text-align: center;
+            margin: 1.5rem 0;
+            padding: 1rem;
+            background: white;
+            border: 1px dashed #ccc;
+            border-radius: 4px;
+        }
+        svg { max-width: 100%; height: auto; }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            background: var(--primary);
+            color: white;
+            margin-top: 3rem;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>4 - Máquinas secuenciales - Concepto de Estado</h1>
+        <a href="javascript:history.back()" class="btn-volver">← Volver</a>
+    </header>
+
+    <main>
+
+        <article class="subtema">
+            <div class="subtema-header">
+                <h2>La Necesidad del Estado en Sistemas Secuenciales</h2>
+            </div>
+            <div class="seccion-contenido">
+
+                <div class="card full-width">
+                    <h3>Historia</h3>
+                    <p>La historia del concepto de estado está intrínsecamente ligada al desarrollo de la computación. Aunque máquinas como la Analítica de Babbage ya poseían una noción implícita de 'configuración' o 'memoria', la formalización surgió con la necesidad de modelar sistemas que no solo reaccionaran a una entrada actual, sino que también tuvieran en cuenta eventos pasados. Alan Turing, con su máquina abstracta de 1936, sentó las bases al definir un modelo computacional con 'configuraciones' internas que cambiaban según reglas. Sin embargo, la distinción explícita entre lógica combinacional (sin memoria) y lógica secuencial (con memoria) se hizo crucial con el auge de la electrónica digital en las décadas de 1940 y 1950. Ingenieros y teóricos buscaban una manera rigurosa de diseñar circuitos que 'recordaran' eventos, dando origen a los primeros modelos de máquinas de estado.</p>
+                </div>
+
+                <div class="card full-width formal-box">
+                    <h3>Descripción Formal</h3>
+                    <p>Un sistema secuencial, a diferencia de uno combinacional, posee memoria interna intrínseca que afecta su comportamiento. Esta memoria se encapsula en lo que denominamos 'estado'. Formalmente, un estado (q) es una abstracción de la configuración interna de la máquina en un instante dado, resumiendo toda la información relevante que la máquina ha procesado y que influirá en sus acciones futuras. Es un elemento de un conjunto finito y predefinido de estados, Q = {q₀, q₁, ..., qₖ}, que representa todas las posibles configuraciones significativas que la máquina puede adoptar. La transición de un estado a otro se rige por la función de transición (δ), que para un autómata finito determinista (AFD), mapea un estado actual y un símbolo de entrada a un nuevo estado único: δ: Q × Σ → Q, donde Σ es el alfabeto finito de entrada.
+La necesidad del estado surge de la exigencia de que un sistema responda de manera diferente a la misma entrada en distintos momentos, dependiendo de una secuencia de eventos previos. Sin estados, la salida de un sistema solo dependería de su entrada actual, lo que lo clasificaría como un sistema combinacional, incapaz de 'recordar' o seguir procesos. Los estados dotan a las máquinas secuenciales de la capacidad de mantener un contexto, permitiéndoles ejecutar algoritmos, reconocer patrones complejos y llevar a cabo tareas de control. Cada estado en Q es una 'instantánea' que resume la historia operativa del sistema de forma concisa, permitiendo a la máquina decidir su siguiente paso basándose únicamente en su estado actual y la entrada presente, sin necesidad de reevaluar todo el historial de entradas desde el inicio.</p>
+                    <div class="diagrama-container">
+                        
+                        <p style="font-size:0.8rem; color:#666; margin-top:0.5rem;"><em>Fig: Representación visual del concepto.</em></p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Intuición</h3>
+                    <p>Imagina que eres una persona que sigue instrucciones. Si te dicen 'salta', simplemente saltas. Esa es una respuesta combinacional, instantánea y sin contexto. Pero si te dicen 'salta si el semáforo está en verde Y el coche anterior ya pasó', necesitas recordar dos cosas: el color del semáforo (input actual) y si el coche anterior efectivamente ya pasó (información del pasado que guardaste). Esa 'memoria' o 'contexto' de lo que ha sucedido es precisamente el estado. Si no tuvieras memoria, no podrías tomar decisiones basadas en eventos previos; cada nueva instrucción sería como la primera. El estado es precisamente eso para una máquina: el resumen de su 'experiencia' o 'contexto' acumulado hasta el momento, lo que le permite comportarse de manera diferente ante la misma entrada si su pasado ha sido distinto. Es el 'dónde estoy' en un proceso complejo, lo que determina no solo 'qué haré ahora' junto con la nueva información, sino también cómo interpretar esa información.</p>
+                </div>
+
+                <div class="card">
+                    <h3>Aplicación Real</h3>
+                    <p>En la ingeniería de software actual, el concepto de estado es omnipresente y fundamental. Los sistemas de control de versiones como Git, por ejemplo, mantienen el estado de un repositorio (ramas, commits, archivos modificados) permitiendo deshacer o rehacer operaciones complejas. Las interfaces de usuario (UI) son máquinas de estado implícitas: un botón puede estar 'habilitado', 'deshabilitado' o 'presionado', y su comportamiento cambia drásticamente en función de su estado actual. Los videojuegos usan FSM (Finite State Machines) extensivamente para controlar la lógica de los personajes: un enemigo puede estar en estado 'patrullando', 'persiguiendo' o 'atacando', y reacciona de manera diferente a la misma entrada (como ver al jugador) dependiendo de su estado presente. Los protocolos de red, como TCP, también son ejemplos claros, donde cada paso de la comunicación (establecimiento de conexión, transferencia de datos, cierre) representa un estado distinto y bien definido.</p>
+                </div>
+
+            </div>
+        </article>
+        
+        <article class="subtema">
+            <div class="subtema-header">
+                <h2>Definición Formal de Estado y Diagramas de Transición</h2>
+            </div>
+            <div class="seccion-contenido">
+
+                <div class="card full-width">
+                    <h3>Historia</h3>
+                    <p>La formalización de las máquinas de estado finito (FSM) tiene sus raíces en los trabajos de Warren S. McCulloch y Walter Pitts en 1943, quienes modelaron el comportamiento de las neuronas como sistemas con estados discretos. Sin embargo, la articulación de modelos específicos para máquinas secuenciales se debe a George H. Mealy (1955) y Edward F. Moore (1956), quienes introdujeron las máquinas de Mealy y de Moore, con sus particularidades en la asociación de salidas a estados o transiciones. Los diagramas de estado surgieron como una herramienta visual indispensable para representar estos formalismos, evolucionando de simples esquemas lógicos a notaciones gráficas estandarizadas que facilitan el diseño y la comunicación. Teóricos como Stephen Kleene, Rabin y Scott refinaron y aplicaron estos conceptos a la teoría de autómatas, demostrando su poder para reconocer lenguajes regulares y sentando las bases de la computación teórica.</p>
+                </div>
+
+                <div class="card full-width formal-box">
+                    <h3>Descripción Formal</h3>
+                    <p>Un autómata finito determinista (AFD) es formalmente una quíntupla M = (Q, Σ, δ, q₀, F), donde cada componente juega un papel crucial en la definición de su comportamiento:
+- Q es un conjunto finito y no vacío de estados, representando todas las configuraciones internas posibles de la máquina.
+- Σ es un alfabeto finito y no vacío de símbolos de entrada, que son los eventos o datos que la máquina puede procesar.
+- δ es la función de transición, δ: Q × Σ → Q, que es el corazón del comportamiento secuencial. Define para cada par (estado actual, símbolo de entrada) cuál será el próximo estado de la máquina, encapsulando la lógica de 'movimiento' entre estados. Por ejemplo, si la máquina está en el estado qᵢ y recibe el símbolo de entrada 'a', la máquina transita determinísticamente al estado δ(qᵢ, 'a').
+- q₀ ∈ Q es el estado inicial, el punto de partida de toda computación o secuencia de eventos.
+- F ⊆ Q es el conjunto de estados finales o de aceptación, indicando el éxito o la terminación de un proceso que la máquina está modelando.
+El concepto de estado q ∈ Q es central. Un estado encapsula toda la información necesaria para determinar el comportamiento futuro de la máquina, sin necesidad de conocer la secuencia completa de entradas previas. Los cambios de estado se modelan mediante la función δ. Los diagramas de estado son la representación gráfica estándar de estos componentes, donde los nodos circulares representan estados, las aristas dirigidas representan transiciones (etiquetadas con símbolos de entrada que activan esa transición), una flecha entrante sin origen indica el estado inicial, y un doble círculo indica un estado final. Esta visualización simplifica la comprensión y el diseño de máquinas secuenciales complejas.</p>
+                    <div class="diagrama-container">
+                        <svg viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
+          <polygon points="0 0, 10 3.5, 0 7" fill="black" />
+        </marker>
+      </defs>
+      <path d="M 40 100 L 60 100" stroke="black" stroke-width="2" marker-end="url(#arrowhead)"/>
+      <circle cx="100" cy="100" r="30" fill="#f8f8f8" stroke="black" stroke-width="2"/>
+      <text x="100" y="105" font-family="Arial" font-size="18" text-anchor="middle" fill="black">q₀</text>
+      <circle cx="300" cy="100" r="30" fill="#f8f8f8" stroke="black" stroke-width="2"/>
+      <text x="300" y="105" font-family="Arial" font-size="18" text-anchor="middle" fill="black">q₁</text>
+      <circle cx="500" cy="100" r="30" fill="#f0f0f0" stroke="black" stroke-width="2"/>
+      <circle cx="500" cy="100" r="25" fill="none" stroke="black" stroke-width="2"/>
+      <text x="500" y="105" font-family="Arial" font-size="18" text-anchor="middle" fill="black">q₂</text>
+      <path d="M 130 100 L 270 100" stroke="black" stroke-width="2" marker-end="url(#arrowhead)"/>
+      <text x="200" y="90" font-family="Arial" font-size="16" text-anchor="middle" fill="black">a</text>
+      <path d="M 330 100 L 470 100" stroke="black" stroke-width="2" marker-end="url(#arrowhead)"/>
+      <text x="400" y="90" font-family="Arial" font-size="16" text-anchor="middle" fill="black">b</text>
+      <path d="M 315 75 A 30 30 0 1 1 285 75" fill="none" stroke="black" stroke-width="2" marker-end="url(#arrowhead)"/>
+      <text x="300" y="50" font-family="Arial" font-size="16" text-anchor="middle" fill="black">c</text>
+    </svg>
+                        <p style="font-size:0.8rem; color:#666; margin-top:0.5rem;"><em>Fig: Representación visual del concepto.</em></p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Intuición</h3>
+                    <p>Imagina que estás jugando un juego de mesa donde solo hay un número limitado de casillas y reglas específicas para moverte entre ellas. Cada casilla distinta en el tablero representa un 'estado'. Las reglas para moverte (por ejemplo, 'si sacas un 3, avanzas 3 casillas', o 'si caes en esta casilla y tienes una tarjeta, ve a la cárcel') son las 'transiciones', y el resultado de un movimiento siempre te lleva a otra casilla (otro estado). Los diagramas de estado son como el mapa completo de este juego: te muestran visualmente todas las casillas posibles (estados), cómo están conectadas, y qué acciones o eventos tienes que realizar (las entradas o símbolos) para pasar de una a otra. No necesitas recordar dónde empezaste hace 20 turnos; solo necesitas saber en qué casilla estás AHORA para decidir tu próximo movimiento. El estado es tu posición actual en el juego, y las transiciones son las acciones que te permiten cambiar esa posición y progresar en el juego.</p>
+                </div>
+
+                <div class="card">
+                    <h3>Aplicación Real</h3>
+                    <p>La representación formal de estados y transiciones es la base de la creación de analizadores léxicos (lexers) y parsers en compiladores e intérpretes de lenguajes de programación. Cada palabra clave, identificador o literal puede ser reconocido por un autómata finito que transita entre estados según los caracteres que lee, validando la sintaxis del código. En el diseño de hardware digital, los diagramas de estado se utilizan extensivamente para especificar el comportamiento de circuitos secuenciales complejos como contadores, secuenciadores y unidades de control de procesadores, donde cada estado corresponde a una configuración particular de sus elementos de memoria. También son cruciales en el diseño de protocolos de comunicación (ej. TCP/IP, USB), donde cada fase de la conexión o transferencia de datos se modela como un estado con transiciones bien definidas ante eventos específicos (recepción de paquetes, timeouts, errores), asegurando una interacción robusta y predecible.</p>
+                </div>
+
+            </div>
+        </article>
+        
+        <article class="subtema">
+            <div class="subtema-header">
+                <h2>El Estado como Base de la Computación y Control</h2>
+            </div>
+            <div class="seccion-contenido">
+
+                <div class="card full-width">
+                    <h3>Historia</h3>
+                    <p>El desarrollo de la computación electrónica tras la Segunda Guerra Mundial consolidó el papel fundamental del estado. Las primeras computadoras, como ENIAC o UNIVAC, aunque no utilizaban el término 'estado' en el sentido moderno, funcionaban basándose en configuraciones eléctricas que representaban los datos y el progreso de un cálculo. La arquitectura de Von Neumann, con su concepto de programa almacenado, utiliza un 'contador de programa' (program counter) que es, en esencia, una forma de estado: indica la próxima instrucción a ejecutar y cambia secuencialmente, pero también puede ser alterado por instrucciones de salto, lo que representa una transición de estado no trivial. La teoría de autómatas, desarrollada en paralelo, proporcionó el formalismo matemático que unificó estas ideas, demostrando cómo cualquier cálculo algorítmico puede descomponerse en una secuencia finita de estados y transiciones, culminando en la noción de la Máquina de Turing como el modelo computacional universal, que también se basa en un concepto de estado interno.</p>
+                </div>
+
+                <div class="card full-width formal-box">
+                    <h3>Descripción Formal</h3>
+                    <p>El estado (q ∈ Q) es mucho más que una simple posición; es la abstracción fundamental que otorga a las máquinas secuenciales la capacidad de computar y controlar procesos dinámicos. Representa la 'memoria' activa de un sistema en un instante dado, un resumen compacto y suficiente de la historia de entradas relevantes que afecta directamente las salidas y las transiciones futuras. En un contexto computacional más amplio, el estado de un sistema puede ser complejo, incluyendo la configuración de registros, el contador de programa, el contenido de la memoria, o incluso variables de entorno de un proceso. La esencia del cómputo secuencial radica precisamente en la capacidad de una máquina para evolucionar de un estado a otro de manera predecible y controlada. Esto se define explícitamente mediante la función de transición (δ), que, para máquinas de estado más ricas como las de Mealy o Moore, puede también producir una salida (λ: Q × Σ → O para Mealy, o λ: Q → O para Moore) al transitar o al entrar en un estado, respectivamente. Los estados iniciales (q₀) establecen el punto de partida lógico para cualquier operación, mientras que los estados finales (F) denotan el logro de un objetivo, la aceptación de una entrada válida, o la finalización de un proceso. La capacidad de un sistema para residir en un conjunto discreto de estados posibles y la existencia de transiciones bien definidas que conectan estos estados son los pilares que permiten modelar procesos dinámicos, implementar lógica de toma de decisiones complejas, y ejecutar algoritmos en una secuencia controlada. El estado es, por tanto, el núcleo conceptual que permite la computación con 'memoria'.</p>
+                    <div class="diagrama-container">
+                        
+                        <p style="font-size:0.8rem; color:#666; margin-top:0.5rem;"><em>Fig: Representación visual del concepto.</em></p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Intuición</h3>
+                    <p>Piensa en el estado como el 'modo' o 'situación' en la que se encuentra un dispositivo o programa. Tu teléfono, por ejemplo, puede estar en modo 'bloqueado', 'desbloqueado', 'llamando', 'en reposo', etc. Cada uno de estos 'modos' es un estado. Y cada modo define un conjunto diferente de comportamientos y reacciones a tus acciones. Si el teléfono está 'bloqueado', presionar un botón puede simplemente encender la pantalla, pero no abrir una aplicación. Si está 'desbloqueado', el mismo botón podría abrir la aplicación correspondiente. El estado le da a la máquina su 'personalidad' o 'contexto operativo' en cada momento, permitiéndole interpretar las mismas entradas de diferentes maneras y ejecutar acciones distintas en consecuencia. Es la base para construir cualquier tipo de inteligencia o comportamiento reactivo que va más allá de una simple tabla de verdad, permitiendo a los sistemas adaptarse y responder de forma sofisticada a su entorno y a su propio historial.</p>
+                </div>
+
+                <div class="card">
+                    <h3>Aplicación Real</h3>
+                    <p>El concepto de estado es fundamental en el diseño de microcontroladores y sistemas embebidos, donde el programa se ejecuta a menudo como una máquina de estados que gestiona eficientemente sensores, actuadores y comunicaciones, optimizando el consumo de recursos. Los sistemas operativos modernos utilizan estados para describir el ciclo de vida de los procesos (ej. 'nuevo', 'listo', 'ejecutando', 'bloqueado', 'terminado'), permitiendo al planificador gestionar de manera eficiente los recursos de la CPU y la memoria. En el desarrollo web, las aplicaciones de una sola página (SPA) y los frameworks de front-end (como React, Vue, Angular) gestionan el 'estado' de la UI y los datos para renderizar dinámicamente el contenido y asegurar una experiencia de usuario fluida. Además, en inteligencia artificial, las FSM y sus extensiones son ampliamente usadas para modelar comportamientos de agentes inteligentes, desde personajes en videojuegos hasta sistemas de diálogo y chatbots, donde el estado actual define el contexto de la interacción y las posibles respuestas o acciones del agente.</p>
+                </div>
+
+            </div>
+        </article>
+        
+    </main>
+
+    <footer>
+        <p>Prof. Jorge López-Cifre, PhD © 2026</p>
+    </footer>
+
+</body>
+</html>

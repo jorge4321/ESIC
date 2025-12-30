@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>10 - Lenguajes regulares - Propiedades de Clausura - Prof. Jorge López-Cifre</title>
+    <style>
+        :root {
+            --primary: #003366;
+            --accent: #d4af37;
+            --bg: #fdfdfd;
+            --text: #333;
+            --card-bg: #fff;
+            --border: #e0e0e0;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+        header {
+            background: var(--primary);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        h1 { margin: 0; font-size: 1.3rem; }
+        @media (min-width: 768px) { h1 { font-size: 1.5rem; } }
+
+        .btn-volver {
+            background: var(--accent);
+            color: var(--primary);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            transition: background 0.3s;
+        }
+        .btn-volver:hover { background: #fff; }
+
+        main {
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .subtema {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            margin-bottom: 3rem;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        .subtema-header {
+            background: #f4f4f4;
+            padding: 1rem 2rem;
+            border-bottom: 1px solid var(--border);
+        }
+        .subtema-header h2 { margin: 0; color: var(--primary); font-size: 1.4rem; }
+
+        .seccion-contenido {
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+
+        @media (min-width: 768px) {
+            .seccion-contenido { grid-template-columns: repeat(2, 1fr); }
+            .full-width { grid-column: span 2; }
+        }
+
+        .card h3 {
+            color: var(--primary);
+            border-bottom: 2px solid var(--accent);
+            display: inline-block;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .formal-box {
+            background-color: #f9fbfd;
+            border-left: 4px solid var(--primary);
+            padding: 1rem;
+        }
+
+        .diagrama-container {
+            text-align: center;
+            margin: 1.5rem 0;
+            padding: 1rem;
+            background: white;
+            border: 1px dashed #ccc;
+            border-radius: 4px;
+        }
+        svg { max-width: 100%; height: auto; }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            background: var(--primary);
+            color: white;
+            margin-top: 3rem;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>10 - Lenguajes regulares - Propiedades de Clausura</h1>
+        <a href="javascript:history.back()" class="btn-volver">← Volver</a>
+    </header>
+
+    <main>
+
+        <article class="subtema">
+            <div class="subtema-header">
+                <h2>Clausura de Lenguajes Regulares bajo Unión e Intersección</h2>
+            </div>
+            <div class="seccion-contenido">
+
+                <div class="card full-width">
+                    <h3>Historia</h3>
+                    <p>El trabajo fundacional para comprender los lenguajes regulares y sus propiedades proviene en gran medida de mediados del siglo XX. Stephen Kleene, en su seminal artículo de 1956 “Representation of Events in Nerve Nets and Finite Automata”, introdujo formalmente el concepto de “eventos regulares” (lo que hoy llamamos lenguajes regulares) y estableció su equivalencia con los autómatas finitos. Este artículo fue crucial ya que demostró que los patrones descriptibles por autómatas finitos también podían expresarse utilizando un conjunto de operaciones que incluían la unión, la concatenación y la estrella de Kleene. La idea de “clausura” – que aplicar ciertas operaciones a lenguajes regulares siempre produce otro lenguaje regular – era una parte implícita de esta equivalencia. Posteriormente, investigadores como Michael O. Rabin y Dana Scott, en su artículo de 1959 “Finite Automata and Their Decision Problems”, solidificaron gran parte de la teoría de autómatas finitos, incluyendo las construcciones que sustentan propiedades de clausura como la intersección. Estos trabajos sentaron las bases para la informática moderna, proporcionando las herramientas formales para analizar y diseñar procesos computacionales.</p>
+                </div>
+
+                <div class="card full-width formal-box">
+                    <h3>Descripción Formal</h3>
+                    <p>Un lenguaje L es regular si existe un Autómata Finito Determinista (AFD) M = (Q, Σ, δ, q₀, F) que lo reconoce. Las propiedades de clausura de los lenguajes regulares afirman que si tomamos uno o más lenguajes regulares y aplicamos ciertas operaciones sobre ellos, el resultado será siempre otro lenguaje regular.
+
+*   **Clausura bajo Unión**: Si L₁ y L₂ son lenguajes regulares sobre un alfabeto Σ, entonces L₁ ∪ L₂ también es un lenguaje regular. Esto se demuestra construyendo un Autómata Finito No Determinista (AFND) M_∪ a partir de los AFDs M₁ = (Q₁, Σ, δ₁, q₀₁, F₁) y M₂ = (Q₂, Σ, δ₂, q₀₂, F₂) que reconocen L₁ y L₂, respectivamente. El nuevo AFND M_∪ = (Q_∪, Σ, δ_∪, q₀_∪, F_∪) se construye con un nuevo estado inicial q₀_∪, y ε-transiciones desde q₀_∪ hacia q₀₁ y q₀₂. Los conjuntos de estados Q_∪ = {q₀_∪} ∪ Q₁ ∪ Q₂, y los estados finales F_∪ = F₁ ∪ F₂. La función de transición δ_∪ incluye todas las transiciones de δ₁ y δ₂, además de las nuevas ε-transiciones.
+
+*   **Clausura bajo Intersección**: Si L₁ y L₂ son lenguajes regulares sobre un alfabeto Σ, entonces L₁ ∩ L₂ también es un lenguaje regular. Esto se demuestra construyendo un AFD "producto" M_∩ a partir de M₁ y M₂. El AFD M_∩ = (Q_∩, Σ, δ_∩, q₀_∩, F_∩) tiene como conjunto de estados Q_∩ = Q₁ × Q₂, es decir, pares ordenados de estados. El estado inicial q₀_∩ = (q₀₁, q₀₂). La función de transición δ_∩ se define como δ_∩((q₁, q₂), a) = (δ₁(q₁, a), δ₂(q₂, a)) para todo (q₁, q₂) ∈ Q_∩ y a ∈ Σ. Los estados finales F_∩ son todos los pares (q₁, q₂) donde q₁ ∈ F₁ y q₂ ∈ F₂.</p>
+                    <div class="diagrama-container">
+                        <svg viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
+          <polygon points="0 0, 10 3.5, 0 7" fill="black" />
+        </marker>
+      </defs>
+
+      <!-- AFD M1 -->
+      <circle cx="100" cy="70" r="20" fill="#E0F2F7" stroke="black" stroke-width="1" />
+      <text x="90" y="75" font-family="Arial" font-size="14">M₁</text>
+      <rect x="70" y="100" width="60" height="30" fill="#F0F0F0" stroke="none" />
+      <text x="80" y="120" font-family="Arial" font-size="12">L₁</text>
+
+      <!-- AFD M2 -->
+      <circle cx="200" cy="70" r="20" fill="#E0F2F7" stroke="black" stroke-width="1" />
+      <text x="190" y="75" font-family="Arial" font-size="14">M₂</text>
+      <rect x="170" y="100" width="60" height="30" fill="#F0F0F0" stroke="none" />
+      <text x="180" y="120" font-family="Arial" font-size="12">L₂</text>
+
+      <!-- Unión Construction NFA -->
+      <circle cx="350" cy="50" r="15" fill="#C0D9E0" stroke="black" stroke-width="1" />
+      <text x="345" y="55" font-family="Arial" font-size="10">q₀_∪</text>
+      <line x1="365" y1="50" x2="400" y2="70" stroke="black" stroke-width="1" marker-end="url(#arrowhead)" />
+      <text x="375" y="60" font-family="Arial" font-size="10">ε</text>
+      <line x1="365" y1="50" x2="400" y2="30" stroke="black" stroke-width="1" marker-end="url(#arrowhead)" />
+      <text x="375" y="40" font-family="Arial" font-size="10">ε</text>
+
+      <circle cx="415" cy="30" r="15" fill="#E0F2F7" stroke="black" stroke-width="1" />
+      <text x="405" y="35" font-family="Arial" font-size="10">q₀₁</text>
+      <circle cx="415" cy="70" r="15" fill="#E0F2F7" stroke="black" stroke-width="1" />
+      <text x="405" y="75" font-family="Arial" font-size="10">q₀₂</text>
+
+      <text x="480" y="50" font-family="Arial" font-size="12">... M₁ ...</text>
+      <text x="480" y="90" font-family="Arial" font-size="12">... M₂ ...</text>
+      <rect x="300" y="130" width="100" height="30" fill="#F0F0F0" stroke="none" />
+      <text x="310" y="150" font-family="Arial" font-size="12">L₁ ∪ L₂</text>
+
+      <!-- Intersection Hint -->
+      <text x="450" y="150" font-family="Arial" font-size="12">L₁ ∩ L₂ (Product Automaton)</text>
+      <rect x="470" y="160" width="100" height="30" fill="#C0D9E0" stroke="none" />
+      <text x="480" y="180" font-family="Arial" font-size="12">M₁ × M₂</text>
+    </svg>
+                        <p style="font-size:0.8rem; color:#666; margin-top:0.5rem;"><em>Fig: Representación visual del concepto.</em></p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Intuición</h3>
+                    <p>Pensemos en los lenguajes regulares como conjuntos de "patrones" que una máquina de estados finitos puede reconocer.
+
+Para la **unión (L₁ ∪ L₂)**, significa que una cadena es aceptada si pertenece al patrón L₁ O al patrón L₂. Si tenemos dos máquinas, M₁ y M₂, que reconocen L₁ y L₂ respectivamente, podemos construir una nueva máquina que, al recibir una cadena, "simultáneamente" intente seguir el camino de M₁ y el camino de M₂ (gracias a las transiciones ε del AFND). Si alguna de estas "simulaciones" alcanza un estado final en M₁ o M₂, la cadena es aceptada. Es como tener una "opción": o encajas en el primer patrón, o encajas en el segundo. Como los AFNDs pueden simular AFDs, y los AFNDs tienen el mismo poder que los AFDs, la unión de dos lenguajes regulares debe ser regular.
+
+Para la **intersección (L₁ ∩ L₂)**, una cadena debe pertenecer al patrón L₁ Y al patrón L₂. Aquí, la intuición es aún más directa: construimos una máquina "producto" donde cada estado representa la combinación de un estado de M₁ y un estado de M₂. La nueva máquina avanza solo si ambos autómatas constituyentes avanzan simultáneamente en sus respectivos caminos. Solo aceptará una cadena si, al finalizar, ambos autómatas individuales están en sus respectivos estados finales. Esto garantiza que la cadena cumple con ambos patrones a la vez.</p>
+                </div>
+
+                <div class="card">
+                    <h3>Aplicación Real</h3>
+                    <p>Las propiedades de clausura tienen implicaciones prácticas profundas, especialmente en la construcción de software para procesamiento de texto y lenguajes.
+
+La **unión** se manifiesta directamente en las expresiones regulares a través del operador de alternancia `|`. Por ejemplo, `(color|colour)` reconoce "color" o "colour". Los analizadores léxicos, componentes esenciales de los compiladores, utilizan esta propiedad para agrupar tokens. Un token como "identificador" podría ser la unión de patrones para nombres de variables válidos, nombres de funciones, etc. La capacidad de unir patrones asegura que un lenguaje de programación puede definir su léxico completo como un lenguaje regular único.
+
+La **intersección**, aunque menos visible directamente en la sintaxis de expresiones regulares estándar, es crucial en escenarios donde se requiere que una entrada cumpla múltiples criterios simultáneamente. Por ejemplo, en validación de datos, una contraseña podría requerir "contener al menos una mayúscula" (L₁) Y "contener al menos un dígito" (L₂). La capacidad de intersectar lenguajes regulares permite crear validadores que comprueben múltiples condiciones de formato o contenido de manera eficiente. También es fundamental en bases de datos para optimizar consultas que combinan condiciones sobre patrones de texto, asegurando que solo los registros que satisfacen todas las condiciones de patrón sean recuperados.</p>
+                </div>
+
+            </div>
+        </article>
+        
+        <article class="subtema">
+            <div class="subtema-header">
+                <h2>Clausura de Lenguajes Regulares bajo Complemento y Concatenación</h2>
+            </div>
+            <div class="seccion-contenido">
+
+                <div class="card full-width">
+                    <h3>Historia</h3>
+                    <p>La comprensión de la clausura bajo complemento está estrechamente ligada al desarrollo y la robustez de los Autómatas Finitos Deterministas (AFDs). Mientras que Stephen Kleene y sus contemporáneos sentaron las bases para la equivalencia entre expresiones regulares y AFDs/AFNDs, la noción de complemento se hizo más prominente a medida que la teoría de autómatas maduraba. La capacidad de un AFD para reconocer su complemento de forma sencilla, simplemente intercambiando estados finales por no finales, es una de sus propiedades más elegantes y poderosas, y destaca la naturaleza determinista de estos autómatas. La concatenación, por otro lado, es una de las tres operaciones fundamentales que Kleene utilizó para definir los "eventos regulares" y ha sido parte integral de la teoría desde sus inicios. Su construcción, aunque más natural en el contexto de los AFNDs (usando ε-transiciones), reafirmó la potencia y expresividad de los lenguajes regulares. Estos conceptos fueron esenciales para establecer la jerarquía de Chomsky y comprender los límites y capacidades de diferentes modelos computacionales.</p>
+                </div>
+
+                <div class="card full-width formal-box">
+                    <h3>Descripción Formal</h3>
+                    <p>*   **Clausura bajo Complemento**: Si L es un lenguaje regular sobre un alfabeto Σ, entonces su complemento, Lᶜ = Σ* \ L, también es un lenguaje regular. Esta propiedad es exclusiva de los AFDs. Para demostrarlo, tomamos un AFD M = (Q, Σ, δ, q₀, F) que reconoce L. Es fundamental que M sea un AFD completo, es decir, que para cada estado q ∈ Q y cada símbolo a ∈ Σ, δ(q, a) esté definido (si no lo está, se añade un "estado sumidero" o "trampa" al que se dirigen todas las transiciones no definidas). Una vez que M es un AFD completo, se construye un nuevo AFD Mᶜ = (Q, Σ, δ, q₀, Q \ F) simplemente invirtiendo el conjunto de estados finales. Es decir, los estados que eran finales en M se vuelven no finales en Mᶜ, y los estados que eran no finales en M se vuelven finales en Mᶜ. Mᶜ acepta exactamente aquellas cadenas que M no acepta, y por lo tanto reconoce Lᶜ.
+
+*   **Clausura bajo Concatenación**: Si L₁ y L₂ son lenguajes regulares sobre un alfabeto Σ, entonces su concatenación, L₁L₂ = {xy | x ∈ L₁ y ∈ L₂}, también es un lenguaje regular. Esto se demuestra construyendo un AFND a partir de los AFDs (o AFNDs) M₁ = (Q₁, Σ, δ₁, q₀₁, F₁) y M₂ = (Q₂, Σ, δ₂, q₀₂, F₂) que reconocen L₁ y L₂. El nuevo AFND M_con = (Q_con, Σ, δ_con, q₀₁, F₂) se construye con Q_con = Q₁ ∪ Q₂. Las transiciones incluyen todas las de δ₁ y δ₂, y se añade una ε-transición desde cada estado final de F₁ al estado inicial q₀₂. Es decir, para cada q_f ∈ F₁, δ_con(q_f, ε) contiene q₀₂. El estado inicial del nuevo AFND es q₀₁, y sus estados finales son los estados finales de M₂.</p>
+                    <div class="diagrama-container">
+                        <svg viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
+          <polygon points="0 0, 10 3.5, 0 7" fill="black" />
+        </marker>
+        <style>
+          .state { fill: #E0F2F7; stroke: black; stroke-width: 1; }
+          .final-state { fill: #E0F2F7; stroke: black; stroke-width: 1; r: 20; }
+          .initial-state { fill: #C0D9E0; stroke: black; stroke-width: 1; r: 15; }
+          .text-label { font-family: Arial; font-size: 14; }
+          .small-text-label { font-family: Arial; font-size: 10; }
+          .box { fill: #F0F0F0; stroke: none; }
+        </style>
+      </defs>
+
+      <!-- Complement Example -->
+      <circle cx="100" cy="70" r="20" class="final-state" />
+      <circle cx="100" cy="70" r="15" fill="none" stroke="black" stroke-width="1" />
+      <text x="90" y="75" class="text-label">q₁</text>
+      <circle cx="180" cy="70" r="20" class="state" />
+      <text x="170" y="75" class="text-label">q₂</text>
+
+      <line x1="120" y1="70" x2="160" y2="70" stroke="black" stroke-width="1" marker-end="url(#arrowhead)" />
+      <text x="135" y="65" class="small-text-label">a</text>
+      <line x1="180" y1="90" x2="100" y2="90" stroke="black" stroke-width="1" marker-end="url(#arrowhead)" />
+      <text x="140" y="100" class="small-text-label">b</text>
+
+      <rect x="70" y="130" width="100" height="30" class="box" />
+      <text x="80" y="150" class="text-label">L</text>
+      <text x="120" y="30" class="small-text-label">AFD M</text>
+
+      <text x="250" y="70" class="text-label">→ Complemento (Invertir estados finales)</text>
+
+      <circle cx="450" cy="70" r="20" class="state" />
+      <text x="440" y="75" class="text-label">q₁</text>
+      <circle cx="530" cy="70" r="20" class="final-state" />
+      <circle cx="530" cy="70" r="15" fill="none" stroke="black" stroke-width="1" />
+      <text x="520" y="75" class="text-label">q₂</text>
+
+      <line x1="470" y1="70" x2="510" y2="70" stroke="black" stroke-width="1" marker-end="url(#arrowhead)" />
+      <text x="485" y="65" class="small-text-label">a</text>
+      <line x1="530" y1="90" x2="450" y2="90" stroke="black" stroke-width="1" marker-end="url(#arrowhead)" />
+      <text x="490" y="100" class="small-text-label">b</text>
+
+      <rect x="420" y="130" width="100" height="30" class="box" />
+      <text x="430" y="150" class="text-label">Lᶜ</text>
+      <text x="470" y="30" class="small-text-label">AFD Mᶜ</text>
+
+      <!-- Concatenation Hint -->
+      <rect x="250" y="130" width="100" height="30" class="box" />
+      <text x="260" y="150" class="text-label">L₁L₂ (NFA with ε-transitions)</text>
+    </svg>
+                        <p style="font-size:0.8rem; color:#666; margin-top:0.5rem;"><em>Fig: Representación visual del concepto.</em></p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Intuición</h3>
+                    <p>*   Para el **complemento (Lᶜ)**, la idea es muy directa con los AFDs. Si un AFD acepta L, significa que hay un conjunto específico de caminos que terminan en estados finales. Si queremos lo opuesto, es decir, todas las cadenas que NO están en L, simplemente cambiamos nuestra definición de "éxito". Si antes un estado era un "estado de éxito", ahora es un "estado de fracaso", y viceversa. Un AFD, por su naturaleza determinista, siempre llega a un único estado para cualquier entrada. Por lo tanto, si ese estado no era final, ahora lo será, y la cadena es aceptada en el complemento. Es como decir: "aceptamos todo lo que la máquina original no aceptaba".
+
+*   Para la **concatenación (L₁L₂)**, la intuición es que queremos reconocer una cadena que es una "x" (que pertenece a L₁) seguida inmediatamente por una "y" (que pertenece a L₂). Para esto, podemos imaginar que tenemos la máquina M₁ para L₁ y la máquina M₂ para L₂. Queremos que M₁ procese la primera parte de la cadena, y una vez que M₁ termina de aceptar su parte (llegando a uno de sus estados finales), "saltamos" instantáneamente (con una ε-transición, que no consume entrada) al estado inicial de M₂. Luego, M₂ procesa el resto de la cadena. Si M₂ llega a uno de sus estados finales, entonces la cadena completa ha sido aceptada como parte de L₁L₂.</p>
+                </div>
+
+                <div class="card">
+                    <h3>Aplicación Real</h3>
+                    <p>*   La propiedad de **clausura bajo complemento** es fundamental para la validación de patrones negativos o la definición de políticas de seguridad. Por ejemplo, si un sistema de seguridad define un conjunto L de "patrones de ataque" (como inyecciones SQL o scripts maliciosos), entonces para protegerse, el sistema necesita aceptar todas las entradas que NO son parte de L. Construir un autómata para Lᶜ directamente de un autómata para L es una forma eficiente de implementar un "firewall" o un sistema de detección de intrusiones basado en patrones prohibidos. En expresiones regulares, aunque el complemento directo no es una operación nativa de la misma manera que la unión o concatenación, la capacidad teórica de hacerlo subyace a la potencia de los motores de regex para negar patrones o identificar lo que *no* coincide.
+
+*   La **clausura bajo concatenación** es quizás la más omnipresente en el procesamiento de lenguajes. Cada vez que definimos una secuencia de tokens en un lenguaje de programación, estamos utilizando la concatenación. Por ejemplo, una "declaración de variable" puede ser `TIPO` seguido de `IDENTIFICADOR` seguido de `PUNTO_Y_COMA`. Cada uno de `TIPO`, `IDENTIFICADOR`, `PUNTO_Y_COMA` puede ser un lenguaje regular por sí mismo. La capacidad de concatenarlos para formar lenguajes regulares más complejos permite a los analizadores sintácticos de los compiladores construir árboles de análisis sintáctico (parse trees) a partir de la secuencia de tokens, que son la concatenación de los patrones léxicos. Es la base para reconocer estructuras secuenciales en cualquier tipo de texto o datos estructurados.</p>
+                </div>
+
+            </div>
+        </article>
+        
+        <article class="subtema">
+            <div class="subtema-header">
+                <h2>Clausura de Lenguajes Regulares bajo la Estrella de Kleene y Homomorfismo</h2>
+            </div>
+            <div class="seccion-contenido">
+
+                <div class="card full-width">
+                    <h3>Historia</h3>
+                    <p>La **estrella de Kleene** (también conocida como iteración de Kleene) es, junto con la unión y la concatenación, una de las tres operaciones fundamentales que Stephen Kleene definió en 1956 para construir los "eventos regulares" a partir de símbolos básicos. Esta operación, denotada por *, captura la idea de "cero o más repeticiones" y es esencial para la expresividad de las expresiones regulares, permitiendo la descripción de patrones de longitud arbitraria. Su inclusión fue una piedra angular para mostrar el poder de los lenguajes regulares en la descripción de patrones computacionales. Los **homomorfismos**, por otro lado, se desarrollaron como una herramienta más abstracta en la teoría de lenguajes formales para estudiar transformaciones de cadenas. Si bien no surgieron directamente del trabajo original de Kleene, su propiedad de clausura para lenguajes regulares se estableció más tarde como parte de la comprensión general de cómo las transformaciones simples en los alfabetos afectan la regularidad de los lenguajes. Son una parte crucial del estudio de propiedades estructurales de lenguajes y sus relaciones con otros modelos.</p>
+                </div>
+
+                <div class="card full-width formal-box">
+                    <h3>Descripción Formal</h3>
+                    <p>*   **Clausura bajo la Estrella de Kleene**: Si L es un lenguaje regular sobre un alfabeto Σ, entonces L* (la estrella de Kleene de L) también es un lenguaje regular. L* representa el conjunto de todas las cadenas que se pueden formar concatenando cero o más cadenas de L. Esto incluye la cadena vacía ε. Para demostrarlo, se construye un AFND M_* a partir de un AFD (o AFND) M = (Q, Σ, δ, q₀, F) que reconoce L. El nuevo AFND M_* = (Q_*, Σ, δ_*, q₀_*, F_*) se construye de la siguiente manera: se añade un nuevo estado inicial y final, q₀_*. Desde q₀_*, se añade una ε-transición al estado inicial original q₀. Además, desde cada estado final q_f ∈ F del autómata original M, se añade una ε-transición de regreso al estado inicial original q₀. Finalmente, q₀_* se convierte en el único estado inicial y final de M_*. Esto asegura que la cadena vacía (cero repeticiones) es aceptada, y que cualquier número de concatenaciones de cadenas de L es reconocido.
+
+*   **Clausura bajo Homomorfismo**: Si L es un lenguaje regular sobre un alfabeto Σ₁, y h: Σ₁* → Σ₂* es un homomorfismo (una función que mapea cada símbolo de Σ₁ a una cadena en Σ₂*, y se extiende a cadenas completas concatenando los resultados, i.e., h(a₁a₂...aₖ) = h(a₁)h(a₂)...h(aₖ)), entonces h(L) = {h(w) | w ∈ L} también es un lenguaje regular. Esto se demuestra construyendo un AFND para h(L) a partir de un AFD M = (Q, Σ₁, δ, q₀, F) que reconoce L. Para cada transición q → p con símbolo a en M, se reemplaza por una secuencia de transiciones que reconocen h(a). Si h(a) = b₁b₂...bₘ, se insertan m-1 nuevos estados entre q y p, de modo que se reconoce b₁, luego b₂, hasta bₘ. Esto transforma las transiciones de M en secuencias de transiciones que procesan las cadenas resultantes del homomorfismo.</p>
+                    <div class="diagrama-container">
+                        <svg viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
+          <polygon points="0 0, 10 3.5, 0 7" fill="black" />
+        </marker>
+        <style>
+          .state { fill: #E0F2F7; stroke: black; stroke-width: 1; }
+          .final-state { fill: #E0F2F7; stroke: black; stroke-width: 1; r: 20; }
+          .initial-state { fill: #C0D9E0; stroke: black; stroke-width: 1; r: 15; }
+          .text-label { font-family: Arial; font-size: 14; }
+          .small-text-label { font-family: Arial; font-size: 10; }
+          .box { fill: #F0F0F0; stroke: none; }
+        </style>
+      </defs>
+
+      <!-- Kleene Star Construction NFA -->
+      <circle cx="100" cy="100" r="15" class="initial-state" />
+      <text x="90" y="105" class="small-text-label">q₀*</text>
+
+      <line x1="115" y1="100" x2="160" y2="100" stroke="black" stroke-width="1" marker-end="url(#arrowhead)" />
+      <text x="130" y="90" class="small-text-label">ε</text>
+
+      <circle cx="180" cy="100" r="20" class="state" />
+      <text x="170" y="105" class="text-label">q₀</text>
+
+      <rect x="200" y="80" width="80" height="40" class="box" />
+      <text x="210" y="105" class="small-text-label">... M ...</text>
+
+      <circle cx="300" cy="100" r="20" class="final-state" />
+      <circle cx="300" cy="100" r="15" fill="none" stroke="black" stroke-width="1" />
+      <text x="290" y="105" class="text-label">q_f</text>
+
+      <path d="M 315 100 A 40 40 0 1 1 275 100" fill="none" stroke="black" stroke-width="1" marker-end="url(#arrowhead)" />
+      <text x="340" y="70" class="small-text-label">ε</text>
+      <path d="M 100 115 A 40 40 0 1 1 100 85" fill="none" stroke="black" stroke-width="1" marker-end="url(#arrowhead)" />
+      <text x="105" y="60" class="small-text-label">ε</text>
+
+      <rect x="150" y="140" width="100" height="30" class="box" />
+      <text x="160" y="160" class="text-label">L*</text>
+
+      <!-- Homomorphism Hint -->
+      <text x="400" y="50" class="text-label">Homomorfismo h(L)</text>
+      <text x="400" y="70" class="small-text-label">Map transition 'a' to 'h(a)' sequence</text>
+      <rect x="420" y="100" width="120" height="30" class="box" />
+      <text x="430" y="120" class="text-label">AFD M_h(L)</text>
+    </svg>
+                        <p style="font-size:0.8rem; color:#666; margin-top:0.5rem;"><em>Fig: Representación visual del concepto.</em></p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Intuición</h3>
+                    <p>*   La **estrella de Kleene (L*)** es el "poder de la repetición". Si L es un conjunto de patrones, L* significa "cero o más repeticiones de patrones de L". Por ejemplo, si L = { "ab" }, entonces L* = {ε, "ab", "abab", "ababab", ...}. Para construir una máquina que reconozca esto, tomamos la máquina M para L. Para permitir "cero repeticiones" (ε), hacemos que el nuevo estado inicial también sea final. Para permitir "más repeticiones", cuando M termina de reconocer una cadena (llega a un estado final), queremos que pueda "reiniciarse" para reconocer otra cadena de L. Esto se logra añadiendo ε-transiciones desde todos los estados finales de M de vuelta a su estado inicial. Así, la máquina puede seguir reconociendo cadenas de L una y otra vez, o no reconocer ninguna y aceptar ε.
+
+*   Un **homomorfismo** es como una "sustitución consistente". Si tenemos un lenguaje regular L y una regla que dice cómo cambiar cada símbolo del alfabeto por una cadena (por ejemplo, 'a' se convierte en "xy", 'b' en "z"), entonces si tomamos cada palabra en L y aplicamos esta regla a cada uno de sus símbolos, el lenguaje resultante h(L) también será regular. La intuición es que las máquinas de estados finitos procesan los símbolos uno por uno. Si un símbolo 'a' se transforma en una cadena más larga "xyz", la máquina simplemente tiene que "desempaquetar" esa transformación y procesar "x", luego "y", luego "z" en lugar de 'a'. Como los lenguajes regulares pueden manejar secuencias fijas de símbolos, pueden manejar estas secuencias resultantes de las transformaciones sin perder su regularidad.</p>
+                </div>
+
+                <div class="card">
+                    <h3>Aplicación Real</h3>
+                    <p>*   La **estrella de Kleene** es, sin duda, una de las operaciones más utilizadas en las **expresiones regulares**. El asterisco `*` en regex significa "cero o más" ocurrencias del elemento precedente. Por ejemplo, `a*` coincide con "", "a", "aa", "aaa", etc. `(ab)*` coincide con "", "ab", "abab", etc. Esta capacidad es vital para la búsqueda de patrones flexibles en texto, la validación de formatos donde ciertos componentes pueden repetirse (por ejemplo, una lista de elementos separados por comas, `(elemento)(,elemento)*`), y el diseño de analizadores léxicos que deben reconocer secuencias de dígitos, letras, o cualquier otro carácter repetitivo para formar números, identificadores o cadenas literales.
+
+*   Los **homomorfismos** son menos visibles directamente en la sintaxis de expresiones regulares de uso diario, pero son conceptualmente importantes en la transformación y codificación de datos. Por ejemplo, si tenemos un lenguaje regular que describe números binarios, un homomorfismo podría mapear cada '0' a "cero" y cada '1' a "uno", produciendo un lenguaje regular de descripciones de números en inglés. Esto es útil en tareas de **procesamiento de lenguaje natural básico**, **generación de código** (donde un patrón abstracto se mapea a una secuencia de instrucciones específicas) o en **compresión/descompresión de datos** (donde un símbolo corto representa una secuencia más larga). También se utilizan en la demostración de propiedades más complejas de los lenguajes formales y en la construcción de sistemas donde la entrada simbólica necesita ser reinterpretada o expandida a otro alfabeto.</p>
+                </div>
+
+            </div>
+        </article>
+        
+    </main>
+
+    <footer>
+        <p>Prof. Jorge López-Cifre, PhD © 2026</p>
+    </footer>
+
+</body>
+</html>

@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2 - Lenguajes y gramáticas - La Jerarquía de Chomsky - Prof. Jorge López-Cifre</title>
+    <style>
+        :root {
+            --primary: #003366;
+            --accent: #d4af37;
+            --bg: #fdfdfd;
+            --text: #333;
+            --card-bg: #fff;
+            --border: #e0e0e0;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+        header {
+            background: var(--primary);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        h1 { margin: 0; font-size: 1.3rem; }
+        @media (min-width: 768px) { h1 { font-size: 1.5rem; } }
+
+        .btn-volver {
+            background: var(--accent);
+            color: var(--primary);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            transition: background 0.3s;
+        }
+        .btn-volver:hover { background: #fff; }
+
+        main {
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .subtema {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            margin-bottom: 3rem;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        .subtema-header {
+            background: #f4f4f4;
+            padding: 1rem 2rem;
+            border-bottom: 1px solid var(--border);
+        }
+        .subtema-header h2 { margin: 0; color: var(--primary); font-size: 1.4rem; }
+
+        .seccion-contenido {
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+
+        @media (min-width: 768px) {
+            .seccion-contenido { grid-template-columns: repeat(2, 1fr); }
+            .full-width { grid-column: span 2; }
+        }
+
+        .card h3 {
+            color: var(--primary);
+            border-bottom: 2px solid var(--accent);
+            display: inline-block;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .formal-box {
+            background-color: #f9fbfd;
+            border-left: 4px solid var(--primary);
+            padding: 1rem;
+        }
+
+        .diagrama-container {
+            text-align: center;
+            margin: 1.5rem 0;
+            padding: 1rem;
+            background: white;
+            border: 1px dashed #ccc;
+            border-radius: 4px;
+        }
+        svg { max-width: 100%; height: auto; }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            background: var(--primary);
+            color: white;
+            margin-top: 3rem;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>2 - Lenguajes y gramáticas - La Jerarquía de Chomsky</h1>
+        <a href="javascript:history.back()" class="btn-volver">← Volver</a>
+    </header>
+
+    <main>
+
+        <article class="subtema">
+            <div class="subtema-header">
+                <h2>Introducción a la Jerarquía de Chomsky y Lenguajes Tipo 0 (Recursivamente Enumerables)</h2>
+            </div>
+            <div class="seccion-contenido">
+
+                <div class="card full-width">
+                    <h3>Historia</h3>
+                    <p>La Jerarquía de Chomsky fue propuesta por el lingüista Noam Chomsky en la década de 1950, específicamente en trabajos como "Three Models for the Description of Language" (1956) y "On Certain Formal Properties of Grammars" (1959). En un momento en que la lingüística buscaba formalizar la estructura subyacente del lenguaje humano, Chomsky desarrolló un marco para clasificar las gramáticas formales según su poder generativo. Este esfuerzo no solo revolucionó la lingüística teórica, sino que también estableció conexiones profundas con la naciente ciencia de la computación. Al organizar los lenguajes formales en una jerarquía, Chomsky proporcionó una base teórica para comprender las capacidades y limitaciones de diferentes modelos computacionales, desde la descripción de la sintaxis del lenguaje natural hasta el diseño de lenguajes de programación. Su trabajo sentó las bases para el estudio moderno de los compiladores y la teoría de la computación.</p>
+                </div>
+
+                <div class="card full-width formal-box">
+                    <h3>Descripción Formal</h3>
+                    <p>Una gramática formal G se define como una cuádrupla (V, Σ, R, S), donde V es un conjunto finito de variables (o no terminales), Σ es un conjunto finito de símbolos terminales (disjunto de V), R es un conjunto finito de reglas de producción de la forma α → β, y S ∈ V es el símbolo inicial. Los lenguajes generados por gramáticas se clasifican en la Jerarquía de Chomsky según las restricciones aplicadas a las reglas de producción en R.
+
+El nivel más general y potente es el Tipo 0, que corresponde a las gramáticas sin restricciones (también llamadas gramáticas de estructura de frase). Para estas gramáticas, las reglas de producción α → β no tienen ninguna limitación en la forma de α ni de β, salvo que α debe contener al menos un símbolo no terminal, y α ∈ (V ∪ Σ)*V(V ∪ Σ)* y β ∈ (V ∪ Σ)*. Los lenguajes generados por gramáticas Tipo 0 se conocen como Lenguajes Recursivamente Enumerables (LRE). Estos lenguajes son precisamente aquellos que pueden ser reconocidos por una Máquina de Turing, lo que significa que existe un algoritmo que se detendrá y aceptará cualquier cadena que pertenezca al lenguaje, aunque no necesariamente se detendrá para rechazar cadenas que no pertenecen (problema de la parada). La tesis de Church-Turing establece que una Máquina de Turing puede realizar cualquier computación que un algoritmo pueda realizar, vinculando así la potencia de las gramáticas Tipo 0 a la esencia de la computabilidad.
+
+Ejemplo de regla Tipo 0: 'aXB' → 'YZbc'.</p>
+                    <div class="diagrama-container">
+                        <svg viewBox="0 0 600 200" style="font-family: Arial, sans-serif; font-size: 14px;">
+  <rect x="50" y="20" width="500" height="160" rx="10" ry="10" style="fill: #e0f2f7; stroke: #000; stroke-width: 1;"/>
+  <text x="300" y="45" text-anchor="middle" style="font-weight: bold;">Jerarquía de Chomsky (General)</text>
+
+  <rect x="70" y="60" width="120" height="100" rx="5" ry="5" style="fill: #f7e0e0; stroke: #000; stroke-width: 1;"/>
+  <text x="130" y="80" text-anchor="middle" style="font-weight: bold;">Tipo 0</text>
+  <text x="130" y="98" text-anchor="middle">Gramáticas sin Restricciones</text>
+  <text x="130" y="116" text-anchor="middle">L. Recursivamente Enumerables</text>
+  <text x="130" y="134" text-anchor="middle">Máquinas de Turing</text>
+
+  <rect x="210" y="70" width="120" height="80" rx="5" ry="5" style="fill: #e2f7e0; stroke: #000; stroke-width: 1;"/>
+  <text x="270" y="90" text-anchor="middle" style="font-weight: bold;">Tipo 1</text>
+  <text x="270" y="108" text-anchor="middle">L. Sensibles al Contexto</text>
+
+  <rect x="350" y="80" width="120" height="60" rx="5" ry="5" style="fill: #f2e0f7; stroke: #000; stroke-width: 1;"/>
+  <text x="410" y="100" text-anchor="middle" style="font-weight: bold;">Tipo 2</text>
+  <text x="410" y="118" text-anchor="middle">L. Libres de Contexto</text>
+
+  <rect x="490" y="90" width="80" height="40" rx="5" ry="5" style="fill: #e0f7f2; stroke: #000; stroke-width: 1;"/>
+  <text x="530" y="110" text-anchor="middle" style="font-weight: bold;">Tipo 3</text>
+  <text x="530" y="128" text-anchor="middle">L. Regulares</text>
+
+  <line x1="190" y1="100" x2="210" y2="100" style="stroke: #000; stroke-width: 1; marker-end: url(#arrowhead);"/>
+  <line x1="330" y1="100" x2="350" y2="100" style="stroke: #000; stroke-width: 1; marker-end: url(#arrowhead);"/>
+  <line x1="470" y1="100" x2="490" y2="100" style="stroke: #000; stroke-width: 1; marker-end: url(#arrowhead);"/>
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#000" />
+    </marker>
+  </defs>
+</svg>
+                        <p style="font-size:0.8rem; color:#666; margin-top:0.5rem;"><em>Fig: Representación visual del concepto.</em></p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Intuición</h3>
+                    <p>Imagina que tienes el poder computacional más grande posible, una máquina capaz de hacer cualquier cálculo que se pueda describir mediante un algoritmo. Los lenguajes Tipo 0 son el conjunto de todos los problemas que esta máquina todopoderosa podría "entender" o "procesar". Piensa en ellos como la totalidad de lo computable. Si puedes escribir un programa que, dado cualquier texto, eventualmente diga 'sí' si ese texto pertenece a un cierto patrón, entonces ese patrón es un lenguaje Tipo 0. Sin embargo, si el texto no encaja, el programa podría seguir intentándolo indefinidamente sin llegar a una conclusión de 'no'. Son los lenguajes más complejos y con menos restricciones en sus reglas de formación, abarcando todo lo que es teóricamente computable.</p>
+                </div>
+
+                <div class="card">
+                    <h3>Aplicación Real</h3>
+                    <p>Aunque los lenguajes Tipo 0 no se utilizan directamente para diseñar la sintaxis de lenguajes de programación prácticos, su estudio es fundamental para la teoría de la computación. Son el punto de partida para comprender los límites de lo que las computadoras pueden hacer. Sus aplicaciones indirectas incluyen el desarrollo de sistemas de Inteligencia Artificial que intentan razonar sobre problemas muy complejos, como los sistemas expertos o los probadores de teoremas automatizados, donde la capacidad de expresar cualquier problema computable es crucial. También son relevantes en la investigación sobre la undecidibilidad de ciertos problemas, por ejemplo, el famoso Problema de la Parada, que demuestra que no existe un algoritmo general para determinar si un programa arbitrario se detendrá o no. Comprender las gramáticas Tipo 0 es esencial para apreciar la base teórica de la computación moderna.</p>
+                </div>
+
+            </div>
+        </article>
+        
+        <article class="subtema">
+            <div class="subtema-header">
+                <h2>Lenguajes y Gramáticas Tipo 1 (Sensibles al Contexto)</h2>
+            </div>
+            <div class="seccion-contenido">
+
+                <div class="card full-width">
+                    <h3>Historia</h3>
+                    <p>Siguiendo el trabajo inicial de Chomsky sobre las gramáticas de estructura de frase, los lenguajes sensibles al contexto fueron introducidos como una restricción natural. Chomsky y Marcus fueron figuras clave en su formalización. La motivación principal era encontrar una clase de gramáticas menos potente que las de Tipo 0, pero más potente que las libres de contexto, que pudiera capturar fenómenos lingüísticos donde el significado o la validez de una construcción depende de su entorno. En los lenguajes naturales, por ejemplo, la concordancia de género y número a menudo requiere que la validez de una palabra dependa de las palabras adyacentes. Este nivel de la jerarquía es un puente importante entre la completa libertad de las gramáticas Tipo 0 y las estructuras más regimentadas de las gramáticas libres de contexto, buscando un equilibrio entre poder expresivo y eficiencia de análisis.</p>
+                </div>
+
+                <div class="card full-width formal-box">
+                    <h3>Descripción Formal</h3>
+                    <p>Una gramática Tipo 1, o gramática sensible al contexto (GSC), es una gramática G = (V, Σ, R, S) donde todas las reglas de producción en R tienen la forma α → β, con la restricción de que la longitud de la cadena α debe ser menor o igual que la longitud de la cadena β (es decir, |α| ≤ |β|), a menos que S → ε sea una regla y S no aparezca en el lado derecho de ninguna otra regla. Más específicamente, las reglas suelen presentarse en la forma A → γ, donde A ∈ V y γ ∈ (V ∪ Σ)*, con la condición |A| ≤ |γ|. Una forma alternativa y más descriptiva de las reglas sensibles al contexto es αAβ → αγβ, donde A ∈ V, α, β ∈ (V ∪ Σ)*, y γ ∈ (V ∪ Σ)*, con γ ≠ ε. Esto significa que un no terminal A solo puede ser reemplazado por γ si A se encuentra en el contexto de las cadenas α y β.
+
+Los lenguajes generados por gramáticas Tipo 1 se llaman Lenguajes Sensibles al Contexto (LSC). Estos lenguajes pueden ser reconocidos por un autómata linealmente acotado (ALA), que es una Máquina de Turing que tiene un cabezal de lectura/escritura restringido a operar dentro de la porción de la cinta ocupada inicialmente por la cadena de entrada. Esto implica que la cantidad de memoria requerida para reconocer un LSC es directamente proporcional a la longitud de la cadena de entrada. La restricción |α| ≤ |β| asegura que las derivaciones no 'encojan' la cadena más allá de su punto de partida, lo que corresponde a la memoria acotada del ALA.
+
+Ejemplo de regla Tipo 1: 'aBc' → 'adefc'.</p>
+                    <div class="diagrama-container">
+                        <svg viewBox="0 0 600 200" style="font-family: Arial, sans-serif; font-size: 14px;">
+  <rect x="50" y="20" width="500" height="160" rx="10" ry="10" style="fill: #e0f2f7; stroke: #000; stroke-width: 1;"/>
+  <text x="300" y="45" text-anchor="middle" style="font-weight: bold;">Jerarquía de Chomsky (Detalle)</text>
+
+  <rect x="70" y="60" width="120" height="100" rx="5" ry="5" style="fill: #f7e0e0; stroke: #000; stroke-width: 1;"/>
+  <text x="130" y="80" text-anchor="middle" style="font-weight: bold;">Tipo 0</text>
+  <text x="130" y="98" text-anchor="middle">Máquinas de Turing</text>
+  <circle cx="130" cy="130" r="20" fill="#c0c0c0" stroke="#000" stroke-width="1"/>
+  <text x="130" y="135" text-anchor="middle">MT</text>
+
+  <rect x="210" y="70" width="120" height="80" rx="5" ry="5" style="fill: #e2f7e0; stroke: #000; stroke-width: 1;"/>
+  <text x="270" y="90" text-anchor="middle" style="font-weight: bold;">Tipo 1 (Sensibles al Contexto)</text>
+  <text x="270" y="108" text-anchor="middle">αAβ → αγβ (|α|≤|β|)</text>
+  <circle cx="270" cy="130" r="20" fill="#a0d0a0" stroke="#000" stroke-width="1"/>
+  <text x="270" y="135" text-anchor="middle">ALA</text>
+
+  <rect x="350" y="80" width="120" height="60" rx="5" ry="5" style="fill: #f2e0f7; stroke: #000; stroke-width: 1;"/>
+  <text x="410" y="100" text-anchor="middle" style="font-weight: bold;">Tipo 2</text>
+
+  <rect x="490" y="90" width="80" height="40" rx="5" ry="5" style="fill: #e0f7f2; stroke: #000; stroke-width: 1;"/>
+  <text x="530" y="110" text-anchor="middle" style="font-weight: bold;">Tipo 3</text>
+
+  <line x1="190" y1="100" x2="210" y2="100" style="stroke: #000; stroke-width: 1; marker-end: url(#arrowhead);"/>
+  <line x1="330" y1="100" x2="350" y2="100" style="stroke: #000; stroke-width: 1; marker-end: url(#arrowhead);"/>
+  <line x1="470" y1="100" x2="490" y2="100" style="stroke: #000; stroke-width: 1; marker-end: url(#arrowhead);"/>
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#000" />
+    </marker>
+  </defs>
+</svg>
+                        <p style="font-size:0.8rem; color:#666; margin-top:0.5rem;"><em>Fig: Representación visual del concepto.</em></p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Intuición</h3>
+                    <p>Piensa en un lenguaje donde ciertas palabras o estructuras solo tienen sentido o son válidas si aparecen en un "vecindario" específico. Por ejemplo, en español, la forma de un verbo debe concordar con el sujeto en número y persona. No es lo mismo decir "él come" que "ellos come". La validez de "come" depende del sujeto "él". Los lenguajes sensibles al contexto capturan precisamente estas dependencias contextuales. Las reglas para formar frases válidas dependen de lo que hay a izquierda y derecha del elemento que estás intentando reemplazar. Son más potentes que los lenguajes libres de contexto (donde la sustitución de una palabra no depende de su entorno), pero no tan "libres" como los lenguajes Tipo 0, ya que las cadenas derivadas no pueden reducirse arbitrariamente en tamaño.</p>
+                </div>
+
+                <div class="card">
+                    <h3>Aplicación Real</h3>
+                    <p>Los lenguajes sensibles al contexto tienen aplicaciones en áreas donde las dependencias contextuales son cruciales. En el procesamiento del lenguaje natural, pueden modelar aspectos complejos como la concordancia gramatical (género, número, tiempo verbal) o el orden de los constituyentes de una frase que no pueden ser capturados por gramáticas libres de contexto. Aunque rara vez se utilizan directamente para especificar la sintaxis completa de un lenguaje de programación debido a la complejidad de sus analizadores (que son polinomiales en tiempo, pero más costosos que los parsers libres de contexto), algunas propiedades de los lenguajes de programación, como la declaración de una variable antes de su uso o la unicidad de los identificadores, son inherentemente sensibles al contexto. También se han explorado en áreas como la bioinformática para modelar estructuras secundarias de ARN o en la descripción de patrones complejos en inteligencia artificial.</p>
+                </div>
+
+            </div>
+        </article>
+        
+        <article class="subtema">
+            <div class="subtema-header">
+                <h2>Lenguajes y Gramáticas Tipo 2 (Libres de Contexto) y Tipo 3 (Regulares)</h2>
+            </div>
+            <div class="seccion-contenido">
+
+                <div class="card full-width">
+                    <h3>Historia</h3>
+                    <p>Las gramáticas libres de contexto (Tipo 2) surgieron como una de las contribuciones más influyentes de Chomsky a finales de los años 50 y principios de los 60. Su simplicidad y poder expresivo las hicieron ideales para describir la sintaxis de los lenguajes de programación. De hecho, la notación Backus-Naur Form (BNF), desarrollada por John Backus y Peter Naur para describir ALGOL 60, es esencialmente una gramática libre de contexto. Las gramáticas regulares (Tipo 3), aún más antiguas, tienen sus raíces en el trabajo de Stephen Kleene en la década de 1950 sobre expresiones regulares y el comportamiento de redes neuronales, estableciendo una equivalencia entre autómatas finitos y expresiones regulares. Ambos tipos han sido fundamentales para el desarrollo de la informática y el diseño de compiladores.</p>
+                </div>
+
+                <div class="card full-width formal-box">
+                    <h3>Descripción Formal</h3>
+                    <p>Las gramáticas Tipo 2, o gramáticas libres de contexto (GLC), son una subclase de las gramáticas sensibles al contexto. Una GLC G = (V, Σ, R, S) tiene reglas de producción de la forma A → β, donde A ∈ V (un solo no terminal en el lado izquierdo) y β ∈ (V ∪ Σ)*. La clave es que la sustitución de A por β puede ocurrir independientemente de los símbolos que rodean a A. Los lenguajes generados por GLC se conocen como Lenguajes Libres de Contexto (LLC) y son reconocidos por autómatas con pila (AP), que son autómatas finitos equipados con una pila de memoria para almacenar y recuperar símbolos. Un AP puede realizar un número ilimitado de operaciones de pila (push/pop) basándose en su estado actual y el símbolo de entrada, lo que le permite reconocer estructuras anidadas.
+
+Las gramáticas Tipo 3, o gramáticas regulares (GR), son la subclase más restrictiva de la jerarquía. Una GR G = (V, Σ, R, S) tiene reglas de producción de una de dos formas: Derecha (A → aB o A → a) o Izquierda (A → Ba o A → a), donde A, B ∈ V y a ∈ Σ. Es crucial que una gramática sea puramente de tipo derecho o de tipo izquierdo, no una mezcla. Los lenguajes generados por GR se conocen como Lenguajes Regulares (LR) y son reconocidos por autómatas finitos (AFD o AFN), que son los modelos computacionales más simples, con una memoria finita y sin capacidad de pila. Solo recuerdan su estado actual.
+
+Ejemplo de regla Tipo 2: 'Exp' → 'Exp + Term' | 'Term'.
+Ejemplo de regla Tipo 3: 'S' → 'aSb' | 'ε'.</p>
+                    <div class="diagrama-container">
+                        <svg viewBox="0 0 600 200" style="font-family: Arial, sans-serif; font-size: 14px;">
+  <rect x="50" y="20" width="500" height="160" rx="10" ry="10" style="fill: #e0f2f7; stroke: #000; stroke-width: 1;"/>
+  <text x="300" y="45" text-anchor="middle" style="font-weight: bold;">Jerarquía de Chomsky (Foco)</text>
+
+  <rect x="70" y="60" width="120" height="100" rx="5" ry="5" style="fill: #f7e0e0; stroke: #000; stroke-width: 1;"/>
+  <text x="130" y="80" text-anchor="middle" style="font-weight: bold;">Tipo 0</text>
+
+  <rect x="210" y="70" width="120" height="80" rx="5" ry="5" style="fill: #e2f7e0; stroke: #000; stroke-width: 1;"/>
+  <text x="270" y="90" text-anchor="middle" style="font-weight: bold;">Tipo 1</text>
+
+  <rect x="350" y="80" width="120" height="60" rx="5" ry="5" style="fill: #f2e0f7; stroke: #000; stroke-width: 1;"/>
+  <text x="410" y="95" text-anchor="middle" style="font-weight: bold;">Tipo 2 (Libres de Contexto)</text>
+  <text x="410" y="110" text-anchor="middle">A → β</text>
+  <circle cx="410" cy="130" r="20" fill="#d0a0d0" stroke="#000" stroke-width="1"/>
+  <text x="410" y="135" text-anchor="middle">AP</text>
+
+  <rect x="490" y="90" width="80" height="40" rx="5" ry="5" style="fill: #e0f7f2; stroke: #000; stroke-width: 1;"/>
+  <text x="530" y="105" text-anchor="middle" style="font-weight: bold;">Tipo 3 (Regulares)</text>
+  <text x="530" y="120" text-anchor="middle">A → aB | a</text>
+  <circle cx="530" cy="140" r="15" fill="#a0d0d0" stroke="#000" stroke-width="1"/>
+  <text x="530" y="145" text-anchor="middle">AF</text>
+
+  <line x1="190" y1="100" x2="210" y2="100" style="stroke: #000; stroke-width: 1; marker-end: url(#arrowhead);"/>
+  <line x1="330" y1="100" x2="350" y2="100" style="stroke: #000; stroke-width: 1; marker-end: url(#arrowhead);"/>
+  <line x1="470" y1="100" x2="490" y2="100" style="stroke: #000; stroke-width: 1; marker-end: url(#arrowhead);"/>
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#000" />
+    </marker>
+  </defs>
+</svg>
+                        <p style="font-size:0.8rem; color:#666; margin-top:0.5rem;"><em>Fig: Representación visual del concepto.</em></p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Intuición</h3>
+                    <p>Las gramáticas libres de contexto son como bloques de construcción que puedes usar para crear estructuras complejas sin preocuparte por cómo esos bloques encajan con otros a su alrededor. Piensa en la estructura de un párrafo: puedes tener una oración, y dentro de ella, varias cláusulas, y dentro de estas, frases. La validez de una cláusula generalmente no depende de lo que haya antes o después del párrafo. Son ideales para describir estructuras jerárquicas y anidadas, como los paréntesis en matemáticas o las llamadas a funciones en programación. Los lenguajes regulares son aún más simples; son para patrones secuenciales que no requieren memoria a largo plazo. Imagina que buscas una secuencia específica de caracteres en un texto: eso es un lenguaje regular. No puedes, por ejemplo, contar cuántos paréntesis de apertura hay para asegurarte de que cada uno tenga un cierre, porque eso requeriría 'memoria de conteo', lo cual es una capacidad que excede la de un autómata finito.</p>
+                </div>
+
+                <div class="card">
+                    <h3>Aplicación Real</h3>
+                    <p>Los lenguajes libres de contexto son la columna vertebral de la definición de la sintaxis de casi todos los lenguajes de programación modernos (C++, Java, Python, JavaScript). Los compiladores utilizan analizadores sintácticos (parsers) basados en gramáticas libres de contexto para verificar la estructura del código y construir árboles de análisis sintáctico. También son cruciales en la definición de lenguajes de marcado como XML y JSON, y en el análisis sintáctico de lenguajes naturales. Los lenguajes regulares, por su parte, son omnipresentes en el procesamiento de texto y la ingeniería de software. Se utilizan para el análisis léxico (tokenización) en compiladores, donde el código fuente se divide en unidades significativas (identificadores, palabras clave, operadores). Las expresiones regulares, que son una notación práctica para definir lenguajes regulares, son una herramienta esencial para la búsqueda de patrones, la validación de entrada de usuarios (ej. formatos de correo electrónico o números de teléfono) y el filtrado de texto en casi cualquier lenguaje de programación y utilidad de sistema (grep, sed).</p>
+                </div>
+
+            </div>
+        </article>
+        
+    </main>
+
+    <footer>
+        <p>Prof. Jorge López-Cifre, PhD © 2026</p>
+    </footer>
+
+</body>
+</html>

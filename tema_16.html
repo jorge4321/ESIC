@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>16 - Gramáticas (GIC) - Sintaxis y Forma Backus-Naur (BNF). - Prof. Jorge López-Cifre</title>
+    <style>
+        :root {
+            --primary: #003366;
+            --accent: #d4af37;
+            --bg: #f8f9fa;
+            --text: #2c3e50;
+            --card-bg: #ffffff;
+            --border: #e9ecef;
+        }
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 0;
+            line-height: 1.7;
+        }
+        /* Tipografía mejorada */
+        p { margin-bottom: 1rem; }
+        strong, b { color: var(--primary); font-weight: 700; }
+        
+        header {
+            background: var(--primary);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        h1 { margin: 0; font-size: 1.25rem; font-weight: 600; }
+        
+        .btn-volver {
+            background: var(--accent);
+            color: var(--primary);
+            text-decoration: none;
+            padding: 0.5rem 1.2rem;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        .btn-volver:hover { 
+            background: #fff; 
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+
+        main {
+            max-width: 1100px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+
+        .subtema {
+            background: var(--card-bg);
+            border-radius: 12px;
+            margin-bottom: 4rem;
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+        
+        .subtema-header {
+            background: linear-gradient(to right, #f8f9fa, #ffffff);
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid var(--border);
+        }
+        .subtema-header h2 { 
+            margin: 0; 
+            color: var(--primary); 
+            font-size: 1.6rem;
+            border-left: 5px solid var(--accent);
+            padding-left: 1rem;
+        }
+
+        .seccion-contenido {
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2.5rem;
+        }
+
+        @media (min-width: 900px) {
+            .seccion-contenido { grid-template-columns: 1fr 1fr; }
+            .full-width { grid-column: 1 / -1; }
+        }
+
+        .card h3 {
+            color: var(--primary);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-top: 0;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 0.5rem;
+        }
+
+        .formal-box {
+            background-color: #f0f7ff; /* Azul muy muy pálido */
+            border-radius: 8px;
+            padding: 2rem !important;
+            border: 1px solid #cce5ff;
+        }
+
+        /* CSS Específico para corregir SVGs */
+        .diagrama-container {
+            text-align: center;
+            margin: 2rem auto;
+            padding: 1.5rem;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
+            max-width: 100%;
+            overflow-x: auto; /* Si es muy ancho, permite scroll */
+        }
+        
+        /* Forzar comportamiento correcto del SVG */
+        .diagrama-container svg {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+        
+        /* Evitar que el texto dentro del SVG sea ilegible */
+        .diagrama-container text {
+            font-family: sans-serif;
+        }
+
+        footer {
+            text-align: center;
+            padding: 3rem;
+            background: var(--primary);
+            color: rgba(255,255,255,0.8);
+            margin-top: 4rem;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>16 - Gramáticas (GIC) - Sintaxis y Forma Backus-Naur (BNF).</h1>
+        <a href="javascript:history.back()" class="btn-volver">← Volver</a>
+    </header>
+
+    <main>
+
+        <article class="subtema">
+            <div class="subtema-header">
+                <h2>1. Gramáticas Libres de Contexto (GIC): Fundamentos y Componentes</h2>
+            </div>
+            <div class="seccion-contenido">
+                
+                <div class="card full-width">
+                    <h3>Historia</h3>
+                    <div><p>Las Gramáticas Libres de Contexto (GIC) emergen en la década de 1950, principalmente a través del trabajo pionero de Noam Chomsky. Inicialmente, Chomsky desarrolló la jerarquía de Chomsky en 1956 para clasificar las gramáticas formales y los lenguajes que pueden generar, como parte de sus estudios en lingüística estructural y la sintaxis de los lenguajes naturales. Las GIC ocupan un lugar intermedio en esta jerarquía, siendo suficientemente potentes para describir la sintaxis de la mayoría de los lenguajes de programación y subconjuntos significativos de lenguajes naturales, pero con propiedades algorítmicas más manejables que las gramáticas sensibles al contexto. Su adopción fue crítica en los primeros días de la computación, especialmente con el desarrollo de compiladores y el diseño de lenguajes como ALGOL 60, donde proporcionaron una manera formal y precisa de definir la estructura sintáctica.</p></div>
+                </div>
+
+                <div class="card full-width formal-box">
+                    <h3>Descripción Formal</h3>
+                    <div><p>Una Gramática Libre de Contexto (GIC) se define formalmente como una 4-tupla G = (V, Σ, P, S), donde:</p>
+<ul>
+<li><strong>V</strong> (o N) es un conjunto finito de símbolos no-terminales, representando construcciones sintácticas abstractas (variables). Son los elementos que deben ser expandidos o reemplazados. Por ejemplo, en un lenguaje de programación, podrían ser 'expresión', 'sentencia', 'función'.</li>
+<li><strong>Σ</strong> (o T) es un conjunto finito de símbolos terminales, que son los elementos básicos del lenguaje que no se pueden descomponer más. Son los símbolos 'finales' que forman las cadenas del lenguaje. Por ejemplo, 'if', 'else', '+', '(', 'id' (identificador), números.</li>
+<li><strong>P</strong> es un conjunto finito de reglas de producción o transiciones, de la forma A → β, donde A ∈ V y β es una cadena de símbolos en (V ∪ Σ)*. Esto significa que un no-terminal A puede ser reemplazado por la cadena β. Es crucial que el lado izquierdo de cada producción contenga exactamente un no-terminal, de ahí 'libre de contexto', ya que la sustitución de A no depende de los símbolos que lo rodean.</li>
+<li><strong>S</strong> es un símbolo no-terminal distinguido, conocido como el símbolo inicial o axioma, S ∈ V. Es el punto de partida para cualquier derivación de una cadena en el lenguaje.</li>
+</ul>
+<p>El lenguaje generado por G, denotado L(G), es el conjunto de todas las cadenas de terminales que pueden ser derivadas de S. Las GIC son fundamentales porque permiten definir estructuras recursivas y anidadas, esenciales en lenguajes de programación y expresiones matemáticas.</p></div>
+                    
+                    <div class="diagrama-container">
+                        <svg viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg">
+  <rect x="50" y="50" width="100" height="30" rx="5" ry="5" fill="#E0F7FA" stroke="black" stroke-width="1"/>
+  <text x="100" y="70" font-family="Arial" font-size="14" text-anchor="middle">V (No-terminales)</text>
+  <rect x="170" y="50" width="100" height="30" rx="5" ry="5" fill="#E8F5E9" stroke="black" stroke-width="1"/>
+  <text x="220" y="70" font-family="Arial" font-size="14" text-anchor="middle">Σ (Terminales)</text>
+  <rect x="290" y="50" width="100" height="30" rx="5" ry="5" fill="#FFFDE7" stroke="black" stroke-width="1"/>
+  <text x="340" y="70" font-family="Arial" font-size="14" text-anchor="middle">P (Producciones)</text>
+  <rect x="410" y="50" width="100" height="30" rx="5" ry="5" fill="#FCE4EC" stroke="black" stroke-width="1"/>
+  <text x="460" y="70" font-family="Arial" font-size="14" text-anchor="middle">S (Símbolo Inicial)</text>
+
+  <text x="300" y="20" font-family="Arial" font-size="18" text-anchor="middle">G = (V, Σ, P, S)</text>
+
+  <line x1="100" y1="80" x2="100" y2="110" stroke="black" stroke-width="1" marker-end="url(#arrowhead)"/>
+  <line x1="220" y1="80" x2="220" y2="110" stroke="black" stroke-width="1" marker-end="url(#arrowhead)"/>
+  <line x1="340" y1="80" x2="340" y2="110" stroke="black" stroke-width="1" marker-end="url(#arrowhead)"/>
+  <line x1="460" y1="80" x2="460" y2="110" stroke="black" stroke-width="1" marker-end="url(#arrowhead)"/>
+  <rect x="200" y="110" width="200" height="40" rx="8" ry="8" fill="#CFD8DC" stroke="black" stroke-width="1"/>
+  <text x="300" y="135" font-family="Arial" font-size="16" text-anchor="middle">Gramática Libre de Contexto</text>
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="black" />
+    </marker>
+  </defs>
+</svg>
+                        <p style="font-size:0.8rem; color:#666; margin-top:1rem; text-align:center;">
+                            <em>Fig: Representación visual generada.</em>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Intuición</h3>
+                    <div><p>Piensa en una Gramática Libre de Contexto como un conjunto de reglas de receta para construir frases o 'sentencias' en un lenguaje. Cada regla dice: 'puedes reemplazar este ingrediente abstracto (un no-terminal) por esta combinación específica de ingredientes concretos (terminales) y otros ingredientes abstractos'. La clave es que la sustitución de un ingrediente abstracto no depende de dónde se encuentre en la receta. Por ejemplo, la regla 'Sustantivo → perro' siempre funciona, sin importar si 'Sustantivo' está al principio o al final de una frase. Esto simplifica enormemente la descripción de la estructura. Es como tener un conjunto de bloques de LEGO: cada bloque puede ser una pieza básica (terminal) o un subconjunto de piezas (no-terminal) que a su vez se pueden descomponer, y puedes ensamblarlos libremente según las reglas, sin preocuparte por el 'contexto' de sus vecinos. Esta simplicidad es poderosa para definir lenguajes con estructuras anidadas y recursivas, como las expresiones matemáticas o las llamadas a funciones en programación.</p></div>
+                </div>
+
+                <div class="card">
+                    <h3>Aplicación Real</h3>
+                    <div><p>Las GIC son la columna vertebral de la definición de la sintaxis de la inmensa mayoría de los lenguajes de programación modernos. Cuando escribes código en Python, Java o C++, su compilador o intérprete utiliza implícitamente una GIC para entender la estructura de tu programa. El primer paso en cualquier compilador, el análisis sintáctico (parsing), toma el código fuente y lo compara con las reglas de la GIC del lenguaje para construir un 'árbol de análisis sintáctico' o AST (Abstract Syntax Tree). Si el código no se ajusta a las reglas de la GIC, se genera un error de sintaxis. Además de los compiladores, las GIC se utilizan en la definición de formatos de datos estructurados como XML o JSON (aunque a menudo se usan expresiones regulares para una parte, la recursividad y anidamiento se gestionan con principios GIC), en el procesamiento de lenguajes naturales para el análisis sintáctico superficial, y en la generación de lenguajes o DSL (Domain-Specific Languages) para automatizar tareas específicas.</p></div>
+                </div>
+
+            </div>
+        </article>
+        
+        <article class="subtema">
+            <div class="subtema-header">
+                <h2>2. Derivaciones y Lenguajes Generados por GIC</h2>
+            </div>
+            <div class="seccion-contenido">
+                
+                <div class="card full-width">
+                    <h3>Historia</h3>
+                    <div><p>El concepto de derivación es intrínseco al estudio de las gramáticas formales y se desarrolló a la par con la formalización de las GIC en la década de 1950. A medida que los científicos de la computación buscaban métodos para analizar y generar programas, se hizo evidente la necesidad de un mecanismo que explicara cómo una gramática 'produce' las cadenas válidas. Los primeros trabajos en compilación y los métodos de parsing, como los algoritmos top-down y bottom-up (por ejemplo, el parsing LL y LR desarrollados en los años 60 y 70), se basan directamente en la idea de la derivación. La representación visual de las derivaciones a través de árboles de análisis sintáctico (parse trees) también fue fundamental para comprender la estructura jerárquica subyacente de las oraciones y los programas, facilitando el diseño y la implementación de analizadores sintácticos robustos.</p></div>
+                </div>
+
+                <div class="card full-width formal-box">
+                    <h3>Descripción Formal</h3>
+                    <div><p>Dada una Gramática Libre de Contexto G = (V, Σ, P, S), una <strong>derivación</strong> es una secuencia de reemplazos de un no-terminal por la parte derecha de una regla de producción. Se denota por '⇒'. Si tenemos una cadena αAβ, donde A ∈ V y α, β ∈ (V ∪ Σ)*, y existe una producción A → γ en P, entonces podemos decir que αAβ ⇒ αγβ. Esto significa que podemos transformar la cadena αAβ en αγβ aplicando una regla de producción.</p>
+<p>La notación '⇒<em>' representa una derivación en cero o más pasos. Si S ⇒</em> ω, donde ω ∈ Σ<em>, entonces ω es una cadena en el lenguaje L(G). Una cadena formada por símbolos de V ∪ Σ que puede ser derivada de S se llama una </em><em>forma sentencial</em>*.</p>
+<p>Un <strong>árbol de análisis sintáctico</strong> (o árbol de derivación) es una representación gráfica de una derivación. Sus nodos internos están etiquetados con no-terminales, los nodos hoja con terminales o ε (cadena vacía), y la raíz está etiquetada con el símbolo inicial S. Si un nodo interno está etiquetado con A y sus hijos, de izquierda a derecha, están etiquetados con X₁, X₂, ..., Xₖ, entonces debe existir una producción A → X₁X₂...Xₖ en P. Los nodos hoja, leídos de izquierda a derecha, forman la cadena generada (la 'yield' del árbol).</p>
+<p>El <strong>lenguaje generado por G</strong>, L(G), es el conjunto de todas las cadenas de terminales que pueden ser derivadas del símbolo inicial S:
+L(G) = {ω ∈ Σ<em> | S ⇒</em> ω}.</p></div>
+                    
+                    <div class="diagrama-container">
+                        <svg viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg">
+  <!-- Nodes -->
+  <circle cx="300" cy="30" r="20" fill="#BBDEFB" stroke="black" stroke-width="1"/>
+  <text x="300" y="35" font-family="Arial" font-size="14" text-anchor="middle">S</text>
+
+  <circle cx="200" cy="90" r="20" fill="#BBDEFB" stroke="black" stroke-width="1"/>
+  <text x="200" y="95" font-family="Arial" font-size="14" text-anchor="middle">A</text>
+  <circle cx="400" cy="90" r="20" fill="#C8E6C9" stroke="black" stroke-width="1"/>
+  <text x="400" y="95" font-family="Arial" font-size="14" text-anchor="middle">b</text>
+
+  <circle cx="150" cy="150" r="20" fill="#C8E6C9" stroke="black" stroke-width="1"/>
+  <text x="150" y="155" font-family="Arial" font-size="14" text-anchor="middle">a</text>
+  <circle cx="250" cy="150" r="20" fill="#BBDEFB" stroke="black" stroke-width="1"/>
+  <text x="250" y="155" font-family="Arial" font-size="14" text-anchor="middle">A</text>
+
+  <circle cx="200" cy="180" r="15" fill="#C8E6C9" stroke="black" stroke-width="1"/>
+  <text x="200" y="185" font-family="Arial" font-size="12" text-anchor="middle">ε</text>
+
+  <!-- Edges -->
+  <line x1="300" y1="50" x2="200" y2="70" stroke="black" stroke-width="1"/>
+  <line x1="300" y1="50" x2="400" y2="70" stroke="black" stroke-width="1"/>
+
+  <line x1="200" y1="110" x2="150" y2="130" stroke="black" stroke-width="1"/>
+  <line x1="200" y1="110" x2="250" y2="130" stroke="black" stroke-width="1"/>
+
+  <line x1="250" y1="170" x2="200" y2="170" stroke="black" stroke-width="1"/>
+
+  <text x="500" y="100" font-family="Arial" font-size="14" text-anchor="middle">Ejemplo de Árbol de Derivación</text>
+  <text x="500" y="120" font-family="Arial" font-size="12" text-anchor="middle">S → Ab</text>
+  <text x="500" y="135" font-family="Arial" font-size="12" text-anchor="middle">A → aA | ε</text>
+  <text x="500" y="150" font-family="Arial" font-size="12" text-anchor="middle">Cadena: aab</text>
+</svg>
+                        <p style="font-size:0.8rem; color:#666; margin-top:1rem; text-align:center;">
+                            <em>Fig: Representación visual generada.</em>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Intuición</h3>
+                    <div><p>Imagina que tienes un rompecabezas, pero en lugar de piezas que encajan, tienes un conjunto de instrucciones sobre cómo 'transformar' una descripción abstracta en una frase concreta. La 'derivación' es el proceso paso a paso de seguir esas instrucciones. Empiezas con una idea general (el símbolo inicial S), y cada regla te permite reemplazar una parte abstracta por algo más específico, hasta que todo lo que queda son las palabras o símbolos reales del lenguaje (los terminales). Un 'árbol de análisis sintáctico' es como el diagrama de ese rompecabezas montado. Muestra visualmente cómo las piezas se anidan unas dentro de otras, revelando la estructura jerárquica subyacente de la frase. Por ejemplo, en 'El perro corre', el árbol podría mostrar que 'El perro' es un sintagma nominal y 'corre' es un sintagma verbal, y ambos forman una oración. Es esencialmente la 'prueba' de que una cadena pertenece al lenguaje definido por la gramática, y cómo está estructurada internamente.</p></div>
+                </div>
+
+                <div class="card">
+                    <h3>Aplicación Real</h3>
+                    <div><p>La comprensión de las derivaciones y los lenguajes generados por GIC es la base del <strong>parsing</strong> (análisis sintáctico) en los compiladores e intérpretes de lenguajes de programación. Cuando escribes un programa, el parser del compilador intenta construir un árbol de análisis sintáctico para tu código. Si logra construirlo siguiendo las reglas de la GIC, tu código es sintácticamente válido; de lo contrario, hay un error de sintaxis. El árbol de análisis sintáctico resultante no solo valida el código, sino que también sirve como una representación estructurada que el compilador utiliza para la siguiente fase: el análisis semántico y la generación de código intermedio. Más allá de los compiladores, esta idea se aplica en el procesamiento de lenguaje natural (NLP) para analizar la estructura gramatical de las oraciones, en la validación de documentos XML o JSON contra sus esquemas (que son, en esencia, GIC implícitas o explícitas), y en el diseño de interfaces de usuario donde la entrada del usuario debe ajustarse a un patrón predefinido.</p></div>
+                </div>
+
+            </div>
+        </article>
+        
+        <article class="subtema">
+            <div class="subtema-header">
+                <h2>3. Forma Backus-Naur (BNF) y sus Variantes</h2>
+            </div>
+            <div class="seccion-contenido">
+                
+                <div class="card full-width">
+                    <h3>Historia</h3>
+                    <div><p>La Forma Backus-Naur (BNF) es una notación metalingüística creada por John Backus para describir la sintaxis del lenguaje de programación ALGOL 58, y posteriormente adoptada y formalizada por Peter Naur en el informe de ALGOL 60 (1960). Su invención marcó un hito porque, por primera vez, se proporcionó una manera precisa, concisa y sin ambigüedades para definir la sintaxis de un lenguaje de programación. Antes de BNF, las descripciones de sintaxis eran a menudo vagas y verbales, llevando a inconsistencias y dificultades en la implementación. La simplicidad y claridad de BNF la hicieron rápidamente indispensable, y su influencia se extendió a la descripción de la sintaxis de virtualmente todos los lenguajes de programación posteriores. Con el tiempo, se desarrollaron variantes como EBNF (Extended Backus-Naur Form) y ABNF (Augmented Backus-Naur Form) para añadir expresividad y mayor legibilidad, incorporando notaciones para repeticiones opcionales o cero o más veces, simplificando las descripciones.</p></div>
+                </div>
+
+                <div class="card full-width formal-box">
+                    <h3>Descripción Formal</h3>
+                    <div><p>La Forma Backus-Naur (BNF) es una notación formal para representar las reglas de producción de una Gramática Libre de Contexto. Utiliza las siguientes convenciones:</p>
+<ul>
+<li><strong>No-terminales</strong>: Se encierran entre corchetes angulares, por ejemplo: <expresión>, <sentencia>.</li>
+<li><strong>Terminales</strong>: Se representan directamente como cadenas de caracteres literales, por ejemplo: 'if', '+', 5.</li>
+<li><strong>Operador de definición</strong>: '::=' (se lee 'se define como' o 'produce') separa el no-terminal del lado izquierdo de sus posibles expansiones.</li>
+<li><strong>Operador de alternancia</strong>: '|' (barra vertical) separa opciones alternativas para la expansión de un no-terminal. </li>
+</ul>
+<p>Una regla BNF básica tiene la forma:
+<no-terminal> ::= secuencia_de_símbolos_1 | secuencia_de_símbolos_2 | ...</p>
+<p><strong>Ejemplo de BNF para una expresión aritmética simple:</strong>
+<expresión> ::= <término> | <expresión> '+' <término>
+<término>    ::= <factor> | <término> '*' <factor>
+<factor>     ::= '(' <expresión> ')' | <número>
+<número>     ::= '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9'</p>
+<p><strong>EBNF (Extended BNF)</strong> introduce operadores adicionales para mayor concisión:
+*   <code>[]</code>: para elementos opcionales (cero o una vez). Ejemplo: <code>IF &lt;condición&gt; THEN &lt;sentencia&gt; [ELSE &lt;sentencia&gt;]</code>
+*   <code>{}</code>: para repetición de cero o más veces. Ejemplo: <code>&lt;lista&gt; ::= &lt;elemento&gt; {',' &lt;elemento&gt;}</code>
+*   <code>()</code>: para agrupar elementos. Ejemplo: <code>&lt;operación&gt; ::= &lt;operando&gt; ('+' | '-') &lt;operando&gt;</code></p>
+<p><strong>ABNF (Augmented BNF)</strong>, utilizado en estándares de Internet como HTTP, añade reglas para rangos de caracteres, repeticiones exactas, etc.</p></div>
+                    
+                    <div class="diagrama-container">
+                        <svg viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg">
+  <rect x="50" y="50" width="120" height="40" rx="5" ry="5" fill="#E0F7FA" stroke="black" stroke-width="1"/>
+  <text x="110" y="75" font-family="Arial" font-size="16" text-anchor="middle">&lt;NoTerminal&gt;</text>
+
+  <text x="190" y="75" font-family="Arial" font-size="18" text-anchor="middle">::=</text>
+
+  <rect x="240" y="50" width="120" height="40" rx="5" ry="5" fill="#E8F5E9" stroke="black" stroke-width="1"/>
+  <text x="300" y="75" font-family="Arial" font-size="16" text-anchor="middle">Opción_1</text>
+
+  <text x="380" y="75" font-family="Arial" font-size="18" text-anchor="middle">|</text>
+
+  <rect x="420" y="50" width="120" height="40" rx="5" ry="5" fill="#FFFDE7" stroke="black" stroke-width="1"/>
+  <text x="480" y="75" font-family="Arial" font-size="16" text-anchor="middle">Opción_2</text>
+
+  <rect x="170" y="120" width="260" height="40" rx="5" ry="5" fill="#CFD8DC" stroke="black" stroke-width="1"/>
+  <text x="300" y="145" font-family="Arial" font-size="16" text-anchor="middle">&lt;expresión&gt; ::= &lt;término&gt; | &lt;expresión&gt; '+' &lt;término&gt;</text>
+
+  <text x="300" y="20" font-family="Arial" font-size="18" text-anchor="middle">Estructura de una regla BNF</text>
+</svg>
+                        <p style="font-size:0.8rem; color:#666; margin-top:1rem; text-align:center;">
+                            <em>Fig: Representación visual generada.</em>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Intuición</h3>
+                    <div><p>Piensa en BNF como un lenguaje para describir lenguajes. Es una forma estandarizada y compacta de escribir las reglas de una gramática. Imagina que estás escribiendo un libro de cocina muy preciso donde cada receta tiene un nombre (el no-terminal) y luego una descripción exacta de cómo prepararlo usando ingredientes básicos (terminales) o sub-recetas (otros no-terminales). El '::=' es como 'se prepara como', y el '|' es como 'o bien, puedes prepararlo de esta otra forma'. BNF elimina ambigüedades porque es puramente declarativo y formal. Si ves una receta en BNF, sabes exactamente qué ingredientes y pasos puedes usar. EBNF y ABNF son como versiones mejoradas de ese libro de cocina, que te permiten decir cosas como 'puedes añadir sal, pero es opcional' (con <code>[]</code>) o 'puedes añadir tantos pimientos como quieras' (con <code>{}</code>). Facilitan la descripción de patrones comunes en la sintaxis, haciéndola más legible y menos propensa a errores para los humanos.</p></div>
+                </div>
+
+                <div class="card">
+                    <h3>Aplicación Real</h3>
+                    <div><p>La Forma Backus-Naur y sus variantes son herramientas omnipresentes en la ingeniería de software y las telecomunicaciones para la <strong>definición formal de sintaxis</strong>. Son el estándar de facto para especificar la estructura de los lenguajes de programación, desde JavaScript hasta C++, permitiendo a los desarrolladores de compiladores construir analizadores sintácticos automáticos que validan el código. Más allá de los lenguajes de programación, BNF/EBNF se utiliza extensamente para describir formatos de intercambio de datos, como los estándares para correo electrónico (RFC 5322), protocolos de red como HTTP (RFC 7230 usa ABNF), o la sintaxis de comandos en sistemas operativos. Su uso garantiza que las implementaciones de diferentes proveedores o sistemas puedan interpretar y generar datos que cumplen exactamente con el mismo conjunto de reglas, asegurando la interoperabilidad. También son valiosas en la documentación de APIs, donde proporcionan una referencia clara y concisa de la estructura esperada de las solicitudes o respuestas.</p></div>
+                </div>
+
+            </div>
+        </article>
+        
+    </main>
+
+    <footer>
+        <p>Prof. Jorge López-Cifre, PhD © 2026</p>
+    </footer>
+
+</body>
+</html>

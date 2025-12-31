@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>18 - Análisis Sintáctico - Árboles de derivación (Parsing). - Prof. Jorge López-Cifre</title>
+    <style>
+        :root {
+            --primary: #003366;
+            --accent: #d4af37;
+            --bg: #f8f9fa;
+            --text: #2c3e50;
+            --card-bg: #ffffff;
+            --border: #e9ecef;
+        }
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 0;
+            line-height: 1.7;
+        }
+        /* Tipografía mejorada */
+        p { margin-bottom: 1rem; }
+        strong, b { color: var(--primary); font-weight: 700; }
+        
+        header {
+            background: var(--primary);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        h1 { margin: 0; font-size: 1.25rem; font-weight: 600; }
+        
+        .btn-volver {
+            background: var(--accent);
+            color: var(--primary);
+            text-decoration: none;
+            padding: 0.5rem 1.2rem;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        .btn-volver:hover { 
+            background: #fff; 
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+
+        main {
+            max-width: 1100px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+
+        .subtema {
+            background: var(--card-bg);
+            border-radius: 12px;
+            margin-bottom: 4rem;
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+        
+        .subtema-header {
+            background: linear-gradient(to right, #f8f9fa, #ffffff);
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid var(--border);
+        }
+        .subtema-header h2 { 
+            margin: 0; 
+            color: var(--primary); 
+            font-size: 1.6rem;
+            border-left: 5px solid var(--accent);
+            padding-left: 1rem;
+        }
+
+        .seccion-contenido {
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2.5rem;
+        }
+
+        @media (min-width: 900px) {
+            .seccion-contenido { grid-template-columns: 1fr 1fr; }
+            .full-width { grid-column: 1 / -1; }
+        }
+
+        .card h3 {
+            color: var(--primary);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-top: 0;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 0.5rem;
+        }
+
+        .formal-box {
+            background-color: #f0f7ff; /* Azul muy muy pálido */
+            border-radius: 8px;
+            padding: 2rem !important;
+            border: 1px solid #cce5ff;
+        }
+
+        /* CSS Específico para corregir SVGs */
+        .diagrama-container {
+            text-align: center;
+            margin: 2rem auto;
+            padding: 1.5rem;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
+            max-width: 100%;
+            overflow-x: auto; /* Si es muy ancho, permite scroll */
+        }
+        
+        /* Forzar comportamiento correcto del SVG */
+        .diagrama-container svg {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+        
+        /* Evitar que el texto dentro del SVG sea ilegible */
+        .diagrama-container text {
+            font-family: sans-serif;
+        }
+
+        footer {
+            text-align: center;
+            padding: 3rem;
+            background: var(--primary);
+            color: rgba(255,255,255,0.8);
+            margin-top: 4rem;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>18 - Análisis Sintáctico - Árboles de derivación (Parsing).</h1>
+        <a href="javascript:history.back()" class="btn-volver">← Volver</a>
+    </header>
+
+    <main>
+
+        <article class="subtema">
+            <div class="subtema-header">
+                <h2>Fundamentos del Análisis Sintáctico y Gramáticas Libres de Contexto</h2>
+            </div>
+            <div class="seccion-contenido">
+                
+                <div class="card full-width">
+                    <h3>Historia</h3>
+                    <div><p>El análisis sintáctico, también conocido como parsing, tiene sus raíces en los esfuerzos pioneros por definir y procesar lenguajes formales. Noam Chomsky, lingüista estadounidense, sentó las bases teóricas en la década de 1950 con la introducción de la jerarquía de Chomsky, donde las Gramáticas Libres de Contexto (GLC) emergieron como un modelo fundamental para describir la estructura sintáctica de los lenguajes naturales y, posteriormente, los de programación. Paralelamente, a finales de los años 50, John Backus y Peter Naur desarrollaron la Notación de Backus-Naur (BNF) para especificar la sintaxis del lenguaje ALGOL 58. Esta notación, esencialmente una forma compacta de GLC, revolucionó la especificación de lenguajes de programación y se convirtió en el estándar de facto. La necesidad de traducir programas de alto nivel a código máquina impulsó la investigación en técnicas de parsing, llevando a los primeros compiladores a incorporar fases de análisis sintáctico robustas y eficientes, transformando la teoría abstracta en una herramienta práctica indispensable para la computación.</p></div>
+                </div>
+
+                <div class="card full-width formal-box">
+                    <h3>Descripción Formal</h3>
+                    <div><p>El análisis sintáctico es el proceso de determinar si una cadena de símbolos (programa fuente) puede ser generada por una gramática formal dada, y en caso afirmativo, construir una representación estructural (un árbol de derivación o un árbol de sintaxis abstracta). Las Gramáticas Libres de Contexto (GLC) son el formalismo más común para definir la sintaxis de lenguajes de programación. Una GLC G se define como una 4-tupla G = (V, Σ, R, S), donde:</p>
+<ul>
+<li>V es un conjunto finito de símbolos no terminales (o variables).</li>
+<li>Σ es un conjunto finito de símbolos terminales (o léxicos), donde V ∩ Σ = ∅.</li>
+<li>R es un conjunto finito de reglas de producción de la forma A → β, donde A ∈ V y β es una cadena de símbolos de (V ∪ Σ)*.</li>
+<li>S ∈ V es el símbolo inicial de la gramática.</li>
+</ul>
+<p>Una derivación es una secuencia de pasos en los que se aplica una regla de producción para reemplazar un no terminal. Si αAβ es una forma sentencial y A → γ es una regla en R, entonces podemos decir que αAβ deriva en αγβ, denotado como αAβ → αγβ. Una derivación de múltiples pasos se denota con →*. El lenguaje L(G) generado por G es el conjunto de todas las cadenas de terminales que pueden ser derivadas desde el símbolo inicial S. El análisis sintáctico busca reconstruir estas derivaciones para una cadena de entrada determinada.</p>
+<p>Para ilustrar, consideremos una gramática simple para expresiones aritméticas:
+E → E + T | T
+T → T * F | F
+F → (E) | id</p>
+<p>Aquí, V = {E, T, F}, Σ = {+, *, (, ), id}. El símbolo inicial es E. El parser tomaría una cadena como "id + id" y verificaría si puede ser generada por estas reglas.</p></div>
+                    
+                    <div class="diagrama-container">
+                        <svg viewBox="0 0 600 200" style="font-family: sans-serif; font-size: 14px;"><g transform="translate(50,10)"><text x="0" y="20" fill="#333">Reglas de una Gramática Libre de Contexto:</text><rect x="0" y="30" width="120" height="25" fill="#e0e0e0" stroke="#333" stroke-width="1" rx="5" ry="5"/><text x="10" y="48" fill="#333">Símbolo Inicial (S)</text><rect x="150" y="30" width="120" height="25" fill="#e0e0e0" stroke="#333" stroke-width="1" rx="5" ry="5"/><text x="160" y="48" fill="#333">No Terminales (V)</text><rect x="300" y="30" width="120" height="25" fill="#e0e0e0" stroke="#333" stroke-width="1" rx="5" ry="5"/><text x="310" y="48" fill="#333">Terminales (Σ)</text><rect x="450" y="30" width="120" height="25" fill="#e0e0e0" stroke="#333" stroke-width="1" rx="5" ry="5"/><text x="460" y="48" fill="#333">Producciones (R)</text><path d="M60,60 L60,80 L140,80 L140,60" stroke="#333" fill="none" stroke-width="1"/><path d="M180,60 L180,80 L260,80 L260,60" stroke="#333" fill="none" stroke-width="1"/><path d="M330,60 L330,80 L410,80 L410,60" stroke="#333" fill="none" stroke-width="1"/><path d="M480,60 L480,80 L560,80 L560,60" stroke="#333" fill="none" stroke-width="1"/><text x="10" y="100" fill="#333">Ejemplo (Expresión simple):</text><text x="10" y="120" fill="#333">E → E + T</text><text x="10" y="140" fill="#333">E → T</text><text x="10" y="160" fill="#333">T → id</text><path d="M100,100 C150,120 150,150 100,170" stroke="#bbb" stroke-width="2" fill="none"/><circle cx="100" cy="135" r="5" fill="#bbb"/><text x="120" y="140" fill="#333">Genera la estructura de la cadena</text></g></svg>
+                        <p style="font-size:0.8rem; color:#666; margin-top:1rem; text-align:center;">
+                            <em>Fig: Representación visual generada.</em>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Intuición</h3>
+                    <div><p>Imagina que tienes una receta de cocina muy detallada. Esta receta tiene reglas sobre cómo combinar ingredientes (terminales) y pasos intermedios (no terminales) para crear un plato final (el símbolo inicial). Un análisis sintáctico es como un chef que toma una lista de ingredientes y acciones (una cadena de símbolos) y trata de ver si puede construir el plato siguiendo estrictamente las reglas de la receta. No solo verifica si el plato es posible, sino que también organiza los pasos en una estructura jerárquica, como si estuviera creando un diagrama de flujo para cada sub-receta. El 'por qué' es crucial: para que una computadora pueda entender y ejecutar un programa, necesita saber si el programa está 'bien formado' según las reglas del lenguaje. Si un programa no cumple con estas reglas, es como si la receta tuviera un paso que no existe o una combinación de ingredientes imposible; el 'chef' (el compilador) no puede proceder y debe reportar un error. El análisis sintáctico transforma una secuencia lineal de caracteres en una estructura significativa que la computadora puede 'digerir' y procesar lógicamente.</p></div>
+                </div>
+
+                <div class="card">
+                    <h3>Aplicación Real</h3>
+                    <div><p>El análisis sintáctico es la piedra angular en el desarrollo de software, presente en casi cualquier herramienta que procese lenguajes formales. Su aplicación más obvia y crítica se encuentra en los compiladores e intérpretes. Cuando escribes código en C++, Java o Python, el compilador o intérprete primero realiza un análisis sintáctico para verificar que tu código se ajusta a las reglas gramaticales del lenguaje. Si hay una "coma" fuera de lugar o una "llave" sin cerrar, el parser lo detectará y generará un error de sintaxis. Pero sus usos van mucho más allá de los lenguajes de programación. Los parsers son esenciales en la manipulación de datos estructurados: los analizadores XML, JSON o YAML utilizan el análisis sintáctico para validar la estructura de los documentos y convertirlos en objetos en memoria. También son fundamentales en el procesamiento del lenguaje natural (PLN) para descomponer oraciones en componentes gramaticales. En el desarrollo web, las bibliotecas de enrutamiento (routing) analizan URLs para determinar qué controlador o función debe manejar una solicitud. Incluso los motores de búsqueda utilizan parsers para comprender y estructurar consultas complejas. En resumen, cualquier sistema que necesite dar sentido a una entrada estructurada se beneficia enormemente del análisis sintáctico riguroso.</p></div>
+                </div>
+
+            </div>
+        </article>
+        
+        <article class="subtema">
+            <div class="subtema-header">
+                <h2>Árboles de Derivación (Parse Trees) y Derivaciones</h2>
+            </div>
+            <div class="seccion-contenido">
+                
+                <div class="card full-width">
+                    <h3>Historia</h3>
+                    <div><p>La formalización de los árboles de derivación surgió orgánicamente con el desarrollo de las Gramáticas Libres de Contexto y la necesidad de una representación visual y estructural de cómo una cadena de terminales es producida por una gramática. Si bien Chomsky estableció las bases de las GLC en la década de 1950, la representación arbórea se popularizó rápidamente como una herramienta didáctica y analítica para comprender la sintaxis de lenguajes. Los árboles de derivación fueron cruciales en los primeros diseños de compiladores, ya que proporcionaban una estructura lógica para la fase posterior de análisis semántico. La capacidad de un árbol para mostrar la jerarquía de las construcciones gramaticales (por ejemplo, cómo una expresión se compone de términos y factores) fue invaluable. Trabajos posteriores, como los de Donald Knuth en los años 60 con las gramáticas de atributos, aprovecharon explícitamente la estructura del árbol de derivación para adjuntar información semántica y realizar verificaciones de tipo, consolidando el papel central de estas estructuras arbóreas en el procesamiento de lenguajes.</p></div>
+                </div>
+
+                <div class="card full-width formal-box">
+                    <h3>Descripción Formal</h3>
+                    <div><p>Un árbol de derivación (o árbol de análisis sintáctico) es una representación gráfica de una derivación en una Gramática Libre de Contexto. Dado una GLC G = (V, Σ, R, S) y una cadena ω ∈ Σ* que pertenece a L(G), un árbol de derivación para ω es un árbol con las siguientes propiedades:</p>
+<ol>
+<li>La raíz del árbol está etiquetada con el símbolo inicial S de G.</li>
+<li>Cada nodo interno del árbol está etiquetado con un símbolo no terminal A ∈ V.</li>
+<li>Cada nodo hoja está etiquetado con un símbolo terminal a ∈ Σ o el símbolo de cadena vacía ε.</li>
+<li>Si un nodo interno está etiquetado con A y tiene hijos X₁, X₂, ..., Xₙ (de izquierda a derecha), entonces A → X₁X₂...Xₙ debe ser una regla de producción en R.</li>
+<li>Si un nodo A tiene un único hijo etiquetado con ε, entonces A → ε debe ser una regla de producción en R.</li>
+</ol>
+<p>El 'yield' o 'frontera' del árbol de derivación es la concatenación de las etiquetas de sus nodos hoja, leídas de izquierda a derecha. Si el yield de un árbol de derivación es ω, entonces el árbol representa una derivación de S a ω. Por ejemplo, para la gramática E → E + T | T, T → id, una cadena como "id + id" tendría un árbol de derivación donde S deriva en E, E deriva en E + T, etc., hasta que todos los no terminales se reemplazan por terminales. Este árbol muestra la estructura jerárquica de la cadena, no solo su existencia en el lenguaje, y es el resultado directo del proceso de parsing.</p></div>
+                    
+                    <div class="diagrama-container">
+                        <svg viewBox="0 0 600 200" style="font-family: sans-serif; font-size: 14px;"><g transform="translate(150,10)"><text x="0" y="20" fill="#333">Árbol de Derivación para "id + id"</text><circle cx="150" cy="50" r="20" fill="#d4edda" stroke="#28a745" stroke-width="1"/><text x="145" y="55" fill="#28a745">E</text><line x1="150" y1="70" x2="100" y2="100" stroke="#333" stroke-width="1"/><line x1="150" y1="70" x2="150" y2="100" stroke="#333" stroke-width="1"/><line x1="150" y1="70" x2="200" y2="100" stroke="#333" stroke-width="1"/><circle cx="100" cy="110" r="20" fill="#d4edda" stroke="#28a745" stroke-width="1"/><text x="95" y="115" fill="#28a745">E</text><circle cx="150" cy="110" r="20" fill="#f8d7da" stroke="#dc3545" stroke-width="1"/><text x="146" y="115" fill="#dc3545">+</text><circle cx="200" cy="110" r="20" fill="#d4edda" stroke="#28a745" stroke-width="1"/><text x="195" y="115" fill="#28a745">T</text><line x1="100" y1="130" x2="100" y2="160" stroke="#333" stroke-width="1"/><line x1="200" y1="130" x2="200" y2="160" stroke="#333" stroke-width="1"/><circle cx="100" cy="170" r="20" fill="#d4edda" stroke="#28a745" stroke-width="1"/><text x="95" y="175" fill="#28a745">T</text><circle cx="200" cy="170" r="20" fill="#f8d7da" stroke="#dc3545" stroke-width="1"/><text x="190" y="175" fill="#dc3545">id</text><line x1="100" y1="190" x2="100" y2="220" stroke="#333" stroke-width="1"/><circle cx="100" cy="230" r="20" fill="#f8d7da" stroke="#dc3545" stroke-width="1"/><text x="90" y="235" fill="#dc3545">id</text></g></svg>
+                        <p style="font-size:0.8rem; color:#666; margin-top:1rem; text-align:center;">
+                            <em>Fig: Representación visual generada.</em>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Intuición</h3>
+                    <div><p>Piensa en un árbol de derivación como el diagrama de "montaje" de una oración o una expresión matemática. Cuando ves una frase como "El perro ladra", puedes identificar que "El perro" es el sujeto y "ladra" es el predicado. Dentro del sujeto, "El" es un artículo y "perro" es un sustantivo. Un árbol de derivación visualiza esta estructura jerárquica. Cada rama representa la aplicación de una regla gramatical, mostrando cómo los componentes más grandes (como una expresión) se descomponen en componentes más pequeños (como términos y operadores), hasta llegar a los elementos más básicos (números, identificadores, palabras clave). Es como desglosar una receta compleja en sus sub-recetas, luego en los pasos individuales, y finalmente en los ingredientes. Este árbol no solo confirma que la secuencia de símbolos es gramaticalmente correcta, sino que también revela la relación entre ellos, lo cual es fundamental para entender el significado y para que la computadora pueda procesar la información de manera lógica y secuencial.</p></div>
+                </div>
+
+                <div class="card">
+                    <h3>Aplicación Real</h3>
+                    <div><p>Los árboles de derivación son la base conceptual para los Árboles de Sintaxis Abstracta (AST), que son una estructura de datos fundamental en casi todos los compiladores modernos. Aunque un compilador no siempre construye el árbol de derivación completo de forma explícita (ya que puede ser muy verboso), el AST es una versión simplificada y esencializada del árbol de derivación. El AST elimina detalles gramaticales irrelevantes para la semántica (como los no terminales que solo sirven para agrupar) y se enfoca en la estructura lógica y jerárquica del programa. A partir del AST, el compilador realiza análisis semánticos (verificación de tipos, alcance de variables), optimizaciones y, finalmente, la generación de código. Fuera de los compiladores, los árboles de derivación (o sus derivados como los AST) son utilizados en herramientas de refactorización de código para comprender la estructura de un programa y aplicar transformaciones automáticas. También son clave en entornos de desarrollo integrados (IDEs) para funcionalidades como el autocompletado inteligente, la navegación por el código y la detección de errores en tiempo real. En el procesamiento del lenguaje natural, los árboles de derivación son utilizados para representar la estructura sintáctica de las oraciones, permitiendo a los sistemas comprender las relaciones entre las palabras y extraer significado.</p></div>
+                </div>
+
+            </div>
+        </article>
+        
+        <article class="subtema">
+            <div class="subtema-header">
+                <h2>Ambigüedad en Gramáticas y Estrategias Básicas de Parsing</h2>
+            </div>
+            <div class="seccion-contenido">
+                
+                <div class="card full-width">
+                    <h3>Historia</h3>
+                    <div><p>La ambigüedad en las gramáticas fue un problema reconocido tempranamente, tanto en la lingüística de Chomsky como en la definición de lenguajes de programación. Ya en los albores de ALGOL 60, se encontraron desafíos con la famosa "cláusula else colgante" (dangling else), donde una construcción condicional sin su cláusula 'else' podía asociarse con dos 'if' diferentes, llevando a interpretaciones ambiguas. Este tipo de problemas impulsó la búsqueda de métodos para resolver la ambigüedad, ya sea modificando la gramática o incorporando reglas de desambiguación en los parsers. La investigación en los años 60 y 70 llevó al desarrollo de algoritmos de parsing eficientes como LL (left-to-right, leftmost derivation) y LR (left-to-right, rightmost derivation), que estaban diseñados para trabajar con clases de gramáticas no ambiguas o para aplicar reglas determinísticas de resolución de ambigüedad (como la precedencia y asociatividad de operadores) para garantizar un único árbol de derivación para cada cadena válida.</p></div>
+                </div>
+
+                <div class="card full-width formal-box">
+                    <h3>Descripción Formal</h3>
+                    <div><p>Una gramática libre de contexto G es ambigua si existe al menos una cadena ω ∈ L(G) para la cual se pueden construir dos o más árboles de derivación distintos. Alternativamente, una gramática es ambigua si existe al menos una cadena ω ∈ L(G) que posee dos o más derivaciones más a la izquierda distintas, o dos o más derivaciones más a la derecha distintas. La ambigüedad es problemática porque implica que una misma secuencia de símbolos puede tener múltiples interpretaciones estructurales, lo que podría llevar a diferentes significados o comportamientos en un programa.</p>
+<p>Consideremos la gramática G con S → E y las reglas E → E + E | E * E | id. Para la cadena "id + id * id", existen dos posibles árboles de derivación (y, por tanto, dos derivaciones más a la izquierda distintas), dependiendo de si la suma o la multiplicación se agrupa primero. Para resolver esto, los parsers emplean estrategias que imponen un orden. Las estrategias de parsing se clasifican generalmente en dos categorías:</p>
+<ul>
+<li><strong>Parsing Top-Down (Descendente):</strong> Intenta construir un árbol de derivación partiendo desde la raíz (el símbolo inicial) y expandiendo hacia abajo, prediciendo la producción adecuada para el siguiente no terminal. Ejemplos incluyen el parsing recursivo descendente y LL(k).</li>
+<li><strong>Parsing Bottom-Up (Ascendente):</strong> Intenta construir un árbol de derivación partiendo desde las hojas (los terminales de la cadena de entrada) y agrupándolos hacia arriba, reduciéndolos a no terminales hasta llegar a la raíz (el símbolo inicial). Ejemplos incluyen el parsing de desplazamiento-reducción (shift-reduce) y LR(k).</li>
+</ul>
+<p>Estas estrategias, aunque no eliminan la ambigüedad inherente de una gramática, permiten al parser elegir una única derivación determinísticamente, aplicando reglas como la precedencia de operadores.</p></div>
+                    
+                    <div class="diagrama-container">
+                        <svg viewBox="0 0 600 200" style="font-family: sans-serif; font-size: 12px;"><g transform="translate(50,10)"><text x="0" y="20" fill="#333">Ambigüedad: "id + id * id"</text><text x="0" y="40" fill="#333">Gramática: E → E + E | E * E | id</text><text x="0" y="60" fill="#333">Árbol 1: (id + id) * id</text><circle cx="100" cy="80" r="15" fill="#d4edda" stroke="#28a745" stroke-width="1"/><text x="95" y="84" fill="#28a745">E</text><line x1="100" y1="95" x2="50" y2="120" stroke="#333" stroke-width="1"/><line x1="100" y1="95" x2="100" y2="120" stroke="#333" stroke-width="1"/><line x1="100" y1="95" x2="150" y2="120" stroke="#333" stroke-width="1"/><circle cx="50" cy="135" r="15" fill="#d4edda" stroke="#28a745" stroke-width="1"/><text x="45" y="139" fill="#28a745">E</text><circle cx="100" cy="135" r="15" fill="#f8d7da" stroke="#dc3545" stroke-width="1"/><text x="96" y="139" fill="#dc3545">*</text><circle cx="150" cy="135" r="15" fill="#f8d7da" stroke="#dc3545" stroke-width="1"/><text x="142" y="139" fill="#dc3545">id</text><line x1="50" y1="150" x2="20" y2="175" stroke="#333" stroke-width="1"/><line x1="50" y1="150" x2="50" y2="175" stroke="#333" stroke-width="1"/><line x1="50" y1="150" x2="80" y2="175" stroke="#333" stroke-width="1"/><circle cx="20" cy="190" r="15" fill="#f8d7da" stroke="#dc3545" stroke-width="1"/><text x="12" y="194" fill="#dc3545">id</text><circle cx="50" cy="190" r="15" fill="#f8d7da" stroke="#dc3545" stroke-width="1"/><text x="46" y="194" fill="#dc3545">+</text><circle cx="80" cy="190" r="15" fill="#f8d7da" stroke="#dc3545" stroke-width="1"/><text x="72" y="194" fill="#dc3545">id</text></g><g transform="translate(300,10)"><text x="0" y="60" fill="#333">Árbol 2: id + (id * id)</text><circle cx="100" cy="80" r="15" fill="#d4edda" stroke="#28a745" stroke-width="1"/><text x="95" y="84" fill="#28a745">E</text><line x1="100" y1="95" x2="50" y2="120" stroke="#333" stroke-width="1"/><line x1="100" y1="95" x2="100" y2="120" stroke="#333" stroke-width="1"/><line x1="100" y1="95" x2="150" y2="120" stroke="#333" stroke-width="1"/><circle cx="50" cy="135" r="15" fill="#f8d7da" stroke="#dc3545" stroke-width="1"/><text x="42" y="139" fill="#dc3545">id</text><circle cx="100" cy="135" r="15" fill="#f8d7da" stroke="#dc3545" stroke-width="1"/><text x="96" y="139" fill="#dc3545">+</text><circle cx="150" cy="135" r="15" fill="#d4edda" stroke="#28a745" stroke-width="1"/><text x="145" y="139" fill="#28a745">E</text><line x1="150" y1="150" x2="120" y2="175" stroke="#333" stroke-width="1"/><line x1="150" y1="150" x2="150" y2="175" stroke="#333" stroke-width="1"/><line x1="150" y1="150" x2="180" y2="175" stroke="#333" stroke-width="1"/><circle cx="120" cy="190" r="15" fill="#f8d7da" stroke="#dc3545" stroke-width="1"/><text x="112" y="194" fill="#dc3545">id</text><circle cx="150" cy="190" r="15" fill="#f8d7da" stroke="#dc3545" stroke-width="1"/><text x="146" y="194" fill="#dc3545">*</text><circle cx="180" cy="190" r="15" fill="#f8d7da" stroke="#dc3545" stroke-width="1"/><text x="172" y="194" fill="#dc3545">id</text></g></svg>
+                        <p style="font-size:0.8rem; color:#666; margin-top:1rem; text-align:center;">
+                            <em>Fig: Representación visual generada.</em>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Intuición</h3>
+                    <div><p>La ambigüedad en una gramática es como tener una frase que puede interpretarse de dos maneras completamente diferentes, como "Vi al hombre con el telescopio". ¿El hombre tiene el telescopio, o yo lo vi usando un telescopio? En el contexto de los lenguajes de programación, esto significa que una misma secuencia de código puede estructurarse de dos maneras válidas según las reglas de la gramática, llevando a dos árboles de derivación distintos. Si una expresión como "a + b * c" pudiera interpretarse como "(a + b) * c" o "a + (b * c)", el resultado de la operación cambiaría drásticamente. Los compiladores no pueden permitirse esta incertidumbre. Para resolver esto, los lenguajes de programación establecen reglas adicionales, como la precedencia de operadores (la multiplicación se hace antes que la suma) y la asociatividad (las sumas se hacen de izquierda a derecha). Las estrategias de parsing son los métodos que usa el compilador para aplicar estas reglas de manera consistente, garantizando que siempre se genere un único árbol de derivación (y, por lo tanto, una única interpretación) para cualquier programa válido.</p></div>
+                </div>
+
+                <div class="card">
+                    <h3>Aplicación Real</h3>
+                    <div><p>La gestión de la ambigüedad y la aplicación de estrategias de parsing son fundamentales en el diseño e implementación de cualquier lenguaje de programación y sus herramientas. Cuando se diseña un nuevo lenguaje, se busca crear una gramática que sea inherentemente no ambigua para evitar confusiones y errores en la interpretación del código. Sin embargo, en la práctica, algunas ambigüedades son toleradas o incluso intencionadas en la gramática para simplificar su expresión, y luego son resueltas por las reglas de precedencia y asociatividad en la etapa de parsing. Herramientas generadoras de parsers como Yacc/Bison o ANTLR permiten a los desarrolladores especificar directamente estas reglas, instruyendo al parser cómo resolver las ambigüedades comunes de manera predecible. Esto asegura que, por ejemplo, en una expresión matemática, las multiplicaciones y divisiones se evalúen antes que las sumas y restas, o que los operadores de asignación se asocien de derecha a izquierda. La correcta aplicación de estas estrategias garantiza que el significado del programa sea consistente y que todos los compiladores o intérpretes de un lenguaje produzcan el mismo comportamiento, un pilar para la portabilidad y fiabilidad del software.</p></div>
+                </div>
+
+            </div>
+        </article>
+        
+    </main>
+
+    <footer>
+        <p>Prof. Jorge López-Cifre, PhD © 2026</p>
+    </footer>
+
+</body>
+</html>

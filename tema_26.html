@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>26 - La Maquina Universal - Concepto de Máquina Universal (origen del software). - Prof. Jorge López-Cifre</title>
+    <style>
+        :root {
+            --primary: #003366;
+            --accent: #d4af37;
+            --bg: #f8f9fa;
+            --text: #2c3e50;
+            --card-bg: #ffffff;
+            --border: #e9ecef;
+        }
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 0;
+            line-height: 1.7;
+        }
+        /* Tipografía mejorada */
+        p { margin-bottom: 1rem; }
+        strong, b { color: var(--primary); font-weight: 700; }
+        
+        header {
+            background: var(--primary);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        h1 { margin: 0; font-size: 1.25rem; font-weight: 600; }
+        
+        .btn-volver {
+            background: var(--accent);
+            color: var(--primary);
+            text-decoration: none;
+            padding: 0.5rem 1.2rem;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        .btn-volver:hover { 
+            background: #fff; 
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+
+        main {
+            max-width: 1100px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+
+        .subtema {
+            background: var(--card-bg);
+            border-radius: 12px;
+            margin-bottom: 4rem;
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+        
+        .subtema-header {
+            background: linear-gradient(to right, #f8f9fa, #ffffff);
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid var(--border);
+        }
+        .subtema-header h2 { 
+            margin: 0; 
+            color: var(--primary); 
+            font-size: 1.6rem;
+            border-left: 5px solid var(--accent);
+            padding-left: 1rem;
+        }
+
+        .seccion-contenido {
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2.5rem;
+        }
+
+        @media (min-width: 900px) {
+            .seccion-contenido { grid-template-columns: 1fr 1fr; }
+            .full-width { grid-column: 1 / -1; }
+        }
+
+        .card h3 {
+            color: var(--primary);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-top: 0;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 0.5rem;
+        }
+
+        .formal-box {
+            background-color: #f0f7ff; /* Azul muy muy pálido */
+            border-radius: 8px;
+            padding: 2rem !important;
+            border: 1px solid #cce5ff;
+        }
+
+        /* CSS Específico para corregir SVGs */
+        .diagrama-container {
+            text-align: center;
+            margin: 2rem auto;
+            padding: 1.5rem;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
+            max-width: 100%;
+            overflow-x: auto; /* Si es muy ancho, permite scroll */
+        }
+        
+        /* Forzar comportamiento correcto del SVG */
+        .diagrama-container svg {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+        
+        /* Evitar que el texto dentro del SVG sea ilegible */
+        .diagrama-container text {
+            font-family: sans-serif;
+        }
+
+        footer {
+            text-align: center;
+            padding: 3rem;
+            background: var(--primary);
+            color: rgba(255,255,255,0.8);
+            margin-top: 4rem;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>26 - La Maquina Universal - Concepto de Máquina Universal (origen del software).</h1>
+        <a href="javascript:history.back()" class="btn-volver">← Volver</a>
+    </header>
+
+    <main>
+
+        <article class="subtema">
+            <div class="subtema-header">
+                <h2>La Máquina de Turing: Un Modelo Teórico de Computación</h2>
+            </div>
+            <div class="seccion-contenido">
+                
+                <div class="card full-width">
+                    <h3>Historia</h3>
+                    <div><p>El concepto de la Máquina de Turing (MT) fue introducido por Alan Turing en 1936 en su seminal artículo "On Computable Numbers, with an Application to the Entscheidungsproblem". Este trabajo surgió como respuesta al "problema de decisión" de Hilbert, un desafío fundamental en matemáticas que buscaba un algoritmo universal para determinar la verdad de cualquier proposición lógica. En un contexto pre-electrónica digital, Turing imaginó un modelo abstracto de un "computador humano" realizando cálculos de manera sistemática. Su objetivo no era construir una máquina física, sino definir rigurosamente qué significa "computable" o "algorítmico". La MT se convirtió rápidamente en la piedra angular de la teoría de la computabilidad, estableciendo los límites teóricos de lo que las máquinas pueden o no pueden calcular, sentando las bases para la posterior revolución de la computación.</p></div>
+                </div>
+
+                <div class="card full-width formal-box">
+                    <h3>Descripción Formal</h3>
+                    <div><p>Una Máquina de Turing (MT) es un modelo matemático abstracto que consiste en una cinta infinita dividida en celdas, un cabezal que lee y escribe símbolos en la cinta, y una unidad de control que puede estar en uno de un conjunto finito de estados. Formalmente, una MT se define como una tupla M = (Q, Σ, Γ, δ, q₀, q_acc, q_rej), donde:
+    *   Q es un conjunto finito de estados.
+    *   Σ es el alfabeto de entrada, un conjunto finito de símbolos (no contiene el símbolo de blanco '◻').
+    *   Γ es el alfabeto de la cinta, un conjunto finito de símbolos tal que Σ ⊆ Γ y '◻' ∈ Γ.
+    *   δ es la función de transición, δ : Q × Γ → Q × Γ × {L, R}. Esto significa que dado un estado actual y un símbolo leído, la máquina transita a un nuevo estado, escribe un nuevo símbolo en la cinta y mueve el cabezal a la izquierda (L) o a la derecha (R).
+    *   q₀ ∈ Q es el estado inicial.
+    *   q_acc ∈ Q es el estado de aceptación.
+    *   q_rej ∈ Q es el estado de rechazo, con q_acc ≠ q_rej.
+La máquina comienza en el estado q₀ con la entrada en la cinta, seguida de infinitos símbolos blancos. El cálculo procede paso a paso según δ. Si la máquina entra en q_acc, acepta la entrada; si entra en q_rej, la rechaza. Si la máquina entra en un bucle infinito, nunca termina y, por lo tanto, no computa un resultado. Este modelo es fundamental para la teoría de la computabilidad y para entender los límites inherentes a la capacidad algorítmica de resolución de problemas.</p></div>
+                    
+                    <div class="diagrama-container">
+                        <svg viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg">
+          <rect x="50" y="75" width="500" height="50" fill="#e0e0e0" stroke="black" stroke-width="1"/>
+          <line x1="100" y1="75" x2="100" y2="125" stroke="black" stroke-width="1"/>
+          <line x1="150" y1="75" x2="150" y2="125" stroke="black" stroke-width="1"/>
+          <line x1="200" y1="75" x2="200" y2="125" stroke="black" stroke-width="1"/>
+          <line x1="250" y1="75" x2="250" y2="125" stroke="black" stroke-width="1"/>
+          <line x1="300" y1="75" x2="300" y2="125" stroke="black" stroke-width="1"/>
+          <text x="125" y="105" font-family="Arial" font-size="20" text-anchor="middle">a</text>
+          <text x="175" y="105" font-family="Arial" font-size="20" text-anchor="middle">b</text>
+          <text x="225" y="105" font-family="Arial" font-size="20" text-anchor="middle">a</text>
+          <text x="275" y="105" font-family="Arial" font-size="20" text-anchor="middle">◻</text>
+
+          <rect x="105" y="40" width="40" height="30" fill="#c0c0c0" stroke="black" stroke-width="1"/>
+          <polygon points="125,70 115,50 135,50" fill="black"/>
+          <text x="125" y="60" font-family="Arial" font-size="14" text-anchor="middle" fill="white">H</text>
+
+          <circle cx="400" cy="40" r="20" fill="#add8e6" stroke="black" stroke-width="1"/>
+          <text x="400" y="45" font-family="Arial" font-size="16" text-anchor="middle">q0</text>
+
+          <circle cx="470" cy="40" r="20" fill="#90ee90" stroke="black" stroke-width="1"/>
+          <text x="470" y="45" font-family="Arial" font-size="16" text-anchor="middle">q1</text>
+
+          <path d="M420,40 Q435,10 450,40" fill="none" stroke="black" stroke-width="1" marker-end="url(#arrowhead)"/>
+          <defs>
+            <marker id="arrowhead" markerWidth="5" markerHeight="5" refX="2.5" refY="2.5" orient="auto">
+              <polygon points="0 0, 5 2.5, 0 5" fill="black" />
+            </marker>
+          </defs>
+          <text x="435" y="25" font-family="Arial" font-size="12" text-anchor="middle">a→b, R</text>
+        </svg>
+                        <p style="font-size:0.8rem; color:#666; margin-top:1rem; text-align:center;">
+                            <em>Fig: Representación visual generada.</em>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Intuición</h3>
+                    <div><p>Piensen en la Máquina de Turing como un robot muy simple pero metódico. Tiene una cinta de papel extremadamente larga (infinita) donde puede leer o escribir símbolos. El robot tiene un "cerebro" que solo puede estar en un número limitado de "estados de ánimo" (estados). Cuando el robot mira un símbolo en la cinta, y dependiendo de su "estado de ánimo" actual, sigue una regla muy específica: escribe un nuevo símbolo, cambia a un nuevo "estado de ánimo" y mueve su brazo (cabezal) un paso a la izquierda o a la derecha. No tiene memoria adicional, todo lo que necesita recordar está en su estado actual o escrito en la cinta. Esta simplicidad es engañosa, porque, a pesar de sus operaciones primitivas, una Máquina de Turing puede, en principio, realizar cualquier cálculo que una computadora moderna pueda hacer, aunque mucho más lentamente.</p></div>
+                </div>
+
+                <div class="card">
+                    <h3>Aplicación Real</h3>
+                    <div><p>Aunque las Máquinas de Turing no son implementadas directamente en el hardware de las computadoras modernas, su impacto es fundamental. Son la base teórica sobre la que se construyen los principios de la computación. Cualquier algoritmo que escribimos, desde los más simples hasta los más complejos, puede ser representado como una Máquina de Turing. Nos proporcionan un marco para entender los límites inherentes a la computación: ¿qué problemas se pueden resolver algorítmicamente y cuáles no? Este modelo es crucial en el diseño de lenguajes de programación, compiladores y sistemas operativos, ya que define el "poder computacional" que estas herramientas deben proporcionar. La tesis de Church-Turing afirma que cualquier función que pueda ser calculada por un procedimiento algorítmico puede ser calculada por una Máquina de Turing, validando su rol como el modelo universal de computación efectiva.</p></div>
+                </div>
+
+            </div>
+        </article>
+        
+        <article class="subtema">
+            <div class="subtema-header">
+                <h2>La Máquina de Turing Universal: El Computador de Propósito General</h2>
+            </div>
+            <div class="seccion-contenido">
+                
+                <div class="card full-width">
+                    <h3>Historia</h3>
+                    <div><p>La Máquina de Turing Universal (MTU) es una extensión conceptual propuesta por el propio Alan Turing en su trabajo de 1936. Turing no solo definió el concepto de una Máquina de Turing individual para resolver un problema específico, sino que también postuló la existencia de una única máquina que podría simular el comportamiento de <em>cualquier otra</em> Máquina de Turing arbitraria. Esta idea revolucionaria implicaba que no se necesitaba construir una nueva máquina física para cada nuevo problema; en su lugar, una máquina "general" podría simplemente leer la "descripción" de la máquina especializada y ejecutar sus pasos. Este fue el primer destello teórico de un computador de propósito general, un concepto que más tarde se materializaría en la arquitectura de Von Neumann y todas las computadoras modernas programables. Su visión sentó las bases para la distinción entre hardware y software.</p></div>
+                </div>
+
+                <div class="card full-width formal-box">
+                    <h3>Descripción Formal</h3>
+                    <div><p>Una Máquina de Turing Universal (MTU) M_U no es una máquina distinta en su definición fundamental, sino una Máquina de Turing particular que tiene la capacidad de simular a cualquier otra Máquina de Turing M cuando se le proporciona una codificación de M y su entrada. M_U = (Q_U, Σ_U, Γ_U, δ_U, q₀_U, q_acc_U, q_rej_U) es una MT estándar. La clave reside en cómo se organiza su cinta. La cinta de M_U se divide conceptualmente en varias secciones, típicamente tres:
+    1.  <strong>Descripción de M:</strong> Una codificación binaria o alfanumérica de la función de transición δ de la máquina M a simular, incluyendo sus estados, alfabetos y reglas de movimiento. Por ejemplo, una regla (q_i, a) → (q_j, b, R) podría codificarse como un string de símbolos.
+    2.  <strong>Cinta de M:</strong> Una representación del contenido actual de la cinta de la máquina M que está siendo simulada, incluyendo sus símbolos y blancos.
+    3.  <strong>Estado de M:</strong> Una representación del estado actual de la máquina M que está siendo simulada.
+La función de transición δ_U de la MTU opera de la siguiente manera: en cada paso, M_U lee el "estado de M" y el "símbolo bajo el cabezal de M" (ambos ubicados en diferentes secciones de su propia cinta). Luego, M_U busca en la "descripción de M" la regla de transición correspondiente. Una vez encontrada, M_U actualiza el "estado de M" y el "símbolo en la cinta de M" según la regla, y simula el movimiento del cabezal de M manipulando la porción de la cinta que representa la "cinta de M". Este proceso de "buscar, decodificar, ejecutar, actualizar" se repite hasta que M_U simula la aceptación o rechazo (o bucle) de M.</p></div>
+                    
+                    <div class="diagrama-container">
+                        <svg viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg">
+          <rect x="50" y="75" width="500" height="50" fill="#e0e0e0" stroke="black" stroke-width="1"/>
+          <line x1="200" y1="75" x2="200" y2="125" stroke="black" stroke-width="1"/>
+          <line x1="400" y1="75" x2="400" y2="125" stroke="black" stroke-width="1"/>
+
+          <text x="125" y="105" font-family="Arial" font-size="16" text-anchor="middle">Codificación de M</text>
+          <text x="300" y="105" font-family="Arial" font-size="16" text-anchor="middle">Cinta de M</text>
+          <text x="500" y="105" font-family="Arial" font-size="16" text-anchor="middle">Estado de M</text>
+
+          <rect x="280" y="40" width="40" height="30" fill="#c0c0c0" stroke="black" stroke-width="1"/>
+          <polygon points="300,70 290,50 310,50" fill="black"/>
+          <text x="300" y="60" font-family="Arial" font-size="14" text-anchor="middle" fill="white">H</text>
+
+          <rect x="250" y="150" width="100" height="30" fill="#add8e6" stroke="black" stroke-width="1"/>
+          <text x="300" y="170" font-family="Arial" font-size="14" text-anchor="middle">Control M_U</text>
+        </svg>
+                        <p style="font-size:0.8rem; color:#666; margin-top:1rem; text-align:center;">
+                            <em>Fig: Representación visual generada.</em>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Intuición</h3>
+                    <div><p>Imaginen que tienen un libro de cocina (la Máquina de Turing Universal) que es tan bueno que puede leer cualquier otra receta de cocina (cualquier otra Máquina de Turing) y prepararla. No importa si es una receta para un pastel, una sopa o un guiso; el libro de cocina universal contiene las instrucciones generales sobre cómo "leer una receta", "entender los ingredientes", "seguir los pasos" y "manipular utensilios" para simular <em>cualquier</em> receta específica. La cinta de la Máquina Universal contiene no solo los "ingredientes" (datos de entrada) sino también la "receta" completa (la descripción de la MT a simular) y el "paso actual" de esa receta (el estado de la MT simulada). Así, la MTU es una única máquina capaz de adoptar la identidad de cualquier otra máquina programada. Esta capacidad de reconfiguración lógica es lo que la convierte en una "máquina universal".</p></div>
+                </div>
+
+                <div class="card">
+                    <h3>Aplicación Real</h3>
+                    <div><p>La Máquina de Turing Universal es el modelo teórico detrás de cada computadora programable en existencia. La CPU de su ordenador es, en esencia, una implementación física de una Máquina de Turing Universal. Cuando usted ejecuta un programa (ya sea un navegador web, un editor de texto o un videojuego), la CPU no se "transforma" físicamente en ese programa. En cambio, la CPU (la MTU) lee las instrucciones del programa (la codificación de una MT específica) desde la memoria (una parte de su "cinta") y ejecuta esas instrucciones sobre los datos de entrada (otra parte de su "cinta"). Esta separación fundamental entre el hardware (la MTU inmutable) y el software (la descripción mutable de la MT a simular) es lo que permite la flexibilidad y el poder de la computación moderna. Permite que el mismo hardware ejecute un número ilimitado de funciones diferentes simplemente cargando diferentes conjuntos de instrucciones o "programas".</p></div>
+                </div>
+
+            </div>
+        </article>
+        
+        <article class="subtema">
+            <div class="subtema-header">
+                <h2>De la Máquina Universal al Software Moderno: Un Paradigma Inmutable</h2>
+            </div>
+            <div class="seccion-contenido">
+                
+                <div class="card full-width">
+                    <h3>Historia</h3>
+                    <div><p>El impacto de la Máquina Universal trascendió rápidamente el ámbito puramente teórico. La idea de una máquina que podía ser "reprogramada" para realizar diferentes tareas sin cambiar su hardware fue la chispa intelectual para la creación de las primeras computadoras electrónicas. John von Neumann, en su "First Draft of a Report on the EDVAC" (1945), articuló la arquitectura que lleva su nombre, proponiendo que tanto las instrucciones del programa como los datos pudieran almacenarse en la misma memoria, accesible por una unidad central de procesamiento. Esta "máquina de programa almacenado" es la encarnación física de la Máquina de Turing Universal. Este diseño rompió con las computadoras anteriores que requerían re-cableado para cada nueva tarea, dando origen al concepto de software como un conjunto de instrucciones lógicas que controlan el hardware de propósito general.</p></div>
+                </div>
+
+                <div class="card full-width formal-box">
+                    <h3>Descripción Formal</h3>
+                    <div><p>Aunque no introducimos una nueva definición formal para la Máquina Universal en este subtema, profundizamos en su significado conceptual para el software. La Máquina Universal M_U es una formalización de la idea de un procesador de propósito general. El "software" es, en esencia, la codificación precisa y detallada de la Máquina de Turing específica (M) que M_U está destinada a simular. Esta codificación, almacenada en una parte de la "cinta" de M_U, dicta el comportamiento exacto que M_U debe emular. La función de transición δ_U de la MTU no resuelve directamente el problema de M, sino que implementa un "interprete" o "simulador" que lee δ de M y los datos de M, y ejecuta las operaciones paso a paso. La eficiencia de M_U al simular M se puede caracterizar: si M detiene su ejecución en T(n) pasos con entrada de tamaño n, una M_U puede simular esto en O(k ⋅ T(n) log T(n)) o O(k ⋅ T(n)²) pasos, donde k es una constante que depende de la codificación y la complejidad de la MTU. Esta complejidad extra es el "costo" de la universalidad, el precio de tener un hardware flexible. La computación se convierte en un proceso de proporcionar a la M_U la descripción adecuada y los datos para ella. Este enfoque es el pilar de la computación moderna, donde el hardware es una base general y el software es la especificación mutable de su comportamiento.</p></div>
+                    
+                    <div class="diagrama-container">
+                        <svg viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg">
+          <rect x="50" y="50" width="200" height="100" fill="#add8e6" stroke="black" stroke-width="1"/>
+          <text x="150" y="100" font-family="Arial" font-size="18" text-anchor="middle">CPU (MTU)</text>
+
+          <rect x="350" y="50" width="200" height="100" fill="#e0e0e0" stroke="black" stroke-width="1"/>
+          <text x="450" y="75" font-family="Arial" font-size="16" text-anchor="middle">Memoria (Cinta)</text>
+          <text x="450" y="100" font-family="Arial" font-size="14" text-anchor="middle">--- Programa (Codificación de M) ---</text>
+          <text x="450" y="125" font-family="Arial" font-size="14" text-anchor="middle">--- Datos (Cinta de M) ---</text>
+
+          <path d="M250,100 H350" stroke="black" stroke-width="2" marker-end="url(#arrowhead)"/>
+          <path d="M350,110 H250" stroke="black" stroke-width="2" marker-end="url(#arrowhead-rev)"/>
+          <defs>
+            <marker id="arrowhead" markerWidth="5" markerHeight="5" refX="2.5" refY="2.5" orient="auto">
+              <polygon points="0 0, 5 2.5, 0 5" fill="black" />
+            </marker>
+            <marker id="arrowhead-rev" markerWidth="5" markerHeight="5" refX="2.5" refY="2.5" orient="auto">
+              <polygon points="5 0, 0 2.5, 5 5" fill="black" />
+            </marker>
+          </defs>
+          <text x="300" y="90" font-family="Arial" font-size="12" text-anchor="middle">Instrucciones / Datos</text>
+          <text x="300" y="120" font-family="Arial" font-size="12" text-anchor="middle">Resultados</text>
+        </svg>
+                        <p style="font-size:0.8rem; color:#666; margin-top:1rem; text-align:center;">
+                            <em>Fig: Representación visual generada.</em>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Intuición</h3>
+                    <div><p>La Máquina Universal nos enseña que no necesitamos un dispositivo diferente para cada tarea que queremos realizar. En cambio, podemos tener un único dispositivo "inteligente" (nuestra computadora o CPU) y simplemente proporcionarle un conjunto de instrucciones (el software) que le dicen cómo comportarse para una tarea específica. Piensen en un chef: no necesita una cocina diferente para cada plato. Su cocina (la Máquina Universal) es lo suficientemente flexible como para ejecutar cualquier receta (software) que se le dé. El "programa" que escribimos es esa receta, y la CPU es el chef que la lee y sigue meticulosamente cada instrucción. Esta idea de la programabilidad es la esencia de toda la computación moderna y la razón por la que un mismo teléfono puede ser calculadora, cámara, teléfono y consola de juegos.</p></div>
+                </div>
+
+                <div class="card">
+                    <h3>Aplicación Real</h3>
+                    <div><p>El concepto de la Máquina de Turing Universal es la justificación teórica y práctica de toda la industria del software. Cada programa que se ejecuta en su computadora, desde el sistema operativo hasta la aplicación más pequeña, es una "descripción" o un "conjunto de instrucciones" que la CPU (una Máquina Universal física) interpreta y ejecuta. Esto permite una flexibilidad y una reutilización del hardware sin precedentes. No necesitamos construir un dispositivo nuevo para cada funcionalidad; simplemente cargamos un nuevo software. Esto ha democratizado la computación, permitiendo a los programadores crear soluciones innovadoras sin necesidad de modificar el hardware subyacente. La separación clara entre hardware y software, originada en la MTU, es la base de todo el desarrollo de software, la creación de sistemas operativos, lenguajes de programación y la vasta gama de aplicaciones que usamos a diario.</p></div>
+                </div>
+
+            </div>
+        </article>
+        
+    </main>
+
+    <footer>
+        <p>Prof. Jorge López-Cifre, PhD © 2026</p>
+    </footer>
+
+</body>
+</html>

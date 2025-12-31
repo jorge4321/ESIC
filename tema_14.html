@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>14 - Limites - Propiedades de Clausura. - Prof. Jorge López-Cifre</title>
+    <style>
+        :root {
+            --primary: #003366;
+            --accent: #d4af37;
+            --bg: #f8f9fa;
+            --text: #2c3e50;
+            --card-bg: #ffffff;
+            --border: #e9ecef;
+        }
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 0;
+            line-height: 1.7;
+        }
+        /* Tipografía mejorada */
+        p { margin-bottom: 1rem; }
+        strong, b { color: var(--primary); font-weight: 700; }
+        
+        header {
+            background: var(--primary);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        h1 { margin: 0; font-size: 1.25rem; font-weight: 600; }
+        
+        .btn-volver {
+            background: var(--accent);
+            color: var(--primary);
+            text-decoration: none;
+            padding: 0.5rem 1.2rem;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        .btn-volver:hover { 
+            background: #fff; 
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+
+        main {
+            max-width: 1100px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+
+        .subtema {
+            background: var(--card-bg);
+            border-radius: 12px;
+            margin-bottom: 4rem;
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+        
+        .subtema-header {
+            background: linear-gradient(to right, #f8f9fa, #ffffff);
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid var(--border);
+        }
+        .subtema-header h2 { 
+            margin: 0; 
+            color: var(--primary); 
+            font-size: 1.6rem;
+            border-left: 5px solid var(--accent);
+            padding-left: 1rem;
+        }
+
+        .seccion-contenido {
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2.5rem;
+        }
+
+        @media (min-width: 900px) {
+            .seccion-contenido { grid-template-columns: 1fr 1fr; }
+            .full-width { grid-column: 1 / -1; }
+        }
+
+        .card h3 {
+            color: var(--primary);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-top: 0;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 0.5rem;
+        }
+
+        .formal-box {
+            background-color: #f0f7ff; /* Azul muy muy pálido */
+            border-radius: 8px;
+            padding: 2rem !important;
+            border: 1px solid #cce5ff;
+        }
+
+        /* CSS Específico para corregir SVGs */
+        .diagrama-container {
+            text-align: center;
+            margin: 2rem auto;
+            padding: 1.5rem;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
+            max-width: 100%;
+            overflow-x: auto; /* Si es muy ancho, permite scroll */
+        }
+        
+        /* Forzar comportamiento correcto del SVG */
+        .diagrama-container svg {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+        
+        /* Evitar que el texto dentro del SVG sea ilegible */
+        .diagrama-container text {
+            font-family: sans-serif;
+        }
+
+        footer {
+            text-align: center;
+            padding: 3rem;
+            background: var(--primary);
+            color: rgba(255,255,255,0.8);
+            margin-top: 4rem;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>14 - Limites - Propiedades de Clausura.</h1>
+        <a href="javascript:history.back()" class="btn-volver">← Volver</a>
+    </header>
+
+    <main>
+
+        <article class="subtema">
+            <div class="subtema-header">
+                <h2>Propiedades de Clausura para Lenguajes Regulares</h2>
+            </div>
+            <div class="seccion-contenido">
+                
+                <div class="card full-width">
+                    <h3>Historia</h3>
+                    <div><p>El concepto de lenguajes regulares surgió del trabajo pionero de Stephen Cole Kleene en la década de 1950, particularmente con su artículo 'Algebra of Regular Events', donde introdujo las expresiones regulares y demostró su equivalencia con los autómatas finitos. Este período fue fundamental para el desarrollo de la teoría de la computación, con investigadores como Noam Chomsky estableciendo más tarde la Jerarquía de Chomsky en los últimos años de esa década, clasificando los lenguajes formales por su poder generativo. Los lenguajes regulares representan la clase más sencilla y fundamental dentro de esta jerarquía, caracterizados por ser reconocibles por autómatas finitos (máquinas con memoria limitada). La comprensión de sus propiedades de clausura fue crucial para definir los límites de lo que estas máquinas simples podían procesar, sentando las bases para aplicaciones prácticas en compiladores y el procesamiento de texto.</p></div>
+                </div>
+
+                <div class="card full-width formal-box">
+                    <h3>Descripción Formal</h3>
+                    <div><p>Un lenguaje regular L es aquel que puede ser reconocido por un autómata finito (AF), ya sea determinista (AFD) o no determinista (AFND), o descrito por una expresión regular. Las propiedades de clausura establecen que si tomamos uno o más lenguajes regulares y aplicamos ciertas operaciones sobre ellos, el resultado siempre será un lenguaje también regular. Formalmente, si L₁ y L₂ son lenguajes regulares sobre un alfabeto Σ, entonces la clase de lenguajes regulares es cerrada bajo las siguientes operaciones:
+*   <strong>Unión (L₁ ∪ L₂):</strong> El lenguaje que contiene todas las cadenas que están en L₁ o en L₂ (o en ambas).
+*   <strong>Concatenación (L₁ L₂):</strong> El lenguaje que contiene todas las cadenas formadas por una cadena de L₁ seguida de una cadena de L₂.
+*   <strong>Clausura de Kleene (L₁*):</strong> El lenguaje que contiene todas las cadenas formadas por cero o más concatenaciones de cadenas de L₁.
+*   <strong>Intersección (L₁ ∩ L₂):</strong> El lenguaje que contiene todas las cadenas que están en L₁ y en L₂.
+*   <strong>Complemento (Σ* \ L₁):</strong> El lenguaje que contiene todas las cadenas sobre Σ que no están en L₁.
+*   <strong>Diferencia (L₁ \ L₂):</strong> El lenguaje que contiene todas las cadenas que están en L₁ pero no en L₂.
+*   <strong>Inverso (L₁ᴿ):</strong> El lenguaje que contiene todas las cadenas de L₁ escritas al revés.
+Estas propiedades son fundamentales porque garantizan que, al combinar operaciones básicas sobre lenguajes reconocibles por AF, el resultado sigue siendo manejable por la misma clase de autómata, lo que simplifica su diseño y análisis.</p></div>
+                    
+                    <div class="diagrama-container">
+                        <svg viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg"><defs><marker id="arrowhead" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="black" /></marker></defs><rect x="50" y="50" width="100" height="40" rx="5" ry="5" fill="#E0F2F7" stroke="black"/><text x="100" y="75" text-anchor="middle" font-family="Arial" font-size="16">L₁ (Regular)</text><rect x="200" y="50" width="100" height="40" rx="5" ry="5" fill="#E0F2F7" stroke="black"/><text x="250" y="75" text-anchor="middle" font-family="Arial" font-size="16">L₂ (Regular)</text><text x="175" y="125" text-anchor="middle" font-family="Arial" font-size="24">∪</text><circle cx="175" cy="125" r="25" fill="#F0F8F0" stroke="black"/><path d="M100 90 L175 110" stroke="black" marker-end="url(#arrowhead)"/><path d="M250 90 L175 110" stroke="black" marker-end="url(#arrowhead)"/><line x1="175" y1="140" x2="175" y2="170" stroke="black" marker-end="url(#arrowhead)"/><rect x="125" y="170" width="100" height="40" rx="5" ry="5" fill="#E0F2F7" stroke="black"/><text x="175" y="195" text-anchor="middle" font-family="Arial" font-size="16">L₁ ∪ L₂ (Regular)</text></svg>
+                        <p style="font-size:0.8rem; color:#666; margin-top:1rem; text-align:center;">
+                            <em>Fig: Representación visual generada.</em>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Intuición</h3>
+                    <div><p>La intuición detrás de la clausura de lenguajes regulares reside en la capacidad limitada pero manejable de los autómatas finitos. Piense en un autómata finito como una máquina con un número fijo de estados que puede procesar un símbolo a la vez y cambiar de estado según su entrada. Cuando combinamos dos lenguajes regulares con operaciones como la unión, simplemente podemos crear un nuevo autómata que 'simula' el comportamiento de ambos. Para la unión, por ejemplo, un nuevo AFND puede tener un estado inicial que no determinísticamente transiciona a los estados iniciales de los dos AF originales. Para la concatenación, podemos hacer que las transiciones finales del primer AF lleven a los estados iniciales del segundo. La cantidad de memoria (estados) que necesitamos puede crecer, pero siempre será finita. Esto garantiza que, no importa cómo se combinen o modifiquen, si el lenguaje original podía ser reconocido por una máquina de estados finitos, el resultado también podrá. Estas construcciones son sistemáticas y no introducen una complejidad de memoria que exceda la de un AF.</p></div>
+                </div>
+
+                <div class="card">
+                    <h3>Aplicación Real</h3>
+                    <div><p>Las propiedades de clausura de lenguajes regulares tienen un impacto masivo en la ingeniería de software moderna, especialmente en el procesamiento de texto y el diseño de compiladores. Los analizadores léxicos (lexers) en los compiladores son un ejemplo primordial: reconocen patrones de tokens (palabras clave, identificadores, números, operadores) que son, esencialmente, lenguajes regulares. La definición de estos patrones mediante expresiones regulares es posible gracias a estas propiedades de clausura, ya que las expresiones regulares son una forma compacta de describir lenguajes regulares y sus combinaciones. Herramientas como <code>grep</code> en sistemas Unix o las funciones de expresiones regulares en casi todos los lenguajes de programación (Python <code>re</code>, Java <code>Pattern</code>, JavaScript <code>RegExp</code>) se basan directamente en la teoría de lenguajes regulares. Permiten buscar, validar y manipular texto de manera eficiente, desde la verificación de formatos de correo electrónico hasta la extracción de datos de logs o el análisis de código fuente, demostrando la ubicuidad y la potencia práctica de esta teoría fundamental en la vida diaria de un ingeniero de software.</p></div>
+                </div>
+
+            </div>
+        </article>
+        
+        <article class="subtema">
+            <div class="subtema-header">
+                <h2>Propiedades de Clausura para Lenguajes Libres de Contexto</h2>
+            </div>
+            <div class="seccion-contenido">
+                
+                <div class="card full-width">
+                    <h3>Historia</h3>
+                    <div><p>Los lenguajes libres de contexto (LLC) fueron formalizados por Noam Chomsky en la década de 1950 como parte de su jerarquía de lenguajes, motivado por la necesidad de describir la sintaxis de los lenguajes naturales y, posteriormente, de los lenguajes de programación. Las gramáticas libres de contexto (GLC) proporcionan un formalismo para generar estos lenguajes, mientras que los autómatas de pila (AP) son los modelos computacionales que los reconocen. Este desarrollo fue crucial para el diseño de los primeros lenguajes de programación como ALGOL y FORTRAN, ya que sus estructuras sintácticas podían ser elegantemente descritas por GLC. La exploración de sus propiedades de clausura fue vital para entender qué tipo de construcciones sintácticas podían ser manejadas por herramientas de parsing basadas en AP, y dónde residían sus limitaciones fundamentales, especialmente en la distinción entre lo que puede y no puede ser descrito con una pila simple.</p></div>
+                </div>
+
+                <div class="card full-width formal-box">
+                    <h3>Descripción Formal</h3>
+                    <div><p>Un lenguaje libre de contexto L es un lenguaje que puede ser generado por una gramática libre de contexto (GLC) o reconocido por un autómata de pila (AP). A diferencia de los lenguajes regulares, los LLC tienen capacidades de memoria ilimitadas a través de su pila, pero esta memoria es de tipo LIFO (último en entrar, primero en salir), lo que impone ciertas limitaciones. Las propiedades de clausura para LLC son las siguientes: si L₁ y L₂ son lenguajes libres de contexto sobre un alfabeto Σ:
+*   <strong>Unión (L₁ ∪ L₂):</strong> Sí, es un LLC. Se puede construir una nueva GLC/AP que no determinísticamente simule el comportamiento de L₁ o L₂.
+*   <strong>Concatenación (L₁ L₂):</strong> Sí, es un LLC. Se puede concatenar las gramáticas o hacer que el AP de L₁ transicione al AP de L₂ al vaciar su pila y aceptar.
+*   <strong>Clausura de Kleene (L₁*):</strong> Sí, es un LLC. Similar a la concatenación y unión, permite cero o más repeticiones.
+*   <strong>Inverso (L₁ᴿ):</strong> Sí, es un LLC. Una gramática para L₁ se puede invertir, o un AP puede simular el inverso leyendo los símbolos en el orden inverso.
+Sin embargo, y esto es crucial, los lenguajes libres de contexto <strong>NO</strong> son cerrados bajo:
+*   <strong>Intersección (L₁ ∩ L₂):</strong> El lenguaje resultante de la intersección de dos LLC generalmente no es un LLC. Esto se debe a que un AP no puede 'simultáneamente' verificar dos propiedades de pila distintas que requieren correlación arbitraria. Un ejemplo clásico es L₁ = {aⁿbⁿcᵐ | n, m ≥ 0} y L₂ = {aᵐbⁿcⁿ | n, m ≥ 0}; su intersección es {aⁿbⁿcⁿ | n ≥ 0}, que no es un LLC.
+*   <strong>Complemento (Σ* \ L₁):</strong> Si no son cerrados bajo intersección, y dado que L₁ ∩ L₂ = Σ<em> \ ((Σ</em> \ L₁) ∪ (Σ* \ L₂)), no pueden ser cerrados bajo complemento, ya que si lo fueran, la intersección también lo sería.
+Estas limitaciones definen el 'límite' de lo que los analizadores sintácticos de pila pueden manejar.</p></div>
+                    
+                    <div class="diagrama-container">
+                        <svg viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg"><defs><marker id="arrowhead" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="black" /></marker></defs><rect x="50" y="50" width="100" height="40" rx="5" ry="5" fill="#F0F8F0" stroke="black"/><text x="100" y="75" text-anchor="middle" font-family="Arial" font-size="16">L₁ (CFL)</text><rect x="200" y="50" width="100" height="40" rx="5" ry="5" fill="#F0F8F0" stroke="black"/><text x="250" y="75" text-anchor="middle" font-family="Arial" font-size="16">L₂ (CFL)</text><text x="175" y="125" text-anchor="middle" font-family="Arial" font-size="24">∩</text><circle cx="175" cy="125" r="25" fill="#FFF0F0" stroke="black"/><path d="M100 90 L175 110" stroke="black" marker-end="url(#arrowhead)"/><path d="M250 90 L175 110" stroke="black" marker-end="url(#arrowhead)"/><line x1="175" y1="140" x2="175" y2="170" stroke="black" marker-end="url(#arrowhead)"/><text x="175" y="195" text-anchor="middle" font-family="Arial" font-size="16">L₁ ∩ L₂</text><line x1="160" y1="175" x2="190" y2="195" stroke="red" stroke-width="2"/><line x1="160" y1="195" x2="190" y2="175" stroke="red" stroke-width="2"/></svg>
+                        <p style="font-size:0.8rem; color:#666; margin-top:1rem; text-align:center;">
+                            <em>Fig: Representación visual generada.</em>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Intuición</h3>
+                    <div><p>La limitación clave de los lenguajes libres de contexto y sus autómatas de pila radica en la naturaleza de la pila: es una estructura de datos LIFO (Last-In, First-Out). Un autómata de pila puede emparejar paréntesis anidados o estructuras recursivas (por ejemplo, 'aⁿbⁿ'), porque el último 'a' empujado es el primero en ser desapilado para emparejar con un 'b'. Sin embargo, si necesitamos comparar o correlacionar dos partes de una cadena que no están anidadas sino 'entrelazadas' o separadas de forma que requieren múltiples comparaciones simultáneas que dependen de la parte anterior de la cadena (como en {aⁿbⁿcⁿ}), la pila simple de un AP no es suficiente. No puede 'recordar' simultáneamente dos conteos independientes o realizar dos comparaciones paralelas y arbitrariamente largas. Por eso, al intentar intersectar dos LLC que requieren tales correlaciones cruzadas, el AP falla en mantener la información necesaria, resultando en un lenguaje que va más allá de su capacidad de reconocimiento. Esto ilustra el poder, pero también la restricción, de la memoria de pila.</p></div>
+                </div>
+
+                <div class="card">
+                    <h3>Aplicación Real</h3>
+                    <div><p>La capacidad de los lenguajes libres de contexto para describir la sintaxis anidada y recursiva los hace indispensables en la informática. Son el fundamento de la fase de análisis sintáctico (parsing) de los compiladores, donde se verifica que el código fuente de un programa sigue las reglas gramaticales del lenguaje (ej., estructuras <code>if-else</code>, bucles <code>for</code>, definiciones de funciones). Formatos de datos estructurados como XML y JSON también pueden ser descritos por GLC, y sus analizadores se construyen basándose en principios de autómatas de pila. En el procesamiento de lenguajes naturales, las GLC se utilizan para modelar la sintaxis de las oraciones. Comprender sus propiedades de clausura es esencial para los diseñadores de lenguajes de programación y herramientas de parsing, ya que les permite saber qué tipos de estructuras sintácticas pueden definir y qué limitaciones inherentes tendrán sus analizadores, evitando la creación de lenguajes que son inherentemente imposibles de parsear eficientemente con las técnicas estándar que utilizan autómatas de pila.</p></div>
+                </div>
+
+            </div>
+        </article>
+        
+        <article class="subtema">
+            <div class="subtema-header">
+                <h2>El Teorema de Pumping y la Decidibilidad: Herramientas para Demostrar la No Clausura</h2>
+            </div>
+            <div class="seccion-contenido">
+                
+                <div class="card full-width">
+                    <h3>Historia</h3>
+                    <div><p>El Teorema de Pumping (o Lema de Bombeo) surgió en la década de 1960 como una herramienta poderosa para demostrar que un lenguaje no pertenece a una clase particular (regular o libre de contexto). Para lenguajes regulares, fue formulado por Y. Bar-Hillel, M. Perles y E. Shamir. Su contraparte para lenguajes libres de contexto fue desarrollada por William Ogden. Estos teoremas surgieron de la necesidad de establecer los 'límites' de las clases de lenguajes, más allá de simplemente observar las propiedades de clausura. Proporcionaron un método formal y sistemático para argumentar que ciertos lenguajes no podían ser reconocidos por autómatas finitos o de pila debido a la naturaleza finita de su memoria o la restricción de su estructura de pila. Esto marcó un hito en la comprensión de la jerarquía de Chomsky y la teoría de la computabilidad, permitiendo a los teóricos probar formalmente las limitaciones intrínsecas de diferentes modelos computacionales.</p></div>
+                </div>
+
+                <div class="card full-width formal-box">
+                    <h3>Descripción Formal</h3>
+                    <div><p>El Teorema de Pumping es un argumento de caja negra que establece que si un lenguaje L pertenece a una clase (por ejemplo, regular o libre de contexto), entonces toda cadena suficientemente larga en L contiene una subcadena que puede ser 'bombeada' (repetida o eliminada) un número arbitrario de veces, y la cadena resultante seguirá perteneciendo a L. Si podemos encontrar una cadena específica en L que, al ser bombeada, produce una cadena fuera de L, entonces L no pertenece a esa clase. Por ejemplo, para lenguajes regulares: Para cualquier lenguaje regular L, existe un entero p (longitud de bombeo) tal que cualquier cadena w ∈ L con |w| ≥ p puede ser dividida en w = xyz, donde |xy| ≤ p, |y| &gt; 0, y para todo i ≥ 0, la cadena xyⁱz ∈ L. Si L no es cerrado bajo una operación, a menudo se demuestra construyendo un lenguaje que <em>sí</em> es cerrado, y luego demostrando que el resultado de la operación <em>no</em> es regular/CFL usando el Teorema de Pumping. Esto se relaciona con la decidibilidad: la capacidad algorítmica de responder 'sí' o 'no' a una pregunta sobre una propiedad de un lenguaje (ej., ¿es este lenguaje regular? ¿es el lenguaje vacío?). La clausura bajo complemento y las propiedades de decidibilidad están estrechamente ligadas; si un problema es decidible para una clase de lenguajes, significa que existe un algoritmo que siempre termina y da una respuesta correcta, y estas propiedades de clausura a menudo son clave para construir tales algoritmos o para probar su imposibilidad.</p></div>
+                    
+                    <div class="diagrama-container">
+                        <svg viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg"><rect x="50" y="80" width="500" height="40" rx="5" ry="5" fill="#E8F5E9" stroke="black"/><text x="300" y="105" text-anchor="middle" font-family="Arial" font-size="18">w = x  y  z</text><rect x="70" y="85" width="80" height="30" fill="#BBDEFB" stroke="blue" stroke-dasharray="2"/><rect x="150" y="85" width="50" height="30" fill="#FFCCBC" stroke="red" stroke-dasharray="2"/><text x="110" y="105" text-anchor="middle" font-family="Arial" font-size="16">x</text><text x="175" y="105" text-anchor="middle" font-family="Arial" font-size="16">y</text><text x="375" y="105" text-anchor="middle" font-family="Arial" font-size="16">z</text><path d="M175 120 L175 150 C190 170, 210 170, 225 150 L225 120" stroke="black" fill="none"/><text x="200" y="165" text-anchor="middle" font-family="Arial" font-size="14">Bombeo (i veces)</text><defs><marker id="arrowhead" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="black" /></marker></defs><line x1="225" y1="150" x2="225" y2="120" stroke="black" marker-end="url(#arrowhead)"/><line x1="175" y1="150" x2="175" y2="120" stroke="black" marker-end="url(#arrowhead)"/><text x="300" y="40" text-anchor="middle" font-family="Arial" font-size="16">Si w ∈ L y |w| ≥ p</text><text x="450" y="105" text-anchor="middle" font-family="Arial" font-size="16">...</text><text x="300" y="190" text-anchor="middle" font-family="Arial" font-size="16">w' = x yⁱ z (fuera de L => L no es regular/CFL)</text></svg>
+                        <p style="font-size:0.8rem; color:#666; margin-top:1rem; text-align:center;">
+                            <em>Fig: Representación visual generada.</em>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Intuición</h3>
+                    <div><p>La intuición detrás del Teorema de Pumping es que cualquier máquina con memoria finita (como un autómata finito) o con una estructura de memoria restringida (como la pila de un autómata de pila) debe eventualmente repetir sus configuraciones internas si se le alimenta con una cadena suficientemente larga. Si un autómata finito lee una cadena más larga que su número de estados, por el principio del palomar, debe visitar al menos un estado dos veces. La parte de la cadena leída entre esas dos visitas puede ser 'bombeada' (repetida o eliminada) y el autómata terminará en el mismo estado final, lo que significa que la cadena resultante también debe ser aceptada si el lenguaje es regular. Si podemos construir una cadena para la cual esto no es cierto (es decir, bombear una parte la saca del lenguaje), entonces ese lenguaje no puede ser reconocido por ese tipo de autómata. Esta idea nos permite probar formalmente las limitaciones inherentes a estos modelos computacionales, mostrando dónde terminan sus capacidades.</p></div>
+                </div>
+
+                <div class="card">
+                    <h3>Aplicación Real</h3>
+                    <div><p>El Teorema de Pumping es una herramienta fundamental en la teoría de la computación, utilizada principalmente para demostrar que un lenguaje <em>no</em> es regular o <em>no</em> es libre de contexto. Esta capacidad de probar la no pertenencia a una clase es esencial para los diseñadores de lenguajes y compiladores, ya que les permite comprender las limitaciones inherentes de los modelos computacionales. Por ejemplo, si se quiere crear un lenguaje de programación cuya sintaxis requiere una verificación de tipo de datos que no puede ser modelada por un LLC (ej. asegurar que cada variable declarada en un bloque interno es única en relación con las del bloque externo de manera arbitrariamente anidada), el Teorema de Pumping podría usarse para mostrar que tal sintaxis no es un LLC, lo que implicaría que un analizador sintáctico basado en AP estándar sería insuficiente, requiriendo un autómata más potente o un enfoque de análisis diferente. También es crucial en cursos avanzados de informática para desarrollar el pensamiento crítico y la comprensión de los fundamentos teóricos de los lenguajes y la computabilidad.</p></div>
+                </div>
+
+            </div>
+        </article>
+        
+    </main>
+
+    <footer>
+        <p>Prof. Jorge López-Cifre, PhD © 2026</p>
+    </footer>
+
+</body>
+</html>

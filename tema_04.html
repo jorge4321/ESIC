@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>4 - Lenguajes y gramáticas - Reglas de producción y derivaciones. - Prof. Jorge López-Cifre</title>
+    <style>
+        :root {
+            --primary: #003366;
+            --accent: #d4af37;
+            --bg: #f8f9fa;
+            --text: #2c3e50;
+            --card-bg: #ffffff;
+            --border: #e9ecef;
+        }
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 0;
+            line-height: 1.7;
+        }
+        /* Tipografía mejorada */
+        p { margin-bottom: 1rem; }
+        strong, b { color: var(--primary); font-weight: 700; }
+        
+        header {
+            background: var(--primary);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        h1 { margin: 0; font-size: 1.25rem; font-weight: 600; }
+        
+        .btn-volver {
+            background: var(--accent);
+            color: var(--primary);
+            text-decoration: none;
+            padding: 0.5rem 1.2rem;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        .btn-volver:hover { 
+            background: #fff; 
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+
+        main {
+            max-width: 1100px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+
+        .subtema {
+            background: var(--card-bg);
+            border-radius: 12px;
+            margin-bottom: 4rem;
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+        
+        .subtema-header {
+            background: linear-gradient(to right, #f8f9fa, #ffffff);
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid var(--border);
+        }
+        .subtema-header h2 { 
+            margin: 0; 
+            color: var(--primary); 
+            font-size: 1.6rem;
+            border-left: 5px solid var(--accent);
+            padding-left: 1rem;
+        }
+
+        .seccion-contenido {
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2.5rem;
+        }
+
+        @media (min-width: 900px) {
+            .seccion-contenido { grid-template-columns: 1fr 1fr; }
+            .full-width { grid-column: 1 / -1; }
+        }
+
+        .card h3 {
+            color: var(--primary);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-top: 0;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 0.5rem;
+        }
+
+        .formal-box {
+            background-color: #f0f7ff; /* Azul muy muy pálido */
+            border-radius: 8px;
+            padding: 2rem !important;
+            border: 1px solid #cce5ff;
+        }
+
+        /* CSS Específico para corregir SVGs */
+        .diagrama-container {
+            text-align: center;
+            margin: 2rem auto;
+            padding: 1.5rem;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
+            max-width: 100%;
+            overflow-x: auto; /* Si es muy ancho, permite scroll */
+        }
+        
+        /* Forzar comportamiento correcto del SVG */
+        .diagrama-container svg {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+        
+        /* Evitar que el texto dentro del SVG sea ilegible */
+        .diagrama-container text {
+            font-family: sans-serif;
+        }
+
+        footer {
+            text-align: center;
+            padding: 3rem;
+            background: var(--primary);
+            color: rgba(255,255,255,0.8);
+            margin-top: 4rem;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>4 - Lenguajes y gramáticas - Reglas de producción y derivaciones.</h1>
+        <a href="javascript:history.back()" class="btn-volver">← Volver</a>
+    </header>
+
+    <main>
+
+        <article class="subtema">
+            <div class="subtema-header">
+                <h2>1. Fundamentos de las Reglas de Producción</h2>
+            </div>
+            <div class="seccion-contenido">
+                
+                <div class="card full-width">
+                    <h3>Historia</h3>
+                    <div><p>Las reglas de producción, también conocidas como reglas de reescritura, son la piedra angular de las gramáticas formales, cuyo concepto fue formalizado por Noam Chomsky en la década de 1950. Chomsky, un lingüista del MIT, buscaba un método matemático para describir la sintaxis de los lenguajes naturales. Su trabajo pionero culminó en la publicación de 'Syntactic Structures' en 1957, donde introdujo las gramáticas generativas. Estas gramáticas ofrecieron un formalismo para generar las 'sentencias correctas' de un lenguaje a partir de un conjunto finito de reglas. Aunque inicialmente aplicadas a la lingüística, la potencia y elegancia de estas reglas pronto fueron reconocidas por los científicos de la computación, convirtiéndose en el fundamento para describir la sintaxis de los lenguajes de programación y el diseño de compiladores, marcando un hito en la informática teórica.</p></div>
+                </div>
+
+                <div class="card full-width formal-box">
+                    <h3>Descripción Formal</h3>
+                    <div><p>Una regla de producción es la componente fundamental de una gramática formal G = (V, Σ, P, S). Formalmente, una regla de producción es un par ordenado (α, β), que se denota comúnmente como α → β. Aquí, α es una cadena de símbolos de V⁺ (el conjunto de símbolos no terminales y terminales, V, excepto la cadena vacía), y β es una cadena de símbolos de V* (el conjunto de símbolos no terminales y terminales, V, incluyendo la cadena vacía). El conjunto V se divide en dos subconjuntos disjuntos: V_N, el conjunto de símbolos no terminales (también llamados variables o metavariables), que representan conceptos sintácticos (como 'Sentencia' o 'Expresión'); y Σ, el conjunto de símbolos terminales, que son los elementos básicos del lenguaje que no se pueden descomponer más (como palabras clave, identificadores, operadores). La flecha '→' indica que la cadena α puede ser reescrita o reemplazada por la cadena β. El conjunto P es el conjunto finito de todas estas reglas de producción. El símbolo S ∈ V_N es el símbolo inicial (o axioma) de la gramática, desde el cual comienza todo el proceso de generación de cadenas del lenguaje. La aplicación de estas reglas permite transformar cadenas de símbolos, partiendo de S, hasta obtener cadenas compuestas únicamente por símbolos terminales, que son las sentencias válidas del lenguaje generado por la gramática.</p></div>
+                    
+                    <div class="diagrama-container">
+                        <svg viewBox="0 0 600 200"><rect x="50" y="70" width="100" height="60" fill="#E0F7FA" stroke="black" stroke-width="2"/><text x="100" y="105" font-family="Arial" font-size="24" text-anchor="middle">A</text><line x1="160" y1="100" x2="240" y2="100" stroke="black" stroke-width="2" marker-end="url(#arrowhead)"/><defs><marker id="arrowhead" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="black" /></marker></defs><rect x="250" y="70" width="280" height="60" fill="#FFFDE7" stroke="black" stroke-width="2"/><text x="390" y="105" font-family="Arial" font-size="24" text-anchor="middle">Secuencia de Símbolos (β)</text></svg>
+                        <p style="font-size:0.8rem; color:#666; margin-top:1rem; text-align:center;">
+                            <em>Fig: Representación visual generada.</em>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Intuición</h3>
+                    <div><p>Imaginemos que las reglas de producción son como un libro de recetas para construir frases. Cada receta tiene un ingrediente 'complejo' que puedes reemplazar (el lado izquierdo de la regla) y te dice cómo reemplazarlo con ingredientes más simples o con una combinación de ellos (el lado derecho). Por ejemplo, si tienes una 'Sentencia', una regla podría decir 'Sentencia → Sujeto Predicado'. Esto significa que para construir una 'Sentencia', puedes usar un 'Sujeto' seguido de un 'Predicado'. Luego, tendrías otras reglas para decirte cómo construir un 'Sujeto' y un 'Predicado'. El objetivo es seguir aplicando estas 'recetas' hasta que solo te queden los 'ingredientes básicos' o palabras finales del lenguaje (los símbolos terminales), sin ningún concepto abstracto. Las reglas de producción nos dan el 'cómo' para transformar una idea abstracta en una secuencia concreta de elementos válidos en un lenguaje.</p></div>
+                </div>
+
+                <div class="card">
+                    <h3>Aplicación Real</h3>
+                    <div><p>La aplicación más prominente de las reglas de producción es en el diseño e implementación de compiladores e intérpretes para lenguajes de programación. Las gramáticas formales, específicamente las gramáticas libres de contexto (GLC), se utilizan para definir la sintaxis de lenguajes como C++, Java o Python. Cada construcción sintáctica (declaraciones, expresiones, bucles) se define mediante un conjunto de reglas de producción. Por ejemplo, una regla podría especificar cómo se forma una declaración: 'Declaración → Tipo Identificador ;'. Los analizadores sintácticos (parsers) de un compilador utilizan estas reglas de producción para verificar si un programa dado se adhiere a la sintaxis del lenguaje, y para construir un árbol sintáctico abstracto (AST) que representa la estructura jerárquica del código. Además, son fundamentales en el diseño de lenguajes de marcado como XML o JSON, donde las DTDs (Document Type Definitions) o esquemas (JSON Schema) son esencialmente conjuntos de reglas que definen las estructuras permitidas.</p></div>
+                </div>
+
+            </div>
+        </article>
+        
+        <article class="subtema">
+            <div class="subtema-header">
+                <h2>2. El Proceso de Derivación</h2>
+            </div>
+            <div class="seccion-contenido">
+                
+                <div class="card full-width">
+                    <h3>Historia</h3>
+                    <div><p>El concepto de derivación es intrínseco al de las gramáticas formales y se desarrolló a la par con estas. Una vez Chomsky estableció las gramáticas generativas, el siguiente paso natural fue definir cómo estas reglas podían usarse para 'generar' o 'derivar' cadenas. La idea de una secuencia de reescrituras que transforma un símbolo inicial en una cadena de terminales fue fundamental para comprender el poder expresivo de las gramáticas. La conceptualización de las derivaciones llevó al desarrollo de algoritmos de parsing en la década de 1960 y 1970, como los algoritmos LR y LL, que buscaban eficientemente determinar si una cadena dada podía ser derivada por una gramática. Este proceso es la base de cómo los compiladores entienden la estructura de los programas, y su formalización permitió el avance significativo en la teoría y práctica de los lenguajes de programación y la ingeniería de software.</p></div>
+                </div>
+
+                <div class="card full-width formal-box">
+                    <h3>Descripción Formal</h3>
+                    <div><p>El proceso de derivación es la secuencia de aplicaciones de reglas de producción que transforman una cadena de símbolos en otra. Dada una gramática G = (V, Σ, P, S), se dice que una cadena ω' se deriva directamente de una cadena ω (se denota ω ⇒ ω') si ω puede ser escrita como γαλ, donde α → β es una regla en P, y ω' es γβλ. Esto significa que hemos reemplazado la subcadena α por β en ω. Una derivación, o secuencia de derivación, es una secuencia finita de pasos de derivación directa: ω₀ ⇒ ω₁ ⇒ ω₂ ⇒ ... ⇒ ω_k. Si existe tal secuencia, decimos que ω_k se deriva de ω₀, y lo denotamos como ω₀ ⇒<em> ω_k (derivación en cero o más pasos) o ω₀ ⇒⁺ ω_k (derivación en uno o más pasos). Cuando la derivación comienza desde el símbolo inicial S y termina en una cadena ω compuesta exclusivamente por símbolos terminales (ω ∈ Σ</em>), entonces ω es una cadena del lenguaje L(G) generado por la gramática G. L(G) = {ω ∈ Σ<em> | S ⇒</em> ω}. Las derivaciones pueden ser de varios tipos, como derivación por la izquierda (leftmost derivation), donde siempre se reemplaza el no terminal más a la izquierda, o derivación por la derecha (rightmost derivation), reemplazando el no terminal más a la derecha. Estas variantes son cruciales en los algoritmos de parsing para construir árboles de derivación.</p></div>
+                    
+                    <div class="diagrama-container">
+                        <svg viewBox="0 0 600 200"><rect x="50" y="70" width="80" height="60" fill="#E0F7FA" stroke="black" stroke-width="2"/><text x="90" y="105" font-family="Arial" font-size="24" text-anchor="middle">S</text><text x="140" y="105" font-family="Arial" font-size="30" text-anchor="middle">⇒</text><rect x="180" y="70" width="120" height="60" fill="#FFFDE7" stroke="black" stroke-width="2"/><text x="240" y="105" font-family="Arial" font-size="24" text-anchor="middle">cadena_1</text><text x="310" y="105" font-family="Arial" font-size="30" text-anchor="middle">⇒</text><rect x="350" y="70" width="120" height="60" fill="#E0F7FA" stroke="black" stroke-width="2"/><text x="410" y="105" font-family="Arial" font-size="24" text-anchor="middle">cadena_2</text><text x="480" y="105" font-family="Arial" font-size="30" text-anchor="middle">⇒*</text><rect x="520" y="70" width="80" height="60" fill="#FFFDE7" stroke="black" stroke-width="2"/><text x="560" y="105" font-family="Arial" font-size="24" text-anchor="middle">ω</text></svg>
+                        <p style="font-size:0.8rem; color:#666; margin-top:1rem; text-align:center;">
+                            <em>Fig: Representación visual generada.</em>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Intuición</h3>
+                    <div><p>La derivación es como el proceso de construir una frase palabra por palabra, siguiendo estrictas reglas gramaticales. Empezamos con una idea general (el símbolo inicial 'S', como 'Quiero decir algo'). Luego, aplicamos una regla para refinar esa idea ('S' podría convertirse en 'Sujeto Predicado'). Después, tomamos un concepto más específico, como 'Sujeto', y lo reemplazamos con algo aún más concreto, como un nombre o un pronombre. Continuamos este proceso de reemplazo, paso a paso, hasta que todos los conceptos abstractos (no terminales) han sido reemplazados por palabras reales (terminales) que forman una frase completa y gramaticalmente correcta. La derivación nos muestra el camino desde la estructura abstracta de una idea hasta su manifestación concreta en una secuencia de símbolos, revelando el 'cómo' se forma una sentencia válida del lenguaje.</p></div>
+                </div>
+
+                <div class="card">
+                    <h3>Aplicación Real</h3>
+                    <div><p>En la ingeniería de software, el proceso de derivación es el corazón de la fase de análisis sintáctico (parsing) de los compiladores e intérpretes. Cuando escribimos código, el compilador debe verificar si la secuencia de tokens (identificadores, operadores, palabras clave) que hemos escrito es sintácticamente válida según las reglas de la gramática del lenguaje de programación. El parser intenta 'derivar' la secuencia de tokens de entrada desde el símbolo inicial de la gramática. Si tiene éxito, significa que el código es sintácticamente correcto y puede construir un árbol de derivación (o árbol sintáctico), que es una representación jerárquica de cómo la cadena fue derivada. Este árbol es fundamental para las fases posteriores del compilador, como el análisis semántico y la generación de código intermedio. Sin una comprensión y aplicación robusta del proceso de derivación, sería imposible construir sistemas que puedan entender y ejecutar el código fuente que escribimos.</p></div>
+                </div>
+
+            </div>
+        </article>
+        
+        <article class="subtema">
+            <div class="subtema-header">
+                <h2>3. Clasificación de Gramáticas y Formas de Reglas de Producción</h2>
+            </div>
+            <div class="seccion-contenido">
+                
+                <div class="card full-width">
+                    <h3>Historia</h3>
+                    <div><p>La clasificación de gramáticas, conocida como la Jerarquía de Chomsky, fue introducida por Noam Chomsky en 1959. Este marco conceptual surgió de su investigación en lingüística, buscando formalizar la estructura de los lenguajes naturales. Chomsky descubrió que las reglas de producción podían ser restringidas en su forma, lo que resultaba en clases de lenguajes con diferentes propiedades y poderes expresivos. Esta jerarquía, que va desde las gramáticas de tipo 0 (irrestricta) hasta las de tipo 3 (regular), se convirtió en un pilar de la ciencia de la computación teórica. Proporcionó una manera sistemática de entender las limitaciones y capacidades de diferentes modelos computacionales (como autómatas), y ha sido fundamental para el diseño de lenguajes de programación, la teoría de compiladores y la inteligencia artificial, al establecer la relación entre la estructura gramatical y la complejidad de los problemas de reconocimiento de lenguajes.</p></div>
+                </div>
+
+                <div class="card full-width formal-box">
+                    <h3>Descripción Formal</h3>
+                    <div><p>La Jerarquía de Chomsky clasifica las gramáticas formales basándose en las restricciones aplicadas a la forma de sus reglas de producción (α → β):<br>1. <strong>Gramáticas de Tipo 0 (Irrestrictas o Recursivamente Enumerable):</strong> No hay restricciones. α ∈ V⁺ y β ∈ V<em>. Pueden generar cualquier lenguaje que una Máquina de Turing pueda reconocer.<br>2. </em><em>Gramáticas de Tipo 1 (Sensibles al Contexto):</em><em> Las reglas son de la forma γAδ → γβδ, donde A ∈ V_N, β ∈ V⁺, y γ, δ ∈ V</em>. La longitud de β debe ser mayor o igual que la de A (|β| ≥ |A|). Estas reglas permiten la reescritura de un no terminal 'A' solo si se encuentra en un contexto específico (γ y δ).<br>3. <strong>Gramáticas de Tipo 2 (Libres de Contexto):</strong> Las reglas son de la forma A → β, donde A ∈ V_N y β ∈ V<em>. No hay restricciones sobre el contexto en el que se aplica la regla, solo el no terminal 'A' en sí mismo importa. Estas gramáticas son ampliamente utilizadas para describir la sintaxis de lenguajes de programación.<br>4. </em><em>Gramáticas de Tipo 3 (Regulares):</em>* Son las más restrictivas. Las reglas son de la forma A → aB o A → a, donde A, B ∈ V_N y a ∈ Σ. A veces se incluye A → ε (cadena vacía). Estas gramáticas generan lenguajes que pueden ser reconocidos por Autómatas Finitos y se usan para expresiones regulares.<br>Cada tipo de gramática en la jerarquía es un subconjunto estricto del tipo anterior en términos de poder expresivo: Lenguajes Regulares ⊂ Lenguajes Libres de Contexto ⊂ Lenguajes Sensibles al Contexto ⊂ Lenguajes Recursivamente Enumerable. Las restricciones en las reglas simplifican el diseño de algoritmos de parsing y los autómatas que los reconocen.</p></div>
+                    
+                    <div class="diagrama-container">
+                        <svg viewBox="0 0 600 200"><rect x="30" y="30" width="250" height="140" fill="#E0F7FA" stroke="black" stroke-width="2"/><text x="155" y="60" font-family="Arial" font-size="20" text-anchor="middle" font-weight="bold">Gramática Libre de Contexto (Tipo 2)</text><text x="155" y="90" font-family="Arial" font-size="20" text-anchor="middle">Regla: A → β</text><text x="155" y="120" font-family="Arial" font-size="16" text-anchor="middle">A ∈ V_N, β ∈ (V_N ∪ Σ)*</text><rect x="320" y="30" width="250" height="140" fill="#FFFDE7" stroke="black" stroke-width="2"/><text x="445" y="60" font-family="Arial" font-size="20" text-anchor="middle" font-weight="bold">Gramática Regular (Tipo 3)</text><text x="445" y="90" font-family="Arial" font-size="20" text-anchor="middle">Regla: A → aB  o  A → a</text><text x="445" y="120" font-family="Arial" font-size="16" text-anchor="middle">A,B ∈ V_N, a ∈ Σ</text></svg>
+                        <p style="font-size:0.8rem; color:#666; margin-top:1rem; text-align:center;">
+                            <em>Fig: Representación visual generada.</em>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Intuición</h3>
+                    <div><p>Piensa en la clasificación de gramáticas como diferentes niveles de 'rigidez' o 'permisividad' en las reglas de un juego. Cuanto más restrictivas sean las reglas (como las de Tipo 3), más fácil será para un autómata simple (como una máquina expendedora) entender y reaccionar. Por otro lado, cuanto menos restrictivas sean las reglas (como las de Tipo 0), más complejos y potentes serán los mecanismos (como el cerebro humano) necesarios para procesarlas. La Jerarquía de Chomsky nos ayuda a entender que no todos los lenguajes son igual de complejos de describir o de procesar. Al clasificar las gramáticas por la forma de sus reglas, podemos elegir el tipo de gramática 'justo' para la tarea que tenemos entre manos, sin usar un martillo para una tuerca, o viceversa, lo que impacta directamente en la eficiencia de los algoritmos y la simplicidad del diseño.</p></div>
+                </div>
+
+                <div class="card">
+                    <h3>Aplicación Real</h3>
+                    <div><p>La Jerarquía de Chomsky es fundamental en la construcción de compiladores y herramientas de procesamiento de lenguajes. Las gramáticas regulares (Tipo 3), con sus reglas simples, se utilizan para la fase de análisis léxico, donde se reconocen los 'tokens' básicos del lenguaje (identificadores, números, operadores) a través de expresiones regulares. Los autómatas finitos son ideales para esta tarea. Las gramáticas libres de contexto (Tipo 2) son el estándar para el análisis sintáctico de la mayoría de los lenguajes de programación modernos, ya que pueden describir estructuras anidadas y recursivas (como bloques de código, expresiones anidadas). Los parsers basados en GLC son eficientes para esta tarea. Las gramáticas sensibles al contexto (Tipo 1) y las irrestrictas (Tipo 0) tienen aplicaciones más especializadas, a menudo en áreas como la lingüística computacional avanzada o la inteligencia artificial, cuando se requiere modelar fenómenos más complejos que dependen del contexto global, aunque su complejidad computacional es significativamente mayor.</p></div>
+                </div>
+
+            </div>
+        </article>
+        
+    </main>
+
+    <footer>
+        <p>Prof. Jorge López-Cifre, PhD © 2026</p>
+    </footer>
+
+</body>
+</html>

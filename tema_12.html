@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>12 - Expresiones regulares - Álgebra Regex y uso en programación. - Prof. Jorge López-Cifre</title>
+    <style>
+        :root {
+            --primary: #003366;
+            --accent: #d4af37;
+            --bg: #f8f9fa;
+            --text: #2c3e50;
+            --card-bg: #ffffff;
+            --border: #e9ecef;
+        }
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 0;
+            line-height: 1.7;
+        }
+        /* Tipografía mejorada */
+        p { margin-bottom: 1rem; }
+        strong, b { color: var(--primary); font-weight: 700; }
+        
+        header {
+            background: var(--primary);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        h1 { margin: 0; font-size: 1.25rem; font-weight: 600; }
+        
+        .btn-volver {
+            background: var(--accent);
+            color: var(--primary);
+            text-decoration: none;
+            padding: 0.5rem 1.2rem;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        .btn-volver:hover { 
+            background: #fff; 
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+
+        main {
+            max-width: 1100px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+
+        .subtema {
+            background: var(--card-bg);
+            border-radius: 12px;
+            margin-bottom: 4rem;
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+        
+        .subtema-header {
+            background: linear-gradient(to right, #f8f9fa, #ffffff);
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid var(--border);
+        }
+        .subtema-header h2 { 
+            margin: 0; 
+            color: var(--primary); 
+            font-size: 1.6rem;
+            border-left: 5px solid var(--accent);
+            padding-left: 1rem;
+        }
+
+        .seccion-contenido {
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2.5rem;
+        }
+
+        @media (min-width: 900px) {
+            .seccion-contenido { grid-template-columns: 1fr 1fr; }
+            .full-width { grid-column: 1 / -1; }
+        }
+
+        .card h3 {
+            color: var(--primary);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-top: 0;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 0.5rem;
+        }
+
+        .formal-box {
+            background-color: #f0f7ff; /* Azul muy muy pálido */
+            border-radius: 8px;
+            padding: 2rem !important;
+            border: 1px solid #cce5ff;
+        }
+
+        /* CSS Específico para corregir SVGs */
+        .diagrama-container {
+            text-align: center;
+            margin: 2rem auto;
+            padding: 1.5rem;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
+            max-width: 100%;
+            overflow-x: auto; /* Si es muy ancho, permite scroll */
+        }
+        
+        /* Forzar comportamiento correcto del SVG */
+        .diagrama-container svg {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+        
+        /* Evitar que el texto dentro del SVG sea ilegible */
+        .diagrama-container text {
+            font-family: sans-serif;
+        }
+
+        footer {
+            text-align: center;
+            padding: 3rem;
+            background: var(--primary);
+            color: rgba(255,255,255,0.8);
+            margin-top: 4rem;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>12 - Expresiones regulares - Álgebra Regex y uso en programación.</h1>
+        <a href="javascript:history.back()" class="btn-volver">← Volver</a>
+    </header>
+
+    <main>
+
+        <article class="subtema">
+            <div class="subtema-header">
+                <h2>Fundamentos de las Expresiones Regulares y Operaciones Básicas</h2>
+            </div>
+            <div class="seccion-contenido">
+                
+                <div class="card full-width">
+                    <h3>Historia</h3>
+                    <div><p>Stephen Cole Kleene introdujo las expresiones regulares en 1956 en su trabajo "Representation of Events in Nerve Nets and Finite Automata". Este concepto surgió de sus investigaciones en la teoría de los autómatas finitos y las redes neuronales, extendiendo ideas previas de McCulloch y Pitts sobre modelos computacionales del cerebro. Kleene buscaba una manera concisa y algebraica de describir los lenguajes que podían ser reconocidos por autómatas finitos, es decir, los "eventos" que una red neuronal o autómata podía "recordar" o procesar. Su objetivo era proporcionar un formalismo para especificar patrones de cadenas de caracteres, estableciendo una equivalencia fundamental entre las expresiones regulares y los lenguajes regulares (reconocibles por autómatas finitos). Este desarrollo marcó un hito en la teoría de la computación, sentando las bases para el análisis léxico en compiladores y la búsqueda de patrones en texto.</p></div>
+                </div>
+
+                <div class="card full-width formal-box">
+                    <h3>Descripción Formal</h3>
+                    <div><p>Una expresión regular (RE) sobre un alfabeto finito Σ es un término construido recursivamente usando las siguientes reglas:
+1.  La expresión ∅ (conjunto vacío) es una RE que denota el lenguaje vacío {}.
+2.  La expresión ε (cadena vacía) es una RE que denota el lenguaje {ε}.
+3.  Para cada símbolo 'a' ∈ Σ, 'a' es una RE que denota el lenguaje {'a'}.
+4.  Si R₁ y R₂ son REs que denotan los lenguajes L₁ y L₂ respectivamente, entonces:
+    a.  (R₁ ∪ R₂) es una RE que denota el lenguaje L₁ ∪ L₂ (Unión). Esto representa cadenas que pertenecen a L₁ O a L₂.
+    b.  (R₁ · R₂) o (R₁R₂) es una RE que denota el lenguaje L₁L₂ = {xy | x ∈ L₁, y ∈ L₂} (Concatenación). Esto representa cadenas formadas por una cadena de L₁ seguida de una cadena de L₂.
+    c.  (R₁<em>) es una RE que denota el lenguaje L₁</em> = ∪ᵢ=₀^∞ L₁ⁱ (Clausura de Kleene). Esto representa cadenas formadas por cero o más concatenaciones de cadenas de L₁. L₁⁰ = {ε}.
+Los paréntesis pueden omitirse cuando la precedencia es: Clausura &gt; Concatenación &gt; Unión.
+Un lenguaje es "regular" si y solo si puede ser descrito por una expresión regular. Esta correspondencia es la piedra angular de la teoría.</p></div>
+                    
+                    <div class="diagrama-container">
+                        <svg viewBox="0 0 600 200">
+      <defs>
+        <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
+          <polygon points="0 0, 10 3.5, 0 7" fill="#333"/>
+        </marker>
+      </defs>
+      <rect x="20" y="50" width="100" height="40" fill="#E0F2F7" stroke="#333" stroke-width="1"/>
+      <text x="70" y="75" text-anchor="middle" font-family="Arial" font-size="16">Lenguaje L1</text>
+      <rect x="20" y="110" width="100" height="40" fill="#E0F2F7" stroke="#333" stroke-width="1"/>
+      <text x="70" y="135" text-anchor="middle" font-family="Arial" font-size="16">Lenguaje L2</text>
+
+      <circle cx="170" cy="100" r="25" fill="#C8E6C9" stroke="#333" stroke-width="1"/>
+      <text x="170" y="105" text-anchor="middle" font-family="Arial" font-size="20">∪</text>
+      <line x1="120" y1="70" x2="145" y2="85" stroke="#333" stroke-width="1" marker-end="url(#arrowhead)"/>
+      <line x1="120" y1="130" x2="145" y2="115" stroke="#333" stroke-width="1" marker-end="url(#arrowhead)"/>
+      <line x1="195" y1="100" x2="240" y2="100" stroke="#333" stroke-width="1" marker-end="url(#arrowhead)"/>
+      <text x="290" y="105" text-anchor="middle" font-family="Arial" font-size="16">L1 ∪ L2</text>
+
+      <circle cx="370" cy="100" r="25" fill="#FFECB3" stroke="#333" stroke-width="1"/>
+      <text x="370" y="105" text-anchor="middle" font-family="Arial" font-size="18">·</text>
+      <line x1="120" y1="70" x2="345" y2="85" stroke="#333" stroke-width="1" marker-end="url(#arrowhead)"/>
+      <line x1="120" y1="130" x2="345" y2="115" stroke="#333" stroke-width="1" marker-end="url(#arrowhead)"/>
+      <line x1="395" y1="100" x2="440" y2="100" stroke="#333" stroke-width="1" marker-end="url(#arrowhead)"/>
+      <text x="490" y="105" text-anchor="middle" font-family="Arial" font-size="16">L1 · L2</text>
+
+      <circle cx="530" cy="70" r="25" fill="#E1BEE7" stroke="#333" stroke-width="1"/>
+      <text x="530" y="75" text-anchor="middle" font-family="Arial" font-size="18">*</text>
+      <line x1="120" y1="70" x2="505" y2="70" stroke="#333" stroke-width="1" marker-end="url(#arrowhead)"/>
+      <line x1="555" y1="70" x2="570" y2="70" stroke="#333" stroke-width="1" marker-end="url(#arrowhead)"/>
+      <text x="585" y="75" text-anchor="start" font-family="Arial" font-size="16">L1*</text>
+    </svg>
+                        <p style="font-size:0.8rem; color:#666; margin-top:1rem; text-align:center;">
+                            <em>Fig: Representación visual generada.</em>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Intuición</h3>
+                    <div><p>Imagina que tienes un enorme diccionario y necesitas encontrar todas las palabras que empiecen con "pro" o que terminen con "ción". O quizás todas las palabras que contengan "ae" pero no necesariamente juntas. Describir estos patrones manualmente sería tedioso y propenso a errores. Las expresiones regulares nos dan un lenguaje compacto y poderoso para describir precisamente estos patrones de texto. Son como un mini-lenguaje de consulta para cadenas. Las operaciones básicas (unión, concatenación, clausura) son como los "ladrillos LEGO" con los que construyes patrones más complejos. La unión dice "esto O aquello", la concatenación dice "esto Y luego aquello", y la clausura de Kleene dice "esto cero o más veces". Esta simplicidad combinatoria es lo que permite describir una infinidad de patrones con una notación finita y elegante.</p></div>
+                </div>
+
+                <div class="card">
+                    <h3>Aplicación Real</h3>
+                    <div><p>En el ámbito de la ingeniería de software, las expresiones regulares son herramientas omnipresentes y fundamentales. Su aplicación más básica y extendida es en la búsqueda y reemplazo de texto. Herramientas como <code>grep</code> en sistemas Unix/Linux, o la función de búsqueda en entornos de desarrollo integrados (IDEs) como VS Code o IntelliJ IDEA, utilizan expresiones regulares para localizar archivos que contengan patrones específicos o para realizar refactorizaciones masivas. Son cruciales en la validación de entradas de usuario, como verificar si un correo electrónico, un número de teléfono o una URL siguen un formato válido. También se emplean extensamente en el análisis léxico de compiladores, donde identifican "tokens" (palabras clave, identificadores, operadores) en el código fuente. Su capacidad para manejar patrones complejos las hace indispensables para procesar logs, extraer información de documentos no estructurados (web scraping) y en el preprocesamiento de datos para machine learning o procesamiento de lenguaje natural.</p></div>
+                </div>
+
+            </div>
+        </article>
+        
+        <article class="subtema">
+            <div class="subtema-header">
+                <h2>El Álgebra de las Expresiones Regulares y sus Propiedades</h2>
+            </div>
+            <div class="seccion-contenido">
+                
+                <div class="card full-width">
+                    <h3>Historia</h3>
+                    <div><p>El desarrollo del álgebra de las expresiones regulares acompaña la formalización de la teoría de lenguajes formales y autómatas. Si bien Kleene definió las expresiones regulares, el estudio sistemático de sus propiedades algebraicas fue consolidado por investigadores como John Conway en su libro "Regular Algebra and Finite Machines" (1971), y posteriormente por Salomaa, Brzozowski y otros. Estos trabajos buscaron establecer un conjunto de axiomas y reglas de inferencia que permitieran manipular expresiones regulares de manera análoga al álgebra booleana o al álgebra de conjuntos. Uno de los resultados más notables en este campo es el Lema de Arden, publicado por D. N. Arden en 1960, que proporciona un método para resolver ecuaciones lineales de expresiones regulares, siendo fundamental para convertir autómatas finitos a expresiones regulares y viceversa, demostrando la profunda conexión algebraica entre ambos formalismos.</p></div>
+                </div>
+
+                <div class="card full-width formal-box">
+                    <h3>Descripción Formal</h3>
+                    <div><p>El álgebra de las expresiones regulares se basa en un conjunto de propiedades que permiten manipular y simplificar estas expresiones sin alterar el lenguaje que denotan. Dada un alfabeto Σ y las operaciones de unión (∪), concatenación (·) y clausura de Kleene (<em>), algunas de las propiedades fundamentales para cualquier expresión regular P, Q, R son:
+1.  </em><em>Asociatividad</em><em>: (P ∪ Q) ∪ R = P ∪ (Q ∪ R) y (P · Q) · R = P · (Q · R).
+2.  </em><em>Conmutatividad de la Unión</em><em>: P ∪ Q = Q ∪ P. (La concatenación NO es conmutativa).
+3.  </em><em>Distributividad</em><em>: P · (Q ∪ R) = (P · Q) ∪ (P · R) y (Q ∪ R) · P = (Q · P) ∪ (R · P).
+4.  </em><em>Elemento Neutro</em><em>: P ∪ ∅ = P, P · ε = P, ε · P = P.
+5.  </em><em>Elemento Absorvente</em><em>: P · ∅ = ∅, ∅ · P = ∅.
+6.  </em><em>Idempotencia de la Unión</em><em>: P ∪ P = P.
+7.  </em><em>Propiedades de la Clausura de Kleene</em><em>: P</em> = ε ∪ P · P<em>, P</em><em> = P</em>.
+Una herramienta poderosa es el <strong>Lema de Arden</strong>, que establece que si P y Q son expresiones regulares y P no contiene ε, entonces la ecuación R = Q ∪ R · P tiene una única solución R = Q · P*. Esto es crucial para la conversión sistemática de autómatas finitos a expresiones regulares.</p></div>
+                    
+                    <div class="diagrama-container">
+                        <svg viewBox="0 0 600 200">
+      <defs>
+        <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
+          <polygon points="0 0, 10 3.5, 0 7" fill="#333"/>
+        </marker>
+      </defs>
+
+      <!-- Left side: P . (Q U R) -->
+      <rect x="50" y="30" width="40" height="40" fill="#E0F2F7" stroke="#333" stroke-width="1"/>
+      <text x="70" y="55" text-anchor="middle" font-family="Arial" font-size="16">P</text>
+      <rect x="110" y="10" width="40" height="40" fill="#FFECB3" stroke="#333" stroke-width="1"/>
+      <text x="130" y="35" text-anchor="middle" font-family="Arial" font-size="16">Q</text>
+      <rect x="110" y="50" width="40" height="40" fill="#C8E6C9" stroke="#333" stroke-width="1"/>
+      <text x="130" y="75" text-anchor="middle" font-family="Arial" font-size="16">R</text>
+      <text x="100" y="50" font-family="Arial" font-size="20">·</text>
+      <text x="130" y="95" font-family="Arial" font-size="20">∪</text>
+      <line x1="90" y1="50" x2="105" y2="50" stroke="#333" stroke-width="1" marker-end="url(#arrowhead)"/>
+      <line x1="150" y1="30" x2="165" y2="30" stroke="#333" stroke-width="1" marker-end="url(#arrowhead)"/>
+      <line x1="150" y1="70" x2="165" y2="70" stroke="#333" stroke-width="1" marker-end="url(#arrowhead)"/>
+      <line x1="130" y1="90" x2="130" y1="105" stroke="#333" stroke-width="1" marker-end="url(#arrowhead)"/>
+
+      <rect x="170" y="40" width="80" height="30" fill="#F3E5F5" stroke="#333" stroke-width="1"/>
+      <text x="210" y="60" text-anchor="middle" font-family="Arial" font-size="14">P · (Q ∪ R)</text>
+
+      <!-- Right side: (P . Q) U (P . R) -->
+      <rect x="300" y="10" width="40" height="40" fill="#E0F2F7" stroke="#333" stroke-width="1"/>
+      <text x="320" y="35" text-anchor="middle" font-family="Arial" font-size="16">P</text>
+      <rect x="350" y="10" width="40" height="40" fill="#FFECB3" stroke="#333" stroke-width="1"/>
+      <text x="370" y="35" text-anchor="middle" font-family="Arial" font-size="16">Q</text>
+      <text x="340" y="35" font-family="Arial" font-size="20">·</text>
+      <line x1="340" y1="30" x2="350" y2="30" stroke="#333" stroke-width="1" marker-end="url(#arrowhead)"/>
+      <rect x="410" y="10" width="80" height="40" fill="#D1C4E9" stroke="#333" stroke-width="1"/>
+      <text x="450" y="35" text-anchor="middle" font-family="Arial" font-size="14">P · Q</text>
+
+      <rect x="300" y="60" width="40" height="40" fill="#E0F2F7" stroke="#333" stroke-width="1"/>
+      <text x="320" y="85" text-anchor="middle" font-family="Arial" font-size="16">P</text>
+      <rect x="350" y="60" width="40" height="40" fill="#C8E6C9" stroke="#333" stroke-width="1"/>
+      <text x="370" y="85" text-anchor="middle" font-family="Arial" font-size="16">R</text>
+      <text x="340" y="85" font-family="Arial" font-size="20">·</text>
+      <line x1="340" y1="80" x2="350" y2="80" stroke="#333" stroke-width="1" marker-end="url(#arrowhead)"/>
+      <rect x="410" y="60" width="80" height="40" fill="#F8BBD0" stroke="#333" stroke-width="1"/>
+      <text x="450" y="85" text-anchor="middle" font-family="Arial" font-size="14">P · R</text>
+
+      <text x="495" y="60" font-family="Arial" font-size="20">∪</text>
+      <line x1="490" y1="40" x2="505" y2="40" stroke="#333" stroke-width="1" marker-end="url(#arrowhead)"/>
+      <line x1="490" y1="80" x2="505" y2="80" stroke="#333" stroke-width="1" marker-end="url(#arrowhead)"/>
+
+      <rect x="510" y="40" width="80" height="30" fill="#F3E5F5" stroke="#333" stroke-width="1"/>
+      <text x="550" y="60" text-anchor="middle" font-family="Arial" font-size="14">(P · Q) ∪ (P · R)</text>
+
+      <text x="275" y="60" font-family="Arial" font-size="24">=</text>
+      <text x="350" y="160" font-family="Arial" font-size="14">Distributividad: P · (Q ∪ R) = (P · Q) ∪ (P · R)</text>
+    </svg>
+                        <p style="font-size:0.8rem; color:#666; margin-top:1rem; text-align:center;">
+                            <em>Fig: Representación visual generada.</em>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Intuición</h3>
+                    <div><p>¿Por qué necesitamos un "álgebra" para expresiones regulares? Piensa en ellas como fórmulas matemáticas. Así como <code>(x + y) * z</code> es equivalente a <code>x * z + y * z</code> en álgebra numérica, existen equivalencias similares para expresiones regulares. Estas reglas algebraicas nos permiten simplificar expresiones largas y complejas, transformarlas en formas más eficientes, o probar que dos expresiones aparentemente diferentes describen el mismo conjunto de patrones. Es crucial para tareas como la optimización de algoritmos de búsqueda o la verificación de que un analizador léxico funciona como se espera. El Lema de Arden, por ejemplo, es como una "fórmula general" para resolver un tipo específico de ecuación recursiva en este álgebra, lo que demuestra la completitud y coherencia del sistema. Entender estas propiedades nos da un control más profundo sobre cómo las expresiones regulares funcionan y cómo podemos manipularlas de manera sistemática.</p></div>
+                </div>
+
+                <div class="card">
+                    <h3>Aplicación Real</h3>
+                    <div><p>El álgebra de las expresiones regulares tiene aplicaciones directas en la optimización y el diseño de sistemas de procesamiento de texto y lenguajes. En el ámbito de los compiladores, durante la fase de análisis léxico, los patrones que definen los tokens se expresan como expresiones regulares. El álgebra permite a los diseñadores de compiladores simplificar estas expresiones para generar autómatas finitos más pequeños y eficientes, lo que se traduce en un analizador léxico más rápido. En sistemas de seguridad, como los Sistemas de Detección de Intrusiones (IDS), las reglas de detección a menudo se basan en expresiones regulares para identificar patrones maliciosos en el tráfico de red. La capacidad de aplicar transformaciones algebraicas a estas reglas puede ayudar a optimizar su rendimiento, reduciendo la carga computacional y mejorando la velocidad de detección. Además, en la verificación formal de sistemas y en el diseño de circuitos, las propiedades algebraicas de las expresiones regulares se utilizan para razonar sobre el comportamiento de sistemas secuenciales y para probar su equivalencia o corrección.</p></div>
+                </div>
+
+            </div>
+        </article>
+        
+        <article class="subtema">
+            <div class="subtema-header">
+                <h2>Expresiones Regulares Extendidas y su Uso Práctico en Programación</h2>
+            </div>
+            <div class="seccion-contenido">
+                
+                <div class="card full-width">
+                    <h3>Historia</h3>
+                    <div><p>Aunque las expresiones regulares de Kleene formales eran poderosas, las necesidades prácticas de los programadores llevaron a la evolución y extensión de su sintaxis y funcionalidad. Herramientas como <code>grep</code> de Unix (creada por Ken Thompson en los años 70), y posteriormente lenguajes como Perl (creado por Larry Wall en 1987), fueron pioneros en introducir "expresiones regulares extendidas". Estas extensiones incluyeron características para la conveniencia del usuario, como cuantificadores más allá de Kleene star (ej. <code>+</code>, <code>?</code>), clases de caracteres (<code>[a-z]</code>, <code>\d</code>), y grupos de captura. La popularidad de Perl y sus regex influenció fuertemente la implementación en otros lenguajes de programación y herramientas, dando origen a lo que se conoce como PCRE (Perl Compatible Regular Expressions), que se ha convertido en un estándar de facto en muchas plataformas, aunque formalmente estas extensiones pueden describir lenguajes que van más allá de los lenguajes regulares teóricos.</p></div>
+                </div>
+
+                <div class="card full-width formal-box">
+                    <h3>Descripción Formal</h3>
+                    <div><p>Si bien las expresiones regulares "extendidas" a menudo exceden la definición estricta de lenguajes regulares (por ejemplo, con características como retroreferencias o lookaheads, que requieren memoria y, por tanto, autómatas con pila), su núcleo sigue siendo la base de Kleene. En un contexto práctico, estas extensiones se entienden como azúcar sintáctico para patrones comunes o para describir clases de lenguajes más amplios.
+Elementos comunes de las RE extendidas:
+1.  <strong>Cuantificadores</strong>:
+    *   <code>+</code>: Una o más ocurrencias (análogo a <code>RR*</code>).
+    *   <code>?</code>: Cero o una ocurrencia (análogo a <code>R | ε</code>).
+    *   <code>{n}</code>: Exactamente <code>n</code> ocurrencias.
+    *   <code>{n,}</code>: <code>n</code> o más ocurrencias.
+    *   <code>{n,m}</code>: Entre <code>n</code> y <code>m</code> ocurrencias.
+2.  <strong>Clases de Caracteres</strong>:
+    *   <code>[abc]</code>: Cualquier carácter de la lista (a, b o c).
+    *   <code>[a-z]</code>: Cualquier carácter en el rango.
+    *   <code>[^abc]</code>: Cualquier carácter EXCEPTO los de la lista.
+    *   <code>\d</code>: Dígito numérico (0-9).
+    *   <code>\w</code>: Carácter alfanumérico (letra, número, guion bajo).
+    *   <code>\s</code>: Espacio en blanco.
+3.  <strong>Anclas</strong>:
+    *   <code>^</code>: Inicio de cadena/línea.
+    *   <code>$</code>: Fin de cadena/línea.
+4.  <strong>Grupos y Captura</strong>: <code>(...)</code> para agrupar expresiones y <code>|</code> para "O".
+Estas adiciones hacen que la descripción de patrones sea mucho más concisa y legible para el uso diario en programación.</p></div>
+                    
+                    <div class="diagrama-container">
+                        <svg viewBox="0 0 600 200">
+      <defs>
+        <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
+          <polygon points="0 0, 10 3.5, 0 7" fill="#333"/>
+        </marker>
+      </defs>
+
+      <rect x="20" y="50" width="80" height="40" fill="#E0F2F7" stroke="#333" stroke-width="1"/>
+      <text x="60" y="75" text-anchor="middle" font-family="Arial" font-size="16">R</text>
+
+      <!-- R+ (One or more) -->
+      <text x="120" y="75" font-family="Arial" font-size="20">+</text>
+      <rect x="150" y="50" width="100" height="40" fill="#D1C4E9" stroke="#333" stroke-width="1"/>
+      <text x="200" y="75" text-anchor="middle" font-family="Arial" font-size="16">R R*</text>
+      <line x1="100" y1="70" x2="115" y2="70" stroke="#333" stroke-width="1" marker-end="url(#arrowhead)"/>
+      <line x1="135" y1="70" x2="145" y2="70" stroke="#333" stroke-width="1" marker-end="url(#arrowhead)"/>
+      <text x="200" y="105" text-anchor="middle" font-family="Arial" font-size="14">"Una o más"</text>
+
+      <!-- R? (Zero or one) -->
+      <rect x="20" y="120" width="80" height="40" fill="#E0F2F7" stroke="#333" stroke-width="1"/>
+      <text x="60" y="145" text-anchor="middle" font-family="Arial" font-size="16">R</text>
+      <text x="120" y="145" font-family="Arial" font-size="20">?</text>
+      <rect x="150" y="120" width="100" height="40" fill="#FFECB3" stroke="#333" stroke-width="1"/>
+      <text x="200" y="145" text-anchor="middle" font-family="Arial" font-size="16">R ∪ ε</text>
+      <line x1="100" y1="140" x2="115" y2="140" stroke="#333" stroke-width="1" marker-end="url(#arrowhead)"/>
+      <line x1="135" y1="140" x2="145" y2="140" stroke="#333" stroke-width="1" marker-end="url(#arrowhead)"/>
+      <text x="200" y="175" text-anchor="middle" font-family="Arial" font-size="14">"Cero o una"</text>
+
+      <!-- Character Classes -->
+      <rect x="300" y="50" width="80" height="40" fill="#C8E6C9" stroke="#333" stroke-width="1"/>
+      <text x="340" y="75" text-anchor="middle" font-family="Arial" font-size="16">[a-z]</text>
+      <rect x="300" y="120" width="80" height="40" fill="#C8E6C9" stroke="#333" stroke-width="1"/>
+      <text x="340" y="145" text-anchor="middle" font-family="Arial" font-size="16">\d</text>
+      <line x1="380" y1="70" x2="400" y2="70" stroke="#333" stroke-width="1" marker-end="url(#arrowhead)"/>
+      <text x="400" y="75" text-anchor="start" font-family="Arial" font-size="14"> = cualquier letra minúscula</text>
+      <line x1="380" y1="140" x2="400" y2="140" stroke="#333" stroke-width="1" marker-end="url(#arrowhead)"/>
+      <text x="400" y="145" text-anchor="start" font-family="Arial" font-size="14"> = cualquier dígito</text>
+    </svg>
+                        <p style="font-size:0.8rem; color:#666; margin-top:1rem; text-align:center;">
+                            <em>Fig: Representación visual generada.</em>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Intuición</h3>
+                    <div><p>Si bien la teoría nos da los cimientos, en la práctica, escribir expresiones regulares solo con <code>∪</code>, <code>·</code> y <code>*</code> puede ser increíblemente tedioso y prolijo. Por ejemplo, para "una o más 'a'", tendríamos que escribir <code>a a*</code>. Las expresiones regulares extendidas son atajos de teclado muy convenientes. En lugar de escribir <code>a a*</code>, usamos <code>a+</code>. En lugar de <code>a | ε</code>, usamos <code>a?</code>. Las clases de caracteres como <code>\d</code> (dígito) o <code>[a-z]</code> (cualquier letra minúscula) son como macros que nos ahorran definir largos conjuntos de caracteres. Estas extensiones no cambian fundamentalmente lo que una expresión regular <em>puede</em> describir (la mayoría de ellas, al menos), sino que hacen que sea mucho más fácil y rápido describir patrones comunes, mejorando la legibilidad y mantenibilidad del código. Son el puente entre la rigurosidad matemática y la eficiencia del programador.</p></div>
+                </div>
+
+                <div class="card">
+                    <h3>Aplicación Real</h3>
+                    <div><p>Las expresiones regulares extendidas son una de las herramientas más potentes y versátiles en el arsenal de cualquier programador. Se utilizan en casi todas las áreas de la ingeniería de software. Para la <strong>validación de formularios web</strong>, se comprueban patrones de correo electrónico, contraseñas seguras, números de tarjetas de crédito y fechas. En el <strong>procesamiento de texto y datos</strong>, son cruciales para extraer información de logs de servidores, archivos CSV malformados, o para limpiar datos antes de un análisis. Los <strong>IDEs</strong> y editores de texto modernos las integran para funcionalidades avanzadas de búsqueda y reemplazo, permitiendo a los desarrolladores refactorizar código de manera eficiente, por ejemplo, cambiando el formato de las declaraciones de variables o funciones. En el <strong>desarrollo web</strong>, son indispensables para el enrutamiento de URLs, validación de APIs, y para el análisis de tráfico. Finalmente, en el <strong>procesamiento del lenguaje natural (NLP)</strong>, se usan para tokenizar texto, identificar entidades nombradas o extraer patrones lingüísticos específicos, sirviendo como un primer paso fundamental en muchas tareas de análisis semántico.</p></div>
+                </div>
+
+            </div>
+        </article>
+        
+    </main>
+
+    <footer>
+        <p>Prof. Jorge López-Cifre, PhD © 2026</p>
+    </footer>
+
+</body>
+</html>

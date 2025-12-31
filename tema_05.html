@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>5 - Máquinas secuenciales - Concepto de estado como memoria. - Prof. Jorge López-Cifre</title>
+    <style>
+        :root {
+            --primary: #003366;
+            --accent: #d4af37;
+            --bg: #f8f9fa;
+            --text: #2c3e50;
+            --card-bg: #ffffff;
+            --border: #e9ecef;
+        }
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 0;
+            line-height: 1.7;
+        }
+        /* Tipografía mejorada */
+        p { margin-bottom: 1rem; }
+        strong, b { color: var(--primary); font-weight: 700; }
+        
+        header {
+            background: var(--primary);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        h1 { margin: 0; font-size: 1.25rem; font-weight: 600; }
+        
+        .btn-volver {
+            background: var(--accent);
+            color: var(--primary);
+            text-decoration: none;
+            padding: 0.5rem 1.2rem;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        .btn-volver:hover { 
+            background: #fff; 
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+
+        main {
+            max-width: 1100px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+
+        .subtema {
+            background: var(--card-bg);
+            border-radius: 12px;
+            margin-bottom: 4rem;
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+        
+        .subtema-header {
+            background: linear-gradient(to right, #f8f9fa, #ffffff);
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid var(--border);
+        }
+        .subtema-header h2 { 
+            margin: 0; 
+            color: var(--primary); 
+            font-size: 1.6rem;
+            border-left: 5px solid var(--accent);
+            padding-left: 1rem;
+        }
+
+        .seccion-contenido {
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2.5rem;
+        }
+
+        @media (min-width: 900px) {
+            .seccion-contenido { grid-template-columns: 1fr 1fr; }
+            .full-width { grid-column: 1 / -1; }
+        }
+
+        .card h3 {
+            color: var(--primary);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-top: 0;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 0.5rem;
+        }
+
+        .formal-box {
+            background-color: #f0f7ff; /* Azul muy muy pálido */
+            border-radius: 8px;
+            padding: 2rem !important;
+            border: 1px solid #cce5ff;
+        }
+
+        /* CSS Específico para corregir SVGs */
+        .diagrama-container {
+            text-align: center;
+            margin: 2rem auto;
+            padding: 1.5rem;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
+            max-width: 100%;
+            overflow-x: auto; /* Si es muy ancho, permite scroll */
+        }
+        
+        /* Forzar comportamiento correcto del SVG */
+        .diagrama-container svg {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+        
+        /* Evitar que el texto dentro del SVG sea ilegible */
+        .diagrama-container text {
+            font-family: sans-serif;
+        }
+
+        footer {
+            text-align: center;
+            padding: 3rem;
+            background: var(--primary);
+            color: rgba(255,255,255,0.8);
+            margin-top: 4rem;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>5 - Máquinas secuenciales - Concepto de estado como memoria.</h1>
+        <a href="javascript:history.back()" class="btn-volver">← Volver</a>
+    </header>
+
+    <main>
+
+        <article class="subtema">
+            <div class="subtema-header">
+                <h2>El Concepto Fundamental de Estado en Máquinas Secuenciales</h2>
+            </div>
+            <div class="seccion-contenido">
+                
+                <div class="card full-width">
+                    <h3>Historia</h3>
+                    <div><p>El origen del concepto de estado está intrínsecamente ligado al desarrollo de la teoría de autómatas y la computación. Ya en la década de 1940, con los trabajos pioneros de Warren McCulloch y Walter Pitts sobre redes neuronales (1943), se sentaron las bases para entender sistemas que transitan entre diferentes configuraciones internas. Posteriormente, Stephen Kleene formalizó los eventos regulares y los autómatas finitos en la década de 1950, demostrando su equivalencia. Sin embargo, fueron George H. Mealy (1955) y Edward F. Moore (1956) quienes, de forma independiente, establecieron los modelos formales de 'máquinas de estados finitos' que hoy conocemos como Máquinas de Mealy y Máquinas de Moore. Estos modelos enfatizaron la idea de que una máquina no solo reacciona a su entrada actual, sino que su comportamiento futuro también depende de su 'estado' interno, una representación concisa de su historial pasado relevante, actuando como su memoria primaria. Esta conceptualización fue crucial para el diseño de circuitos lógicos y el entendimiento de la computación secuencial.</p></div>
+                </div>
+
+                <div class="card full-width formal-box">
+                    <h3>Descripción Formal</h3>
+                    <div><p>Una máquina secuencial se define fundamentalmente por su capacidad de recordar información pasada, lo que se encapsula en el concepto de 'estado'. Formalmente, un autómata de estados finitos (AEF) es una 5-tupla (Q, Σ, δ, q₀, F), donde:
+- Q es un conjunto finito y no vacío de estados.
+- Σ es un conjunto finito y no vacío de símbolos de entrada, el alfabeto.
+- δ es la función de transición de estado, δ: Q × Σ → Q, que determina el siguiente estado a partir del estado actual y el símbolo de entrada.
+- q₀ ∈ Q es el estado inicial.
+- F ⊆ Q es el conjunto de estados finales o de aceptación.
+El estado 'q' en Q actúa como una representación compacta de la memoria de la máquina, resumiendo toda la información relevante sobre las entradas procesadas hasta ese momento. La función δ es el corazón de la dinámica de la máquina, dictando cómo la máquina 'cambia su memoria' en respuesta a nuevas entradas. A diferencia de un circuito combinacional puro, cuya salida depende únicamente de sus entradas actuales, una máquina secuencial incorpora el estado, permitiéndole exhibir un comportamiento diferente para la misma entrada, dependiendo de su historial. Esto la convierte en un modelo poderoso para sistemas que requieren persistencia o secuenciación de operaciones.</p></div>
+                    
+                    <div class="diagrama-container">
+                        <svg viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L9,3 z" fill="#000" />
+    </marker>
+  </defs>
+  <rect x="50" y="50" width="150" height="100" rx="10" ry="10" fill="#e0e0e0" stroke="#000" stroke-width="2" />
+  <text x="125" y="100" font-family="Arial" font-size="18" text-anchor="middle" fill="#333">Estado Actual (q)</text>
+  <text x="125" y="125" font-family="Arial" font-size="14" text-anchor="middle" fill="#555">Memoria</text>
+
+  <rect x="400" y="50" width="150" height="100" rx="10" ry="10" fill="#e0e0e0" stroke="#000" stroke-width="2" />
+  <text x="475" y="100" font-family="Arial" font-size="18" text-anchor="middle" fill="#333">Estado Siguiente (q')</text>
+  <text x="475" y="125" font-family="Arial" font-size="14" text-anchor="middle" fill="#555">Memoria Actualizada</text>
+
+  <circle cx="300" cy="100" r="30" fill="#b0e0e6" stroke="#000" stroke-width="2" />
+  <text x="300" y="105" font-family="Arial" font-size="16" text-anchor="middle" fill="#333">δ</text>
+
+  <path d="M200,75 H270" stroke="#000" stroke-width="2" marker-end="url(#arrow)" />
+  <path d="M330,75 H400" stroke="#000" stroke-width="2" marker-end="url(#arrow)" />
+  <text x="235" y="70" font-family="Arial" font-size="12" text-anchor="middle" fill="#333">Entrada (σ)</text>
+
+  <path d="M125,150 V170 H475 V150" stroke="#000" stroke-width="2" marker-end="url(#arrow)" />
+  <text x="300" y="185" font-family="Arial" font-size="12" text-anchor="middle" fill="#333">Ciclo de tiempo / Reloj</text>
+</svg>
+                        <p style="font-size:0.8rem; color:#666; margin-top:1rem; text-align:center;">
+                            <em>Fig: Representación visual generada.</em>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Intuición</h3>
+                    <div><p>Para entender la importancia del estado, imaginemos una máquina sin él. Si tuviéramos un semáforo sin memoria, simplemente cambiaría de color basándose solo en el instante presente: si hay un coche ahora, rojo; si no, verde. ¡Esto sería un caos! No podría mantener un tiempo fijo en cada color ni seguir una secuencia lógica. El concepto de estado resuelve esto: el semáforo 'recuerda' si está en 'rojo', 'amarillo' o 'verde' y, basándose en ese recuerdo (estado actual) y una señal externa (como un temporizador o un sensor de coche), decide cuál será su próximo color. Este 'recuerdo' del estado le permite comportarse de manera secuencial y predecible a lo largo del tiempo. Es como si la máquina tuviera una pequeña nota mental que dice: 'Ahora estoy en la fase X'. Esta nota mental es crucial porque permite que la máquina reaccione no solo a lo que está sucediendo 'ahora', sino también a lo que 'ya ha sucedido', permitiendo una lógica más compleja y útil.</p></div>
+                </div>
+
+                <div class="card">
+                    <h3>Aplicación Real</h3>
+                    <div><p>El concepto de estado como memoria es fundamental en casi todo sistema digital moderno. Desde los sistemas de control más sencillos hasta los procesadores más complejos, la noción de estado es omnipresente. Por ejemplo, en el diseño de protocolos de red (como TCP/IP), cada conexión tiene un 'estado' (por ejemplo, 'establecida', 'escuchando', 'cerrada') que determina cómo debe reaccionar a los paquetes entrantes. Una máquina expendedora es un excelente ejemplo práctico: su estado puede ser 'esperando moneda', 'dinero insertado' (con la cantidad acumulada), 'producto seleccionado', 'dispensando cambio'. Cada estado habilita o deshabilita ciertas acciones. En el ámbito de la ingeniería de software, los patrones de diseño como 'State Pattern' o 'Observer Pattern' implementan esta idea, permitiendo que un objeto altere su comportamiento cuando su estado interno cambia. Los controladores de interfaz de usuario (UI) en aplicaciones web o móviles también manejan el estado para determinar qué elementos se muestran y cómo responden a la interacción del usuario.</p></div>
+                </div>
+
+            </div>
+        </article>
+        
+        <article class="subtema">
+            <div class="subtema-header">
+                <h2>Modelos Formales de Máquinas Secuenciales: Mealy y Moore</h2>
+            </div>
+            <div class="seccion-contenido">
+                
+                <div class="card full-width">
+                    <h3>Historia</h3>
+                    <div><p>Tras la conceptualización inicial de autómatas finitos, se hizo evidente la necesidad de modelos que no solo reconocieran patrones, sino que también produjeran salidas. Fue en 1955 cuando George H. Mealy introdujo un modelo donde las salidas se asocian a las transiciones entre estados. Un año después, en 1956, Edward F. Moore propuso un modelo alternativo donde las salidas están ligadas directamente a los estados mismos. Ambos modelos surgieron en un contexto de creciente interés por la lógica de conmutación y el diseño de circuitos digitales, buscando una manera sistemática de especificar el comportamiento de los sistemas secuenciales. Mealy y Moore proporcionaron los fundamentos teóricos para el análisis y síntesis de estos circuitos, permitiendo a los ingenieros diseñar sistemas lógicos complejos con una comprensión clara de cuándo y cómo se producirían las salidas, sentando las bases para el diseño de hardware digital y controladores de software.</p></div>
+                </div>
+
+                <div class="card full-width formal-box">
+                    <h3>Descripción Formal</h3>
+                    <div><p>Las máquinas de Mealy y Moore son dos modelos de máquinas de estados finitos con salidas, que difieren en cómo se generan dichas salidas.</p>
+<p><strong>Máquina de Mealy:</strong> Una máquina de Mealy es una 6-tupla (Q, Σ, Δ, δ, λ, q₀), donde:
+- Q es el conjunto finito de estados.
+- Σ es el alfabeto de entrada.
+- Δ es el alfabeto de salida.
+- δ: Q × Σ → Q es la función de transición de estado.
+- λ: Q × Σ → Δ es la función de salida, que mapea un par (estado actual, símbolo de entrada) a un símbolo de salida. Esto significa que la salida se produce durante la transición entre estados y depende tanto del estado actual como de la entrada que provoca la transición.</p>
+<p><strong>Máquina de Moore:</strong> Una máquina de Moore es una 6-tupla (Q, Σ, Δ, δ, λ, q₀), donde:
+- Q, Σ, Δ, δ y q₀ tienen la misma definición que para la máquina de Mealy.
+- λ: Q → Δ es la función de salida, que mapea un estado actual a un símbolo de salida. En este caso, la salida está asociada directamente con el estado en el que se encuentra la máquina y es independiente de la entrada que la llevó a ese estado (excepto, por supuesto, por la entrada que causa la transición al estado actual). La salida de un estado está activa mientras la máquina permanece en ese estado.</p>
+<p>Aunque conceptualmente distintos, se puede demostrar que cualquier Máquina de Mealy puede ser convertida en una Máquina de Moore equivalente y viceversa, aunque la conversión puede requerir un aumento en el número de estados.</p></div>
+                    
+                    <div class="diagrama-container">
+                        <svg viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L9,3 z" fill="#000" />
+    </marker>
+  </defs>
+
+  <!-- Mealy Machine -->
+  <circle cx="150" cy="100" r="40" fill="#cceeff" stroke="#000" stroke-width="2" />
+  <text x="150" y="105" font-family="Arial" font-size="16" text-anchor="middle" fill="#333">qᵢ</text>
+  <path d="M180,90 C220,50 220,150 180,110" fill="none" stroke="#000" stroke-width="2" marker-end="url(#arrow)" />
+  <text x="200" y="80" font-family="Arial" font-size="12" text-anchor="middle" fill="#333">σ / out</text>
+  <text x="150" y="50" font-family="Arial" font-size="14" text-anchor="middle" fill="#333">Mealy</text>
+
+  <!-- Moore Machine -->
+  <circle cx="450" cy="100" r="40" fill="#fffacd" stroke="#000" stroke-width="2" />
+  <text x="450" y="90" font-family="Arial" font-size="16" text-anchor="middle" fill="#333">qᵢ</text>
+  <text x="450" y="115" font-family="Arial" font-size="12" text-anchor="middle" fill="#333">/ out</text>
+  <path d="M480,90 C520,50 520,150 480,110" fill="none" stroke="#000" stroke-width="2" marker-end="url(#arrow)" />
+  <text x="500" y="80" font-family="Arial" font-size="12" text-anchor="middle" fill="#333">σ</text>
+  <text x="450" y="50" font-family="Arial" font-size="14" text-anchor="middle" fill="#333">Moore</text>
+</svg>
+                        <p style="font-size:0.8rem; color:#666; margin-top:1rem; text-align:center;">
+                            <em>Fig: Representación visual generada.</em>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Intuición</h3>
+                    <div><p>La diferencia clave entre Mealy y Moore radica en cuándo se produce la 'respuesta' o 'salida' de la máquina. Imaginen un dispensador de dulces. En un modelo Mealy, el dulce (salida) se dispensa <em>justo en el momento</em> en que introduces la moneda (entrada) y el dispensador 'decide' qué dulce te dará, basándose en la moneda y el estado actual (por ejemplo, si tiene cambio). Es decir, la acción de dar el dulce está ligada a la <em>transición</em> de un estado a otro. Si fuera un modelo Moore, el dulce se asociaría directamente con el 'estado' en el que te encuentras <em>después</em> de insertar la moneda. Por ejemplo, al llegar al estado 'dulce_disponible', el dispensador automáticamente suelta el dulce, sin importar si introduces otra moneda o no mientras estés en ese estado. Las máquinas de Mealy suelen reaccionar más rápido a las entradas (la salida aparece tan pronto como la entrada es procesada), mientras que las máquinas de Moore tienen una salida más 'estable' que permanece mientras la máquina está en un estado particular, lo que puede ser útil para evitar glitches o cambios rápidos e indeseados en la salida.</p></div>
+                </div>
+
+                <div class="card">
+                    <h3>Aplicación Real</h3>
+                    <div><p>Ambos modelos tienen aplicaciones extensas en el diseño de sistemas digitales y software, cada uno con sus ventajas. Las Máquinas de Mealy son frecuentemente preferidas en el diseño de hardware digital (FPGA, ASICs) cuando se requiere que las salidas cambien rápidamente en respuesta a las entradas, por ejemplo, en la lógica de control que necesita una respuesta inmediata a una señal. Un decodificador de teclado podría ser Mealy: la pulsación de una tecla (entrada) genera instantáneamente el código ASCII correspondiente (salida) mientras la máquina pasa de un estado de 'reposo' a 'tecla_pulsada'. Las Máquinas de Moore son a menudo más fáciles de depurar y se utilizan cuando las salidas deben ser estables durante un ciclo de reloj completo, o para controladores donde la salida representa el 'estado' del sistema. Un semáforo es un excelente ejemplo de Moore: cuando el semáforo está en estado 'VERDE', su salida (luz verde encendida) permanece constante hasta que transita a otro estado. En software, los protocolos de comunicación o los intérpretes de comandos a menudo pueden modelarse como máquinas de estados Mealy o Moore para gestionar el flujo de información y las respuestas del sistema.</p></div>
+                </div>
+
+            </div>
+        </article>
+        
+        <article class="subtema">
+            <div class="subtema-header">
+                <h2>Implementación del Estado como Memoria en Sistemas Digitales</h2>
+            </div>
+            <div class="seccion-contenido">
+                
+                <div class="card full-width">
+                    <h3>Historia</h3>
+                    <div><p>La implementación física del concepto de estado ha evolucionado drásticamente desde los primeros relés electromecánicos. En la década de 1930, Claude Shannon, en su tesis magistral, demostró cómo los relés podían usarse para construir circuitos lógicos que realizaban operaciones booleanas y también para 'recordar' información. Posteriormente, con la invención de los tubos de vacío y luego los transistores, se desarrollaron componentes electrónicos que podían mantener uno de dos estados estables, como los biestables (flip-flops) y los latches. Estos dispositivos se convirtieron en las unidades fundamentales de memoria para el estado en los circuitos digitales. La integración de miles y luego millones de estos transistores en un solo chip (circuitos integrados) a partir de los años 60 y 70, permitió la construcción de microprocesadores complejos donde el estado de la CPU (registros, contador de programa, etc.) es la memoria activa que dirige su funcionamiento. Esta progresión desde elementos discretos hasta la microelectrónica moderna subraya la importancia de la representación física del estado.</p></div>
+                </div>
+
+                <div class="card full-width formal-box">
+                    <h3>Descripción Formal</h3>
+                    <div><p>En sistemas digitales, el 'estado' de una máquina secuencial se materializa como un conjunto de valores binarios almacenados en elementos de memoria. Estos elementos son típicamente biestables (flip-flops) o registros. Si una máquina tiene N estados distintos, se necesitan al menos ⌈log₂(N)⌉ biestables para codificar todos los estados posibles. Cada biestable almacena un bit de información, y el conjunto de todos los valores de los biestables en un instante dado constituye el 'vector de estado' actual.</p>
+<p>La transición de estado se implementa mediante lógica combinacional. Una 'función de siguiente estado' (δ_combinacional) toma el vector de estado actual y las entradas externas, y produce el vector de estado que la máquina debería tener en el siguiente ciclo de reloj. Este vector de siguiente estado se alimenta a las entradas de los biestables. En el flanco de un pulso de reloj (clk), los biestables capturan los nuevos valores de sus entradas, actualizando así el estado de la máquina. La salida (en el caso de máquinas de Moore o Mealy) también se genera mediante lógica combinacional, usando el estado actual (y posiblemente las entradas actuales, para Mealy). Así, el sistema secuencial es una interconexión de lógica combinacional (para δ y λ) y elementos de memoria secuencial (para Q) sincronizados por un reloj.</p></div>
+                    
+                    <div class="diagrama-container">
+                        <svg viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L9,3 z" fill="#000" />
+    </marker>
+  </defs>
+
+  <!-- Logic Combinacional -->
+  <rect x="50" y="50" width="150" height="100" rx="10" ry="10" fill="#d4edda" stroke="#000" stroke-width="2" />
+  <text x="125" y="90" font-family="Arial" font-size="16" text-anchor="middle" fill="#333">Lógica</text>
+  <text x="125" y="110" font-family="Arial" font-size="16" text-anchor="middle" fill="#333">Combinacional</text>
+  <text x="125" y="130" font-family="Arial" font-size="12" text-anchor="middle" fill="#555">(δ y λ)</text>
+
+  <!-- Elementos de Memoria (Registros/FF) -->
+  <rect x="300" y="50" width="150" height="100" rx="10" ry="10" fill="#f8d7da" stroke="#000" stroke-width="2" />
+  <text x="375" y="90" font-family="Arial" font-size="16" text-anchor="middle" fill="#333">Elementos</text>
+  <text x="375" y="110" font-family="Arial" font-size="16" text-anchor="middle" fill="#333">de Memoria</text>
+  <text x="375" y="130" font-family="Arial" font-size="12" text-anchor="middle" fill="#555">(Vector de Estado Q)</text>
+
+  <!-- Clock -->
+  <path d="M375,150 V170" stroke="#000" stroke-width="2" />
+  <text x="375" y="185" font-family="Arial" font-size="12" text-anchor="middle" fill="#333">Clock (CLK)</text>
+
+  <!-- Connections -->
+  <path d="M200,80 H50" stroke="#000" stroke-width="2" marker-end="url(#arrow)" />
+  <text x="20" y="75" font-family="Arial" font-size="12" text-anchor="middle" fill="#333">Entrada (Σ)</text>
+
+  <path d="M200,120 H300" stroke="#000" stroke-width="2" marker-end="url(#arrow)" />
+  <text x="250" y="115" font-family="Arial" font-size="12" text-anchor="middle" fill="#333">Estado Siguiente</text>
+
+  <path d="M450,100 H550" stroke="#000" stroke-width="2" marker-end="url(#arrow)" />
+  <text x="575" y="105" font-family="Arial" font-size="12" text-anchor="middle" fill="#333">Salida (Δ)</text>
+
+  <path d="M300,70 H200" stroke="#000" stroke-width="2" marker-end="url(#arrow)" />
+  <text x="250" y="65" font-family="Arial" font-size="12" text-anchor="middle" fill="#333">Estado Actual</text>
+</svg>
+                        <p style="font-size:0.8rem; color:#666; margin-top:1rem; text-align:center;">
+                            <em>Fig: Representación visual generada.</em>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Intuición</h3>
+                    <div><p>Piensen en cómo funciona su cerebro para recordar algo. No hay un 'registro' donde se guarde una palabra, sino que la memoria es un patrón de actividad eléctrica en billones de neuronas. De manera similar, en la electrónica digital, el 'estado' de una máquina no es una entidad mística, sino que se manifiesta como los valores concretos (voltajes altos o bajos, que representan 1s o 0s) almacenados en pequeños componentes llamados biestables o flip-flops. Cada flip-flop puede recordar un 'bit' de información. Si juntamos varios de estos flip-flops, podemos almacenar un 'vector de estado' que representa un número, una letra o un código, que es nuestra representación de un estado abstracto. La 'lógica combinacional' es como el 'pensamiento' de la máquina: toma lo que la máquina 'recuerda' ahora y lo que 'está viendo' (las entradas), y decide qué es lo que debería 'recordar' a continuación. El 'reloj' es como el ritmo cardíaco de la máquina, que le dice cuándo es el momento de 'actualizar su memoria' con el nuevo recuerdo. Así, el concepto abstracto de estado se traduce en una realidad física de bits almacenados en hardware que cambian en momentos precisos.</p></div>
+                </div>
+
+                <div class="card">
+                    <h3>Aplicación Real</h3>
+                    <div><p>La implementación del estado como memoria es la base de toda la computación moderna. En el corazón de cualquier microprocesador, encontramos vastas colecciones de registros que almacenan el estado del procesador: el contador de programa (que apunta a la siguiente instrucción), los registros de propósito general (que almacenan datos temporales), los registros de estado (flags de condiciones). Estos registros son, esencialmente, bancos de biestables que definen el estado actual del CPU. En sistemas de control embebidos, el estado de los periféricos (por ejemplo, si un motor está encendido/apagado, la dirección de rotación) se guarda en registros específicos de hardware. En el diseño de compiladores, el 'estado' de la máquina virtual o del analizador sintáctico se mantiene en variables y estructuras de datos para recordar qué tokens se han procesado y qué reglas gramaticales se están aplicando. Incluso en el diseño de videojuegos, el estado de un personaje (caminando, saltando, atacando) o el estado del juego (menú principal, jugando, pausa) se gestiona explícitamente a través de variables que actúan como la memoria del sistema, permitiendo comportamientos complejos y interactivos.</p></div>
+                </div>
+
+            </div>
+        </article>
+        
+    </main>
+
+    <footer>
+        <p>Prof. Jorge López-Cifre, PhD © 2026</p>
+    </footer>
+
+</body>
+</html>

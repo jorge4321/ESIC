@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>10 - Optimización - Minimización de estados. - Prof. Jorge López-Cifre</title>
+    <style>
+        :root {
+            --primary: #003366;
+            --accent: #d4af37;
+            --bg: #f8f9fa;
+            --text: #2c3e50;
+            --card-bg: #ffffff;
+            --border: #e9ecef;
+        }
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 0;
+            line-height: 1.7;
+        }
+        /* Tipografía mejorada */
+        p { margin-bottom: 1rem; }
+        strong, b { color: var(--primary); font-weight: 700; }
+        
+        header {
+            background: var(--primary);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        h1 { margin: 0; font-size: 1.25rem; font-weight: 600; }
+        
+        .btn-volver {
+            background: var(--accent);
+            color: var(--primary);
+            text-decoration: none;
+            padding: 0.5rem 1.2rem;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        .btn-volver:hover { 
+            background: #fff; 
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+
+        main {
+            max-width: 1100px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+
+        .subtema {
+            background: var(--card-bg);
+            border-radius: 12px;
+            margin-bottom: 4rem;
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+        
+        .subtema-header {
+            background: linear-gradient(to right, #f8f9fa, #ffffff);
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid var(--border);
+        }
+        .subtema-header h2 { 
+            margin: 0; 
+            color: var(--primary); 
+            font-size: 1.6rem;
+            border-left: 5px solid var(--accent);
+            padding-left: 1rem;
+        }
+
+        .seccion-contenido {
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2.5rem;
+        }
+
+        @media (min-width: 900px) {
+            .seccion-contenido { grid-template-columns: 1fr 1fr; }
+            .full-width { grid-column: 1 / -1; }
+        }
+
+        .card h3 {
+            color: var(--primary);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-top: 0;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 0.5rem;
+        }
+
+        .formal-box {
+            background-color: #f0f7ff; /* Azul muy muy pálido */
+            border-radius: 8px;
+            padding: 2rem !important;
+            border: 1px solid #cce5ff;
+        }
+
+        /* CSS Específico para corregir SVGs */
+        .diagrama-container {
+            text-align: center;
+            margin: 2rem auto;
+            padding: 1.5rem;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
+            max-width: 100%;
+            overflow-x: auto; /* Si es muy ancho, permite scroll */
+        }
+        
+        /* Forzar comportamiento correcto del SVG */
+        .diagrama-container svg {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+        
+        /* Evitar que el texto dentro del SVG sea ilegible */
+        .diagrama-container text {
+            font-family: sans-serif;
+        }
+
+        footer {
+            text-align: center;
+            padding: 3rem;
+            background: var(--primary);
+            color: rgba(255,255,255,0.8);
+            margin-top: 4rem;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>10 - Optimización - Minimización de estados.</h1>
+        <a href="javascript:history.back()" class="btn-volver">← Volver</a>
+    </header>
+
+    <main>
+
+        <article class="subtema">
+            <div class="subtema-header">
+                <h2>Estados Distinguibles e Indistinguibles: La base de la minimización.</h2>
+            </div>
+            <div class="seccion-contenido">
+                
+                <div class="card full-width">
+                    <h3>Historia</h3>
+                    <div><p>La búsqueda de eficiencia y simplicidad en los modelos computacionales ha sido una constante desde los albores de la informática. En el contexto de los autómatas finitos, la idea de minimizar el número de estados surge naturalmente de la necesidad de optimizar los recursos computacionales y hacer los diseños más comprensibles. Si bien no hay una única fecha o autor para el concepto inicial de estados equivalentes, las bases teóricas se sentaron en la década de 1950. Investigadores como Edward F. Moore, George H. Mealy y otros, que trabajaban en el diseño de circuitos lógicos y máquinas de estados finitos, se dieron cuenta de que diferentes configuraciones de estados podían tener el mismo comportamiento observable. La formalización de estas ideas llevó a métodos sistemáticos para identificar y fusionar estos estados redundantes, pavimentando el camino para los algoritmos de minimización modernos.</p></div>
+                </div>
+
+                <div class="card full-width formal-box">
+                    <h3>Descripción Formal</h3>
+                    <div><p>La minimización de un Autómata Finito Determinista (AFD) se fundamenta en la noción de estados distinguibles e indistinguibles (o equivalentes). Sea un AFD M = (Q, Σ, δ, q₀, F), donde Q es el conjunto finito de estados, Σ es el alfabeto de entrada, δ es la función de transición (δ: Q × Σ → Q), q₀ es el estado inicial, y F es el conjunto de estados finales. Dos estados p, q ∈ Q son indistinguibles si y solo si, para toda cadena w ∈ Σ<em>, δ</em>(p, w) ∈ F si y solo si δ<em>(q, w) ∈ F. Es decir, cualquier cadena de entrada w lleva a p y q a estados que son ambos finales o ambos no finales. Si existe al menos una cadena w ∈ Σ</em> tal que (δ<em>(p, w) ∈ F y δ</em>(q, w) ∉ F) o (δ<em>(p, w) ∉ F y δ</em>(q, w) ∈ F), entonces los estados p y q son distinguibles. La indistinguibilidad es una relación de equivalencia, denotada p ≈ q, que particiona Q en clases de equivalencia. Cada clase de equivalencia representa un estado del AFD minimizado. El proceso de minimización consiste en identificar estas clases de equivalencia y construir un nuevo AFD donde cada estado es una de estas clases.</p></div>
+                    
+                    <div class="diagrama-container">
+                        <svg viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg"><defs><marker id="arrowhead" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="black" /></marker></defs><circle cx="100" cy="80" r="25" fill="#E0F2F7" stroke="black" stroke-width="2"/><text x="95" y="85" font-family="Arial" font-size="18" fill="black">p</text><circle cx="100" cy="160" r="25" fill="#E0F2F7" stroke="black" stroke-width="2"/><text x="95" y="165" font-family="Arial" font-size="18" fill="black">q</text><circle cx="250" cy="120" r="25" fill="#C8E6C9" stroke="black" stroke-width="2"/><text x="245" y="125" font-family="Arial" font-size="18" fill="black">r</text><path d="M125 80 H225" stroke="black" stroke-width="2" marker-end="url(#arrowhead)"/><text x="170" y="70" font-family="Arial" font-size="14" fill="black">a</text><path d="M125 160 H225" stroke="black" stroke-width="2" marker-end="url(#arrowhead)"/><text x="170" y="170" font-family="Arial" font-size="14" fill="black">a</text><text x="350" y="60" font-family="Arial" font-size="18" fill="black">⇒ Estados p y q son indistinguibles</text><text x="350" y="85" font-family="Arial" font-size="18" fill="black">Pueden ser fusionados</text><circle cx="450" cy="120" r="35" fill="#B2EBF2" stroke="black" stroke-width="2"/><text x="430" y="125" font-family="Arial" font-size="20" fill="black">{p, q}</text><path d="M485 120 H540" stroke="black" stroke-width="2" marker-end="url(#arrowhead)"/><circle cx="565" cy="120" r="25" fill="#C8E6C9" stroke="black" stroke-width="2"/><text x="560" y="125" font-family="Arial" font-size="18" fill="black">r'</text><text x="515" y="110" font-family="Arial" font-size="14" fill="black">a</text></svg>
+                        <p style="font-size:0.8rem; color:#666; margin-top:1rem; text-align:center;">
+                            <em>Fig: Representación visual generada.</em>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Intuición</h3>
+                    <div><p>Imaginemos que tenemos dos estados en un autómata que, para cualquier secuencia de entradas que les presentemos, siempre nos dan el mismo tipo de resultado final: o ambos nos llevan a un estado de aceptación, o ambos nos llevan a un estado de no aceptación. Si esto sucede para <em>todas</em> las posibles secuencias de entrada, entonces, desde la perspectiva del comportamiento externo del autómata, estos dos estados son idénticos. No hay manera de "distinguirlos" observando únicamente las salidas (aceptación o rechazo). En esencia, son redundantes. Si dos estados son indistinguibles, podemos fusionarlos en uno solo sin cambiar el lenguaje que reconoce el autómata. El autómata resultante tendrá menos estados pero seguirá aceptando exactamente las mismas cadenas. Esta es la intuición fundamental detrás de la minimización: eliminar la redundancia estructural manteniendo la equivalencia funcional.</p></div>
+                </div>
+
+                <div class="card">
+                    <h3>Aplicación Real</h3>
+                    <div><p>La identificación de estados distinguibles e indistinguibles es una herramienta fundamental en la optimización de autómatas que se usan en diversas áreas de la ingeniería de software y sistemas. En el diseño de compiladores, la fase de análisis léxico a menudo se implementa con autómatas finitos que reconocen patrones (tokens). Minimizar estos autómatas conduce a analizadores léxicos más pequeños y rápidos, reduciendo la memoria y el tiempo de ejecución. En el diseño de circuitos digitales, las máquinas de estados finitos (FSM) se usan para controlar la lógica secuencial. La minimización de FSM reduce el número de flip-flops y compuertas lógicas requeridas, lo que se traduce en circuitos más compactos, de menor consumo energético y más económicos. También es crucial en la verificación de protocolos de comunicación y en la simplificación de modelos de comportamiento de software para el análisis de rendimiento y la detección de errores.</p></div>
+                </div>
+
+            </div>
+        </article>
+        
+        <article class="subtema">
+            <div class="subtema-header">
+                <h2>El Teorema de Myhill-Nerode y su Relevancia en la Minimización.</h2>
+            </div>
+            <div class="seccion-contenido">
+                
+                <div class="card full-width">
+                    <h3>Historia</h3>
+                    <div><p>El Teorema de Myhill-Nerode es una de las piedras angulares de la teoría de lenguajes formales, proporcionando una conexión profunda entre las propiedades algebraicas de un lenguaje y la estructura de los autómatas que lo reconocen. Fue descubierto de forma independiente por John Myhill en 1957 y Anil Nerode en 1958, publicándose poco después. Su desarrollo se enmarcó en un período de intensa investigación en lógica matemática y los fundamentos de la computación, donde se buscaban criterios formales para clasificar lenguajes y comprender sus límites. Este teorema no solo estableció una condición necesaria y suficiente para que un lenguaje sea regular, sino que también demostró la existencia de un autómata finito determinista (AFD) mínimo único para cada lenguaje regular, resolviendo así una cuestión fundamental en la teoría de autómatas.</p></div>
+                </div>
+
+                <div class="card full-width formal-box">
+                    <h3>Descripción Formal</h3>
+                    <div><p>El Teorema de Myhill-Nerode se basa en la definición de una relación de equivalencia sobre las cadenas de Σ<em>. Para un lenguaje L ⊆ Σ</em>, definimos la relación de Myhill-Nerode, denotada por ≈L, de la siguiente manera: para dos cadenas x, y ∈ Σ<em>, x ≈L y si y solo si para toda cadena z ∈ Σ</em>, (xz ∈ L si y solo si yz ∈ L). Esta relación particiona Σ* en clases de equivalencia, donde cada clase [x] contiene todas las cadenas que son indistinguibles de x con respecto a L. El teorema establece que un lenguaje L es regular si y solo si el número de clases de equivalencia de ≈L es finito. Además, el número de estados en el AFD mínimo que reconoce L es exactamente igual al número de estas clases de equivalencia. Este AFD mínimo es único (salvo por el renombramiento de estados). Los estados del AFD mínimo corresponden directamente a las clases de equivalencia de la relación ≈L. La función de transición para el AFD mínimo M' = (Q', Σ, δ', q'₀, F') se define como δ'([x], a) = [xa], donde [x] es una clase de equivalencia y [xa] es la clase de equivalencia de la cadena xa. El estado inicial es [ε], y F' incluye todas las clases [x] tal que x ∈ L. Es crucial entender que la relación ≈L captura la información mínima necesaria que un autómata debe recordar sobre un prefijo de entrada para decidir la aceptación de cualquier sufijo.</p></div>
+                    
+                    <div class="diagrama-container">
+                        <svg viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg"><rect x="50" y="50" width="500" height="100" fill="#F8F8F8" stroke="black" stroke-width="2"/><text x="260" y="40" font-family="Arial" font-size="20" fill="black">Σ* (Conjunto de todas las cadenas)</text><line x1="150" y1="50" x2="150" y2="150" stroke="black" stroke-width="1" stroke-dasharray="5,5"/><line x1="250" y1="50" x2="250" y2="150" stroke="black" stroke-width="1" stroke-dasharray="5,5"/><line x1="350" y1="50" x2="350" y2="150" stroke="black" stroke-width="1" stroke-dasharray="5,5"/><line x1="450" y1="50" x2="450" y2="150" stroke="black" stroke-width="1" stroke-dasharray="5,5"/><text x="90" y="95" font-family="Arial" font-size="16" fill="black">[ε]</text><text x="180" y="95" font-family="Arial" font-size="16" fill="black">[a]</text><text x="280" y="95" font-family="Arial" font-size="16" fill="black">[b]</text><text x="380" y="95" font-family="Arial" font-size="16" fill="black">[aa]</text><text x="480" y="95" font-family="Arial" font-size="16" fill="black">...</text><defs><marker id="arrowhead" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="black" /></marker></defs><path d="M300 155 V 170 H 400" stroke="black" stroke-width="2" marker-end="url(#arrowhead)"/><text x="300" y="185" font-family="Arial" font-size="16" fill="black">Cada clase ↔ Un estado del DFA mínimo</text></svg>
+                        <p style="font-size:0.8rem; color:#666; margin-top:1rem; text-align:center;">
+                            <em>Fig: Representación visual generada.</em>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Intuición</h3>
+                    <div><p>La intuición detrás del Teorema de Myhill-Nerode es que cada estado en un AFD es esencialmente un 'resumen' del prefijo de la cadena que ha sido leída hasta ese punto. Si dos prefijos de cadena (x e y) nos llevan al mismo estado en un AFD, entonces cualquier sufijo que agreguemos a 'x' o a 'y' los llevará al mismo estado final (ya sea de aceptación o de rechazo). Por lo tanto, esos dos prefijos ('x' e 'y') son 'equivalentes' en cómo afectan la aceptación futura de la cadena completa. El teorema nos dice que el número mínimo de estados que necesita un autómata para reconocer un lenguaje es precisamente el número de estos 'resúmenes' fundamentalmente diferentes que el autómata debe ser capaz de distinguir. Si hay un número infinito de tales 'resúmenes' o 'clases de equivalencia', entonces el lenguaje no puede ser regular, porque un AFD solo tiene un número finito de estados para recordar esos resúmenes. Si es finito, el número de estados del AFD mínimo es exactamente ese.</p></div>
+                </div>
+
+                <div class="card">
+                    <h3>Aplicación Real</h3>
+                    <div><p>El Teorema de Myhill-Nerode es de una importancia teórica y práctica inmensa. Teóricamente, proporciona una herramienta poderosa para probar que un lenguaje <em>no</em> es regular (mediante la demostración de un número infinito de clases de equivalencia), complementando el Lema de Bombeo. También establece la unicidad del AFD mínimo, un resultado clave en la teoría de autómatas. En la práctica, aunque los algoritmos de minimización no calculan directamente las clases de Myhill-Nerode, operan bajo el mismo principio de identificar estados indistinguibles. Por ejemplo, los generadores de analizadores léxicos (como Lex o Flex) construyen autómatas finitos y luego los minimizan para generar código más eficiente. Comprender el teorema de Myhill-Nerode asegura que el autómata minimizado sea realmente el más pequeño posible, lo que es vital para la optimización en compiladores, el diseño de hardware para FSM, y la implementación eficiente de reconocedores de expresiones regulares.</p></div>
+                </div>
+
+            </div>
+        </article>
+        
+        <article class="subtema">
+            <div class="subtema-header">
+                <h2>Algoritmos Prácticos de Minimización: Hopcroft y el método de la tabla.</h2>
+            </div>
+            <div class="seccion-contenido">
+                
+                <div class="card full-width">
+                    <h3>Historia</h3>
+                    <div><p>Una vez establecido el concepto de estados equivalentes y la existencia del AFD mínimo por el teorema de Myhill-Nerode, el siguiente paso fue desarrollar algoritmos eficientes para encontrarlo. Los primeros algoritmos surgieron en la década de 1950, destacando el trabajo de Edward F. Moore (1956) con un algoritmo que tiene una complejidad de O(n²), donde n es el número de estados. Sin embargo, en 1971, John Hopcroft publicó un algoritmo de minimización significativamente más eficiente, con una complejidad de O(n log n). Este algoritmo se convirtió rápidamente en el estándar y sigue siendo el más utilizado en la actualidad debido a su rendimiento superior. Paralelamente, el 'método de la tabla' o 'table filling algorithm' (también atribuido a Moore, aunque de forma simplificada) se desarrolló como una técnica didáctica y práctica para la minimización, ofreciendo una implementación más intuitiva para autómatas pequeños y medianos.</p></div>
+                </div>
+
+                <div class="card full-width formal-box">
+                    <h3>Descripción Formal</h3>
+                    <div><p>Existen dos algoritmos principales para la minimización de AFD. El Algoritmo de Hopcroft es un método de refinamiento de particiones. Comienza con una partición inicial de los estados en dos conjuntos: los estados finales (F) y los estados no finales (Q \ F). Luego, itera sobre esta partición, refinándola repetidamente. En cada paso, para cada conjunto S en la partición actual y cada símbolo de entrada a ∈ Σ, se examinan las transiciones de los estados en S con el símbolo a. Si los estados p y q en S tienen transiciones a δ(p, a) y δ(q, a) que pertenecen a diferentes conjuntos en la partición actual, entonces p y q deben ser separados. Este proceso se repite hasta que ningún conjunto en la partición pueda ser refinado aún más. El algoritmo de la tabla (table-filling algorithm) es un enfoque alternativo que construye una tabla triangular de pares de estados. Inicialmente, se marcan todos los pares (p, q) donde p ∈ F y q ∉ F (o viceversa) como distinguibles. Luego, de forma iterativa, un par (p, q) se marca como distinguible si para algún símbolo a ∈ Σ, el par (δ(p, a), δ(q, a)) ya ha sido marcado como distinguible. Este proceso continúa hasta que no se puedan marcar más pares. Los pares de estados que permanecen sin marcar al final son indistinguibles y pueden fusionarse. Ambos algoritmos garantizan encontrar el AFD mínimo para el lenguaje dado.</p></div>
+                    
+                    <div class="diagrama-container">
+                        <svg viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg"><rect x="50" y="30" width="200" height="60" fill="#E0F2F7" stroke="black" stroke-width="2"/><text x="80" y="65" font-family="Arial" font-size="16" fill="black">P0 = {No Finales}</text><rect x="350" y="30" width="200" height="60" fill="#FFE0B2" stroke="black" stroke-width="2"/><text x="390" y="65" font-family="Arial" font-size="16" fill="black">P0 = {Finales}</text><defs><marker id="arrowhead" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="black" /></marker></defs><path d="M250 80 C 270 110, 330 110, 350 80" fill="none" stroke="gray" stroke-width="1" stroke-dasharray="3,3"/><path d="M300 95 V 120" stroke="black" stroke-width="2" marker-end="url(#arrowhead)"/><text x="305" y="110" font-family="Arial" font-size="16" fill="black">Refinamiento</text><rect x="50" y="140" width="100" height="40" fill="#E0F2F7" stroke="black" stroke-width="2"/><text x="65" y="165" font-family="Arial" font-size="14" fill="black">P1_A</text><rect x="180" y="140" width="100" height="40" fill="#E0F2F7" stroke="black" stroke-width="2"/><text x="195" y="165" font-family="Arial" font-size="14" fill="black">P1_B</text><rect x="350" y="140" width="100" height="40" fill="#FFE0B2" stroke="black" stroke-width="2"/><text x="365" y="165" font-family="Arial" font-size="14" fill="black">P1_C</text><rect x="480" y="140" width="100" height="40" fill="#FFE0B2" stroke="black" stroke-width="2"/><text x="495" y="165" font-family="Arial" font-size="14" fill="black">P1_D</text><path d="M100 90 V 140" stroke="gray" stroke-width="1" stroke-dasharray="3,3"/><path d="M230 90 V 140" stroke="gray" stroke-width="1" stroke-dasharray="3,3"/><path d="M400 90 V 140" stroke="gray" stroke-width="1" stroke-dasharray="3,3"/><path d="M530 90 V 140" stroke="gray" stroke-width="1" stroke-dasharray="3,3"/></svg>
+                        <p style="font-size:0.8rem; color:#666; margin-top:1rem; text-align:center;">
+                            <em>Fig: Representación visual generada.</em>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Intuición</h3>
+                    <div><p>Piensa en la minimización como un proceso de 'agrupación inteligente'. Empezamos con una primera suposición: todos los estados finales son un grupo, y todos los no finales son otro. Luego, comenzamos a observar las transiciones. Si dentro de un grupo (digamos, de estados no finales), tenemos dos estados p y q, y al aplicarles el mismo símbolo 'a', uno va a un estado final y el otro a un no final, ¡entonces p y q no pueden estar en el mismo grupo! Son distinguibles. Así que los separamos en grupos más pequeños. Repetimos este proceso una y otra vez, dividiendo los grupos hasta que ya no podamos encontrar ninguna razón para separar más estados. En ese punto, cada grupo restante contiene estados que son verdaderamente indistinguibles, y cada grupo se convierte en un único estado en nuestro autómata minimizado. El algoritmo de la tabla sigue una lógica similar, pero de forma inversa: marca activamente los pares de estados que <em>son</em> distinguibles.</p></div>
+                </div>
+
+                <div class="card">
+                    <h3>Aplicación Real</h3>
+                    <div><p>La aplicación de los algoritmos de minimización es vasta y crítica en varias ramas de la computación. En la construcción de compiladores, la generación de analizadores léxicos eficientes es primordial. Expresiones regulares complejas se convierten en AFD, y la aplicación del algoritmo de Hopcroft garantiza un autómata más pequeño y rápido, lo que reduce el tiempo de compilación y la huella de memoria. En el diseño de hardware, especialmente para chips con lógica de control (state machines), la minimización de estados reduce el número de elementos de almacenamiento (flip-flops) y compuertas lógicas, resultando en diseños más baratos, de menor consumo de energía y mayor velocidad. Para el procesamiento de lenguaje natural y la bioinformática, donde se utilizan autómatas para reconocer patrones en texto o secuencias de ADN/ARN, la minimización permite que los motores de búsqueda de patrones sean mucho más rápidos y escalables. Finalmente, en la verificación formal y el análisis de sistemas, la minimización simplifica los modelos de comportamiento, haciendo que la detección de propiedades y errores sea más manejable computacionalmente.</p></div>
+                </div>
+
+            </div>
+        </article>
+        
+    </main>
+
+    <footer>
+        <p>Prof. Jorge López-Cifre, PhD © 2026</p>
+    </footer>
+
+</body>
+</html>

@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>9 - Optimización - Conversión de AFN a AFD. - Prof. Jorge López-Cifre</title>
+    <style>
+        :root {
+            --primary: #003366;
+            --accent: #d4af37;
+            --bg: #f8f9fa;
+            --text: #2c3e50;
+            --card-bg: #ffffff;
+            --border: #e9ecef;
+        }
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 0;
+            line-height: 1.7;
+        }
+        /* Tipografía mejorada */
+        p { margin-bottom: 1rem; }
+        strong, b { color: var(--primary); font-weight: 700; }
+        
+        header {
+            background: var(--primary);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        h1 { margin: 0; font-size: 1.25rem; font-weight: 600; }
+        
+        .btn-volver {
+            background: var(--accent);
+            color: var(--primary);
+            text-decoration: none;
+            padding: 0.5rem 1.2rem;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        .btn-volver:hover { 
+            background: #fff; 
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+
+        main {
+            max-width: 1100px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+
+        .subtema {
+            background: var(--card-bg);
+            border-radius: 12px;
+            margin-bottom: 4rem;
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+        
+        .subtema-header {
+            background: linear-gradient(to right, #f8f9fa, #ffffff);
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid var(--border);
+        }
+        .subtema-header h2 { 
+            margin: 0; 
+            color: var(--primary); 
+            font-size: 1.6rem;
+            border-left: 5px solid var(--accent);
+            padding-left: 1rem;
+        }
+
+        .seccion-contenido {
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2.5rem;
+        }
+
+        @media (min-width: 900px) {
+            .seccion-contenido { grid-template-columns: 1fr 1fr; }
+            .full-width { grid-column: 1 / -1; }
+        }
+
+        .card h3 {
+            color: var(--primary);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-top: 0;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 0.5rem;
+        }
+
+        .formal-box {
+            background-color: #f0f7ff; /* Azul muy muy pálido */
+            border-radius: 8px;
+            padding: 2rem !important;
+            border: 1px solid #cce5ff;
+        }
+
+        /* CSS Específico para corregir SVGs */
+        .diagrama-container {
+            text-align: center;
+            margin: 2rem auto;
+            padding: 1.5rem;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
+            max-width: 100%;
+            overflow-x: auto; /* Si es muy ancho, permite scroll */
+        }
+        
+        /* Forzar comportamiento correcto del SVG */
+        .diagrama-container svg {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+        
+        /* Evitar que el texto dentro del SVG sea ilegible */
+        .diagrama-container text {
+            font-family: sans-serif;
+        }
+
+        footer {
+            text-align: center;
+            padding: 3rem;
+            background: var(--primary);
+            color: rgba(255,255,255,0.8);
+            margin-top: 4rem;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>9 - Optimización - Conversión de AFN a AFD.</h1>
+        <a href="javascript:history.back()" class="btn-volver">← Volver</a>
+    </header>
+
+    <main>
+
+        <article class="subtema">
+            <div class="subtema-header">
+                <h2>Equivalencia de Autómatas Finitos: AFN vs. AFD</h2>
+            </div>
+            <div class="seccion-contenido">
+                
+                <div class="card full-width">
+                    <h3>Historia</h3>
+                    <div><p>El concepto de autómata finito surgió a mediados del siglo XX, inicialmente con el trabajo de Warren McCulloch y Walter Pitts en 1943 sobre redes neuronales que podían describirse como máquinas de estados finitos. Sin embargo, fue Stephen Kleene quien, en 1956, formalizó la relación entre las expresiones regulares y los autómatas finitos en su 'Teorema de Kleene', demostrando que las expresiones regulares describen exactamente los lenguajes aceptados por estos autómatas. Posteriormente, en 1959, Michael Rabin y Dana Scott, en su artículo 'Finite Automata and Their Decision Problems', introdujeron formalmente los Autómatas Finitos No Deterministas (AFN) y demostraron su equivalencia computacional con los Autómatas Finitos Deterministas (AFD). Esta equivalencia fue una revelación, ya que, aunque los AFN parecían más potentes debido a su capacidad de tener múltiples transiciones o transiciones ε, se demostró que cualquier lenguaje reconocido por un AFN también podía ser reconocido por un AFD, sentando las bases para las técnicas de conversión.</p></div>
+                </div>
+
+                <div class="card full-width formal-box">
+                    <h3>Descripción Formal</h3>
+                    <div><p>Un Autómata Finito Determinista (AFD) M se define formalmente como una 5-tupla (Q, Σ, δ, q₀, F), donde:
+• Q es un conjunto finito y no vacío de estados.
+• Σ es un alfabeto finito de símbolos de entrada.
+• δ: Q × Σ → Q es la función de transición determinista, que asigna a cada par (estado, símbolo) un ÚNICO estado siguiente.
+• q₀ ∈ Q es el estado inicial único.
+• F ⊆ Q es el conjunto de estados finales o de aceptación.</p>
+<p>Un Autómata Finito No Determinista (AFN) M' se define formalmente como una 5-tupla (Q', Σ, δ', q'₀, F'), donde:
+• Q' es un conjunto finito y no vacío de estados.
+• Σ es un alfabeto finito de símbolos de entrada.
+• δ': Q' × (Σ ∪ {ε}) → 𝒫(Q') es la función de transición no determinista, que mapea cada par (estado, símbolo o ε) a un CONJUNTO de estados siguientes (𝒫(Q') denota el conjunto potencia de Q').
+• q'₀ ∈ Q' es el estado inicial único.
+• F' ⊆ Q' es el conjunto de estados finales o de aceptación.</p>
+<p>La equivalencia entre un AFN y un AFD significa que para cada AFN que acepta un lenguaje L, existe un AFD que también acepta el mismo lenguaje L, y viceversa. Es decir, los AFN y los AFD tienen el mismo poder de reconocimiento de lenguajes: ambos reconocen exactamente la clase de lenguajes regulares.</p></div>
+                    
+                    <div class="diagrama-container">
+                        <svg viewBox="0 0 600 200">
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="8" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="black" />
+    </marker>
+  </defs>
+  <g transform="translate(50, 50)">
+    <text x="0" y="-20" font-family="Arial" font-size="16" font-weight="bold">AFN (No Determinista)</text>
+    <circle cx="0" cy="50" r="20" fill="#CCE5FF" stroke="black" stroke-width="1" />
+    <text x="0" y="55" text-anchor="middle">q1</text>
+    <circle cx="100" cy="50" r="20" fill="#CCE5FF" stroke="black" stroke-width="1" />
+    <text x="100" y="55" text-anchor="middle">q2</text>
+    <line x1="20" y1="50" x2="80" y2="50" stroke="black" stroke-width="1" marker-end="url(#arrowhead)" />
+    <text x="50" y="40" text-anchor="middle">a</text>
+    <path d="M 10 65 Q 50 100, 90 65" fill="none" stroke="black" stroke-width="1" marker-end="url(#arrowhead)" />
+    <text x="50" y="105" text-anchor="middle">a, ε</text>
+  </g>
+  <g transform="translate(350, 50)">
+    <text x="0" y="-20" font-family="Arial" font-size="16" font-weight="bold">AFD (Determinista)</text>
+    <circle cx="0" cy="50" r="20" fill="#E5FFCC" stroke="black" stroke-width="1" />
+    <text x="0" y="55" text-anchor="middle">p1</text>
+    <circle cx="100" cy="50" r="20" fill="#E5FFCC" stroke="black" stroke-width="1" />
+    <text x="100" y="55" text-anchor="middle">p2</text>
+    <line x1="20" y1="50" x2="80" y2="50" stroke="black" stroke-width="1" marker-end="url(#arrowhead)" />
+    <text x="50" y="40" text-anchor="middle">a</text>
+    <line x1="0" y1="70" x2="0" y2="70" stroke="none" />
+  </g>
+  <text x="300" y="100" text-anchor="middle" font-size="24" font-family="Arial">↔</text>
+  <text x="300" y="125" text-anchor="middle" font-size="14" font-family="Arial">Equivalentes</text>
+</svg>
+                        <p style="font-size:0.8rem; color:#666; margin-top:1rem; text-align:center;">
+                            <em>Fig: Representación visual generada.</em>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Intuición</h3>
+                    <div><p>La intuición detrás de la equivalencia AFN-AFD radica en cómo manejan el 'no determinismo'. Un AFN, al leer un símbolo, puede 'elegir' entre varios caminos posibles o incluso realizar transiciones sin consumir ningún símbolo (transiciones ε). Esto lo hace conceptualmente flexible y a menudo más fácil de diseñar para expresar ciertos patrones. Sin embargo, esta flexibilidad es solo aparente en términos de poder de reconocimiento. Podemos pensar en un AFN como si tuviera la capacidad de 'adivinar' el camino correcto. Un AFD, al no tener esa capacidad de adivinación, debe ser más riguroso. La clave está en que el AFD puede simular el comportamiento no determinista del AFN. Para cada entrada, el AFD no sigue un solo camino, sino que simultáneamente rastrea <em>todos los posibles estados</em> en los que el AFN podría estar. Así, cada estado del AFD se convierte en un conjunto de estados del AFN. Si alguno de estos estados en el conjunto es un estado de aceptación del AFN, entonces el estado del AFD también es de aceptación. De esta forma, el AFD replica la 'adivinación' del AFN al considerar todas las posibilidades a la vez.</p></div>
+                </div>
+
+                <div class="card">
+                    <h3>Aplicación Real</h3>
+                    <div><p>La comprensión de la equivalencia entre AFN y AFD es fundamental en diversas áreas de la ingeniería de software y la informática teórica. Una de las aplicaciones más destacadas se encuentra en el diseño y la implementación de analizadores léxicos (scanners) para compiladores. Las reglas léxicas (como la identificación de palabras clave, identificadores o números) se suelen expresar mediante expresiones regulares. Para procesarlas eficientemente, estas expresiones regulares se convierten primero a un AFN (que es más sencillo de construir a partir de una expresión regular) y luego este AFN se convierte a un AFD. Un AFD es preferible para la implementación práctica porque su comportamiento determinista permite una ejecución más rápida y con menor complejidad, ya que en cada paso de la lectura de la entrada solo hay un estado siguiente bien definido. Esto garantiza que el analizador léxico opere con la máxima eficiencia posible, procesando el código fuente de un programa en tiempo lineal con respecto a su longitud.</p></div>
+                </div>
+
+            </div>
+        </article>
+        
+        <article class="subtema">
+            <div class="subtema-header">
+                <h2>El Algoritmo de Construcción de Subconjuntos</h2>
+            </div>
+            <div class="seccion-contenido">
+                
+                <div class="card full-width">
+                    <h3>Historia</h3>
+                    <div><p>El algoritmo que permite convertir sistemáticamente cualquier Autómata Finito No Determinista (AFN) en un Autómata Finito Determinista (AFD) equivalente es conocido como el Algoritmo de Construcción de Subconjuntos (Subset Construction Algorithm). Este método fue introducido por Michael Rabin y Dana Scott en su influyente artículo de 1959, 'Finite Automata and Their Decision Problems'. Este trabajo no solo formalizó el concepto de AFN y demostró su equivalencia con los AFD, sino que también proporcionó la metodología constructiva explícita para realizar dicha conversión. La importancia de este algoritmo radica en que transformó una demostración de existencia (que un AFD equivalente siempre existe) en una herramienta práctica. Aunque el AFD resultante podría ser exponencialmente más grande que el AFN original, el algoritmo garantizó la viabilidad de implementar lenguajes regulares utilizando la eficiencia inherente de los autómatas deterministas. Este avance fue crucial para el desarrollo de herramientas automáticas para el análisis léxico.</p></div>
+                </div>
+
+                <div class="card full-width formal-box">
+                    <h3>Descripción Formal</h3>
+                    <div><p>El Algoritmo de Construcción de Subconjuntos toma un AFN M = (Q, Σ, δ, q₀, F) y produce un AFD M' = (Q', Σ, δ', q'₀, F') que acepta el mismo lenguaje. El proceso es el siguiente:</p>
+<ol>
+<li>
+<p><strong>Cálculo del ε-Cierre (ε-Closure):</strong> Para cualquier conjunto de estados A ⊆ Q, ε-Cierre(A) es el conjunto de todos los estados alcanzables desde cualquier estado en A siguiendo únicamente transiciones ε. Formalmente, ε-Cierre(A) = {q ∈ Q | existe un camino de ε-transiciones de p a q para algún p ∈ A}.</p>
+</li>
+<li>
+<p><strong>Estado Inicial del AFD:</strong> El estado inicial del AFD, q'₀, es el ε-Cierre del estado inicial del AFN: q'₀ = ε-Cierre({q₀}).</p>
+</li>
+<li>
+<p><strong>Construcción de Estados y Transiciones del AFD:</strong> Se construye Q' y δ' de forma iterativa:
+    a. Se inicializa Q' con q'₀.
+    b. Para cada estado X ∈ Q' que aún no ha sido procesado y para cada símbolo a ∈ Σ:
+        i. Calcular Δ(X, a) = ∪_{p∈X} δ(p, a). Este es el conjunto de estados alcanzables desde los estados en X siguiendo una transición 'a' directamente.
+        ii. Calcular Y = ε-Cierre(Δ(X, a)). Este será el nuevo estado del AFD.
+        iii. Si Y no está ya en Q', se añade a Q'.
+        iv. Se define la transición δ'(X, a) = Y.
+    c. Este proceso continúa hasta que no se puedan generar nuevos estados de AFD.</p>
+</li>
+<li>
+<p><strong>Estados Finales del AFD:</strong> Un estado X ∈ Q' es un estado final en F' si X contiene al menos un estado final del AFN original, es decir, F' = {X ∈ Q' | X ∩ F ≠ ∅}.</p>
+</li>
+</ol></div>
+                    
+                    <div class="diagrama-container">
+                        <svg viewBox="0 0 600 200">
+  <defs>
+    <marker id="arrowhead2" markerWidth="10" markerHeight="7" refX="8" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="black" />
+    </marker>
+  </defs>
+  <rect x="20" y="50" width="150" height="60" rx="10" ry="10" fill="#FFDDC1" stroke="black" stroke-width="1" />
+  <text x="95" y="85" text-anchor="middle" font-family="Arial" font-size="14">AFN de Entrada</text>
+  <line x1="170" y1="80" x2="210" y2="80" stroke="black" stroke-width="1" marker-end="url(#arrowhead2)" />
+  <rect x="210" y="50" width="180" height="60" rx="10" ry="10" fill="#E0FFB2" stroke="black" stroke-width="1" />
+  <text x="300" y="85" text-anchor="middle" font-family="Arial" font-size="14">Algoritmo de Construcción de Subconjuntos</text>
+  <line x1="390" y1="80" x2="430" y2="80" stroke="black" stroke-width="1" marker-end="url(#arrowhead2)" />
+  <rect x="430" y="50" width="150" height="60" rx="10" ry="10" fill="#CCEEFF" stroke="black" stroke-width="1" />
+  <text x="505" y="85" text-anchor="middle" font-family="Arial" font-size="14">AFD Resultante</text>
+  <text x="300" y="140" text-anchor="middle" font-family="Arial" font-size="12">Cada estado del AFD es un conjunto de estados del AFN</text>
+</svg>
+                        <p style="font-size:0.8rem; color:#666; margin-top:1rem; text-align:center;">
+                            <em>Fig: Representación visual generada.</em>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Intuición</h3>
+                    <div><p>La idea central del algoritmo de construcción de subconjuntos es que un AFN puede estar en varios estados a la vez (debido al no determinismo). Para simular esto con un AFD, cada estado del nuevo AFD se construye para representar un <em>conjunto</em> de estados del AFN original. Cuando el AFD lee un símbolo de entrada 'a' desde un estado que representa el conjunto de estados S del AFN, el nuevo estado del AFD debe representar todos los estados a los que el AFN podría transicionar desde <em>cualquiera</em> de los estados en S al leer 'a' (incluyendo las transiciones ε que podrían seguir). El ε-Cierre es crucial aquí porque permite al AFN 'moverse' entre estados sin consumir entrada. Por lo tanto, cada vez que calculamos el siguiente conjunto de estados, debemos considerar todas las transiciones ε posibles para asegurar que estamos capturando todas las configuraciones alcanzables del AFN. Así, el AFD mantiene un registro de todas las 'posibilidades' del AFN en todo momento, eliminando el no determinismo.</p></div>
+                </div>
+
+                <div class="card">
+                    <h3>Aplicación Real</h3>
+                    <div><p>La aplicación más directa y relevante del algoritmo de construcción de subconjuntos se encuentra en la generación automática de analizadores léxicos (lexers o scanners) para compiladores y otros procesadores de texto. Herramientas como <code>lex</code> (o su versión moderna <code>flex</code>) y <code>JFlex</code> implementan este algoritmo. Los desarrolladores definen los patrones léxicos (tokens como identificadores, palabras clave, operadores, números) usando expresiones regulares. Estas herramientas toman las expresiones regulares, las convierten internamente en un AFN, y luego aplican el algoritmo de construcción de subconjuntos para transformarlas en un AFD. El AFD resultante es el que se compila en el código final del analizador léxico. La razón de esta conversión es que un AFD es mucho más eficiente de ejecutar que un AFN en un programa de software real, ya que no requiere 'rastrear' múltiples caminos y siempre tiene una transición única para cada símbolo de entrada, lo que permite un reconocimiento de patrones extremadamente rápido.</p></div>
+                </div>
+
+            </div>
+        </article>
+        
+        <article class="subtema">
+            <div class="subtema-header">
+                <h2>Limitaciones y Optimización del AFD Resultante</h2>
+            </div>
+            <div class="seccion-contenido">
+                
+                <div class="card full-width">
+                    <h3>Historia</h3>
+                    <div><p>Aunque el algoritmo de construcción de subconjuntos garantiza la obtención de un AFD equivalente a un AFN, el AFD resultante puede ser considerablemente grande, con un número de estados que, en el peor de los casos, puede ser exponencial con respecto al número de estados del AFN original (hasta 2^|Q|). Esta explosión de estados es una limitación práctica importante. La necesidad de reducir el tamaño de estos autómatas llevó al desarrollo de algoritmos de minimización de AFD. La teoría detrás de la minimización se remonta al Teorema de Myhill-Nerode (1957), que establece que para cada lenguaje regular existe un AFD único con el número mínimo de estados (hasta isomorfismo). David Huffman propuso uno de los primeros algoritmos de minimización en 1954, y posteriormente, trabajos como el de Brzozowski (1962) y, notablemente, el algoritmo de Hopcroft (1971), proporcionaron métodos eficientes para lograr la minimización, haciendo los AFD más manejables para aplicaciones prácticas.</p></div>
+                </div>
+
+                <div class="card full-width formal-box">
+                    <h3>Descripción Formal</h3>
+                    <div><p>El problema principal con el AFD M' = (Q', Σ, δ', q'₀, F') obtenido de la construcción de subconjuntos es que |Q'| puede ser exponencialmente mayor que |Q|. Esto implica mayores requisitos de memoria y potencialmente un rendimiento más lento. La optimización del AFD se logra mediante su minimización.</p>
+<p>Un AFD M' se considera mínimo si no existe otro AFD M'' = (Q'', Σ, δ'', q''₀, F'') que acepte el mismo lenguaje L(M') tal que |Q''| &lt; |Q'|. La minimización busca identificar y fusionar estados que son 'indistinguibles' o 'equivalentes'.</p>
+<p>Dos estados p, q ∈ Q' se consideran indistinguibles si, para cualquier cadena de entrada w ∈ Σ*, δ'(p, w) ∈ F' si y solo si δ'(q, w) ∈ F'. En otras palabras, desde p y q, cualquier cadena lleva a un estado de aceptación o a un estado de no aceptación de la misma manera.</p>
+<p>Los algoritmos de minimización de AFD, como el algoritmo de Hopcroft, se basan en la idea de particionar el conjunto de estados Q' en clases de equivalencia de estados indistinguibles. Inicialmente, se particionan los estados en dos grupos: estados finales y estados no finales. Luego, se refina recursivamente esta partición hasta que ninguna clase de equivalencia pueda dividirse más. Cada clase de equivalencia final se convierte en un único estado del AFD minimizado. El AFD minimizado M'' resultante tendrá como estados estas clases de equivalencia, y su número será el mínimo posible para el lenguaje L(M').</p></div>
+                    
+                    <div class="diagrama-container">
+                        <svg viewBox="0 0 600 200">
+  <defs>
+    <marker id="arrowhead3" markerWidth="10" markerHeight="7" refX="8" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="black" />
+    </marker>
+  </defs>
+  <g transform="translate(50, 50)">
+    <text x="50" y="-20" font-family="Arial" font-size="16" font-weight="bold">AFD Generado (puede ser grande)</text>
+    <circle cx="0" cy="50" r="15" fill="#FFE0B2" stroke="black" stroke-width="1" />
+    <circle cx="60" cy="50" r="15" fill="#FFE0B2" stroke="black" stroke-width="1" />
+    <circle cx="120" cy="50" r="15" fill="#FFE0B2" stroke="black" stroke-width="1" />
+    <circle cx="30" cy="90" r="15" fill="#FFE0B2" stroke="black" stroke-width="1" />
+    <circle cx="90" cy="90" r="15" fill="#FFE0B2" stroke="black" stroke-width="1" />
+    <text x="180" y="70" font-family="Arial" font-size="20">...</text>
+  </g>
+  <line x1="280" y1="100" x2="320" y2="100" stroke="black" stroke-width="1" marker-end="url(#arrowhead3)" />
+  <text x="300" y="90" text-anchor="middle" font-family="Arial" font-size="14">Minimización</text>
+  <g transform="translate(380, 50)">
+    <text x="50" y="-20" font-family="Arial" font-size="16" font-weight="bold">AFD Mínimo</text>
+    <circle cx="0" cy="50" r="20" fill="#B2EBF2" stroke="black" stroke-width="1" />
+    <circle cx="80" cy="50" r="20" fill="#B2EBF2" stroke="black" stroke-width="1" />
+    <circle cx="40" cy="110" r="20" fill="#B2EBF2" stroke="black" stroke-width="1" />
+  </g>
+</svg>
+                        <p style="font-size:0.8rem; color:#666; margin-top:1rem; text-align:center;">
+                            <em>Fig: Representación visual generada.</em>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Intuición</h3>
+                    <div><p>Después de convertir un AFN a un AFD usando la construcción de subconjuntos, a menudo nos encontramos con un AFD que tiene muchos estados, algunos de los cuales podrían ser redundantes. La minimización es como 'limpiar' y 'condensar' este AFD. Imagina que tienes dos estados en tu AFD que, a pesar de ser diferentes, se comportan de forma idéntica con respecto a la aceptación de cadenas: cualquier secuencia de símbolos que te lleve a un estado de aceptación desde el primero, también te llevará a un estado de aceptación desde el segundo, y viceversa. Desde el punto de vista del lenguaje que acepta el autómata, estos dos estados son indistinguibles. La minimización identifica estos estados redundantes y los fusiona en uno solo. Esto no cambia el lenguaje que el autómata acepta, pero reduce su complejidad. El objetivo es obtener la representación más compacta posible del AFD para un lenguaje dado, sin sacrificar su funcionalidad.</p></div>
+                </div>
+
+                <div class="card">
+                    <h3>Aplicación Real</h3>
+                    <div><p>La optimización mediante la minimización de AFD es vital en cualquier aplicación donde los autómatas finitos sean implementados. Por ejemplo, en los analizadores léxicos de los compiladores, aunque la construcción de subconjuntos genera un AFD a partir de las expresiones regulares, la posterior minimización de este AFD es crucial. Un analizador léxico basado en un AFD minimizado consume menos memoria, ya que tiene menos estados y transiciones que almacenar. Además, puede operar marginalmente más rápido porque hay menos 'estructura' que navegar. Esto es especialmente importante para lenguajes de programación complejos con muchas reglas léxicas, donde la diferencia entre un AFD grande y uno minimizado puede ser significativa. Otras aplicaciones incluyen la verificación de hardware, el diseño de circuitos lógicos, la construcción de filtros de red basados en patrones, y sistemas de reconocimiento de voz o patrones, donde la eficiencia y el uso óptimo de recursos son siempre una prioridad.</p></div>
+                </div>
+
+            </div>
+        </article>
+        
+    </main>
+
+    <footer>
+        <p>Prof. Jorge López-Cifre, PhD © 2026</p>
+    </footer>
+
+</body>
+</html>

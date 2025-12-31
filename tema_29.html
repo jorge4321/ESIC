@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>29 - Decidibilidad - El Problema de la Parada. - Prof. Jorge López-Cifre</title>
+    <style>
+        :root {
+            --primary: #003366;
+            --accent: #d4af37;
+            --bg: #f8f9fa;
+            --text: #2c3e50;
+            --card-bg: #ffffff;
+            --border: #e9ecef;
+        }
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 0;
+            line-height: 1.7;
+        }
+        /* Tipografía mejorada */
+        p { margin-bottom: 1rem; }
+        strong, b { color: var(--primary); font-weight: 700; }
+        
+        header {
+            background: var(--primary);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        h1 { margin: 0; font-size: 1.25rem; font-weight: 600; }
+        
+        .btn-volver {
+            background: var(--accent);
+            color: var(--primary);
+            text-decoration: none;
+            padding: 0.5rem 1.2rem;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        .btn-volver:hover { 
+            background: #fff; 
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+
+        main {
+            max-width: 1100px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+
+        .subtema {
+            background: var(--card-bg);
+            border-radius: 12px;
+            margin-bottom: 4rem;
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+        
+        .subtema-header {
+            background: linear-gradient(to right, #f8f9fa, #ffffff);
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid var(--border);
+        }
+        .subtema-header h2 { 
+            margin: 0; 
+            color: var(--primary); 
+            font-size: 1.6rem;
+            border-left: 5px solid var(--accent);
+            padding-left: 1rem;
+        }
+
+        .seccion-contenido {
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2.5rem;
+        }
+
+        @media (min-width: 900px) {
+            .seccion-contenido { grid-template-columns: 1fr 1fr; }
+            .full-width { grid-column: 1 / -1; }
+        }
+
+        .card h3 {
+            color: var(--primary);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-top: 0;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 0.5rem;
+        }
+
+        .formal-box {
+            background-color: #f0f7ff; /* Azul muy muy pálido */
+            border-radius: 8px;
+            padding: 2rem !important;
+            border: 1px solid #cce5ff;
+        }
+
+        /* CSS Específico para corregir SVGs */
+        .diagrama-container {
+            text-align: center;
+            margin: 2rem auto;
+            padding: 1.5rem;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
+            max-width: 100%;
+            overflow-x: auto; /* Si es muy ancho, permite scroll */
+        }
+        
+        /* Forzar comportamiento correcto del SVG */
+        .diagrama-container svg {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+        
+        /* Evitar que el texto dentro del SVG sea ilegible */
+        .diagrama-container text {
+            font-family: sans-serif;
+        }
+
+        footer {
+            text-align: center;
+            padding: 3rem;
+            background: var(--primary);
+            color: rgba(255,255,255,0.8);
+            margin-top: 4rem;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>29 - Decidibilidad - El Problema de la Parada.</h1>
+        <a href="javascript:history.back()" class="btn-volver">← Volver</a>
+    </header>
+
+    <main>
+
+        <article class="subtema">
+            <div class="subtema-header">
+                <h2>Introducción a la Decidibilidad y el Modelo de Computación Universal</h2>
+            </div>
+            <div class="seccion-contenido">
+                
+                <div class="card full-width">
+                    <h3>Historia</h3>
+                    <div><p>El siglo XX marcó una era de profunda reflexión sobre los fundamentos de las matemáticas y la lógica. Antes de la formulación del problema de la parada, David Hilbert planteó en 1900 su famoso "Entscheidungsproblem" (problema de decisión), buscando un algoritmo universal que pudiera determinar la veracidad o falsedad de cualquier proposición matemática. Este desafío impulsó la necesidad de definir formalmente qué es un "algoritmo" o un "cálculo efectivo". En la década de 1930, figuras como Kurt Gödel, Alonzo Church y Alan Turing trabajaron de manera independiente en esta cuestión. Gödel demostró la incompletitud de sistemas formales, mientras Church desarrolló el cálculo lambda y Turing, en 1936, introdujo el concepto de la Máquina de Turing. La tesis de Church-Turing postuló que todo lo computable por un algoritmo puede ser computado por una Máquina de Turing, estableciendo así un modelo universal de computación que es el pilar de la decidibilidad.</p></div>
+                </div>
+
+                <div class="card full-width formal-box">
+                    <h3>Descripción Formal</h3>
+                    <div><p>La decidibilidad en la teoría de la computación se refiere a la existencia de un algoritmo que, dada una entrada, siempre termina y produce una respuesta de "sí" o "no". Formalmente, un lenguaje L es decidible si existe una Máquina de Turing (MT) M tal que M acepta todas las cadenas en L y rechaza todas las cadenas no en L. Crucialmente, M debe <em>siempre</em> parar para cualquier entrada. Si una MT M, que computa una función f: Σ<em> → Σ</em>, se detiene para <em>todas</em> las entradas, decimos que f es una función computable total. Si se detiene solo para algunas, es una función computable parcial. La Máquina de Turing, como modelo de computación universal, se define como una tupla M = (Q, Σ, Γ, δ, q₀, q_accept, q_reject), donde Q es el conjunto finito de estados, Σ el alfabeto de entrada, Γ el alfabeto de la cinta (Σ ⊆ Γ), δ la función de transición (Q × Γ → Q × Γ × {L, R}), q₀ el estado inicial, q_accept el estado de aceptación, y q_reject el estado de rechazo. Un problema es decidible si su lenguaje asociado es decidible. Esto establece el marco para entender las limitaciones fundamentales de la computación algorítmica.</p></div>
+                    
+                    <div class="diagrama-container">
+                        <svg viewBox="0 0 600 200">
+      <rect x="50" y="75" width="500" height="50" fill="#e0f2f7" stroke="black" stroke-width="2"/>
+      <line x1="100" y1="75" x2="100" y2="125" stroke="black" stroke-width="1"/>
+      <line x1="150" y1="75" x2="150" y2="125" stroke="black" stroke-width="1"/>
+      <line x1="200" y1="75" x2="200" y2="125" stroke="black" stroke-width="1"/>
+      <line x1="250" y1="75" x2="250" y2="125" stroke="black" stroke-width="1"/>
+      <line x1="300" y1="75" x2="300" y2="125" stroke="black" stroke-width="1"/>
+      <line x1="350" y1="75" x2="350" y2="125" stroke="black" stroke-width="1"/>
+      <line x1="400" y1="75" x2="400" y2="125" stroke="black" stroke-width="1"/>
+      <line x1="450" y1="75" x2="450" y2="125" stroke="black" stroke-width="1"/>
+      <line x1="500" y1="75" x2="500" y2="125" stroke="black" stroke-width="1"/>
+      <rect x="230" y="20" width="140" height="40" fill="#ffe0b2" stroke="black" stroke-width="2"/>
+      <text x="300" y="45" font-family="Arial" font-size="16" text-anchor="middle" fill="black">Unidad de Control</text>
+      <polygon points="270,70 290,50 310,70" fill="#a7d9b9" stroke="black" stroke-width="1"/>
+      <text x="275" y="105" font-family="Arial" font-size="20" text-anchor="middle" fill="black">w₁</text>
+      <text x="325" y="105" font-family="Arial" font-size="20" text-anchor="middle" fill="black">w₂</text>
+      <text x="375" y="105" font-family="Arial" font-size="20" text-anchor="middle" fill="black">w₃</text>
+      <text x="225" y="105" font-family="Arial" font-size="20" text-anchor="middle" fill="black">...</text>
+      <text x="425" y="105" font-family="Arial" font-size="20" text-anchor="middle" fill="black">...</text>
+      <text x="300" y="145" font-family="Arial" font-size="14" text-anchor="middle" fill="black">Cinta Infinita</text>
+      <text x="280" y="85" font-family="Arial" font-size="16" text-anchor="middle" fill="black">Cabeza</text>
+    </svg>
+                        <p style="font-size:0.8rem; color:#666; margin-top:1rem; text-align:center;">
+                            <em>Fig: Representación visual generada.</em>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Intuición</h3>
+                    <div><p>Imagina que la decidibilidad es como tener una "receta infalible" para resolver un problema. Si un problema es decidible, significa que existe una serie de pasos claros y finitos (un algoritmo) que, sin importar la entrada que le des, siempre te dirá si la respuesta es "sí" o "no", y además, ¡siempre terminará su ejecución! No se quedará pensando eternamente ni te dará una respuesta ambigua. La Máquina de Turing es nuestra forma matemática de describir qué es exactamente esa "receta" o algoritmo. Es como el modelo más básico y potente de lo que puede hacer una computadora. Si un problema puede ser resuelto por una Máquina de Turing que siempre se detiene, entonces decimos que el problema es decidible. Esto establece los límites de lo que las computadoras pueden resolver de manera definitiva y con garantía de terminación.</p></div>
+                </div>
+
+                <div class="card">
+                    <h3>Aplicación Real</h3>
+                    <div><p>Los conceptos de decidibilidad y computabilidad son el fundamento teórico de toda la ingeniería de software moderna y las ciencias de la computación. Cada vez que escribes un programa, estás construyendo un algoritmo que esperamos sea computable y, en muchos casos, que termine para todas las entradas esperadas. Los compiladores, por ejemplo, son programas que transforman código fuente en código máquina; su correcto funcionamiento depende de principios de computabilidad. La verificación de propiedades de sistemas críticos, como el software de control de vuelo o dispositivos médicos, se basa en la búsqueda de algoritmos decidibles que puedan asegurar que el sistema siempre se comportará de cierta manera (o que nunca hará algo indeseable). Aunque los problemas de la vida real son complejos, la aspiración es reducirlos a problemas decidibles o manejables. Incluso la creación de lenguajes de programación, sistemas operativos y bases de datos se asienta sobre la comprensión profunda de lo que es algorítmicamente posible.</p></div>
+                </div>
+
+            </div>
+        </article>
+        
+        <article class="subtema">
+            <div class="subtema-header">
+                <h2>El Problema de la Parada: La Cuestión Fundamental de la Computación</h2>
+            </div>
+            <div class="seccion-contenido">
+                
+                <div class="card full-width">
+                    <h3>Historia</h3>
+                    <div><p>El Problema de la Parada (Halting Problem) fue presentado por Alan Turing en su seminal artículo de 1936, "On Computable Numbers, with an Application to the Entscheidungsproblem". En este trabajo, Turing no solo introdujo el concepto de la Máquina de Turing, sino que también demostró que existen límites inherentes a lo que estas máquinas pueden computar. Fue una respuesta directa al Entscheidungsproblem de Hilbert y una de las primeras y más impactantes demostraciones de la existencia de problemas algorítmicamente irresolubles. La prueba de Turing, una elegante aplicación de la diagonalización de Cantor, reveló que no se puede construir un algoritmo universal capaz de determinar si cualquier otro algoritmo, dada una entrada arbitraria, se detendrá o continuará ejecutándose indefinidamente. Esta conclusión revolucionó la comprensión de la computación, mostrando que la capacidad de un programa para razonar sobre el comportamiento de otros programas tiene límites fundamentales e inquebrantables.</p></div>
+                </div>
+
+                <div class="card full-width formal-box">
+                    <h3>Descripción Formal</h3>
+                    <div><p>El Problema de la Parada puede definirse formalmente como el problema de decidir si una Máquina de Turing M, dada una entrada w, eventualmente se detendrá (parará) o continuará ejecutándose por siempre (entrará en un bucle infinito). Simbólicamente, se define el lenguaje H como H = {⟨M, w⟩ | M es una Máquina de Turing y M para en la entrada w}. Aquí, ⟨M, w⟩ representa una codificación de la Máquina de Turing M y la entrada w como una única cadena binaria. La tesis fundamental de la teoría de la computabilidad es que el lenguaje H es indecidible. La prueba de indecidibilidad se realiza por contradicción, utilizando un argumento de diagonalización. Supongamos que H es decidible. Entonces, existe una Máquina de Turing D (decididor) que siempre para y acepta ⟨M, w⟩ si M para en w, y rechaza ⟨M, w⟩ si M no para en w. Podemos construir una nueva Máquina de Turing D' (Diagonaldor) de la siguiente manera: D' toma como entrada una descripción ⟨M⟩ de una Máquina de Turing M. D' simula a D con la entrada ⟨M, ⟨M⟩⟩. Si D acepta ⟨M, ⟨M⟩⟩ (lo que implica que M para en sí misma), entonces D' entra en un bucle infinito. Si D rechaza ⟨M, ⟨M⟩⟩ (lo que implica que M no para en sí misma), entonces D' se detiene. Ahora, si ejecutamos D' con su propia descripción ⟨D'⟩, llegamos a una paradoja: si D' para en ⟨D'⟩, entonces por construcción de D', D' debe entrar en un bucle infinito. Si D' no para en ⟨D'⟩, entonces por construcción de D', D' debe detenerse. Esta contradicción demuestra que nuestro supuesto inicial de que H es decidible debe ser falso. Por lo tanto, el Problema de la Parada es indecidible.</p></div>
+                    
+                    <div class="diagrama-container">
+                        <svg viewBox="0 0 600 200">
+      <rect x="50" y="50" width="150" height="50" fill="#a7d9b9" stroke="black" stroke-width="2"/>
+      <text x="125" y="78" font-family="Arial" font-size="16" text-anchor="middle" fill="black">Máquina H (Hipótética)</text>
+
+      <rect x="250" y="20" width="100" height="30" fill="#ffe0b2" stroke="black" stroke-width="1"/>
+      <text x="300" y="38" font-family="Arial" font-size="14" text-anchor="middle" fill="black">Entrada: M</text>
+      <rect x="250" y="60" width="100" height="30" fill="#ffe0b2" stroke="black" stroke-width="1"/>
+      <text x="300" y="78" font-family="Arial" font-size="14" text-anchor="middle" fill="black">Entrada: w</text>
+
+      <line x1="200" y1="65" x2="250" y2="65" stroke="black" stroke-width="1"/>
+      <line x1="350" y1="40" x2="400" y2="40" stroke="black" stroke-width="1"/>
+      <line x1="350" y1="80" x2="400" y2="80" stroke="black" stroke-width="1"/>
+
+      <path d="M400 60 L450 40 L450 80 Z" fill="#e0f2f7" stroke="black" stroke-width="2"/>
+      <text x="425" y="65" font-family="Arial" font-size="14" text-anchor="middle" fill="black">MUX</text>
+
+      <line x1="450" y1="60" x2="500" y2="60" stroke="black" stroke-width="1"/>
+
+      <rect x="500" y="50" width="80" height="25" fill="#c3e8e1" stroke="black" stroke-width="1"/>
+      <text x="540" y="67" font-family="Arial" font-size="12" text-anchor="middle" fill="black">Para / No Para</text>
+
+      <text x="125" y="125" font-family="Arial" font-size="16" text-anchor="middle" fill="black">Contradicción</text>
+      <path d="M125 100 L125 120 M120 115 L125 120 L130 115" stroke="red" stroke-width="2"/>
+
+      <rect x="50" y="150" width="150" height="30" fill="#ffcdd2" stroke="black" stroke-width="1"/>
+      <text x="125" y="168" font-family="Arial" font-size="14" text-anchor="middle" fill="black">Máquina D' (Diagonal)</text>
+      <path d="M125 180 L125 190 M120 185 L125 190 L130 185" stroke="black" stroke-width="1"/>
+    </svg>
+                        <p style="font-size:0.8rem; color:#666; margin-top:1rem; text-align:center;">
+                            <em>Fig: Representación visual generada.</em>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Intuición</h3>
+                    <div><p>Imagina que eres un brillante desarrollador de software y te encomiendan la tarea de crear el "debugger definitivo". Este debugger sería tan avanzado que, al darle cualquier programa y cualquier entrada, siempre te diría, en un tiempo finito, si ese programa terminará su ejecución o si, por el contrario, se quedará en un bucle infinito. Sería una herramienta increíblemente útil, ¿verdad? Podrías predecir fallos, optimizar recursos y garantizar la fiabilidad del software. El Problema de la Parada nos dice que ese "debugger definitivo" es imposible de construir. No importa lo inteligente que seas o lo potente que sea tu computadora, siempre habrá un programa para el cual tu debugger no podrá dar una respuesta definitiva. La esencia de la prueba es una paradoja similar a la de "el barbero que afeita a todos los que no se afeitan a sí mismos". Si intentas construir esa máquina, puedes construir otra máquina que la contradiga, demostrando que la primera no puede existir.</p></div>
+                </div>
+
+                <div class="card">
+                    <h3>Aplicación Real</h3>
+                    <div><p>La indecidibilidad del Problema de la Parada tiene profundas implicaciones prácticas en el desarrollo de software y en la ingeniería en general. Significa que no podemos crear un programa general que verifique, para <em>cualquier</em> otro programa, propiedades complejas como "este programa nunca se bloqueará", "este programa siempre terminará en menos de X segundos", o "este programa nunca accederá a memoria no autorizada". Esto afecta directamente la verificación automática de software, la seguridad informática (por ejemplo, un antivirus perfecto que detecte todos los virus antes de ejecutarse es imposible) y la optimización de código. Aunque se han desarrollado herramientas de análisis estático y dinámico muy sofisticadas que funcionan bien para muchos casos, estas herramientas o bien no pueden garantizar la completitud (pueden fallar en encontrar algunos problemas o dar falsos positivos), o bien no terminan para todos los programas. Reconocer esta limitación fundamental nos ayuda a diseñar sistemas más robustos, a aceptar que la intervención humana y la revisión manual siguen siendo esenciales, y a enfocar nuestros esfuerzos en problemas decidibles o en heurísticas para los indecidibles.</p></div>
+                </div>
+
+            </div>
+        </article>
+        
+        <article class="subtema">
+            <div class="subtema-header">
+                <h2>Más Allá del Problema de la Parada: Consecuencias y Otros Problemas Indecidibles</h2>
+            </div>
+            <div class="seccion-contenido">
+                
+                <div class="card full-width">
+                    <h3>Historia</h3>
+                    <div><p>Tras la demostración de Turing de la indecidibilidad del Problema de la Parada, la comunidad matemática y computacional comenzó a explorar qué otros problemas compartían esta característica. Emil Post, en 1947, introdujo el Post Correspondence Problem (PCP), demostrando que era indecidible, lo que mostró que la indecidibilidad no era un caso aislado de las máquinas de Turing. Un hito crucial fue el Teorema de Rice, formulado por Henry Gordon Rice en 1953. Este teorema generalizó enormemente el concepto, estableciendo que casi cualquier pregunta interesante sobre el comportamiento no trivial de un programa es indecidible. Estos descubrimientos solidificaron la comprensión de los límites inherentes a la computación, extendiendo la sombra de la indecidibilidad mucho más allá del problema original de Turing y delineando claramente las fronteras de lo algorítmicamente posible, impactando campos desde la lógica matemática hasta la inteligencia artificial y la verificación de software.</p></div>
+                </div>
+
+                <div class="card full-width formal-box">
+                    <h3>Descripción Formal</h3>
+                    <div><p>La indecidibilidad del Problema de la Parada es el punto de partida para demostrar la indecidibilidad de una vasta gama de otros problemas computacionales mediante la técnica de <em>reducción</em>. Un problema A se <em>reduce</em> a un problema B (denotado A ≤ B) si un algoritmo que resuelve B puede usarse para construir un algoritmo que resuelva A. Si A es indecidible y A ≤ B, entonces B también debe ser indecidible. Un ejemplo fundamental de la generalización es el Teorema de Rice. Este teorema establece que cualquier propiedad no trivial del lenguaje reconocido por una Máquina de Turing es indecidible. Una propiedad P es "no trivial" si no todas las MTs la tienen, y no ninguna MT la tiene. Ejemplos de propiedades no triviales incluyen: "L(M) es un lenguaje vacío", "L(M) es regular", "L(M) contiene una cadena de longitud par", "M se detiene en la cadena vacía". La indecidibilidad de estos problemas se demuestra reduciendo el Problema de la Parada (o un problema indecidible conocido) a ellos. Otros problemas notables indecidibles incluyen el Problema de la Correspondencia de Post (PCP), el problema de determinar si dos Máquinas de Turing son equivalentes (L(M1) = L(M2)), y el problema de si una Máquina de Turing acepta un lenguaje recursivo. La teoría de la computabilidad categoriza así la dificultad intrínseca de los problemas, revelando que algunos no tienen solución algorítmica general.</p></div>
+                    
+                    <div class="diagrama-container">
+                        <svg viewBox="0 0 600 200">
+      <rect x="50" y="75" width="100" height="50" fill="#ffe0b2" stroke="black" stroke-width="2"/>
+      <text x="100" y="103" font-family="Arial" font-size="16" text-anchor="middle" fill="black">Problema A</text>
+
+      <rect x="450" y="75" width="100" height="50" fill="#a7d9b9" stroke="black" stroke-width="2"/>
+      <text x="500" y="103" font-family="Arial" font-size="16" text-anchor="middle" fill="black">Problema B</text>
+
+      <line x1="150" y1="100" x2="200" y2="100" stroke="black" stroke-width="2"/>
+      <polygon points="190,95 200,100 190,105" fill="black"/>
+      <text x="175" y="85" font-family="Arial" font-size="12" text-anchor="middle" fill="black">Entrada A</text>
+
+      <rect x="200" y="80" width="100" height="40" fill="#e0f2f7" stroke="black" stroke-width="1"/>
+      <text x="250" y="103" font-family="Arial" font-size="14" text-anchor="middle" fill="black">Reducción (R)</text>
+
+      <line x1="300" y1="100" x2="350" y2="100" stroke="black" stroke-width="2"/>
+      <polygon points="340,95 350,100 340,105" fill="black"/>
+      <text x="325" y="85" font-family="Arial" font-size="12" text-anchor="middle" fill="black">Salida A</text>
+
+      <line x1="350" y1="100" x2="450" y2="100" stroke="black" stroke-width="2"/>
+      <polygon points="440,95 450,100 440,105" fill="black"/>
+      <text x="400" y="85" font-family="Arial" font-size="12" text-anchor="middle" fill="black">Entrada B</text>
+
+      <text x="100" y="145" font-family="Arial" font-size="14" text-anchor="middle" fill="black">Si A es indecidible</text>
+      <path d="M100 150 L100 160 M95 155 L100 160 L105 155" stroke="black" stroke-width="1"/>
+
+      <text x="250" y="145" font-family="Arial" font-size="14" text-anchor="middle" fill="black">y A ≤ B</text>
+      <path d="M250 150 L250 160 M245 155 L250 160 L255 155" stroke="black" stroke-width="1"/>
+
+      <text x="400" y="145" font-family="Arial" font-size="14" text-anchor="middle" fill="black">entonces B es indecidible</text>
+      <path d="M400 150 L400 160 M395 155 L400 160 L405 155" stroke="black" stroke-width="1"/>
+
+    </svg>
+                        <p style="font-size:0.8rem; color:#666; margin-top:1rem; text-align:center;">
+                            <em>Fig: Representación visual generada.</em>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Intuición</h3>
+                    <div><p>Una vez que sabemos que el Problema de la Parada es imposible de resolver de manera general, abrimos la puerta a una clase entera de otros problemas que también son irresolubles. Piensa en ello como una "enfermedad contagiosa" en el mundo de la computación. Si demuestras que el "problema X" se puede convertir en el "Problema de la Parada", entonces resolver el problema X sería equivalente a resolver el Problema de la Parada, lo cual sabemos que es imposible. Por lo tanto, el problema X también es indecidible. El Teorema de Rice es una especie de "vacuna general" que nos dice que casi cualquier pregunta interesante que quieras hacer sobre el comportamiento <em>funcional</em> de un programa (si termina, si produce cierta salida, si es equivalente a otro, etc.) será indecidible. Esto nos obliga a ser humildes sobre lo que las computadoras pueden lograr automáticamente y a enfocarnos en la verificación de casos específicos o propiedades simplificadas.</p></div>
+                </div>
+
+                <div class="card">
+                    <h3>Aplicación Real</h3>
+                    <div><p>Las implicaciones de la indecidibilidad van mucho más allá del mero ejercicio teórico. En el ámbito de la inteligencia artificial, el Teorema de Rice sugiere que no puede existir un algoritmo general que determine si un programa dado es "inteligente" o "se comporta como un humano". En la verificación formal de software, sabemos que no podemos construir un verificador universal que garantice <em>todas</em> las propiedades de <em>cualquier</em> programa. En su lugar, los ingenieros deben especificar propiedades concretas y verificables, a menudo restringiendo el dominio o el tipo de programas, o utilizando enfoques de análisis estático que son conservadores (pueden dar falsos positivos). La gestión de la seguridad informática también se ve afectada; la creación de un sistema de detección de intrusiones o un antivirus que sea 100% efectivo contra todos los programas maliciosos es, en principio, imposible. Comprender estos límites ayuda a los desarrolladores a establecer expectativas realistas para las capacidades de sus herramientas y a centrarse en la creación de soluciones prácticas y robustas que gestionen la complejidad y el riesgo, en lugar de buscar la perfección algorítmica inalcanzable.</p></div>
+                </div>
+
+            </div>
+        </article>
+        
+    </main>
+
+    <footer>
+        <p>Prof. Jorge López-Cifre, PhD © 2026</p>
+    </footer>
+
+</body>
+</html>

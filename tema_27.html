@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>27 - La Maquina Universal - Variantes y no determinismo. - Prof. Jorge López-Cifre</title>
+    <style>
+        :root {
+            --primary: #003366;
+            --accent: #d4af37;
+            --bg: #f8f9fa;
+            --text: #2c3e50;
+            --card-bg: #ffffff;
+            --border: #e9ecef;
+        }
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 0;
+            line-height: 1.7;
+        }
+        /* Tipografía mejorada */
+        p { margin-bottom: 1rem; }
+        strong, b { color: var(--primary); font-weight: 700; }
+        
+        header {
+            background: var(--primary);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        h1 { margin: 0; font-size: 1.25rem; font-weight: 600; }
+        
+        .btn-volver {
+            background: var(--accent);
+            color: var(--primary);
+            text-decoration: none;
+            padding: 0.5rem 1.2rem;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        .btn-volver:hover { 
+            background: #fff; 
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+
+        main {
+            max-width: 1100px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+
+        .subtema {
+            background: var(--card-bg);
+            border-radius: 12px;
+            margin-bottom: 4rem;
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+        
+        .subtema-header {
+            background: linear-gradient(to right, #f8f9fa, #ffffff);
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid var(--border);
+        }
+        .subtema-header h2 { 
+            margin: 0; 
+            color: var(--primary); 
+            font-size: 1.6rem;
+            border-left: 5px solid var(--accent);
+            padding-left: 1rem;
+        }
+
+        .seccion-contenido {
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2.5rem;
+        }
+
+        @media (min-width: 900px) {
+            .seccion-contenido { grid-template-columns: 1fr 1fr; }
+            .full-width { grid-column: 1 / -1; }
+        }
+
+        .card h3 {
+            color: var(--primary);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-top: 0;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 0.5rem;
+        }
+
+        .formal-box {
+            background-color: #f0f7ff; /* Azul muy muy pálido */
+            border-radius: 8px;
+            padding: 2rem !important;
+            border: 1px solid #cce5ff;
+        }
+
+        /* CSS Específico para corregir SVGs */
+        .diagrama-container {
+            text-align: center;
+            margin: 2rem auto;
+            padding: 1.5rem;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
+            max-width: 100%;
+            overflow-x: auto; /* Si es muy ancho, permite scroll */
+        }
+        
+        /* Forzar comportamiento correcto del SVG */
+        .diagrama-container svg {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+        
+        /* Evitar que el texto dentro del SVG sea ilegible */
+        .diagrama-container text {
+            font-family: sans-serif;
+        }
+
+        footer {
+            text-align: center;
+            padding: 3rem;
+            background: var(--primary);
+            color: rgba(255,255,255,0.8);
+            margin-top: 4rem;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>27 - La Maquina Universal - Variantes y no determinismo.</h1>
+        <a href="javascript:history.back()" class="btn-volver">← Volver</a>
+    </header>
+
+    <main>
+
+        <article class="subtema">
+            <div class="subtema-header">
+                <h2>La Máquina Universal de Turing y la Programación Almacenada</h2>
+            </div>
+            <div class="seccion-contenido">
+                
+                <div class="card full-width">
+                    <h3>Historia</h3>
+                    <div><p>El concepto de una máquina que pudiera ejecutar cualquier algoritmo preestablecido, es decir, una máquina "programable", fue una de las ideas más profundas de Alan Turing. En su seminal artículo de 1936, "On Computable Numbers, with an Application to the Entscheidungsproblem", Turing no solo definió lo que hoy conocemos como la Máquina de Turing estándar, sino que también conceptualizó una "Máquina de Computación Universal". Esta máquina especial, a diferencia de sus contrapartes que estaban diseñadas para un problema específico, podía tomar como entrada la descripción de cualquier otra Máquina de Turing y luego simular su comportamiento. Esta visión precursora de un dispositivo capaz de procesar instrucciones arbitrarias sentó las bases teóricas para la arquitectura de von Neumann y el modelo de computadora de programa almacenado, que domina la computación moderna. Turing demostró que la computabilidad no requiere hardware específico para cada tarea, sino un único dispositivo versátil.</p></div>
+                </div>
+
+                <div class="card full-width formal-box">
+                    <h3>Descripción Formal</h3>
+                    <div><p>Una Máquina Universal de Turing (MUT), denotada como U, es una Máquina de Turing estándar que, dada una codificación de otra Máquina de Turing M y una entrada ω, simula el comportamiento de M en ω. Formalmente, si una Máquina de Turing M se define como M = (Q, Σ, Γ, δ, q₀, q_acc, q_rej), donde Q es el conjunto de estados, Σ el alfabeto de entrada, Γ el alfabeto de la cinta (Σ ⊆ Γ), δ la función de transición, q₀ el estado inicial, q_acc el estado de aceptación y q_rej el estado de rechazo. Una codificación estándar de M, denotada como <M>, es una cadena sobre un alfabeto binario {0, 1} que representa de forma única todos los componentes de M.
+La MUT U tiene una cinta de longitud infinita dividida conceptualmente en varias secciones. Típicamente, la cinta de U contendría:
+1. La codificación de la Máquina de Turing a simular, <M>.
+2. El contenido actual de la cinta de M.
+3. El estado actual de M.
+La función de transición de U, δ_U, está diseñada para interpretar <M> y simular cada paso de M. En cada paso de la simulación, U lee el estado actual de M (sección 3) y el símbolo bajo el cabezal simulado de M (en la sección 2). Consulta la descripción <M> (sección 1) para encontrar la transición apropiada de M. Una vez encontrada, U actualiza el símbolo en la cinta de M (sección 2), el estado actual de M (sección 3) y mueve el cabezal simulado de M (actualizando un puntero o índice en la sección 2). Este proceso se repite hasta que M entra en un estado de aceptación o rechazo. La MUT demuestra que una única máquina puede realizar cualquier cálculo realizable por cualquier otra Máquina de Turing.</p></div>
+                    
+                    <div class="diagrama-container">
+                        <svg viewBox="0 0 600 200">
+  <rect x="50" y="50" width="500" height="100" fill="#e0e0e0" stroke="black" stroke-width="2"/>
+  <text x="290" y="30" font-family="Arial" font-size="20" text-anchor="middle">Cinta de la Máquina Universal de Turing</text>
+
+  <line x1="200" y1="50" x2="200" y2="150" stroke="black" stroke-width="2"/>
+  <text x="125" y="100" font-family="Arial" font-size="16" text-anchor="middle">Descripción de M (&lt;M&gt;)</text>
+
+  <line x1="400" y1="50" x2="400" y2="150" stroke="black" stroke-width="2"/>
+  <text x="300" y="100" font-family="Arial" font-size="16" text-anchor="middle">Contenido de la Cinta de M</text>
+  
+  <text x="500" y="100" font-family="Arial" font-size="16" text-anchor="middle">Estado Actual de M</text>
+  
+  <polygon points="290,160 310,160 300,175" fill="black"/>
+  <text x="300" y="190" font-family="Arial" font-size="14" text-anchor="middle">Cabezal de Lectura/Escritura de U</text>
+</svg>
+                        <p style="font-size:0.8rem; color:#666; margin-top:1rem; text-align:center;">
+                            <em>Fig: Representación visual generada.</em>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Intuición</h3>
+                    <div><p>Imagina que tienes un reproductor de música. Este reproductor no está hecho para una sola canción; puede reproducir cualquier canción que le des, siempre y cuando esté en un formato que entienda (por ejemplo, MP3). La Máquina Universal de Turing (MUT) es como ese reproductor. No está "programada" para resolver un problema específico (como sumar números o buscar en una lista); en cambio, puede tomar las "instrucciones" (el programa o algoritmo) para cualquier problema que una Máquina de Turing normal pueda resolver y luego ejecutar esas instrucciones. Es la idea fundamental detrás de cualquier computadora moderna: un único dispositivo físico capaz de realizar una infinidad de tareas diferentes simplemente cargando software distinto. La "universalidad" reside en su capacidad de adaptarse a cualquier tarea computacional, siempre que se le proporcione la descripción adecuada de la tarea.</p></div>
+                </div>
+
+                <div class="card">
+                    <h3>Aplicación Real</h3>
+                    <div><p>La Máquina Universal de Turing es el concepto teórico que subyace a toda la computación moderna. Cada computadora personal, servidor o smartphone es esencialmente una implementación práctica de una MUT. El sistema operativo (Windows, macOS, Linux, Android, iOS) actúa como el "simulador" que lee y ejecuta las instrucciones de los diferentes programas (aplicaciones, juegos, navegadores web). Cuando abrimos un navegador, el hardware de nuestra computadora no se reconfigura físicamente; en cambio, el sistema operativo le "dice" a la CPU cómo interpretar y ejecutar el código del navegador. Otros ejemplos directos incluyen las máquinas virtuales (VMware, VirtualBox), que simulan una computadora completa dentro de otra, o los lenguajes de programación interpretados (Python, JavaScript), donde un "intérprete" (una especie de MUT especializada) lee y ejecuta el código línea por línea.</p></div>
+                </div>
+
+            </div>
+        </article>
+        
+        <article class="subtema">
+            <div class="subtema-header">
+                <h2>Variantes de la Máquina de Turing: Equivalencia y Robustez</h2>
+            </div>
+            <div class="seccion-contenido">
+                
+                <div class="card full-width">
+                    <h3>Historia</h3>
+                    <div><p>Poco después de que Alan Turing propusiera su modelo original, otros investigadores y el propio Turing comenzaron a explorar variantes y modificaciones. La motivación era doble: por un lado, simplificar el modelo para ciertos análisis teóricos o, por otro, intentar aumentar su poder computacional. Figuras como Emil Post también propusieron formulaciones equivalentes. Se consideraron máquinas con múltiples cintas, cintas bidimensionales, múltiples cabezales de lectura/escritura, cintas infinitas en ambas direcciones, o con un alfabeto de cinta más grande. Lo notable de esta exploración es que, a pesar de las muchas variantes estructurales imaginables, ninguna de ellas logró superar la capacidad computacional de la Máquina de Turing original con una sola cinta infinita unidireccional. Esta "robustez" del modelo de Turing, es decir, su insensibilidad a pequeñas variaciones en su definición, se convirtió en una pieza clave de evidencia para la Tesis de Church-Turing.</p></div>
+                </div>
+
+                <div class="card full-width formal-box">
+                    <h3>Descripción Formal</h3>
+                    <div><p>Aunque existen numerosas variantes de las Máquinas de Turing, las más estudiadas incluyen:
+1.  <strong>Máquinas de Turing Multi-cinta (MTM-C):</strong> Poseen k cintas, cada una con su propio cabezal. La función de transición es δ: Q × Γᵏ → Q × Γᵏ × {L, R}ᵏ.
+2.  <strong>Máquinas de Turing Multi-pista (MTM-P):</strong> Tienen una única cinta pero con k pistas, donde cada celda almacena un k-tupla de símbolos. El alfabeto de la cinta Γ_MP = Γᵏ.
+3.  <strong>Máquinas de Turing con Cinta Bidireccional Infinita (MTM-BI):</strong> La cinta se extiende infinitamente a la izquierda y a la derecha desde la posición inicial.
+Sorprendentemente, todas estas variantes son computacionalmente equivalentes a la Máquina de Turing estándar de una sola cinta (MTS). La prueba de equivalencia se realiza mostrando cómo una MTS puede simular cualquier variante, y viceversa. Por ejemplo, una MTM-C con k cintas puede ser simulada por una MTS con una sola cinta multi-pista. La cinta de la MTS tendría 2k pistas: k pistas para los contenidos de las k cintas de la MTM-C y k pistas adicionales para marcar la posición de cada uno de los k cabezales. Para simular un paso de la MTM-C, la MTS escanearía toda su cinta para encontrar todos los cabezales, registraría los símbolos bajo ellos, determinaría las nuevas transiciones según las reglas de la MTM-C, y luego volvería a escanear la cinta para realizar todas las actualizaciones de símbolos y movimientos de cabezales. Este proceso garantiza que cualquier cálculo que pueda hacer una MTM-C, lo puede hacer una MTS, aunque potencialmente más lentamente.</p></div>
+                    
+                    <div class="diagrama-container">
+                        <svg viewBox="0 0 600 200">
+  <rect x="50" y="50" width="500" height="30" fill="#e0e0e0" stroke="black" stroke-width="1"/>
+  <rect x="50" y="80" width="500" height="30" fill="#e0e0e0" stroke="black" stroke-width="1"/>
+  <rect x="50" y="110" width="500" height="30" fill="#e0e0e0" stroke="black" stroke-width="1"/>
+  
+  <text x="290" y="30" font-family="Arial" font-size="20" text-anchor="middle">Máquina Multi-Cinta</text>
+
+  <circle cx="100" cy="40" r="10" fill="black"/>
+  <text x="100" y="45" font-family="Arial" font-size="12" fill="white" text-anchor="middle">H1</text>
+  <circle cx="150" cy="70" r="10" fill="black"/>
+  <text x="150" y="75" font-family="Arial" font-size="12" fill="white" text-anchor="middle">H2</text>
+  <circle cx="200" cy="100" r="10" fill="black"/>
+  <text x="200" y="105" font-family="Arial" font-size="12" fill="white" text-anchor="middle">H3</text>
+
+  <path d="M300,65 Q350,10 400,65" stroke="gray" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+  <text x="350" y="30" font-family="Arial" font-size="14" text-anchor="middle">Simulación</text>
+
+  <rect x="450" y="50" width="100" height="90" fill="#c0c0c0" stroke="black" stroke-width="1"/>
+  <text x="500" y="65" font-family="Arial" font-size="12" text-anchor="middle">Pista 1 (Cinta 1)</text>
+  <text x="500" y="85" font-family="Arial" font-size="12" text-anchor="middle">Pista 2 (Cinta 2)</text>
+  <text x="500" y="105" font-family="Arial" font-size="12" text-anchor="middle">Pista 3 (Cinta 3)</text>
+  <text x="500" y="125" font-family="Arial" font-size="12" text-anchor="middle">Pistas de Cabezales</text>
+  
+  <text x="500" y="170" font-family="Arial" font-size="20" text-anchor="middle">Máquina Mono-Cinta Multi-Pista</text>
+
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="gray" />
+    </marker>
+  </defs>
+</svg>
+                        <p style="font-size:0.8rem; color:#666; margin-top:1rem; text-align:center;">
+                            <em>Fig: Representación visual generada.</em>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Intuición</h3>
+                    <div><p>Piensa en el modelo básico de la Máquina de Turing como el "núcleo" de lo que es computable. Ahora, imagina que intentas hacer que sea "mejor" agregándole más herramientas: en lugar de una cinta, le das tres; en lugar de un cabezal, le das dos; o le permites moverse hacia la izquierda sin fin. Intuitivamente, pensaríamos que esto le daría más poder para resolver problemas. Sin embargo, lo que se ha demostrado es que, en términos de <em>qué</em> problemas puede resolver (no <em>cuán rápido</em>), todas estas adiciones son meras conveniencias. Es como tener una sola hoja de papel y un lápiz para escribir una novela. Si te doy tres hojas de papel y tres lápices, seguirás escribiendo la misma novela, solo que quizás de forma más cómoda o con el potencial de ir más rápido. El punto clave es que la capacidad fundamental de la computación no se ve alterada.</p></div>
+                </div>
+
+                <div class="card">
+                    <h3>Aplicación Real</h3>
+                    <div><p>Aunque las variantes de la Máquina de Turing no aumentan su poder computacional, son increíblemente relevantes en la ingeniería de software y el diseño de hardware para optimizar el rendimiento. Por ejemplo, los sistemas de memoria caché y las jerarquías de memoria en las computadoras modernas pueden verse como una forma de cinta multi-pista o multi-cabezal, donde diferentes "cintas" (niveles de caché, RAM, disco) son accedidas por "cabezales" de forma optimizada para la velocidad. En el diseño de compiladores y optimización de código, a menudo se transforman algoritmos entre representaciones que podrían considerarse análogas a diferentes variantes de MT para mejorar el tiempo de ejecución o el uso de recursos. El concepto de robustez también tranquiliza a los ingenieros: la capacidad fundamental de resolver problemas computacionales no depende de los detalles específicos de la arquitectura de la computadora, sino de la existencia de un conjunto básico de operaciones.</p></div>
+                </div>
+
+            </div>
+        </article>
+        
+        <article class="subtema">
+            <div class="subtema-header">
+                <h2>Máquinas de Turing No Deterministas: Poder y Complejidad</h2>
+            </div>
+            <div class="seccion-contenido">
+                
+                <div class="card full-width">
+                    <h3>Historia</h3>
+                    <div><p>El concepto de no determinismo en la computación emergió como una abstracción poderosa en la década de 1950, destacándose con el trabajo de Michael Rabin y Dana Scott sobre autómatas finitos no deterministas. Al aplicarse a las Máquinas de Turing, el no determinismo abrió una nueva dimensión para el estudio de la complejidad computacional. No fue hasta la década de 1960 y principios de 1970, con figuras como Stephen Cook y Richard Karp, que las Máquinas de Turing No Deterministas (MTND) se convirtieron en herramientas esenciales para definir clases de complejidad como NP (tiempo polinomial no determinista). La famosa pregunta P vs NP, que indaga si cada problema que puede ser verificado rápidamente (P) puede también ser resuelto rápidamente por una MTND, se convirtió en uno de los problemas sin resolver más importantes de la informática teórica, impulsado por la concepción de las MTND.</p></div>
+                </div>
+
+                <div class="card full-width formal-box">
+                    <h3>Descripción Formal</h3>
+                    <div><p>Una Máquina de Turing No Determinista (MTND) M = (Q, Σ, Γ, δ, q₀, q_acc, q_rej) difiere de una Máquina de Turing Determinista (MTD) en su función de transición δ. Mientras que para una MTD, δ: Q × Γ → Q × Γ × {L, R} asigna una única transición para cada par (estado, símbolo), en una MTND, la función de transición δ: Q × Γ → P(Q × Γ × {L, R}) devuelve un <em>conjunto</em> de posibles transiciones. Esto significa que, desde un determinado estado y leyendo un símbolo en la cinta, la MTND puede elegir entre varias opciones para el siguiente estado, el símbolo a escribir y la dirección del movimiento del cabezal.
+Una MTND acepta una entrada si <em>existe al menos una secuencia de elecciones de transiciones</em> que lleva la máquina a un estado de aceptación q_acc. Si todas las secuencias posibles de elecciones llevan a un estado de rechazo o a un bucle infinito, la entrada es rechazada.
+A pesar de esta capacidad de "elección múltiple" o "adivinación", se ha demostrado que las MTND son computacionalmente equivalentes a las MTD. Cualquier problema resoluble por una MTND también puede ser resuelto por una MTD. La simulación de una MTND por una MTD implica explorar sistemáticamente todas las posibles ramas de computación del árbol de configuración de la MTND. Esto se puede lograr con una MTD multi-cinta que, por ejemplo, utiliza una cinta para la entrada original, otra para almacenar la "dirección" de la ruta de exploración actual (secuencia de elecciones), y una tercera cinta para realizar la simulación de esa ruta. Si una rama lleva a un estado de aceptación, la MTD acepta; de lo contrario, la MTD retrocede y prueba la siguiente rama.</p></div>
+                    
+                    <div class="diagrama-container">
+                        <svg viewBox="0 0 600 200">
+  <circle cx="100" cy="100" r="20" fill="#add8e6" stroke="black"/>
+  <text x="100" y="105" font-family="Arial" font-size="14" text-anchor="middle">q₀</text>
+
+  <path d="M120,100 C180,50 240,50 300,100" stroke="black" stroke-width="2" fill="none" marker-end="url(#arrowhead_black)"/>
+  <text x="210" y="65" font-family="Arial" font-size="12" text-anchor="middle">Opción 1: (q₁, a, R)</text>
+
+  <path d="M120,100 C180,150 240,150 300,100" stroke="black" stroke-width="2" fill="none" marker-end="url(#arrowhead_black)"/>
+  <text x="210" y="135" font-family="Arial" font-size="12" text-anchor="middle">Opción 2: (q₂, b, L)</text>
+
+  <path d="M320,100 C380,50 440,50 500,100" stroke="green" stroke-width="2" fill="none" marker-end="url(#arrowhead_green)"/>
+  <text x="410" y="65" font-family="Arial" font-size="12" text-anchor="middle" fill="green">Camino de Aceptación</text>
+
+  <circle cx="500" cy="100" r="20" fill="#90ee90" stroke="black"/>
+  <circle cx="500" cy="100" r="15" fill="#90ee90" stroke="black"/>
+  <text x="500" y="105" font-family="Arial" font-size="14" text-anchor="middle">q_acc</text>
+
+  <defs>
+    <marker id="arrowhead_black" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="black" />
+    </marker>
+    <marker id="arrowhead_green" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="green" />
+    </marker>
+  </defs>
+</svg>
+                        <p style="font-size:0.8rem; color:#666; margin-top:1rem; text-align:center;">
+                            <em>Fig: Representación visual generada.</em>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Intuición</h3>
+                    <div><p>Imagina que estás en un laberinto con múltiples caminos en cada intersección. Una Máquina de Turing Determinista es como una persona que debe elegir un solo camino en cada intersección, y si se equivoca, tiene que retroceder y probar otra. Una Máquina de Turing No Determinista, en cambio, es como si pudieras "clonarte" en cada intersección, enviando una copia de ti mismo por cada camino posible. Si alguna de tus copias encuentra la salida, ¡entonces la máquina acepta la entrada! No tiene que retroceder ni "adivinar"; simplemente explora todas las posibilidades simultáneamente. Esto no significa que pueda resolver problemas "imposibles" para la determinista (el laberinto sigue siendo el mismo), sino que para algunos problemas, puede encontrar la solución mucho más rápidamente, explorando el espacio de búsqueda de forma "paralela".</p></div>
+                </div>
+
+                <div class="card">
+                    <h3>Aplicación Real</h3>
+                    <div><p>Aunque las máquinas de Turing no deterministas son un modelo teórico, su impacto en la informática es profundo, especialmente en la teoría de la complejidad computacional. La clase de problemas NP (Non-deterministic Polynomial time) agrupa aquellos problemas para los cuales una solución propuesta puede ser verificada en tiempo polinomial por una máquina determinista, o, equivalentemente, para los cuales una MTND puede encontrar una solución en tiempo polinomial. La pregunta P vs NP, sobre si P=NP, es fundamental para entender los límites de la computación eficiente. En la práctica, muchos algoritmos de inteligencia artificial, búsqueda heurística, optimización (como algoritmos genéticos, simulaciones de recocido), y criptografía (ej. factorizacion de números grandes) se benefician de estrategias que intentan emular, de manera limitada, la exploración simultánea o "adivinación" del no determinismo para encontrar soluciones a problemas intrínsecamente difíciles para las computadoras deterministas actuales.</p></div>
+                </div>
+
+            </div>
+        </article>
+        
+    </main>
+
+    <footer>
+        <p>Prof. Jorge López-Cifre, PhD © 2026</p>
+    </footer>
+
+</body>
+</html>

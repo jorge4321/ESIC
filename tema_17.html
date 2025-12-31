@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>17 - Gramáticas (GIC) - Derivaciones de gramáticas. - Prof. Jorge López-Cifre</title>
+    <style>
+        :root {
+            --primary: #003366;
+            --accent: #d4af37;
+            --bg: #f8f9fa;
+            --text: #2c3e50;
+            --card-bg: #ffffff;
+            --border: #e9ecef;
+        }
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 0;
+            line-height: 1.7;
+        }
+        /* Tipografía mejorada */
+        p { margin-bottom: 1rem; }
+        strong, b { color: var(--primary); font-weight: 700; }
+        
+        header {
+            background: var(--primary);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        h1 { margin: 0; font-size: 1.25rem; font-weight: 600; }
+        
+        .btn-volver {
+            background: var(--accent);
+            color: var(--primary);
+            text-decoration: none;
+            padding: 0.5rem 1.2rem;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        .btn-volver:hover { 
+            background: #fff; 
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+
+        main {
+            max-width: 1100px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+
+        .subtema {
+            background: var(--card-bg);
+            border-radius: 12px;
+            margin-bottom: 4rem;
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+        
+        .subtema-header {
+            background: linear-gradient(to right, #f8f9fa, #ffffff);
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid var(--border);
+        }
+        .subtema-header h2 { 
+            margin: 0; 
+            color: var(--primary); 
+            font-size: 1.6rem;
+            border-left: 5px solid var(--accent);
+            padding-left: 1rem;
+        }
+
+        .seccion-contenido {
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2.5rem;
+        }
+
+        @media (min-width: 900px) {
+            .seccion-contenido { grid-template-columns: 1fr 1fr; }
+            .full-width { grid-column: 1 / -1; }
+        }
+
+        .card h3 {
+            color: var(--primary);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-top: 0;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 0.5rem;
+        }
+
+        .formal-box {
+            background-color: #f0f7ff; /* Azul muy muy pálido */
+            border-radius: 8px;
+            padding: 2rem !important;
+            border: 1px solid #cce5ff;
+        }
+
+        /* CSS Específico para corregir SVGs */
+        .diagrama-container {
+            text-align: center;
+            margin: 2rem auto;
+            padding: 1.5rem;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
+            max-width: 100%;
+            overflow-x: auto; /* Si es muy ancho, permite scroll */
+        }
+        
+        /* Forzar comportamiento correcto del SVG */
+        .diagrama-container svg {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+        
+        /* Evitar que el texto dentro del SVG sea ilegible */
+        .diagrama-container text {
+            font-family: sans-serif;
+        }
+
+        footer {
+            text-align: center;
+            padding: 3rem;
+            background: var(--primary);
+            color: rgba(255,255,255,0.8);
+            margin-top: 4rem;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>17 - Gramáticas (GIC) - Derivaciones de gramáticas.</h1>
+        <a href="javascript:history.back()" class="btn-volver">← Volver</a>
+    </header>
+
+    <main>
+
+        <article class="subtema">
+            <div class="subtema-header">
+                <h2>Fundamentos de las Derivaciones en Gramáticas Libres de Contexto (GIC)</h2>
+            </div>
+            <div class="seccion-contenido">
+                
+                <div class="card full-width">
+                    <h3>Historia</h3>
+                    <div><p>Las gramáticas formales, y con ellas el concepto de derivación, tienen sus raíces en el trabajo pionero de Noam Chomsky en la década de 1950. Chomsky, un lingüista, buscaba una manera rigurosa de describir la sintaxis de los lenguajes naturales, lo que llevó a la creación de la Jerarquía de Chomsky. Dentro de esta jerarquía, las Gramáticas Libres de Contexto (GIC) emergieron como una herramienta poderosa para modelar estructuras de lenguaje. El contexto histórico era la efervescencia de la lingüística generativa y la necesidad de un formalismo matemático para entender cómo los humanos generan y comprenden oraciones. La derivación se convirtió en el proceso central que mostraba cómo, a partir de un símbolo inicial, se podían generar secuencias de palabras terminales siguiendo un conjunto de reglas de producción. Este enfoque sentó las bases no solo para el análisis lingüístico, sino también para el diseño de lenguajes de programación y la teoría de la computación. Su impacto fue fundamental para la comprensión de la estructura de lenguajes formales y naturales.</p></div>
+                </div>
+
+                <div class="card full-width formal-box">
+                    <h3>Descripción Formal</h3>
+                    <div><p>Una Gramática Libre de Contexto (GIC) G se define como una tupla cuádruple G = (V, Σ, P, S), donde:
+*   V es un conjunto finito de Símbolos No Terminales (variables).
+*   Σ es un conjunto finito de Símbolos Terminales (el alfabeto del lenguaje), con V ∩ Σ = Ø.
+*   P es un conjunto finito de Reglas de Producción de la forma A → α, donde A ∈ V y α ∈ (V ∪ Σ)*.
+*   S ∈ V es el Símbolo Inicial de la gramática.</p>
+<p>Una <strong>derivación directa</strong> es una relación binaria sobre (V ∪ Σ)<em>, denotada por →. Decimos que γ → δ si y solo si γ = uAv y δ = uαv, para alguna regla de producción A → α en P, y u, v ∈ (V ∪ Σ)</em>. En otras palabras, se reemplaza un no terminal A por el lado derecho de una de sus producciones.</p>
+<p>Una <strong>derivación</strong> es una secuencia de derivaciones directas. Se denota por →<em> (lectura: "deriva en cero o más pasos") o por →⁺ (lectura: "deriva en uno o más pasos"). Si una cadena w ∈ Σ</em> puede ser obtenida a partir del símbolo inicial S mediante una secuencia de derivaciones, es decir, S →<em> w, entonces w es una cadena en el lenguaje generado por G, denotado como L(G). El lenguaje L(G) = {w ∈ Σ</em> | S →* w}. Las derivaciones son el mecanismo fundamental para la generación de cadenas válidas que pertenecen al lenguaje definido por la gramática. Cada paso de derivación reemplaza un no terminal por su expansión según las reglas de producción, hasta que solo quedan símbolos terminales.</p></div>
+                    
+                    <div class="diagrama-container">
+                        <svg viewBox="0 0 600 200">
+      <rect x="0" y="0" width="600" height="200" fill="#f8f8f8"/>
+      <text x="50" y="40" font-family="sans-serif" font-size="20" fill="black">S</text>
+      <text x="150" y="40" font-family="sans-serif" font-size="20" fill="black">NP VP</text>
+      <text x="250" y="40" font-family="sans-serif" font-size="20" fill="black">El NP_sust VP</text>
+      <text x="350" y="40" font-family="sans-serif" font-size="20" fill="black">El perro VP</text>
+      <text x="450" y="40" font-family="sans-serif" font-size="20" fill="black">El perro come</text>
+
+      <path d="M70 55 L130 55" stroke="black" stroke-width="2" marker-end="url(#arrowhead1)"/>
+      <path d="M190 55 L230 55" stroke="black" stroke-width="2" marker-end="url(#arrowhead1)"/>
+      <path d="M290 55 L330 55" stroke="black" stroke-width="2" marker-end="url(#arrowhead1)"/>
+      <path d="M390 55 L430 55" stroke="black" stroke-width="2" marker-end="url(#arrowhead1)"/>
+
+      <text x="100" y="70" font-family="sans-serif" font-size="14" fill="gray">S → NP VP</text>
+      <text x="210" y="70" font-family="sans-serif" font-size="14" fill="gray">NP → El NP_sust</text>
+      <text x="310" y="70" font-family="sans-serif" font-size="14" fill="gray">NP_sust → perro</text>
+      <text x="410" y="70" font-family="sans-serif" font-size="14" fill="gray">VP → come</text>
+
+      <defs>
+        <marker id="arrowhead1" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
+          <polygon points="0 0, 10 3.5, 0 7" fill="black" />
+        </marker>
+      </defs>
+
+      <text x="20" y="120" font-family="sans-serif" font-size="16" fill="black">Ejemplo de derivación:</text>
+      <text x="20" y="150" font-family="monospace" font-size="16" fill="darkblue">S → NP VP</text>
+      <text x="20" y="170" font-family="monospace" font-size="16" fill="darkblue">    → El NP_sust VP</text>
+      <text x="20" y="190" font-family="monospace" font-size="16" fill="darkblue">    → El perro VP</text>
+      <text x="20" y="190" font-family="monospace" font-size="16" fill="darkblue" transform="translate(0, 20)">    → El perro come</text>
+    </svg>
+                        <p style="font-size:0.8rem; color:#666; margin-top:1rem; text-align:center;">
+                            <em>Fig: Representación visual generada.</em>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Intuición</h3>
+                    <div><p>Piensa en una derivación como un conjunto de instrucciones paso a paso para construir una oración o una estructura de código. Imagina que tienes un "vocabulario" de palabras y frases (símbolos terminales y no terminales) y un "libro de recetas" (reglas de producción). Empiezas con una idea general (el símbolo inicial S), y cada paso de la derivación consiste en tomar una parte de tu "receta" actual que aún no es una "palabra final" (un no terminal) y reemplazarla por una expansión más detallada según las reglas. Por ejemplo, si tienes "S → Sustantivo Verbo", y sabes que "Sustantivo" puede ser "Perro" y "Verbo" puede ser "corre", sigues reemplazando hasta que todas las partes sean "palabras finales". El objetivo es llegar a una secuencia de "palabras" que sean parte del lenguaje, sin dejar ninguna "idea general" sin expandir. La intuición es que las derivaciones nos muestran el camino, la secuencia de transformaciones, desde una estructura abstracta inicial hasta una cadena concreta y válida en el lenguaje. Es como el desdoblamiento de una idea compleja en sus componentes más simples y luego en sus formas terminales, mostrando cómo se ensambla una expresión a partir de sus elementos constituyentes.</p></div>
+                </div>
+
+                <div class="card">
+                    <h3>Aplicación Real</h3>
+                    <div><p>Las derivaciones son el corazón de muchas aplicaciones en ingeniería de software, especialmente en el diseño y la implementación de compiladores e intérpretes. Cuando escribes un programa, el compilador utiliza gramáticas para verificar si tu código es sintácticamente correcto. Este proceso se conoce como "análisis sintáctico" o "parseo". El compilador intenta encontrar una derivación de tu código a partir del símbolo inicial de la gramática del lenguaje de programación. Si se encuentra una derivación, significa que el programa es sintácticamente válido. Si no, se genera un error indicando un problema de sintaxis. Además, las derivaciones son fundamentales en el Procesamiento de Lenguaje Natural (PLN) para analizar la estructura gramatical de las oraciones humanas, lo que es esencial para chatbots, traductores automáticos y sistemas de comprensión del lenguaje. También se usan en la definición y validación de formatos de datos (como XML, JSON) y protocolos de comunicación, donde una derivación garantiza que un mensaje o documento cumple con la estructura esperada.</p></div>
+                </div>
+
+            </div>
+        </article>
+        
+        <article class="subtema">
+            <div class="subtema-header">
+                <h2>Derivaciones Izquierda, Derecha y Árboles de Derivación</h2>
+            </div>
+            <div class="seccion-contenido">
+                
+                <div class="card full-width">
+                    <h3>Historia</h3>
+                    <div><p>Con el avance de las computadoras y la necesidad de lenguajes de programación robustos en los años 60 y 70, la forma en que se analizaba sintácticamente el código se volvió crucial. Autores como Donald Knuth realizaron contribuciones seminales al campo del análisis sintáctico con la invención de los parsers LR, que se basan en derivaciones más a la derecha. Simultáneamente, el concepto de derivaciones más a la izquierda era fundamental para los parsers LL. La distinción entre estas estrategias de derivación surgió de la necesidad práctica de construir analizadores sintácticos eficientes y deterministas. Los árboles de derivación (también conocidos como árboles de análisis sintáctico o parse trees) se formalizaron como una representación visual y estructural de la derivación, independientemente del orden específico en que se aplicaban las reglas. Este enfoque permitió una comprensión más profunda de la sintaxis y fue vital para la construcción de herramientas de software robustas que podían interpretar y compilar lenguajes complejos de manera confiable.</p></div>
+                </div>
+
+                <div class="card full-width formal-box">
+                    <h3>Descripción Formal</h3>
+                    <div><p>Si tenemos una gramática G = (V, Σ, P, S) y una cadena α en (V ∪ Σ)<em>, existen estrategias específicas para aplicar las reglas de producción.
+Una </em><em>derivación más a la izquierda</em>* (leftmost derivation), denotada por ⇒LM, es una secuencia de derivaciones directas α₀ ⇒LM α₁ ⇒LM ... ⇒LM αₙ, donde en cada paso αᵢ → αᵢ₊₁, el no terminal más a la izquierda en αᵢ es el que es reemplazado por una producción.
+Formalmente, uAv ⇒LM uαv si A → α es una producción y u contiene solo símbolos terminales, o u es la cadena vacía ε.</p>
+<p>Una <strong>derivación más a la derecha</strong> (rightmost derivation), denotada por ⇒RM, es una secuencia de derivaciones directas α₀ ⇒RM α₁ ⇒RM ... ⇒RM αₙ, donde en cada paso αᵢ → αᵢ₊₁, el no terminal más a la derecha en αᵢ es el que es reemplazado por una producción.
+Formalmente, uAv ⇒RM uαv si A → α es una producción y v contiene solo símbolos terminales, o v es la cadena vacía ε.</p>
+<p>Un <strong>Árbol de Derivación</strong> (o Árbol Sintáctico) es una representación gráfica de cómo una cadena terminal puede ser derivada desde el símbolo inicial de una gramática. Un árbol de derivación para una GIC G = (V, Σ, P, S) y una cadena w ∈ L(G) satisface:
+1.  La raíz del árbol está etiquetada con S.
+2.  Cada nodo interno está etiquetado con un símbolo no terminal A ∈ V.
+3.  Cada nodo hoja está etiquetado con un símbolo terminal a ∈ Σ o con ε (la cadena vacía).
+4.  Si un nodo interno está etiquetado con A y sus hijos, de izquierda a derecha, están etiquetados con X₁, X₂, ..., Xₖ, entonces A → X₁X₂...Xₖ debe ser una producción en P.
+5.  Si Xᵢ es un no terminal, tiene hijos. Si es un terminal o ε, es una hoja.</p>
+<p>La lectura de las hojas del árbol de izquierda a derecha produce la cadena w. Un árbol de derivación encapsula la estructura jerárquica de la cadena, haciendo explícitas las relaciones sintácticas de manera independiente al orden de la derivación (izquierda o derecha).</p></div>
+                    
+                    <div class="diagrama-container">
+                        <svg viewBox="0 0 600 200">
+      <rect x="0" y="0" width="600" height="200" fill="#f8f8f8"/>
+      <style>
+        .node { font-family: sans-serif; font-size: 16px; fill: black; }
+        .terminal { fill: #333; }
+        .line { stroke: black; stroke-width: 1.5; }
+      </style>
+
+      <circle cx="300" cy="30" r="15" fill="#add8e6"/>
+      <text x="295" y="35" class="node">E</text>
+
+      <line x1="300" y1="45" x2="230" y2="70" class="line"/>
+      <circle cx="230" cy="85" r="15" fill="#add8e6"/>
+      <text x="225" y="90" class="node">E</text>
+
+      <line x1="300" y1="45" x2="300" y2="70" class="line"/>
+      <text x="295" y="90" class="terminal">+</text>
+
+      <line x1="300" y1="45" x2="370" y2="70" class="line"/>
+      <circle cx="370" cy="85" r="15" fill="#add8e6"/>
+      <text x="365" y="90" class="node">T</text>
+
+      <line x1="230" y1="100" x2="190" y2="125" class="line"/>
+      <circle cx="190" cy="140" r="15" fill="#add8e6"/>
+      <text x="185" y="145" class="node">T</text>
+
+      <line x1="230" y1="100" x2="270" y2="125" class="line"/>
+      <text x="265" y="145" class="terminal">*</text>
+
+      <line x1="230" y1="100" x2="310" y2="125" class="line"/>
+      <circle cx="310" cy="140" r="15" fill="#add8e6"/>
+      <text x="305" y="145" class="node">F</text>
+
+      <line x1="190" y1="155" x2="190" y2="180" class="line"/>
+      <text x="185" y="195" class="terminal">a</text>
+
+      <line x1="370" y1="100" x2="370" y2="125" class="line"/>
+      <circle cx="370" cy="140" r="15" fill="#add8e6"/>
+      <text x="365" y="145" class="node">F</text>
+
+      <line x1="310" y1="155" x2="310" y2="180" class="line"/>
+      <text x="305" y="195" class="terminal">b</text>
+
+      <line x1="370" y1="155" x2="370" y2="180" class="line"/>
+      <text x="365" y="195" class="terminal">c</text>
+
+      <text x="10" y="100" font-family="sans-serif" font-size="14" fill="gray">Producciones:</text>
+      <text x="10" y="120" font-family="monospace" font-size="12" fill="darkgreen">E → E + T</text>
+      <text x="10" y="135" font-family="monospace" font-size="12" fill="darkgreen">E → T</text>
+      <text x="10" y="150" font-family="monospace" font-size="12" fill="darkgreen">T → T * F</text>
+      <text x="10" y="165" font-family="monospace" font-size="12" fill="darkgreen">T → F</text>
+      <text x="10" y="180" font-family="monospace" font-size="12" fill="darkgreen">F → a | b | c</text>
+      <text x="450" y="120" font-family="sans-serif" font-size="14" fill="gray">Cadena: a * b + c</text>
+    </svg>
+                        <p style="font-size:0.8rem; color:#666; margin-top:1rem; text-align:center;">
+                            <em>Fig: Representación visual generada.</em>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Intuición</h3>
+                    <div><p>Imagina que tienes una receta de cocina muy flexible. Puedes seguirla de izquierda a derecha, preparando los ingredientes en el orden en que aparecen en la lista (esto sería una derivación izquierda). O podrías decidir que, como el último ingrediente es lo que le dará el sabor final, lo preparas primero (esto se asemeja a una derivación derecha). Ambas estrategias te llevan al mismo plato final, pero la secuencia de preparación es diferente. El "Árbol de Derivación" es como la representación visual de la receta terminada, mostrando la estructura jerárquica de los ingredientes y sus relaciones, sin importar si los preparaste de izquierda a derecha o de derecha a izquierda. Muestra cómo se agrupan las partes, qué es un componente principal y qué es un subcomponente. Es la estructura profunda que subyace a la secuencia superficial de palabras o símbolos. Es crucial porque a menudo, lo que nos importa no es el orden preciso de cómo se generó, sino la estructura inherente y el significado del plato final.</p></div>
+                </div>
+
+                <div class="card">
+                    <h3>Aplicación Real</h3>
+                    <div><p>En el ámbito de los compiladores, las derivaciones izquierda y derecha son la base de los algoritmos de análisis sintáctico. Los analizadores predictivos descendentes (como los parsers LL) construyen una derivación más a la izquierda del programa. Por otro lado, los analizadores ascendentes (como los parsers LR), que son más potentes y ampliamente usados en la práctica, construyen una derivación más a la derecha, pero en orden inverso. Comprender estas estrategias es fundamental para diseñar analizadores sintácticos eficientes que puedan traducir el código fuente a una representación interna ejecutable. Los árboles de derivación son la representación intermedia clave que estos analizadores producen. Esta estructura es luego utilizada por otras fases del compilador, como el análisis semántico y la generación de código, para entender el significado del programa y producir el código máquina correspondiente. En lingüística computacional, los árboles de derivación son esenciales para la representación de la estructura sintáctica de oraciones, permitiendo a las máquinas comprender las relaciones gramaticales y semánticas de forma explícita.</p></div>
+                </div>
+
+            </div>
+        </article>
+        
+        <article class="subtema">
+            <div class="subtema-header">
+                <h2>Ambigüedad en Gramáticas y su Impacto en las Derivaciones</h2>
+            </div>
+            <div class="seccion-contenido">
+                
+                <div class="card full-width">
+                    <h3>Historia</h3>
+                    <div><p>La cuestión de la ambigüedad en los lenguajes formales y naturales ha sido un desafío persistente desde los primeros días de la teoría de las gramáticas. En el campo de la lingüística, la ambigüedad sintáctica es un fenómeno común en el lenguaje humano que Noam Chomsky y otros investigadores intentaron formalizar y comprender. Con el advenimiento de los lenguajes de programación, la ambigüedad se convirtió en un problema crítico: un programa debe tener una interpretación única para poder ejecutarse de manera predecible. Esto llevó a la búsqueda de métodos para identificar y, si es posible, eliminar la ambigüedad en las gramáticas de los lenguajes de programación. Científicos de la computación como Niklaus Wirth (diseñador de Pascal) y otros, dedicaron grandes esfuerzos a diseñar gramáticas no ambiguas y a desarrollar reglas (como la precedencia de operadores) para resolver ambigüedades inherentes a expresiones. La historia de la ambigüedad es la historia de la lucha por la precisión y la previsibilidad en la comunicación tanto humana como máquina, vital para la confiabilidad de los sistemas de software.</p></div>
+                </div>
+
+                <div class="card full-width formal-box">
+                    <h3>Descripción Formal</h3>
+                    <div><p>Una Gramática Libre de Contexto G = (V, Σ, P, S) se dice que es <strong>ambigua</strong> si existe al menos una cadena w ∈ L(G) para la cual existen dos o más árboles de derivación distintos. Alternativamente, una gramática es ambigua si existe una cadena w ∈ L(G) para la cual existen dos o más derivaciones más a la izquierda distintas, o dos o más derivaciones más a la derecha distintas. Es importante notar que si una cadena tiene dos árboles de derivación distintos, necesariamente tendrá también dos derivaciones más a la izquierda (y dos más a la derecha) distintas. Sin embargo, lo inverso no siempre es trivial de demostrar sin ver el árbol.</p>
+<p>Un ejemplo clásico de ambigüedad es la gramática de expresiones aritméticas sin reglas de precedencia explícitas, como:
+E → E + E
+E → E * E
+E → id</p>
+<p>Consideremos la cadena "id + id * id". Esta cadena puede tener dos árboles de derivación distintos, lo que implica dos interpretaciones posibles:
+1.  (id + id) * id (la suma se evalúa primero)
+2.  id + (id * id) (la multiplicación se evalúa primero)</p>
+<p>La ambigüedad es una propiedad de la gramática, no del lenguaje. Un lenguaje puede ser inherentemente ambiguo, lo que significa que no existe ninguna GIC no ambigua que lo genere. Sin embargo, la mayoría de los lenguajes generados por GIC no son inherentemente ambiguos, y el problema reside en el diseño de la gramática. Resolver la ambigüedad implica reescribir la gramática para que imponga un orden de evaluación o estructura única, a menudo introduciendo nuevos no terminales y reorganizando las reglas para reflejar la precedencia y asociatividad deseadas.</p></div>
+                    
+                    <div class="diagrama-container">
+                        <svg viewBox="0 0 600 200">
+      <rect x="0" y="0" width="600" height="200" fill="#f8f8f8"/>
+      <style>
+        .node { font-family: sans-serif; font-size: 14px; fill: black; }
+        .terminal { fill: #333; }
+        .line { stroke: black; stroke-width: 1.5; }
+        .title { font-family: sans-serif; font-size: 16px; fill: black; font-weight: bold; }
+        .subtitle { font-family: sans-serif; font-size: 14px; fill: gray; }
+      </style>
+
+      <text x="50" y="20" class="title">Árbol 1: (id + id) * id</text>
+      <circle cx="150" cy="40" r="12" fill="#d3d3d3"/>
+      <text x="145" y="45" class="node">E</text>
+
+      <line x1="150" y1="52" x2="100" y2="70" class="line"/>
+      <circle cx="100" cy="85" r="12" fill="#d3d3d3"/>
+      <text x="95" y="90" class="node">E</text>
+
+      <line x1="150" y1="52" x2="150" y2="70" class="line"/>
+      <text x="145" y="85" class="terminal">*</text>
+
+      <line x1="150" y1="52" x2="200" y2="70" class="line"/>
+      <text x="190" y="85" class="terminal">id</text>
+
+      <line x1="100" y1="97" x2="70" y2="115" class="line"/>
+      <text x="60" y="130" class="terminal">id</text>
+
+      <line x1="100" y1="97" x2="100" y2="115" class="line"/>
+      <text x="95" y="130" class="terminal">+</text>
+
+      <line x1="100" y1="97" x2="130" y2="115" class="line"/>
+      <text x="120" y="130" class="terminal">id</text>
+
+
+      <text x="350" y="20" class="title">Árbol 2: id + (id * id)</text>
+      <circle cx="450" cy="40" r="12" fill="#d3d3d3"/>
+      <text x="445" y="45" class="node">E</text>
+
+      <line x1="450" y1="52" x2="400" y2="70" class="line"/>
+      <text x="390" y="85" class="terminal">id</text>
+
+      <line x1="450" y1="52" x2="450" y2="70" class="line"/>
+      <text x="445" y="85" class="terminal">+</text>
+
+      <line x1="450" y1="52" x2="500" y2="70" class="line"/>
+      <circle cx="500" cy="85" r="12" fill="#d3d3d3"/>
+      <text x="495" y="90" class="node">E</text>
+
+      <line x1="500" y1="97" x2="470" y2="115" class="line"/>
+      <text x="460" y="130" class="terminal">id</text>
+
+      <line x1="500" y1="97" x2="500" y2="115" class="line"/>
+      <text x="495" y="130" class="terminal">*</text>
+
+      <line x1="500" y1="97" x2="530" y2="115" class="line"/>
+      <text x="520" y="130" class="terminal">id</text>
+
+      <text x="50" y="160" class="subtitle">Gramática ambigua:</text>
+      <text x="50" y="175" font-family="monospace" font-size="12" fill="darkgreen">E → E + E</text>
+      <text x="50" y="190" font-family="monospace" font-size="12" fill="darkgreen">E → E * E</text>
+      <text x="150" y="190" font-family="monospace" font-size="12" fill="darkgreen">E → id</text>
+    </svg>
+                        <p style="font-size:0.8rem; color:#666; margin-top:1rem; text-align:center;">
+                            <em>Fig: Representación visual generada.</em>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Intuición</h3>
+                    <div><p>Piensa en una frase como "Comí el pastel con la cuchara". ¿Significa que usaste la cuchara para comer el pastel (el instrumento para "comer") o que el pastel estaba "con la cuchara" (un atributo del pastel)? Ambas interpretaciones son sintácticamente válidas, pero el significado es diferente. Esto es ambigüedad. En el contexto de las gramáticas, significa que una misma secuencia de símbolos terminales (como un programa o una oración) puede ser construida de dos o más maneras estructuralmente diferentes según las reglas de la gramática. Es como tener dos "planos" válidos para construir la misma casa, pero donde las habitaciones y conexiones son distintas. En programación, esta falta de una única interpretación es muy peligrosa, ya que el compilador no sabría qué "plano" usar, llevando a un comportamiento impredecible del programa. La intuición clave es que la ambigüedad crea confusión y falta de certeza en la interpretación de la estructura, lo que es inaceptable para sistemas que requieren precisión y determinación.</p></div>
+                </div>
+
+                <div class="card">
+                    <h3>Aplicación Real</h3>
+                    <div><p>La ambigüedad en las gramáticas es un problema crítico en el diseño de lenguajes de programación. Si la gramática de un lenguaje es ambigua, el compilador podría interpretar el mismo fragmento de código de diferentes maneras, lo que llevaría a comportamientos inconsistentes o errores impredecibles. Por esta razón, los diseñadores de lenguajes se esfuerzan por crear gramáticas inambiguas, o al menos definir reglas claras (como la precedencia y asociatividad de operadores en expresiones aritméticas) para resolver las ambigüedades. Por ejemplo, la regla de que la multiplicación tiene mayor precedencia que la suma ("2 + 3 * 4" siempre es "2 + (3 * 4)") es una forma de resolver una ambigüedad sintáctica común. En el Procesamiento de Lenguaje Natural (PLN), identificar y resolver la ambigüedad es fundamental para la correcta comprensión de las oraciones. Los algoritmos de análisis sintáctico deben ser capaces de manejar o desambiguar estas situaciones para que las máquinas puedan procesar el lenguaje humano de manera efectiva en aplicaciones como la traducción automática, los asistentes virtuales, la extracción de información y la generación de respuestas coherentes.</p></div>
+                </div>
+
+            </div>
+        </article>
+        
+    </main>
+
+    <footer>
+        <p>Prof. Jorge López-Cifre, PhD © 2026</p>
+    </footer>
+
+</body>
+</html>

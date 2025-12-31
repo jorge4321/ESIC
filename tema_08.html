@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>8 - Autómatas finitos - Caminos únicos vs. múltiples. - Prof. Jorge López-Cifre</title>
+    <style>
+        :root {
+            --primary: #003366;
+            --accent: #d4af37;
+            --bg: #f8f9fa;
+            --text: #2c3e50;
+            --card-bg: #ffffff;
+            --border: #e9ecef;
+        }
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 0;
+            line-height: 1.7;
+        }
+        /* Tipografía mejorada */
+        p { margin-bottom: 1rem; }
+        strong, b { color: var(--primary); font-weight: 700; }
+        
+        header {
+            background: var(--primary);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        h1 { margin: 0; font-size: 1.25rem; font-weight: 600; }
+        
+        .btn-volver {
+            background: var(--accent);
+            color: var(--primary);
+            text-decoration: none;
+            padding: 0.5rem 1.2rem;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        .btn-volver:hover { 
+            background: #fff; 
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+
+        main {
+            max-width: 1100px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+
+        .subtema {
+            background: var(--card-bg);
+            border-radius: 12px;
+            margin-bottom: 4rem;
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+        
+        .subtema-header {
+            background: linear-gradient(to right, #f8f9fa, #ffffff);
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid var(--border);
+        }
+        .subtema-header h2 { 
+            margin: 0; 
+            color: var(--primary); 
+            font-size: 1.6rem;
+            border-left: 5px solid var(--accent);
+            padding-left: 1rem;
+        }
+
+        .seccion-contenido {
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2.5rem;
+        }
+
+        @media (min-width: 900px) {
+            .seccion-contenido { grid-template-columns: 1fr 1fr; }
+            .full-width { grid-column: 1 / -1; }
+        }
+
+        .card h3 {
+            color: var(--primary);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-top: 0;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 0.5rem;
+        }
+
+        .formal-box {
+            background-color: #f0f7ff; /* Azul muy muy pálido */
+            border-radius: 8px;
+            padding: 2rem !important;
+            border: 1px solid #cce5ff;
+        }
+
+        /* CSS Específico para corregir SVGs */
+        .diagrama-container {
+            text-align: center;
+            margin: 2rem auto;
+            padding: 1.5rem;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
+            max-width: 100%;
+            overflow-x: auto; /* Si es muy ancho, permite scroll */
+        }
+        
+        /* Forzar comportamiento correcto del SVG */
+        .diagrama-container svg {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+        
+        /* Evitar que el texto dentro del SVG sea ilegible */
+        .diagrama-container text {
+            font-family: sans-serif;
+        }
+
+        footer {
+            text-align: center;
+            padding: 3rem;
+            background: var(--primary);
+            color: rgba(255,255,255,0.8);
+            margin-top: 4rem;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>8 - Autómatas finitos - Caminos únicos vs. múltiples.</h1>
+        <a href="javascript:history.back()" class="btn-volver">← Volver</a>
+    </header>
+
+    <main>
+
+        <article class="subtema">
+            <div class="subtema-header">
+                <h2>Autómatas Finitos Deterministas (AFDs): El camino único.</h2>
+            </div>
+            <div class="seccion-contenido">
+                
+                <div class="card full-width">
+                    <h3>Historia</h3>
+                    <div><p>El concepto de máquinas de estados finitos, precursor de los autómatas, tiene sus raíces en los trabajos de neurofisiología de Warren McCulloch y Walter Pitts en la década de 1940, que intentaban modelar redes neuronales con lógica binaria. Sin embargo, la formalización de los autómatas finitos como reconocedores de lenguajes regulares se consolidó en la década de 1950. Stephen Kleene fue fundamental en esta etapa, al establecer la equivalencia entre las expresiones regulares y los autómatas finitos en 1956, en su trabajo sobre los 'eventos regulares'. Otros investigadores como George H. Mealy (1955) y Edward F. Moore (1956) contribuyeron con modelos de máquinas de estados finitos que producían salidas, pero la base determinista subyacente a sus modelos era clave. La noción de un camino único y predecible en la computación se estableció firmemente con los AFDs, proporcionando una base clara para el análisis computacional.</p></div>
+                </div>
+
+                <div class="card full-width formal-box">
+                    <h3>Descripción Formal</h3>
+                    <div><p>Un Automáta Finito Determinista (AFD) es una quíntupla M = (Q, Σ, δ, q₀, F), donde:
+*   Q es un conjunto finito y no vacío de estados del autómata.
+*   Σ es un alfabeto finito y no vacío de símbolos de entrada.
+*   δ es la función de transición, δ: Q × Σ → Q. Esta función es el corazón del determinismo: para cada estado q ∈ Q y cada símbolo a ∈ Σ, hay exactamente un único estado siguiente δ(q, a) ∈ Q al que el autómata transita. No hay ambigüedad ni múltiples opciones de transición para una misma entrada.
+*   q₀ ∈ Q es el estado inicial, desde donde comienza el procesamiento de cualquier cadena.
+*   F ⊆ Q es el conjunto de estados finales o de aceptación. Si el autómata termina en uno de estos estados después de procesar una cadena completa, la cadena es aceptada.
+Un AFD procesa una cadena de entrada w = a₁a₂...aₙ comenzando en q₀. Para cada símbolo aᵢ, el autómata transita del estado actual q al estado siguiente δ(q, aᵢ) de manera secuencial. Después de procesar toda la cadena, si el estado final alcanzado pertenece a F, la cadena es aceptada; en caso contrario, es rechazada. La característica definitoria de un AFD es que, para cualquier estado y cualquier símbolo de entrada, la transición a un estado siguiente es única y sin ambigüedades, de ahí la noción de 'camino único'. El lenguaje L(M) de un AFD es el conjunto de todas las cadenas que acepta.</p></div>
+                    
+                    <div class="diagrama-container">
+                        <svg width="100%" height="auto"  viewBox="0 0 600 200">
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="black" />
+    </marker>
+  </defs>
+
+  <circle cx="100" cy="100" r="30" fill="#f0f0f0" stroke="black"/>
+  <text x="100" y="105" text-anchor="middle" font-size="18">q0</text>
+  <circle cx="300" cy="100" r="30" fill="#f0f0f0" stroke="black"/>
+  <text x="300" y="105" text-anchor="middle" font-size="18">q1</text>
+  <circle cx="500" cy="100" r="30" fill="#f0f0f0" stroke="black"/>
+  <circle cx="500" cy="100" r="25" fill="none" stroke="black"/>
+  <text x="500" y="105" text-anchor="middle" font-size="18">q2</text>
+
+  <path d="M 50 100 L 70 100" stroke="black" fill="none" marker-end="url(#arrowhead)"/>
+
+  <path d="M 130 100 L 270 100" stroke="black" fill="none" marker-end="url(#arrowhead)"/>
+  <text x="200" y="90" text-anchor="middle" font-size="16">a</text>
+
+  <path d="M 330 100 L 470 100" stroke="black" fill="none" marker-end="url(#arrowhead)"/>
+  <text x="400" y="90" text-anchor="middle" font-size="16">b</text>
+
+  <path d="M 85 75 A 20 20 0 1 1 115 75" stroke="black" fill="none" marker-end="url(#arrowhead)"/>
+  <text x="100" y="55" text-anchor="middle" font-size="16">b</text>
+
+  <path d="M 285 75 A 20 20 0 1 1 315 75" stroke="black" fill="none" marker-end="url(#arrowhead)"/>
+  <text x="300" y="55" text-anchor="middle" font-size="16">a</text>
+
+  <path d="M 485 75 A 20 20 0 1 1 515 75" stroke="black" fill="none" marker-end="url(#arrowhead)"/>
+  <text x="500" y="55" text-anchor="middle" font-size="16">a,b</text>
+</svg>
+                        <p style="font-size:0.8rem; color:#666; margin-top:1rem; text-align:center;">
+                            <em>Fig: Representación visual generada.</em>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Intuición</h3>
+                    <div><p>Imagina que estás en un laberinto con instrucciones muy claras. En cada cruce (estado), hay un cartel que te dice exactamente qué camino tomar (transición) para cada posible acción o señal (símbolo de entrada). No hay opciones, ni caminos múltiples, ni adivinanzas. Si recibes una señal 'A', el cartel siempre te enviará a un único y específico próximo cruce. Si recibes una señal 'B', te enviará a otro cruce, o quizás te hará dar la vuelta, pero siempre de manera inequívoca. Al final de tu viaje, si terminas en una de las salidas marcadas como "éxito" (estado final), entonces el conjunto de señales que seguiste es aceptado. Los AFDs son como estos laberintos estrictamente reglamentados, donde cada paso es dictado de forma absoluta, garantizando un resultado predecible para cada secuencia de entrada. Su funcionamiento es directo y fácil de visualizar como un flujo de control sin bifurcaciones inesperadas.</p></div>
+                </div>
+
+                <div class="card">
+                    <h3>Aplicación Real</h3>
+                    <div><p>Los AFDs son omnipresentes en la ingeniería de software y la informática debido a su eficiencia y simplicidad de implementación. Una de sus aplicaciones más destacadas es el análisis léxico en los compiladores. Aquí, los AFDs se utilizan para reconocer 'tokens' (palabras clave, identificadores, operadores, números) en el código fuente de un programa, convirtiendo el texto en una secuencia de unidades lógicas. Por ejemplo, un AFD puede determinar si una secuencia de caracteres forma un número entero válido o una variable con un nombre conforme a las reglas del lenguaje. También se emplean en el diseño de circuitos digitales y controladores de hardware, donde los estados y transiciones corresponden a los diferentes modos de operación y señales de entrada. En redes, los AFDs modelan protocolos de comunicación, asegurando que los mensajes sigan una secuencia predefinida. Su naturaleza determinista los hace ideales para situaciones donde la ambigüedad no es tolerable y la eficiencia es primordial.</p></div>
+                </div>
+
+            </div>
+        </article>
+        
+        <article class="subtema">
+            <div class="subtema-header">
+                <h2>Autómatas Finitos No Deterministas (AFNDs): Múltiples caminos posibles.</h2>
+            </div>
+            <div class="seccion-contenido">
+                
+                <div class="card full-width">
+                    <h3>Historia</h3>
+                    <div><p>La noción de Autómata Finito No Determinista (AFND) fue introducida por Michael Rabin y Dana Scott en su influyente artículo de 1959, 'Finite Automata and Their Decision Problems'. Este trabajo revolucionario no solo definió formalmente los AFNDs, sino que también demostró que, a pesar de su aparente mayor complejidad, tienen el mismo poder computacional que los AFDs, un resultado que fue fundamental para el desarrollo de la teoría de la computación. En un principio, el no determinismo fue una abstracción matemática diseñada para simplificar la prueba de ciertas propiedades de los autómatas y la construcción de máquinas para lenguajes complejos. Sin embargo, su utilidad práctica pronto se hizo evidente, especialmente en la coincidencia de patrones y la implementación de expresiones regulares, demostrando que un modelo conceptualmente más simple de construir puede ser tan potente como uno más restrictivo.</p></div>
+                </div>
+
+                <div class="card full-width formal-box">
+                    <h3>Descripción Formal</h3>
+                    <div><p>Un Automáta Finito No Determinista (AFND) es una quíntupla M = (Q, Σ, δ, q₀, F), similar a un AFD, pero con una diferencia clave en su función de transición:
+*   Q, Σ, q₀, F tienen las mismas definiciones que en un AFD: conjunto finito de estados, alfabeto finito, estado inicial y conjunto de estados finales, respectivamente.
+*   δ es la función de transición, δ: Q × (Σ ∪ {ε}) → P(Q). Aquí, P(Q) denota el conjunto potencia de Q (el conjunto de todos los subconjuntos de Q). Esto significa que para un estado q ∈ Q y un símbolo a ∈ Σ (o el símbolo vacío ε, que representa una cadena vacía), la transición δ(q, a) puede resultar en un conjunto de cero, uno o más estados posibles. Las transiciones ε (épsilon) permiten cambiar de estado sin consumir ningún símbolo de entrada, añadiendo una capa de no determinismo.
+Un AFND acepta una cadena w = a₁a₂...aₙ si existe al menos una secuencia de transiciones válidas desde q₀ que termina en un estado de aceptación q_f ∈ F después de procesar toda la cadena. La presencia de múltiples estados siguientes para una misma entrada, o las transiciones ε, genera 'caminos' de computación paralelos. Si alguno de estos caminos logra alcanzar un estado final al consumir toda la entrada, la cadena es aceptada, incluso si otros caminos fallan. Esto contrasta con los AFDs, donde un único camino determina la aceptación o rechazo.</p></div>
+                    
+                    <div class="diagrama-container">
+                        <svg width="100%" height="auto"  viewBox="0 0 600 200">
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="black" />
+    </marker>
+  </defs>
+
+  <circle cx="150" cy="100" r="30" fill="#f0f0f0" stroke="black"/>
+  <text x="150" y="105" text-anchor="middle" font-size="18">q0</text>
+  <circle cx="350" cy="100" r="30" fill="#f0f0f0" stroke="black"/>
+  <text x="350" y="105" text-anchor="middle" font-size="18">q1</text>
+  <circle cx="550" cy="100" r="30" fill="#f0f0f0" stroke="black"/>
+  <circle cx="550" cy="100" r="25" fill="none" stroke="black"/>
+  <text x="550" y="105" text-anchor="middle" font-size="18">q2</text>
+
+  <path d="M 100 100 L 120 100" stroke="black" fill="none" marker-end="url(#arrowhead)"/>
+
+  <path d="M 180 100 L 320 100" stroke="black" fill="none" marker-end="url(#arrowhead)"/>
+  <text x="250" y="90" text-anchor="middle" font-size="16">a</text>
+
+  <path d="M 380 100 L 520 100" stroke="black" fill="none" marker-end="url(#arrowhead)"/>
+  <text x="450" y="90" text-anchor="middle" font-size="16">b</text>
+
+  <path d="M 135 75 A 20 20 0 1 1 165 75" stroke="black" fill="none" marker-end="url(#arrowhead)"/>
+  <text x="150" y="55" text-anchor="middle" font-size="16">Σ</text>
+</svg>
+                        <p style="font-size:0.8rem; color:#666; margin-top:1rem; text-align:center;">
+                            <em>Fig: Representación visual generada.</em>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Intuición</h3>
+                    <div><p>Piensa en un AFND como un laberinto donde, en algunos cruces (estados), puedes tener varias puertas para la misma señal (símbolo de entrada), e incluso algunas puertas que puedes atravesar sin ninguna señal (transiciones ε). En lugar de seguir un único camino, puedes "clonar" tu conciencia y explorar todas las puertas simultáneamente. Si alguna de tus "versiones clonadas" logra llegar a una salida de "éxito" (estado final) al procesar la secuencia completa de señales, entonces la secuencia es considerada válida. Esta flexibilidad lo hace conceptualmente más fácil de diseñar para patrones complejos, ya que no tienes que preocuparte por cada posible ramificación; simplemente describes las opciones. Es como tener un superpoder que te permite explorar todos los futuros posibles al mismo tiempo hasta encontrar uno que funcione, lo que simplifica enormemente la creación de modelos para ciertas propiedades.</p></div>
+                </div>
+
+                <div class="card">
+                    <h3>Aplicación Real</h3>
+                    <div><p>Los AFNDs son la base conceptual y, a menudo, la implementación subyacente de los motores de Expresiones Regulares (regex engines) que se encuentran en casi todos los lenguajes de programación y herramientas de texto (como grep, editores de texto avanzados, lenguajes de scripting como Perl, Python). Cuando escribes una expresión regular compleja como <code>(a|b)*abb</code>, un AFND puede ser construido directamente a partir de ella de manera mucho más sencilla que un AFD equivalente. También son fundamentales en el análisis léxico de compiladores, permitiendo la coincidencia de patrones más complejos y flexibles que los AFDs puros. Aunque para la ejecución final a menudo se convierten a AFDs por razones de eficiencia, la facilidad de diseño que ofrecen los AFNDs los convierte en una herramienta invaluable para describir patrones y comportamientos complejos de manera concisa y comprensible para el ser humano.</p></div>
+                </div>
+
+            </div>
+        </article>
+        
+        <article class="subtema">
+            <div class="subtema-header">
+                <h2>Equivalencia y Transformación entre AFDs y AFNDs: La unicidad de la computabilidad.</h2>
+            </div>
+            <div class="seccion-contenido">
+                
+                <div class="card full-width">
+                    <h3>Historia</h3>
+                    <div><p>El teorema de equivalencia entre AFDs y AFNDs, demostrado por Rabin y Scott en 1959, fue uno de los pilares fundacionales de la teoría de los lenguajes formales. Antes de esto, no era obvio si la introducción de la no-determinismo aumentaría el poder computacional de los autómatas finitos. Su prueba demostró que no lo hacía: cualquier lenguaje reconocible por un AFND también podía ser reconocido por un AFD. Este resultado es crucial porque estableció los límites de lo que los autómatas finitos pueden computar, independientemente de si son deterministas o no. El método constructivo para la transformación, conocido como 'construcción por subconjuntos', proporcionó una manera algorítmica de convertir cualquier AFND en un AFD equivalente, aunque potencialmente mucho más grande. Este descubrimiento consolidó la comprensión de la clase de lenguajes regulares y su relación con los autómatas finitos.</p></div>
+                </div>
+
+                <div class="card full-width formal-box">
+                    <h3>Descripción Formal</h3>
+                    <div><p>La equivalencia entre AFDs y AFNDs establece que, para cada AFND M_N = (Q_N, Σ, δ_N, q₀_N, F_N), existe un AFD M_D = (Q_D, Σ, δ_D, q₀_D, F_D) tal que L(M_N) = L(M_D). Esto significa que ambos modelos tienen el mismo poder de reconocimiento de lenguajes, es decir, reconocen exactamente la misma clase de lenguajes: los lenguajes regulares. La construcción por subconjuntos es el algoritmo estándar para realizar esta conversión, y define los componentes del AFD M_D de la siguiente manera:
+*   Q_D = P(Q_N): El conjunto de estados del AFD resultante son todos los subconjuntos del conjunto de estados del AFND original (el conjunto potencia de Q_N).
+*   q₀_D = ε-clausura(q₀_N): El estado inicial del AFD es la ε-clausura del estado inicial del AFND. La ε-clausura de un estado q es el conjunto de todos los estados alcanzables desde q a través de cero o más transiciones ε.
+*   F_D = {S ∈ Q_D | S ∃ p ∈ S tal que p ∈ F_N}: Un estado del AFD (que es un subconjunto de estados del AFND) es final si contiene al menos un estado final del AFND.
+*   δ_D(S, a) = ε-clausura(∪_{p∈S} δ_N(p, a)): Para un estado S del AFD (que es un subconjunto de estados del AFND) y un símbolo de entrada a, la transición lleva a la ε-clausura de la unión de todos los estados alcanzables desde cualquier estado en S mediante una transición 'a' en el AFND. Es importante notar que el número de estados en el AFD resultante puede ser exponencialmente mayor que en el AFND original (hasta 2^|Q_N| estados).</p></div>
+                    
+                    <div class="diagrama-container">
+                        <svg width="100%" height="auto"  viewBox="0 0 600 200">
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="black" />
+    </marker>
+  </defs>
+
+  <circle cx="150" cy="100" r="30" fill="#f0f0f0" stroke="black"/>
+  <text x="150" y="105" text-anchor="middle" font-size="18">A={q0}</text>
+  <circle cx="450" cy="100" r="30" fill="#f0f0f0" stroke="black"/>
+  <circle cx="450" cy="100" r="25" fill="none" stroke="black"/>
+  <text x="450" y="105" text-anchor="middle" font-size="18">B={q0,q1}</text>
+
+  <path d="M 100 100 L 120 100" stroke="black" fill="none" marker-end="url(#arrowhead)"/>
+
+  <path d="M 180 100 L 420 100" stroke="black" fill="none" marker-end="url(#arrowhead)"/>
+  <text x="300" y="90" text-anchor="middle" font-size="16">a</text>
+
+  <path d="M 135 75 A 20 20 0 1 1 165 75" stroke="black" fill="none" marker-end="url(#arrowhead)"/>
+  <text x="150" y="55" text-anchor="middle" font-size="16">b</text>
+
+  <path d="M 435 75 A 20 20 0 1 1 465 75" stroke="black" fill="none" marker-end="url(#arrowhead)"/>
+  <text x="450" y="55" text-anchor="middle" font-size="16">a</text>
+
+  <path d="M 430 130 C 350 160, 250 160, 170 130" stroke="black" fill="none" marker-end="url(#arrowhead)"/>
+  <text x="300" y="165" text-anchor="middle" font-size="16">b</text>
+</svg>
+                        <p style="font-size:0.8rem; color:#666; margin-top:1rem; text-align:center;">
+                            <em>Fig: Representación visual generada.</em>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Intuición</h3>
+                    <div><p>Imagina que tienes un mapa de un laberinto no determinista donde puedes tomar múltiples caminos al mismo tiempo (AFND). La transformación a un AFD es como crear un nuevo mapa simplificado. En este nuevo mapa, cada 'lugar' no es solo un cruce, sino una descripción de todos los cruces posibles donde podrías estar simultáneamente en el laberinto original. Si en el mapa original podías estar en cruce A o cruce B a la vez, en el nuevo mapa, hay un único 'lugar' llamado '{A, B}'. Este nuevo mapa es determinista porque, desde '{A, B}', para cualquier señal, siempre habrá un único próximo 'lugar' (un nuevo conjunto de cruces posibles). Este proceso demuestra que, aunque el AFND te da más flexibilidad para describir el problema, al final, la información que puede procesar (los lenguajes regulares) puede ser manejada por una máquina puramente determinista, solo que quizás con más estados. La equivalencia es profunda: no importa cuántas opciones te permitas en el diseño, no puedes superar la capacidad fundamental del modelo determinista para esta clase de problemas.</p></div>
+                </div>
+
+                <div class="card">
+                    <h3>Aplicación Real</h3>
+                    <div><p>La transformación de AFNDs a AFDs es una técnica fundamental en la implementación de herramientas que utilizan expresiones regulares. Los AFNDs son más fáciles de construir directamente a partir de una expresión regular, ya que su flexibilidad para el no determinismo y las transiciones epsilon simplifica enormemente el proceso de diseño inicial. Sin embargo, simular un AFND directamente puede ser menos eficiente, ya que requiere explorar múltiples caminos en paralelo o realizar retrocesos. Por ello, en muchas implementaciones de motores de expresiones regulares, el AFND inicial se convierte internamente a un AFD equivalente. Este AFD, aunque potencialmente más grande, puede ser simulado de manera mucho más rápida y determinista, sin la necesidad de retroceder (backtracking) o mantener múltiples hilos de ejecución. Es una optimización clave para lograr un alto rendimiento en el reconocimiento de patrones en texto, compiladores y sistemas de análisis de datos.</p></div>
+                </div>
+
+            </div>
+        </article>
+        
+    </main>
+
+    <footer>
+        <p>Prof. Jorge López-Cifre, PhD © 2026</p>
+    </footer>
+
+</body>
+</html>

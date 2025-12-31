@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>13 - Expresiones regulares - Equivalencia entre Autómatas y Regex. - Prof. Jorge López-Cifre</title>
+    <style>
+        :root {
+            --primary: #003366;
+            --accent: #d4af37;
+            --bg: #f8f9fa;
+            --text: #2c3e50;
+            --card-bg: #ffffff;
+            --border: #e9ecef;
+        }
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 0;
+            line-height: 1.7;
+        }
+        /* Tipografía mejorada */
+        p { margin-bottom: 1rem; }
+        strong, b { color: var(--primary); font-weight: 700; }
+        
+        header {
+            background: var(--primary);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        h1 { margin: 0; font-size: 1.25rem; font-weight: 600; }
+        
+        .btn-volver {
+            background: var(--accent);
+            color: var(--primary);
+            text-decoration: none;
+            padding: 0.5rem 1.2rem;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        .btn-volver:hover { 
+            background: #fff; 
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+
+        main {
+            max-width: 1100px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+
+        .subtema {
+            background: var(--card-bg);
+            border-radius: 12px;
+            margin-bottom: 4rem;
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+        
+        .subtema-header {
+            background: linear-gradient(to right, #f8f9fa, #ffffff);
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid var(--border);
+        }
+        .subtema-header h2 { 
+            margin: 0; 
+            color: var(--primary); 
+            font-size: 1.6rem;
+            border-left: 5px solid var(--accent);
+            padding-left: 1rem;
+        }
+
+        .seccion-contenido {
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2.5rem;
+        }
+
+        @media (min-width: 900px) {
+            .seccion-contenido { grid-template-columns: 1fr 1fr; }
+            .full-width { grid-column: 1 / -1; }
+        }
+
+        .card h3 {
+            color: var(--primary);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-top: 0;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 0.5rem;
+        }
+
+        .formal-box {
+            background-color: #f0f7ff; /* Azul muy muy pálido */
+            border-radius: 8px;
+            padding: 2rem !important;
+            border: 1px solid #cce5ff;
+        }
+
+        /* CSS Específico para corregir SVGs */
+        .diagrama-container {
+            text-align: center;
+            margin: 2rem auto;
+            padding: 1.5rem;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
+            max-width: 100%;
+            overflow-x: auto; /* Si es muy ancho, permite scroll */
+        }
+        
+        /* Forzar comportamiento correcto del SVG */
+        .diagrama-container svg {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+        
+        /* Evitar que el texto dentro del SVG sea ilegible */
+        .diagrama-container text {
+            font-family: sans-serif;
+        }
+
+        footer {
+            text-align: center;
+            padding: 3rem;
+            background: var(--primary);
+            color: rgba(255,255,255,0.8);
+            margin-top: 4rem;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>13 - Expresiones regulares - Equivalencia entre Autómatas y Regex.</h1>
+        <a href="javascript:history.back()" class="btn-volver">← Volver</a>
+    </header>
+
+    <main>
+
+        <article class="subtema">
+            <div class="subtema-header">
+                <h2>Fundamentos de las Expresiones Regulares y Lenguajes Regulares</h2>
+            </div>
+            <div class="seccion-contenido">
+                
+                <div class="card full-width">
+                    <h3>Historia</h3>
+                    <div><p>El concepto de expresiones regulares (ERs) fue introducido por el matemático Stephen Cole Kleene en la década de 1950. En su influyente trabajo "Representation of Events in Nerve Nets and Finite Automata" (1956), Kleene estableció una conexión fundamental entre la descripción de patrones de eventos y el comportamiento de las redes neuronales y autómatas finitos. Su investigación se inspiró en los modelos de redes neuronales de McCulloch y Pitts, buscando una forma concisa de describir los "eventos regulares" que estos sistemas podían reconocer. La teoría de Kleene demostró que la clase de lenguajes que pueden ser descritos por expresiones regulares es exactamente la misma que la clase de lenguajes que pueden ser reconocidos por autómatas finitos. Este teorema, conocido como el Teorema de Kleene, sentó las bases para gran parte de la teoría de los lenguajes formales y tuvo un impacto profundo en la informática teórica, la compilación y el procesamiento de texto, proporcionando un marco matemático para la especificación y el reconocimiento de patrones.</p></div>
+                </div>
+
+                <div class="card full-width formal-box">
+                    <h3>Descripción Formal</h3>
+                    <div><p>Un alfabeto Σ es un conjunto finito no vacío de símbolos. Una expresión regular (ER) sobre Σ es una cadena formada recursivamente según las siguientes reglas:
+1.  ∅ es una ER, denota el lenguaje vacío. L(∅) = ∅.
+2.  ε es una ER, denota el lenguaje que contiene solo la cadena vacía. L(ε) = {ε}.
+3.  Para cada a ∈ Σ, 'a' es una ER, denota el lenguaje que contiene solo el símbolo 'a'. L('a') = {'a'}.
+4.  Si R₁ y R₂ son ERs, entonces (R₁ ∪ R₂) es una ER (unión), denota L(R₁) ∪ L(R₂).
+5.  Si R₁ y R₂ son ERs, entonces (R₁R₂) es una ER (concatenación), denota L(R₁)L(R₂) = {xy | x ∈ L(R₁), y ∈ L(R₂)}.
+6.  Si R es una ER, entonces (R<em>) es una ER (clausura de Kleene), denota L(R</em>) = {ε} ∪ L(R) ∪ L(R)L(R) ∪ ... (cero o más concatenaciones de cadenas de L(R)).
+Un lenguaje L se dice que es un lenguaje regular si existe una expresión regular R tal que L = L(R). La equivalencia fundamental establece que un lenguaje es regular si y solo si es aceptado por algún autómata finito (AF). Esto significa que cualquier patrón que pueda describirse con una ER puede ser reconocido por una máquina de estados finitos, y viceversa.</p></div>
+                    
+                    <div class="diagrama-container">
+                        <svg viewBox="0 0 600 200">
+      <defs>
+        <marker id="arrow" markerWidth="10" markerHeight="10" refX="5" refY="3" orient="auto" markerUnits="strokeWidth">
+          <path d="M0,0 L0,6 L9,3 z" fill="black" />
+        </marker>
+      </defs>
+      <circle cx="100" cy="100" r="30" stroke="black" stroke-width="2" fill="#E0FFFF"/>
+      <text x="90" y="105" font-family="Arial" font-size="20">q0</text>
+      <circle cx="300" cy="100" r="30" stroke="black" stroke-width="2" fill="#E0FFFF"/>
+      <text x="290" y="105" font-family="Arial" font-size="20">q1</text>
+      <circle cx="500" cy="100" r="30" stroke="black" stroke-width="2" fill="#E0FFFF"/>
+      <circle cx="500" cy="100" r="25" stroke="black" stroke-width="2" fill="none"/>
+      <text x="490" y="105" font-family="Arial" font-size="20">q2</text>
+      <path d="M40 100 L70 100" stroke="black" stroke-width="2" marker-end="url(#arrow)" />
+      <path d="M130 100 L270 100" stroke="black" stroke-width="2" marker-end="url(#arrow)" />
+      <text x="180" y="90" font-family="Arial" font-size="16">a</text>
+      <path d="M330 100 L470 100" stroke="black" stroke-width="2" marker-end="url(#arrow)" />
+      <text x="380" y="90" font-family="Arial" font-size="16">b</text>
+      <path d="M285 70 C280 40, 320 40, 315 70" stroke="black" stroke-width="2" marker-end="url(#arrow)" />
+      <text x="300" y="30" font-family="Arial" font-size="16">a</text>
+    </svg>
+                        <p style="font-size:0.8rem; color:#666; margin-top:1rem; text-align:center;">
+                            <em>Fig: Representación visual generada.</em>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Intuición</h3>
+                    <div><p>Imagina que las expresiones regulares son como "patrones de búsqueda" muy potentes. Piensa en buscar un archivo por su nombre; quizás busques todos los archivos que terminan en ".txt" o que empiezan con "reporte_". Las ERs llevan esto a un nivel más abstracto y formal. El operador de unión (∪) es como "O", permitiéndote decir "encuentra 'gato' O 'perro'". La concatenación (R₁R₂) es como "Y", significando "encuentra 'casa' Y luego 'blanca'". La clausura de Kleene (<em>) es el más poderoso: significa "cero o más repeticiones" de un patrón. Esto te permite especificar cosas como "cualquier número de 'a's seguido por una 'b'" (a</em>b). La intuición detrás de la equivalencia con los autómatas es que cualquier patrón que puedas describir con estas reglas simples y combinaciones (ERs) puede ser "seguido" por una máquina simple de estados (un autómata) que se mueve de un estado a otro mientras consume la entrada. Si la máquina termina en un estado de aceptación después de leer la entrada, significa que la entrada coincide con el patrón de la ER.</p></div>
+                </div>
+
+                <div class="card">
+                    <h3>Aplicación Real</h3>
+                    <div><p>Las expresiones regulares son una herramienta indispensable en el ámbito de la ingeniería de software y el procesamiento de datos. Su uso más común se encuentra en la <strong>validación de entrada</strong>, donde permiten verificar si cadenas de texto como correos electrónicos, números de teléfono, URLs o contraseñas cumplen con un formato específico. En el <strong>análisis léxico</strong> de los compiladores, las ERs se utilizan para definir los tokens del lenguaje (palabras clave, identificadores, operadores), facilitando la primera fase del proceso de compilación. Herramientas como <code>grep</code> en sistemas Unix/Linux, o las funciones de búsqueda y reemplazo en editores de texto avanzados (como VS Code, Sublime Text), dependen fuertemente de las expresiones regulares para realizar búsquedas complejas de patrones. También son cruciales en el <strong>procesamiento y extracción de datos</strong> de archivos de log, documentos web (HTML, XML) o bases de datos, permitiendo a los desarrolladores identificar y extraer información relevante de manera eficiente y flexible.</p></div>
+                </div>
+
+            </div>
+        </article>
+        
+        <article class="subtema">
+            <div class="subtema-header">
+                <h2>Conversión de Autómatas a Expresiones Regulares (Teorema de Kleene I)</h2>
+            </div>
+            <div class="seccion-contenido">
+                
+                <div class="card full-width">
+                    <h3>Historia</h3>
+                    <div><p>El segundo pilar del Teorema de Kleene, que establece que todo lenguaje aceptado por un autómata finito puede ser descrito por una expresión regular, fue también formulado por Stephen Cole Kleene a mediados de los años 50. Aunque Kleene proporcionó la prueba de la existencia de tal conversión, la construcción práctica de algoritmos eficientes surgió un poco después. El algoritmo de McNaughton y Yamada (1960) fue uno de los primeros en ofrecer un método sistemático para esta transformación, utilizando un enfoque basado en resolver un sistema de ecuaciones lineales donde las incógnitas son expresiones regulares. Otro método muy utilizado es el de la eliminación de estados, que reduce iterativamente el autómata al eliminar estados uno por uno, reemplazando los caminos resultantes con expresiones regulares concatenadas y unidas, hasta que solo queden el estado inicial y los finales. Estos desarrollos fueron cruciales para establecer la equivalencia práctica y teórica entre ambos formalismos.</p></div>
+                </div>
+
+                <div class="card full-width formal-box">
+                    <h3>Descripción Formal</h3>
+                    <div><p>Dado un Autómata Finito Determinista (AFD) M = (Q, Σ, δ, q₀, F), donde Q es el conjunto de estados, Σ el alfabeto, δ la función de transición, q₀ el estado inicial y F el conjunto de estados finales. El objetivo es construir una expresión regular R tal que L(R) = L(M). Un método común para esta conversión es el de la eliminación de estados o el uso de las ecuaciones de Arden.
+Las ecuaciones de Arden se basan en definir Rᵢⱼᵏ como la expresión regular que describe todas las cadenas que llevan del estado i al estado j sin pasar por ningún estado de índice mayor que k.
+La ecuación general para estados i, j y un estado intermedio k es: Rᵢⱼᵏ = Rᵢⱼᵏ⁻¹ ∪ Rᵢₖᵏ⁻¹ (Rₖₖᵏ⁻¹)<em> Rₖⱼᵏ⁻¹.
+Los casos base para k = 0, Rᵢⱼ⁰, representan las transiciones directas de qᵢ a qⱼ, incluyendo ε si i=j y no hay bucles etiquetados con símbolos, o ∅ si no hay transiciones entre qᵢ y qⱼ.
+El método de eliminación de estados implica transformar el AFD en un autómata de estados generalizado, donde las transiciones están etiquetadas con expresiones regulares. Luego, se eliminan los estados internos uno a uno, ajustando las ERs de las transiciones restantes. Cuando se elimina un estado qₖ, las transiciones de qᵢ a qⱼ que pasaban por qₖ se reemplazan por una nueva expresión regular Rᵢⱼ = Rᵢⱼ ∪ Rᵢₖ (Rₖₖ)</em> Rₖⱼ. Este proceso se repite hasta que solo queden el estado inicial y los estados finales, o un único estado final que absorbe todas las transiciones. Si R = Q + RP y ε ∉ L(P), la solución única es R = QP*. El lenguaje total L(M) es la unión de las expresiones regulares de las rutas desde el estado inicial a cada estado final después de la reducción.</p></div>
+                    
+                    <div class="diagrama-container">
+                        <svg viewBox="0 0 600 200">
+      <defs>
+        <marker id="arrow_d2er" markerWidth="10" markerHeight="10" refX="5" refY="3" orient="auto" markerUnits="strokeWidth">
+          <path d="M0,0 L0,6 L9,3 z" fill="black" />
+        </marker>
+      </defs>
+      <circle cx="100" cy="100" r="30" stroke="black" stroke-width="2" fill="#E0FFFF"/>
+      <text x="90" y="105" font-family="Arial" font-size="20">q0</text>
+      <circle cx="300" cy="100" r="30" stroke="black" stroke-width="2" fill="#E0FFFF"/>
+      <text x="290" y="105" font-family="Arial" font-size="20">q1</text>
+      <circle cx="500" cy="100" r="30" stroke="black" stroke-width="2" fill="#E0FFFF"/>
+      <circle cx="500" cy="100" r="25" stroke="black" stroke-width="2" fill="none"/>
+      <text x="490" y="105" font-family="Arial" font-size="20">q2</text>
+      <path d="M40 100 L70 100" stroke="black" stroke-width="2" marker-end="url(#arrow_d2er)" />
+      <path d="M130 100 L270 100" stroke="black" stroke-width="2" marker-end="url(#arrow_d2er)" />
+      <text x="180" y="90" font-family="Arial" font-size="16">a</text>
+      <path d="M330 100 L470 100" stroke="black" stroke-width="2" marker-end="url(#arrow_d2er)" />
+      <text x="380" y="90" font-family="Arial" font-size="16">b</text>
+      <path d="M285 70 C280 40, 320 40, 315 70" stroke="black" stroke-width="2" marker-end="url(#arrow_d2er)" />
+      <text x="300" y="30" font-family="Arial" font-size="16">a</text>
+    </svg>
+                        <p style="font-size:0.8rem; color:#666; margin-top:1rem; text-align:center;">
+                            <em>Fig: Representación visual generada.</em>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Intuición</h3>
+                    <div><p>Imagina que tienes un mapa de carreteras muy detallado (el autómata) con ciudades (estados) y carreteras (transiciones) que solo permiten pasar por ciertas ciudades en un orden específico. Quieres obtener una descripción concisa de todos los posibles viajes que puedes hacer desde una ciudad inicial hasta una ciudad final, sin tener que enumerar cada ruta individualmente. Una expresión regular es precisamente esa descripción compacta de todas esas rutas. El proceso de conversión de un autómata a una expresión regular es como "resumir" todas las posibles secuencias de carreteras y paradas intermedias que te llevan de un punto A a un punto B. Cuando eliminamos un estado intermedio, es como si estuviéramos creando una "super-carretera" directa entre dos puntos. Esta "super-carretera" encapsula todas las opciones de paso por el estado eliminado, combinando las carreteras de entrada, los bucles internos y las carreteras de salida del estado. Repetimos este proceso hasta que solo nos quede una o varias 'super-carreteras' directas desde el estado inicial hasta los estados finales, y la unión de sus etiquetas es nuestra expresión regular final.</p></div>
+                </div>
+
+                <div class="card">
+                    <h3>Aplicación Real</h3>
+                    <div><p>Aunque la conversión de un autómata a una expresión regular es fundamentalmente una herramienta teórica para demostrar la equivalencia, tiene aplicaciones prácticas indirectas e incluso directas en la verificación y el diseño. En el <strong>diseño de lenguajes de programación o protocolos</strong>, puede usarse para verificar si la gramática de un componente léxico (que a menudo se define mediante expresiones regulares) cubre todos los casos posibles o, por el contrario, si un autómata diseñado manualmente produce el lenguaje esperado. En la <strong>optimización de hardware</strong>, los autómatas finitos se utilizan para diseñar circuitos secuenciales; la conversión a expresiones regulares puede ayudar a analizar las propiedades de temporización y a simplificar la lógica del circuito. Además, puede ser útil en la <strong>demostración formal de propiedades</strong> de sistemas basados en estados, permitiendo una representación más abstracta de su comportamiento que facilita el razonamiento sobre su corrección o seguridad.</p></div>
+                </div>
+
+            </div>
+        </article>
+        
+        <article class="subtema">
+            <div class="subtema-header">
+                <h2>Conversión de Expresiones Regulares a Autómatas (Teorema de Kleene II)</h2>
+            </div>
+            <div class="seccion-contenido">
+                
+                <div class="card full-width">
+                    <h3>Historia</h3>
+                    <div><p>La otra dirección del Teorema de Kleene, que afirma que cualquier expresión regular puede convertirse en un autómata finito, fue un hito crucial. Si bien Kleene lo demostró, la construcción algorítmica más práctica y conocida fue desarrollada por Ken Thompson en 1968. Su trabajo, "Regular Expression Search Algorithm", se publicó junto con la primera versión de la utilidad <code>grep</code> (global regular expression print) en los sistemas operativos Unix. La "construcción de Thompson" es un algoritmo inductivo que construye un Autómata Finito No Determinista con Transiciones Épsilon (AFND-ε) para cada operador de la expresión regular (unión, concatenación, clausura de Kleene) y luego combina estos AFND-ε para formar un autómata que reconoce el lenguaje completo de la ER. Este enfoque fue revolucionario porque proporcionó una manera eficiente de implementar motores de expresiones regulares, siendo la base de innumerables herramientas de procesamiento de texto hasta el día de hoy.</p></div>
+                </div>
+
+                <div class="card full-width formal-box">
+                    <h3>Descripción Formal</h3>
+                    <div><p>Dada una expresión regular R sobre un alfabeto Σ, el objetivo es construir un Autómata Finito No Determinista con Transiciones Épsilon (AFND-ε) N tal que L(N) = L(R). La construcción de Thompson es un método estándar y se realiza recursivamente:
+1.  <strong>Caso Base ∅</strong>: Se construye un AFND-ε con un estado inicial y un estado final, pero sin transiciones, de modo que no acepta ninguna cadena.
+2.  <strong>Caso Base ε</strong>: Se construye un AFND-ε con un estado inicial, un estado final, y una transición ε entre ellos. Acepta solo la cadena vacía.
+3.  <strong>Caso Base a ∈ Σ</strong>: Se construye un AFND-ε con un estado inicial, un estado final, y una transición con el símbolo 'a' entre ellos. Acepta solo la cadena 'a'.
+4.  <strong>Para R₁ ∪ R₂ (Unión)</strong>: Si N₁ reconoce L(R₁) y N₂ reconoce L(R₂), se crea un nuevo estado inicial y un nuevo estado final. Se añaden transiciones ε desde el nuevo inicial a los iniciales de N₁ y N₂, y transiciones ε desde los finales de N₁ y N₂ al nuevo final.
+5.  <strong>Para R₁R₂ (Concatenación)</strong>: Si N₁ reconoce L(R₁) y N₂ reconoce L(R₂), se une el estado final de N₁ con el estado inicial de N₂ mediante una transición ε. El estado inicial de N₁ es el nuevo inicial, y el final de N₂ es el nuevo final.
+6.  <strong>Para R₁* (Clausura de Kleene)</strong>: Si N₁ reconoce L(R₁), se crea un nuevo estado inicial y un nuevo estado final. Se añade una transición ε del nuevo inicial al nuevo final. Se añaden transiciones ε del nuevo inicial al inicial de N₁, del final de N₁ al nuevo final, y del final de N₁ al inicial de N₁ (para la repetición).
+El AFND-ε resultante puede convertirse en un AFND y luego en un AFD equivalente, demostrando que todo lenguaje descrito por una ER es regular.</p></div>
+                    
+                    <div class="diagrama-container">
+                        <svg viewBox="0 0 600 200">
+      <defs>
+        <marker id="arrow_er2d" markerWidth="10" markerHeight="10" refX="5" refY="3" orient="auto" markerUnits="strokeWidth">
+          <path d="M0,0 L0,6 L9,3 z" fill="black" />
+        </marker>
+      </defs>
+      <circle cx="100" cy="100" r="30" stroke="black" stroke-width="2" fill="#E0FFFF"/>
+      <text x="90" y="105" font-family="Arial" font-size="20">q0</text>
+      <path d="M40 100 L70 100" stroke="black" stroke-width="2" marker-end="url(#arrow_er2d)" />
+
+      <circle cx="200" cy="50" r="20" stroke="black" stroke-width="1" fill="#ADD8E6"/>
+      <text x="190" y="55" font-family="Arial" font-size="16">a_i</text>
+      <circle cx="300" cy="50" r="20" stroke="black" stroke-width="1" fill="#ADD8E6"/>
+      <text x="290" y="55" font-family="Arial" font-size="16">a_f</text>
+      <path d="M220 50 L280 50" stroke="black" stroke-width="1" marker-end="url(#arrow_er2d)" />
+      <text x="245" y="40" font-family="Arial" font-size="14">a</text>
+
+      <circle cx="200" cy="150" r="20" stroke="black" stroke-width="1" fill="#ADD8E6"/>
+      <text x="190" y="155" font-family="Arial" font-size="16">b_i</text>
+      <circle cx="300" cy="150" r="20" stroke="black" stroke-width="1" fill="#ADD8E6"/>
+      <text x="290" y="155" font-family="Arial" font-size="16">b_f</text>
+      <path d="M220 150 L280 150" stroke="black" stroke-width="1" marker-end="url(#arrow_er2d)" />
+      <text x="245" y="140" font-family="Arial" font-size="14">b</text>
+
+      <path d="M130 100 L180 60" stroke="black" stroke-width="2" marker-end="url(#arrow_er2d)" />
+      <path d="M130 100 L180 140" stroke="black" stroke-width="2" marker-end="url(#arrow_er2d)" />
+      <text x="140" y="80" font-family="Arial" font-size="16">ε</text>
+      <text x="140" y="120" font-family="Arial" font-size="16">ε</text>
+
+      <circle cx="500" cy="100" r="30" stroke="black" stroke-width="2" fill="#E0FFFF"/>
+      <circle cx="500" cy="100" r="25" stroke="black" stroke-width="2" fill="none"/>
+      <text x="490" y="105" font-family="Arial" font-size="20">qf</text>
+
+      <path d="M320 50 L470 90" stroke="black" stroke-width="2" marker-end="url(#arrow_er2d)" />
+      <text x="395" y="65" font-family="Arial" font-size="16">ε</text>
+      <path d="M320 150 L470 110" stroke="black" stroke-width="2" marker-end="url(#arrow_er2d)" />
+      <text x="395" y="135" font-family="Arial" font-size="16">ε</text>
+      <path d="M470 100 C470 130, 420 130, 420 100 C420 70, 470 70, 470 100" stroke="black" stroke-width="2" marker-end="url(#arrow_er2d)" />
+      <text x="445" y="155" font-family="Arial" font-size="16">ε</text>
+      <path d="M470 100 C470 70, 420 70, 420 100" stroke="black" stroke-width="2" marker-end="url(#arrow_er2d)" />
+      <text x="445" y="45" font-family="Arial" font-size="16">ε</text>
+    </svg>
+                        <p style="font-size:0.8rem; color:#666; margin-top:1rem; text-align:center;">
+                            <em>Fig: Representación visual generada.</em>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Intuición</h3>
+                    <div><p>Si las expresiones regulares son como recetas para patrones de texto, la conversión a un autómata es como construir una máquina que pueda "cocinar" cualquier texto que siga esa receta. Cada ingrediente básico de la receta (un símbolo 'a', la cadena vacía ε) tiene una máquina simple. Luego, para combinar ingredientes, construimos máquinas más grandes. Si la receta dice "A o B" (unión), la máquina tiene dos caminos paralelos para A y B. Si dice "A seguido de B" (concatenación), la máquina de A alimenta a la máquina de B. Y si dice "cero o más de A" (clausura de Kleene), la máquina tiene un bucle que permite pasar por A una y otra vez, o saltarse A por completo. Las transiciones ε son como "atajos invisibles" que no consumen ningún símbolo de entrada, permitiendo a la máquina cambiar de estado sin leer nada, lo cual es útil para conectar estas sub-máquinas de forma flexible.</p></div>
+                </div>
+
+                <div class="card">
+                    <h3>Aplicación Real</h3>
+                    <div><p>Esta conversión es el corazón de la implementación práctica de los <strong>motores de expresiones regulares</strong> en casi todas las aplicaciones de software. Cuando utilizas una ER en Python, Java, JavaScript, Perl, o herramientas como <code>grep</code> o <code>sed</code>, internamente, esa ER se transforma en un autómata (típicamente un AFND-ε, luego un AFND, y a veces un AFD para mayor eficiencia) para realizar la búsqueda de patrones. Esto permite que la búsqueda sea extremadamente rápida y eficiente, especialmente en grandes volúmenes de texto. Los <strong>analizadores léxicos</strong> de los compiladores, generados por herramientas como Lex o Flex, también emplean esta conversión: las reglas de tokens (ERs) se compilan en un autómata finito que es capaz de identificar las unidades léxicas del código fuente de manera determinista y rápida. Es una tecnología subyacente esencial para el procesamiento de texto, la minería de datos, la seguridad informática (ej. detección de intrusiones basada en firmas), y cualquier campo donde la búsqueda y validación de patrones en cadenas sea crítica.</p></div>
+                </div>
+
+            </div>
+        </article>
+        
+    </main>
+
+    <footer>
+        <p>Prof. Jorge López-Cifre, PhD © 2026</p>
+    </footer>
+
+</body>
+</html>

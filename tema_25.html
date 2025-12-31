@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>25 - Máquinas de Turing - Ejemplos de computación básica. - Prof. Jorge López-Cifre</title>
+    <style>
+        :root {
+            --primary: #003366;
+            --accent: #d4af37;
+            --bg: #f8f9fa;
+            --text: #2c3e50;
+            --card-bg: #ffffff;
+            --border: #e9ecef;
+        }
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 0;
+            line-height: 1.7;
+        }
+        /* Tipografía mejorada */
+        p { margin-bottom: 1rem; }
+        strong, b { color: var(--primary); font-weight: 700; }
+        
+        header {
+            background: var(--primary);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        h1 { margin: 0; font-size: 1.25rem; font-weight: 600; }
+        
+        .btn-volver {
+            background: var(--accent);
+            color: var(--primary);
+            text-decoration: none;
+            padding: 0.5rem 1.2rem;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        .btn-volver:hover { 
+            background: #fff; 
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+
+        main {
+            max-width: 1100px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+
+        .subtema {
+            background: var(--card-bg);
+            border-radius: 12px;
+            margin-bottom: 4rem;
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+        
+        .subtema-header {
+            background: linear-gradient(to right, #f8f9fa, #ffffff);
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid var(--border);
+        }
+        .subtema-header h2 { 
+            margin: 0; 
+            color: var(--primary); 
+            font-size: 1.6rem;
+            border-left: 5px solid var(--accent);
+            padding-left: 1rem;
+        }
+
+        .seccion-contenido {
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2.5rem;
+        }
+
+        @media (min-width: 900px) {
+            .seccion-contenido { grid-template-columns: 1fr 1fr; }
+            .full-width { grid-column: 1 / -1; }
+        }
+
+        .card h3 {
+            color: var(--primary);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-top: 0;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 0.5rem;
+        }
+
+        .formal-box {
+            background-color: #f0f7ff; /* Azul muy muy pálido */
+            border-radius: 8px;
+            padding: 2rem !important;
+            border: 1px solid #cce5ff;
+        }
+
+        /* CSS Específico para corregir SVGs */
+        .diagrama-container {
+            text-align: center;
+            margin: 2rem auto;
+            padding: 1.5rem;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
+            max-width: 100%;
+            overflow-x: auto; /* Si es muy ancho, permite scroll */
+        }
+        
+        /* Forzar comportamiento correcto del SVG */
+        .diagrama-container svg {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+        
+        /* Evitar que el texto dentro del SVG sea ilegible */
+        .diagrama-container text {
+            font-family: sans-serif;
+        }
+
+        footer {
+            text-align: center;
+            padding: 3rem;
+            background: var(--primary);
+            color: rgba(255,255,255,0.8);
+            margin-top: 4rem;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>25 - Máquinas de Turing - Ejemplos de computación básica.</h1>
+        <a href="javascript:history.back()" class="btn-volver">← Volver</a>
+    </header>
+
+    <main>
+
+        <article class="subtema">
+            <div class="subtema-header">
+                <h2>La Máquina de Turing como Modelo Universal de Computación</h2>
+            </div>
+            <div class="seccion-contenido">
+                
+                <div class="card full-width">
+                    <h3>Historia</h3>
+                    <div><p>El concepto de la Máquina de Turing (MT) fue introducido por el matemático británico Alan Turing en 1936, en su seminal artículo "On Computable Numbers, with an Application to the Entscheidungsproblem". El trabajo de Turing fue una respuesta a la pregunta planteada por David Hilbert sobre la decidibilidad de todos los problemas matemáticos (el "Entscheidungsproblem"). De manera independiente, Alonzo Church había desarrollado el cálculo lambda, y la tesis de Church-Turing postuló que cualquier función computable puede ser computada por una Máquina de Turing. Este modelo abstracto no buscaba construir una máquina física, sino formalizar la noción intuitiva de "algoritmo" o "procedimiento efectivo". Las MTs sentaron las bases para la comprensión de los límites y capacidades de la computación, marcando el inicio formal de la ciencia de la computación teórica.</p></div>
+                </div>
+
+                <div class="card full-width formal-box">
+                    <h3>Descripción Formal</h3>
+                    <div><p>Una Máquina de Turing (MT) se define formalmente como una 7-tupla M = (Q, Σ, Γ, δ, q₀, qₐcc, qᵣₑⱼ), donde:
+- Q es un conjunto finito y no vacío de estados.
+- Σ es el alfabeto de entrada, un conjunto finito de símbolos que la máquina puede leer como entrada. El símbolo blanco ⬜ no pertenece a Σ.
+- Γ es el alfabeto de la cinta, un conjunto finito de símbolos que incluye Σ y el símbolo blanco ⬜ (Σ ⊆ Γ).
+- δ es la función de transición, una aplicación parcial de Q × Γ a Q × Γ × {L, R}. Esto significa que para un estado actual q y un símbolo X leído de la cinta, δ(q, X) produce un nuevo estado p, un símbolo Y para escribir en la cinta, y una dirección D (L para mover el cabezal a la izquierda, R para moverlo a la derecha).
+- q₀ ∈ Q es el estado inicial de la máquina.
+- qₐcc ∈ Q es el estado de aceptación. Si la máquina entra en este estado, la entrada se acepta.
+- qᵣₑⱼ ∈ Q es el estado de rechazo (qᵣₑⱼ ≠ qₐcc). Si la máquina entra en este estado, la entrada se rechaza. Si la máquina se detiene en cualquier otro estado o no tiene una transición definida para la configuración actual, también puede considerarse un rechazo o un bucle infinito. La cinta de la MT se considera infinita hacia la derecha y la izquierda, inicialmente llena de símbolos blancos excepto por la entrada. El cabezal de lectura/escritura se mueve a lo largo de esta cinta, leyendo, escribiendo y cambiando de estado.</p></div>
+                    
+                    <div class="diagrama-container">
+                        <svg viewBox="0 0 600 200"><rect x="50" y="80" width="500" height="40" fill="#f0f0f0" stroke="#333" stroke-width="2"/><rect x="270" y="80" width="40" height="40" fill="#ddd" stroke="#333" stroke-width="2"/><text x="290" y="105" font-family="monospace" font-size="22" text-anchor="middle">X</text><polygon points="270,80 310,80 290,50" fill="#666" stroke="#333"/><circle cx="290" cy="25" r="15" fill="#aaccff" stroke="#333"/><text x="290" y="30" font-family="sans-serif" font-size="14" text-anchor="middle">q</text><text x="150" y="145" font-family="sans-serif" font-size="14" text-anchor="middle">Cinta</text><text x="450" y="145" font-family="sans-serif" font-size="14" text-anchor="middle">Infinita</text></svg>
+                        <p style="font-size:0.8rem; color:#666; margin-top:1rem; text-align:center;">
+                            <em>Fig: Representación visual generada.</em>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Intuición</h3>
+                    <div><p>La Máquina de Turing puede imaginarse como un trabajador de oficina muy metódico y con una memoria ilimitada. Este trabajador tiene un cuaderno (la cinta) con una cantidad infinita de páginas (celdas), en cada una de las cuales puede escribir un solo símbolo. Además, tiene una lista de instrucciones (la función de transición) que le dice qué hacer en cada situación: 'Si estás en el estado 'Q' y lees un 'X', entonces escribe un 'Y', muévete a la 'Izquierda' o 'Derecha' en el cuaderno y pasa al estado 'P''. No tiene inteligencia o intuición; sigue las reglas al pie de la letra. La belleza de este modelo radica en su simplicidad: a pesar de sus reglas básicas, se ha demostrado que es capaz de simular cualquier algoritmo que una computadora real pueda ejecutar. Es un modelo minimalista que captura la esencia de la computación algorítmica.</p></div>
+                </div>
+
+                <div class="card">
+                    <h3>Aplicación Real</h3>
+                    <div><p>Aunque las Máquinas de Turing no son implementadas directamente como hardware, su modelo abstracto subyace en gran parte de la informática moderna. La arquitectura de Von Neumann, que define el funcionamiento de la mayoría de las computadoras actuales, es una realización práctica de los principios de la MT, separando la unidad de control, la memoria y la unidad aritmética. Los procesadores (CPUs) son máquinas de estados finitos que ejecutan instrucciones para manipular datos en memoria, tal como una MT manipula símbolos en su cinta. En el desarrollo de software, los compiladores y los intérpretes son ejemplos de programas que simulan el comportamiento de una MT, transformando lenguajes de programación de alto nivel en instrucciones que la máquina puede entender y ejecutar, demostrando la universalidad de la computación que Turing predijo.</p></div>
+                </div>
+
+            </div>
+        </article>
+        
+        <article class="subtema">
+            <div class="subtema-header">
+                <h2>Computación de Funciones Numéricas: Suma en Notación Unaria</h2>
+            </div>
+            <div class="seccion-contenido">
+                
+                <div class="card full-width">
+                    <h3>Historia</h3>
+                    <div><p>Después de la formulación inicial de Alan Turing, una de las primeras y más importantes tareas fue demostrar que su modelo podía realizar operaciones aritméticas básicas. La capacidad de sumar, restar, multiplicar y dividir números era esencial para validar la Máquina de Turing como un modelo viable de computación. Los primeros ejemplos de MTs se diseñaron para trabajar con números representados en notación unaria, donde un número 'n' se representa con 'n' símbolos idénticos (por ejemplo, 'n' ceros). Esta notación simplifica el diseño de la máquina, ya que las operaciones se reducen a la manipulación directa de secuencias de símbolos. La concreción de estos ejemplos fue crucial para que la comunidad matemática y lógica aceptara la Máquina de Turing como el estándar de oro para definir lo computable.</p></div>
+                </div>
+
+                <div class="card full-width formal-box">
+                    <h3>Descripción Formal</h3>
+                    <div><p>Consideremos la función suma de dos números naturales, representados en notación unaria. Por ejemplo, el número 3 se representa como '000', y el número 2 como '00'. La entrada de la MT para sumar 3 y 2 podría ser la cadena '000100', donde '1' actúa como un separador. El objetivo de la MT es transformar esta cadena en '00000', la representación unaria de 5. Una posible estrategia para la Máquina de Turing es la siguiente:
+1.  Reemplazar el primer '0' de la izquierda con un símbolo blanco ⬜. Moverse a la derecha.
+2.  Moverse a la derecha hasta encontrar el símbolo '1'.
+3.  Reemplazar el '1' con un '0'. Moverse a la derecha.
+4.  Moverse a la derecha hasta encontrar el primer símbolo blanco ⬜ (el final de la segunda secuencia de ceros).
+5.  Moverse una posición a la izquierda. Si el símbolo es un '0', se ha terminado de procesar el segundo número. Reemplazarlo por un '0' y mover a la izquierda.
+6.  Moverse a la izquierda hasta encontrar el primer símbolo blanco ⬜ (el inicio de la primera secuencia de ceros, que fue borrado en el paso 1).
+7.  Moverse una posición a la derecha. Si el símbolo es un '0', se ha terminado. Si no, se repite el proceso desde el paso 1, efectivamente 'moviendo' un '0' de la segunda secuencia para completar la primera. Al final, todos los '0's del segundo número habrán sido fusionados con el primer número, y el '1' separador habrá sido convertido en un '0', resultando en la suma total en unario. La máquina se detiene en un estado de aceptación cuando la cinta contiene solo el resultado en unario y el cabezal está al inicio o final de la cadena resultante, rodeada de blancos.</p></div>
+                    
+                    <div class="diagrama-container">
+                        <svg viewBox="0 0 600 200"><text x="50" y="50" font-family="sans-serif" font-size="14">Entrada: 000100 (3+2)</text><rect x="50" y="60" width="40" height="40" fill="#f0f0f0" stroke="#333" stroke-width="1"/> <text x="70" y="85" font-family="monospace" font-size="20">0</text><rect x="90" y="60" width="40" height="40" fill="#f0f0f0" stroke="#333" stroke-width="1"/> <text x="110" y="85" font-family="monospace" font-size="20">0</text><rect x="130" y="60" width="40" height="40" fill="#f0f0f0" stroke="#333" stroke-width="1"/> <text x="150" y="85" font-family="monospace" font-size="20">0</text><rect x="170" y="60" width="40" height="40" fill="#f0f0f0" stroke="#333" stroke-width="1"/> <text x="190" y="85" font-family="monospace" font-size="20">1</text><rect x="210" y="60" width="40" height="40" fill="#f0f0f0" stroke="#333" stroke-width="1"/> <text x="230" y="85" font-family="monospace" font-size="20">0</text><rect x="250" y="60" width="40" height="40" fill="#f0f0f0" stroke="#333" stroke-width="1"/> <text x="270" y="85" font-family="monospace" font-size="20">0</text><path d="M300 80 L350 80 L340 70 M350 80 L340 90" stroke="#333" stroke-width="2" fill="none"/><text x="380" y="50" font-family="sans-serif" font-size="14">Salida: 00000 (5)</text><rect x="380" y="60" width="40" height="40" fill="#f0f0f0" stroke="#333" stroke-width="1"/> <text x="400" y="85" font-family="monospace" font-size="20">0</text><rect x="420" y="60" width="40" height="40" fill="#f0f0f0" stroke="#333" stroke-width="1"/> <text x="440" y="85" font-family="monospace" font-size="20">0</text><rect x="460" y="60" width="40" height="40" fill="#f0f0f0" stroke="#333" stroke-width="1"/> <text x="480" y="85" font-family="monospace" font-size="20">0</text><rect x="500" y="60" width="40" height="40" fill="#f0f0f0" stroke="#333" stroke-width="1"/> <text x="520" y="85" font-family="monospace" font-size="20">0</text><rect x="540" y="60" width="40" height="40" fill="#f0f0f0" stroke="#333" stroke-width="1"/> <text x="560" y="85" font-family="monospace" font-size="20">0</text></svg>
+                        <p style="font-size:0.8rem; color:#666; margin-top:1rem; text-align:center;">
+                            <em>Fig: Representación visual generada.</em>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Intuición</h3>
+                    <div><p>La suma en notación unaria con una Máquina de Turing es sorprendentemente intuitiva si pensamos en ella como un proceso de 'conteo' o 'concatenación'. Imagina que tienes dos montones de fichas: uno con tres fichas y otro con dos. Si quieres sumarlas, simplemente juntas ambos montones. La MT simula esto moviendo las fichas (los '0's) de un montón al otro y eliminando el separador. Primero, localiza el separador ('1') entre los dos números. Luego, "borra" este separador y "agrega" su valor (que es '0' en el contexto unario) a la secuencia de '0's existente, effectively combinando ambas cadenas de '0's. El proceso iterativo de buscar, marcar, mover y reescribir es la mecánica de la MT para realizar la operación, demostrando cómo incluso tareas aritméticas básicas se descomponen en manipulaciones de símbolos fundamentales.</p></div>
+                </div>
+
+                <div class="card">
+                    <h3>Aplicación Real</h3>
+                    <div><p>Aunque las computadoras modernas no realizan sumas en notación unaria, los principios de manipulación de bits y memoria que se ilustran en estos ejemplos son fundamentales para la arquitectura de las unidades aritmético-lógicas (ALUs) de los procesadores. Las ALUs operan sobre representaciones binarias de números, realizando sumas, restas y otras operaciones lógicas a nivel de bits. Las técnicas de una MT para buscar un patrón, marcarlo y reescribir la cinta son análogas a cómo un procesador carga datos de la memoria, los procesa y los guarda de vuelta. Además, en criptografía y seguridad informática, la manipulación de grandes números enteros es crucial, y el concepto de romper estas operaciones en pasos elementales (como lo hace una MT) es la base para diseñar algoritmos eficientes y seguros.</p></div>
+                </div>
+
+            </div>
+        </article>
+        
+        <article class="subtema">
+            <div class="subtema-header">
+                <h2>Reconocimiento de Lenguajes: Palíndromos Simples</h2>
+            </div>
+            <div class="seccion-contenido">
+                
+                <div class="card full-width">
+                    <h3>Historia</h3>
+                    <div><p>El estudio de la capacidad de las Máquinas de Turing para reconocer lenguajes formales es central en la teoría de la computación. Tras el desarrollo de la jerarquía de Chomsky en los años 50 y 60, se hizo evidente que algunas clases de lenguajes (como los lenguajes libres de contexto) podían ser reconocidas por autómatas de pila, pero los lenguajes más complejos requerían el poder computacional de una Máquina de Turing. Demostrar que una MT podía reconocer un lenguaje como el de los palíndromos (cadenas que se leen igual de izquierda a derecha que de derecha a izquierda) fue un paso importante. Los palíndromos, aunque conceptualmente sencillos, requieren una capacidad de "memoria" y comparación que va más allá de un autómata finito y, en su forma general, exige la flexibilidad de la cinta de una MT para mover y comparar caracteres distantes de la cadena, confirmando su superioridad computacional.</p></div>
+                </div>
+
+                <div class="card full-width formal-box">
+                    <h3>Descripción Formal</h3>
+                    <div><p>Para reconocer el lenguaje de los palíndromos sobre el alfabeto Σ = {a, b}, una Máquina de Turing puede seguir un algoritmo como el siguiente para una cadena de entrada w:
+1.  En el estado inicial q₀, lee el primer símbolo de la cinta. Márcalo con un símbolo especial (por ejemplo, 'x') y recuerda cuál era (por ejemplo, 'a' o 'b').
+2.  Mueve el cabezal hacia la derecha hasta encontrar el primer símbolo blanco ⬜ (el final de la cadena de entrada).
+3.  Mueve el cabezal una posición a la izquierda para leer el último símbolo de la cadena.
+4.  Compara este último símbolo con el que se recordó en el paso 1.
+    a.  Si coinciden: Marca el último símbolo con 'x'. Mueve el cabezal hacia la izquierda hasta encontrar el primer 'x', luego muévelo una posición a la derecha para leer el siguiente símbolo no marcado. Regresa al paso 1.
+    b.  Si no coinciden (o si se compara un 'a' con 'b', o viceversa): La cadena no es un palíndromo. La máquina entra en el estado qᵣₑⱼ.
+5.  Si en algún momento, al intentar leer el primer símbolo no marcado (paso 1), el cabezal se encuentra con un símbolo blanco ⬜ (o solo queda un símbolo central sin marcar en el caso de palíndromos de longitud impar), significa que todos los pares han sido comparados con éxito. La máquina entra en el estado qₐcc. Este proceso manipula la cinta, borrando efectivamente los caracteres comparados y reduciendo la cadena a evaluar en cada iteración, utilizando la cinta como memoria auxiliar.</p></div>
+                    
+                    <div class="diagrama-container">
+                        <svg viewBox="0 0 600 200"><rect x="100" y="80" width="40" height="40" fill="#ddd" stroke="#333" stroke-width="1"/> <text x="120" y="105" font-family="monospace" font-size="20">a</text><rect x="140" y="80" width="40" height="40" fill="#f0f0f0" stroke="#333" stroke-width="1"/> <text x="160" y="105" font-family="monospace" font-size="20">b</text><rect x="180" y="80" width="40" height="40" fill="#f0f0f0" stroke="#333" stroke-width="1"/> <text x="200" y="105" font-family="monospace" font-size="20">a</text><rect x="220" y="80" width="40" height="40" fill="#f0f0f0" stroke="#333" stroke-width="1"/> <text x="240" y="105" font-family="monospace" font-size="20">b</text><rect x="260" y="80" width="40" height="40" fill="#f0f0f0" stroke="#333" stroke-width="1"/> <text x="280" y="105" font-family="monospace" font-size="20">a</text><polygon points="100,80 140,80 120,50" fill="#666" stroke="#333"/><text x="120" y="145" font-family="sans-serif" font-size="14" text-anchor="middle">Paso 1: Leer 'a' inicial</text><path d="M320 90 L370 90 L360 80 M370 90 L360 100" stroke="#333" stroke-width="2" fill="none"/><rect x="400" y="80" width="40" height="40" fill="#e0e0e0" stroke="#333" stroke-width="1"/> <text x="420" y="105" font-family="monospace" font-size="20">_</text><rect x="440" y="80" width="40" height="40" fill="#f0f0f0" stroke="#333" stroke-width="1"/> <text x="460" y="105" font-family="monospace" font-size="20">b</text><rect x="480" y="80" width="40" height="40" fill="#f0f0f0" stroke="#333" stroke-width="1"/> <text x="500" y="105" font-family="monospace" font-size="20">a</text><rect x="520" y="80" width="40" height="40" fill="#e0e0e0" stroke="#333" stroke-width="1"/> <text x="540" y="105" font-family="monospace" font-size="20">_</text><polygon points="440,80 480,80 460,50" fill="#666" stroke="#333"/><text x="460" y="145" font-family="sans-serif" font-size="14" text-anchor="middle">Paso 2: Leer 'b' y comparar</text></svg>
+                        <p style="font-size:0.8rem; color:#666; margin-top:1rem; text-align:center;">
+                            <em>Fig: Representación visual generada.</em>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Intuición</h3>
+                    <div><p>Piensa en cómo verificarías manualmente si una palabra es un palíndromo. Tomarías el primer carácter y lo compararías con el último. Si coinciden, los "tacharías" y repetirías el proceso con los caracteres restantes del centro de la palabra. Una Máquina de Turing realiza exactamente esta misma estrategia. Utiliza su cabezal para moverse de un extremo de la cinta al otro, marcando los caracteres ya comparados para no volver a considerarlos. La cinta actúa como tu "papel" y la memoria de estados internos de la MT como tu "cerebro" para recordar el carácter que acabas de leer y hacia dónde debes moverte. Su capacidad para viajar a lo largo de la cinta, escribir marcas y regresar a puntos específicos es lo que le permite manejar la complejidad de este tipo de reconocimiento de patrones.</p></div>
+                </div>
+
+                <div class="card">
+                    <h3>Aplicación Real</h3>
+                    <div><p>El reconocimiento de patrones es una tarea fundamental en informática, y el ejemplo de los palíndromos ilustra la capacidad de las MTs para este fin. En la ingeniería de software, los algoritmos de búsqueda y comparación de cadenas (por ejemplo, expresiones regulares) son omnipresentes, desde la validación de formularios web hasta la búsqueda de texto en editores o sistemas operativos. Los compiladores usan técnicas similares para el análisis sintáctico (parsing) de código, verificando si las estructuras del lenguaje cumplen con las reglas gramaticales. En bioinformática, el reconocimiento de secuencias palindrómicas en el ADN es vital, ya que suelen indicar sitios de unión para enzimas o elementos reguladores. En seguridad, la verificación de integridad de datos y la detección de anomalías a menudo se basan en la capacidad de reconocer patrones específicos en flujos de datos.</p></div>
+                </div>
+
+            </div>
+        </article>
+        
+    </main>
+
+    <footer>
+        <p>Prof. Jorge López-Cifre, PhD © 2026</p>
+    </footer>
+
+</body>
+</html>

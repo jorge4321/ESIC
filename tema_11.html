@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>11 - Optimización - Diseño de reconocedores (emails, fechas). - Prof. Jorge López-Cifre</title>
+    <style>
+        :root {
+            --primary: #003366;
+            --accent: #d4af37;
+            --bg: #f8f9fa;
+            --text: #2c3e50;
+            --card-bg: #ffffff;
+            --border: #e9ecef;
+        }
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 0;
+            line-height: 1.7;
+        }
+        /* Tipografía mejorada */
+        p { margin-bottom: 1rem; }
+        strong, b { color: var(--primary); font-weight: 700; }
+        
+        header {
+            background: var(--primary);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        h1 { margin: 0; font-size: 1.25rem; font-weight: 600; }
+        
+        .btn-volver {
+            background: var(--accent);
+            color: var(--primary);
+            text-decoration: none;
+            padding: 0.5rem 1.2rem;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        .btn-volver:hover { 
+            background: #fff; 
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+
+        main {
+            max-width: 1100px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+
+        .subtema {
+            background: var(--card-bg);
+            border-radius: 12px;
+            margin-bottom: 4rem;
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+        
+        .subtema-header {
+            background: linear-gradient(to right, #f8f9fa, #ffffff);
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid var(--border);
+        }
+        .subtema-header h2 { 
+            margin: 0; 
+            color: var(--primary); 
+            font-size: 1.6rem;
+            border-left: 5px solid var(--accent);
+            padding-left: 1rem;
+        }
+
+        .seccion-contenido {
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2.5rem;
+        }
+
+        @media (min-width: 900px) {
+            .seccion-contenido { grid-template-columns: 1fr 1fr; }
+            .full-width { grid-column: 1 / -1; }
+        }
+
+        .card h3 {
+            color: var(--primary);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-top: 0;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 0.5rem;
+        }
+
+        .formal-box {
+            background-color: #f0f7ff; /* Azul muy muy pálido */
+            border-radius: 8px;
+            padding: 2rem !important;
+            border: 1px solid #cce5ff;
+        }
+
+        /* CSS Específico para corregir SVGs */
+        .diagrama-container {
+            text-align: center;
+            margin: 2rem auto;
+            padding: 1.5rem;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
+            max-width: 100%;
+            overflow-x: auto; /* Si es muy ancho, permite scroll */
+        }
+        
+        /* Forzar comportamiento correcto del SVG */
+        .diagrama-container svg {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+        
+        /* Evitar que el texto dentro del SVG sea ilegible */
+        .diagrama-container text {
+            font-family: sans-serif;
+        }
+
+        footer {
+            text-align: center;
+            padding: 3rem;
+            background: var(--primary);
+            color: rgba(255,255,255,0.8);
+            margin-top: 4rem;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>11 - Optimización - Diseño de reconocedores (emails, fechas).</h1>
+        <a href="javascript:history.back()" class="btn-volver">← Volver</a>
+    </header>
+
+    <main>
+
+        <article class="subtema">
+            <div class="subtema-header">
+                <h2>Fundamentos de Reconocedores de Patrones y Expresiones Regulares</h2>
+            </div>
+            <div class="seccion-contenido">
+                
+                <div class="card full-width">
+                    <h3>Historia</h3>
+                    <div><p>El concepto de expresiones regulares tiene sus raíces en la década de 1940 y 1950. Stephen Cole Kleene fue una figura seminal, formalizando la idea de 'conjuntos regulares' y 'eventos regulares' en 1951, sentando las bases teóricas de la computación y la lógica. Su trabajo estableció la equivalencia entre estos conjuntos y los autómatas finitos, formando la piedra angular de la teoría de lenguajes formales. Sin embargo, su aplicación práctica se popularizó mucho más tarde. En los años 60, Ken Thompson, un pionero de Unix, implementó el primer uso práctico de expresiones regulares en el editor de texto QED y posteriormente en herramientas fundamentales de Unix como 'ed' y 'grep'. Esto transformó las expresiones regulares de un concepto académico a una herramienta indispensable para la búsqueda y manipulación de texto basada en patrones, influyendo en la sintaxis que usamos hoy.</p></div>
+                </div>
+
+                <div class="card full-width formal-box">
+                    <h3>Descripción Formal</h3>
+                    <div><p>Una expresión regular (ER) <code>r</code> sobre un alfabeto finito Σ es una notación concisa para describir un lenguaje regular, denotado <code>L(r)</code>. Las reglas de construcción recursiva son las siguientes: 1. <code>ε</code> (la cadena vacía) es una ER, y <code>L(ε) = {ε}</code>. 2. Para cada <code>a ∈ Σ</code>, <code>a</code> es una ER, y <code>L(a) = {a}</code>. 3. Si <code>r₁</code> y <code>r₂</code> son ER, entonces:   a. <code>(r₁|r₂)</code> (unión) es una ER, <code>L(r₁|r₂) = L(r₁) ∪ L(r₂)</code>.   b. <code>(r₁r₂)</code> (concatenación) es una ER, <code>L(r₁r₂) = {xy | x ∈ L(r₁), y ∈ L(r₂)}</code>.   c. <code>(r₁*)</code> (cerradura de Kleene) es una ER, <code>L(r₁*) = (L(r₁))* = {ε} ∪ L(r₁) ∪ L(r₁)L(r₁) ∪ ...</code>. Operadores convenientes como <code>r+</code> (una o más veces) o <code>r?</code> (cero o una vez) pueden derivarse de los fundamentales. Un 'reconocedor de patrones' es un algoritmo o un autómata finito que, dada una cadena de entrada <code>w</code>, determina si <code>w ∈ L(r)</code>. Las ER proporcionan un mecanismo declarativo para la especificación de patrones, ocultando la complejidad subyacente de la máquina de estados que realiza el reconocimiento.</p></div>
+                    
+                    <div class="diagrama-container">
+                        <svg width="100%" height="auto"  viewBox="0 0 600 200">
+    <style>
+        .state { fill: #f0f0f0; stroke: black; stroke-width: 1; }
+        .start-arrow { stroke: black; stroke-width: 1; fill: none; marker-end: url(#arrowhead); }
+        .edge { stroke: black; stroke-width: 1; fill: none; marker-end: url(#arrowhead); }
+        .text { font-family: sans-serif; font-size: 14px; text-anchor: middle; fill: black; }
+        .final-state { fill: #d0f0d0; stroke: black; stroke-width: 2; }
+    </style>
+    <defs>
+        <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" fill="black" />
+        </marker>
+    </defs>
+
+    <!-- Recognizer for 'a' -->
+    <text x="150" y="30" class="text" style="font-weight:bold;">Reconocedor para 'a'</text>
+    <circle cx="100" cy="100" r="25" class="state" />
+    <text x="100" y="105" class="text">q₀</text>
+    <path d="M 50 100 H 75" class="start-arrow" />
+
+    <circle cx="200" cy="100" r="25" class="final-state" />
+    <circle cx="200" cy="100" r="20" class="final-state" />
+    <text x="200" y="105" class="text">q₁</text>
+
+    <path d="M 125 100 H 175" class="edge" />
+    <text x="150" y="90" class="text">a</text>
+
+    <!-- Recognizer for 'a*' (NFA representation) -->
+    <text x="450" y="30" class="text" style="font-weight:bold;">Reconocedor para 'a*'</text>
+    <circle cx="400" cy="100" r="25" class="state" />
+    <text x="400" y="105" class="text">q₂</text>
+    <path d="M 350 100 H 375" class="start-arrow" />
+
+    <circle cx="500" cy="100" r="25" class="final-state" />
+    <circle cx="500" cy="100" r="20" class="final-state" />
+    <text x="500" y="105" class="text">q₃</text>
+
+    <!-- epsilon transition from start to final for 'a*' -->
+    <path d="M 400 75 C 420 50, 480 50, 500 75" class="edge" />
+    <text x="450" y="45" class="text">ε</text>
+
+    <!-- transition a from start to final for 'a*' -->
+    <path d="M 425 100 H 475" class="edge" />
+    <text x="450" y="90" class="text">a</text>
+
+    <!-- loop for a on final state q3 -->
+    <path d="M 500 125 C 520 150, 480 150, 500 125" class="edge" />
+    <text x="525" y="140" class="text">a</text>
+</svg>
+                        <p style="font-size:0.8rem; color:#666; margin-top:1rem; text-align:center;">
+                            <em>Fig: Representación visual generada.</em>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Intuición</h3>
+                    <div><p>Piensa en una expresión regular como un lenguaje para describir patrones. Imagina que tienes un documento muy largo y quieres encontrar todas las frases que cumplen una condición muy específica, como 'una palabra que empieza con 'A', seguida de cualquier número de letras, y que termina con 'Z''. En lugar de escribir un programa complejo con bucles y condicionales para cada posible variación, una expresión regular te permite definir esta regla de forma compacta y legible: 'A[a-zA-Z]<em>Z'. Es como darle a tu computadora una 'receta' para el patrón que buscas. Su poder radica en su capacidad de abstracción; no te dice </em>cómo<em> buscar, sino </em>qué* buscar, permitiéndote concentrarte en el problema de la descripción del patrón en lugar de en los detalles de la implementación del algoritmo de búsqueda. Es el 'por qué' de la concisión y flexibilidad en la búsqueda de texto.</p></div>
+                </div>
+
+                <div class="card">
+                    <h3>Aplicación Real</h3>
+                    <div><p>Las expresiones regulares son una herramienta indispensable en la ingeniería de software y en el procesamiento de datos. Su aplicación más común es la validación de entrada de datos, asegurando que cadenas como direcciones de correo electrónico, números de teléfono, o códigos postales cumplen un formato predefinido antes de ser procesados o almacenados. Son el corazón de los mecanismos de búsqueda y reemplazo en casi todos los editores de texto avanzados (como VS Code, Sublime Text, o vim), permitiendo manipulaciones complejas de texto. En el análisis de logs y el procesamiento de big data, se utilizan para extraer información específica de grandes volúmenes de texto. También son fundamentales en el scripting (Python, Perl, JavaScript, Bash) para tareas de manipulación de cadenas, y en el desarrollo web para la validación de formularios. Incluso en sistemas de seguridad, como firewalls y sistemas de detección de intrusiones, las expresiones regulares ayudan a identificar patrones maliciosos en el tráfico de red.</p></div>
+                </div>
+
+            </div>
+        </article>
+        
+        <article class="subtema">
+            <div class="subtema-header">
+                <h2>Autómatas Finitos Deterministas y No Deterministas para el Reconocimiento</h2>
+            </div>
+            <div class="seccion-contenido">
+                
+                <div class="card full-width">
+                    <h3>Historia</h3>
+                    <div><p>La historia de los autómatas finitos se entrelaza con el desarrollo de la computación y la neurociencia temprana. Warren McCulloch y Walter Pitts sentaron algunas de las bases en 1943 con sus modelos de redes neuronales, que podían interpretarse como autómatas. Stephen Cole Kleene, en 1956, formalizó los 'eventos regulares' y demostró que estos podían ser reconocidos por máquinas de estados finitos. Sin embargo, el avance crucial vino en 1959 con Michael O. Rabin y Dana Scott, quienes introdujeron formalmente los autómatas finitos no deterministas (AFN) y, de manera fundamental, demostraron su equivalencia computacional con los autómatas finitos deterministas (AFD). Esta equivalencia significó que, si bien los AFN eran más fáciles de diseñar para lenguajes complejos, no tenían más poder de reconocimiento que los AFD. El algoritmo de Thompson (1968) para construir un AFN a partir de una expresión regular fue clave para la implementación práctica de los motores de expresiones regulares.</p></div>
+                </div>
+
+                <div class="card full-width formal-box">
+                    <h3>Descripción Formal</h3>
+                    <div><p>Un autómata finito determinista (AFD) es una máquina de estados que se define formalmente como una 5-tupla <code>(Q, Σ, δ, q₀, F)</code>, donde: <code>Q</code> es un conjunto finito de estados; <code>Σ</code> es el alfabeto finito de símbolos de entrada; <code>δ: Q × Σ → Q</code> es la función de transición determinista, mapeando un par (estado, símbolo) a un único estado siguiente; <code>q₀ ∈ Q</code> es el estado inicial; y <code>F ⊆ Q</code> es el conjunto de estados de aceptación o finales. Un AFD acepta una cadena <code>w</code> si, partiendo de <code>q₀</code> y siguiendo las transiciones dictadas por <code>w</code>, el autómata termina en un estado <code>q ∈ F</code>. Un autómata finito no determinista (AFN) es similar, pero su función de transición <code>δ</code> es <code>δ: Q × (Σ ∪ {ε}) → 𝒫(Q)</code>, permitiendo múltiples transiciones desde un estado para un mismo símbolo de entrada, o transiciones con la cadena vacía (ε-transiciones). Un AFN acepta una cadena si existe al menos una secuencia de transiciones que lleva a un estado final. La equivalencia entre AFN y AFD implica que cualquier lenguaje reconocido por un AFN también puede ser reconocido por un AFD (mediante la construcción por subconjuntos), aunque el AFD resultante puede tener un número exponencialmente mayor de estados.</p></div>
+                    
+                    <div class="diagrama-container">
+                        <svg width="100%" height="auto"  viewBox="0 0 600 200">
+    <style>
+        .state { fill: #f0f0f0; stroke: black; stroke-width: 1; }
+        .start-arrow { stroke: black; stroke-width: 1; fill: none; marker-end: url(#arrowhead); }
+        .edge { stroke: black; stroke-width: 1; fill: none; marker-end: url(#arrowhead); }
+        .text { font-family: sans-serif; font-size: 14px; text-anchor: middle; fill: black; }
+        .final-state { fill: #d0f0d0; stroke: black; stroke-width: 2; }
+    </style>
+    <defs>
+        <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" fill="black" />
+        </marker>
+    </defs>
+
+    <text x="300" y="30" class="text" style="font-weight:bold;">AFD para L = Σ*ab (cadenas que terminan en 'ab')</text>
+
+    <!-- State q0 (Initial) -->
+    <circle cx="100" cy="100" r="25" class="state" />
+    <text x="100" y="105" class="text">q₀</text>
+    <path d="M 50 100 H 75" class="start-arrow" />
+
+    <!-- State q1 -->
+    <circle cx="250" cy="100" r="25" class="state" />
+    <text x="250" y="105" class="text">q₁</text>
+
+    <!-- State q2 (Final) -->
+    <circle cx="400" cy="100" r="25" class="final-state" />
+    <circle cx="400" cy="100" r="20" class="final-state" />
+    <text x="400" y="105" class="text">q₂</text>
+
+    <!-- Transitions -->
+    <!-- q0 --a--> q1 -->
+    <path d="M 125 100 H 225" class="edge" />
+    <text x="175" y="90" class="text">a</text>
+
+    <!-- q0 --b--> q0 (self-loop) -->
+    <path d="M 100 75 C 120 50, 80 50, 100 75" class="edge" />
+    <text x="100" y="45" class="text">b</text>
+
+    <!-- q1 --a--> q1 (self-loop) -->
+    <path d="M 250 75 C 270 50, 230 50, 250 75" class="edge" />
+    <text x="250" y="45" class="text">a</text>
+
+    <!-- q1 --b--> q2 -->
+    <path d="M 275 100 H 375" class="edge" />
+    <text x="325" y="90" class="text">b</text>
+
+    <!-- q2 --a--> q1 -->
+    <path d="M 400 125 C 420 150, 230 150, 250 125" class="edge" />
+    <text x="325" y="140" class="text">a</text>
+
+    <!-- q2 --b--> q0 -->
+    <path d="M 400 100 Q 500 50, 500 100 Q 500 150, 400 100" class="edge" />
+    <path d="M 400 125 C 450 150, 150 150, 100 125" class="edge" />
+    <text x="250" y="160" class="text">b</text>
+</svg>
+                        <p style="font-size:0.8rem; color:#666; margin-top:1rem; text-align:center;">
+                            <em>Fig: Representación visual generada.</em>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Intuición</h3>
+                    <div><p>Imagina que un autómata finito es como una máquina de estados simple, con un conjunto de 'situaciones' o 'estados' en los que puede encontrarse. Cuando la máquina lee un carácter de una cadena de entrada, 'cambia' de un estado a otro según unas reglas predefinidas. Si, al leer la cadena completa, la máquina termina en uno de sus 'estados de aceptación', la cadena se considera 'válida' o 'reconocida'. Los Autómatas Finitos Deterministas (AFD) son muy estrictos: para cada estado y cada carácter, solo hay un camino posible. Los Autómatas Finitos No Deterministas (AFN) son más flexibles; pueden tener múltiples caminos para el mismo carácter o incluso cambiar de estado sin leer ningún carácter (ε-transiciones). Esta flexibilidad hace que los AFN sean a menudo más fáciles de construir a partir de expresiones regulares, mientras que los AFD son más directos y eficientes de simular una vez que están construidos.</p></div>
+                </div>
+
+                <div class="card">
+                    <h3>Aplicación Real</h3>
+                    <div><p>Los autómatas finitos son los caballos de batalla invisibles detrás de muchas tecnologías que usamos a diario. Su aplicación más fundamental es en el análisis léxico de compiladores e intérpretes. Cuando escribes código, un 'lexer' (generado a menudo por herramientas como Lex o Flex) utiliza autómatas finitos, derivados de expresiones regulares, para descomponer el código fuente en 'tokens' (palabras clave, identificadores, operadores), la primera fase esencial en el proceso de compilación. Más allá de los compiladores, los autómatas finitos se utilizan en el diseño de circuitos digitales y hardware para modelar el comportamiento de componentes electrónicos con un número finito de estados. También se emplean para el análisis de protocolos de comunicación, donde las secuencias de mensajes deben seguir un patrón específico. Además, la mayoría de los motores de expresiones regulares, internamente, construyen y simulan estos autómatas para realizar las búsquedas de patrones que los programadores especifican, haciendo que esta teoría abstracta sea la base de herramientas prácticas ubicuas.</p></div>
+                </div>
+
+            </div>
+        </article>
+        
+        <article class="subtema">
+            <div class="subtema-header">
+                <h2>Optimización y Diseño de Reconocedores Eficientes para Casos Reales (Emails, Fechas)</h2>
+            </div>
+            <div class="seccion-contenido">
+                
+                <div class="card full-width">
+                    <h3>Historia</h3>
+                    <div><p>La búsqueda de eficiencia en el reconocimiento de patrones es tan antigua como las expresiones regulares mismas. La demostración de equivalencia entre AFN y AFD por Rabin y Scott en 1959 fue un hito, pero también puso de manifiesto que la conversión de un AFN a un AFD podía generar un número exponencialmente mayor de estados, lo que planteaba desafíos de rendimiento. Esto impulsó la investigación en la minimización de AFD. Uno de los algoritmos más influyentes es el algoritmo de Hopcroft (1971), que permite construir el AFD con el menor número de estados posible para un lenguaje dado. La evolución de los motores de expresiones regulares ha sido un camino constante de equilibrio entre la expresividad de los patrones y la eficiencia de su reconocimiento, utilizando una combinación de técnicas de simulación de AFN (para expresiones complejas con retroceso) y conversión/minimización de AFD (para un rendimiento óptimo en casos más sencillos y predecibles).</p></div>
+                </div>
+
+                <div class="card full-width formal-box">
+                    <h3>Descripción Formal</h3>
+                    <div><p>La optimización en el diseño de reconocedores de patrones se centra en reducir la complejidad temporal y espacial de los autómatas finitos subyacentes. El objetivo principal es la minimización de Autómatas Finitos Deterministas (AFD). Un AFD <code>M = (Q, Σ, δ, q₀, F)</code> se considera mínimo si no existe otro AFD <code>M' = (Q', Σ, δ', q'₀, F')</code> que reconozca el mismo lenguaje <code>L(M)</code> con un número menor de estados, es decir, <code>|Q'| &lt; |Q|</code>. El proceso de minimización, como el implementado por el algoritmo de Hopcroft, se basa en particionar el conjunto de estados <code>Q</code> en clases de equivalencia de estados indistinguibles. Dos estados <code>p, q ∈ Q</code> son indistinguibles si para toda cadena <code>w ∈ Σ*</code>, <code>δ*(p, w) ∈ F</code> si y solo si <code>δ*(q, w) ∈ F</code>. Esto significa que, a partir de <code>p</code> o <code>q</code>, cualquier cadena <code>w</code> lleva a un estado final o a un estado no final de manera consistente. Al fusionar los estados indistinguibles en un único nuevo estado, se construye un AFD mínimo que es único (salvo isomorfismo de nombres de estados) y que mantiene el mismo poder de reconocimiento. Este autómata minimizado garantiza el reconocimiento más eficiente en términos de espacio y pasos de transición por carácter de entrada.</p></div>
+                    
+                    <div class="diagrama-container">
+                        <svg width="100%" height="auto"  viewBox="0 0 600 200">
+    <style>
+        .state { fill: #f0f0f0; stroke: black; stroke-width: 1; }
+        .start-arrow { stroke: black; stroke-width: 1; fill: none; marker-end: url(#arrowhead); }
+        .edge { stroke: black; stroke-width: 1; fill: none; marker-end: url(#arrowhead); }
+        .text { font-family: sans-serif; font-size: 14px; text-anchor: middle; fill: black; }
+        .final-state { fill: #d0f0d0; stroke: black; stroke-width: 2; }
+        .merged-state { fill: #c0e0c0; stroke: darkgreen; stroke-width: 2; }
+        .merged-text { font-family: sans-serif; font-size: 14px; text-anchor: middle; fill: darkgreen; }
+    </style>
+    <defs>
+        <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" fill="black" />
+        </marker>
+    </defs>
+
+    <!-- Unminimized DFA Sketch -->
+    <text x="150" y="30" class="text" style="font-weight:bold;">AFD Original (Conceptual)</text>
+    <circle cx="100" cy="80" r="25" class="state" />
+    <text x="100" y="85" class="text">q₀</text>
+    <path d="M 50 80 H 75" class="start-arrow" />
+
+    <circle cx="200" cy="80" r="25" class="state" />
+    <text x="200" y="85" class="text">q₁</text>
+
+    <circle cx="300" cy="80" r="25" class="final-state" />
+    <circle cx="300" cy="80" r="20" class="final-state" />
+    <text x="300" y="85" class="text">q₂</text>
+
+    <circle cx="250" cy="150" r="25" class="final-state" />
+    <circle cx="250" cy="150" r="20" class="final-state" />
+    <text x="250" y="155" class="text">q₃</text>
+
+    <!-- Basic transitions (illustrative, not a specific language) -->
+    <path d="M 125 80 H 175" class="edge" /> <text x="150" y="70" class="text">a</text>
+    <path d="M 225 80 H 275" class="edge" /> <text x="250" y="70" class="text">b</text>
+    <path d="M 100 105 C 100 130, 250 130, 250 125" class="edge" /> <text x="175" y="140" class="text">c</text>
+    <path d="M 275 150 C 275 125, 300 125, 300 105" class="edge" /> <text x="285" y="140" class="text">d</text>
+
+    <!-- Minimized DFA Sketch -->
+    <text x="450" y="30" class="text" style="font-weight:bold;">AFD Minimizado (Conceptual)</text>
+    <circle cx="400" cy="80" r="25" class="state" />
+    <text x="400" y="85" class="text">Q₀'</text>
+    <path d="M 350 80 H 375" class="start-arrow" />
+
+    <circle cx="500" cy="80" r="25" class="state" />
+    <text x="500" y="85" class="text">Q₁'</text>
+
+    <circle cx="450" cy="150" r="25" class="merged-state" />
+    <circle cx="450" cy="150" r="20" class="merged-state" />
+    <text x="450" y="155" class="merged-text">Q₂₃'</text> <!-- Merged state from q2 and q3 -->
+
+    <!-- Basic transitions (illustrative) -->
+    <path d="M 425 80 H 475" class="edge" /> <text x="450" y="70" class="text">a</text>
+    <path d="M 400 105 C 400 130, 450 130, 450 125" class="edge" /> <text x="425" y="140" class="text">c</text>
+    <path d="M 500 105 C 500 130, 450 130, 450 125" class="edge" /> <text x="475" y="140" class="text">b,d</text>
+</svg>
+                        <p style="font-size:0.8rem; color:#666; margin-top:1rem; text-align:center;">
+                            <em>Fig: Representación visual generada.</em>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Intuición</h3>
+                    <div><p>Imagina que un autómata es como un laberinto con muchas habitaciones (estados) y puertas (transiciones). Un autómata 'sin optimizar' podría tener dos habitaciones distintas que, funcionalmente, siempre te llevan a las mismas opciones futuras, o habitaciones a las que nunca se puede llegar. Optimizar el autómata es como simplificar ese laberinto: fusionar esas habitaciones redundantes, eliminar las inaccesibles y asegurarse de que cada parte del laberinto sea única y contribuya al objetivo final. ¿Por qué es crucial? Porque cada estado y cada transición consumen recursos computacionales (memoria y tiempo). Un autómata minimizado es el laberinto más pequeño posible para resolver el mismo problema, lo que se traduce en un procesamiento de patrones más rápido y con menor consumo de recursos, esencial cuando se manejan enormes volúmenes de datos o se requiere una respuesta en tiempo real.</p></div>
+                </div>
+
+                <div class="card">
+                    <h3>Aplicación Real</h3>
+                    <div><p>La optimización en el diseño de reconocedores es fundamental para aplicaciones del mundo real donde el rendimiento y la eficiencia son críticos. Para validar patrones complejos como direcciones de correo electrónico o formatos de fecha, las expresiones regulares pueden ser muy largas y, si se diseñan sin pensar en la eficiencia, pueden llevar a problemas de rendimiento significativos, incluyendo vulnerabilidades como el "Regex Denial of Service" (ReDoS). En el contexto de los emails, una ER completa puede ser sorprendentemente compleja; los reconocedores optimizados permiten validar estos formatos de manera eficiente sin sobrecargar los servidores o ralentizar los procesos de registro. Para las fechas, que pueden presentarse en múltiples formatos (ISO 8601, DD/MM/YYYY, MM-DD-YY), los reconocedores optimizados son clave para una extracción y validación rápida en sistemas de bases de datos, calendarios o procesamiento de datos financieros. En sistemas de seguridad, como los Sistemas de Detección de Intrusiones (IDS), la optimización permite escanear tráfico de red a alta velocidad para detectar patrones maliciosos en tiempo real, sin introducir latencia. Además, en el procesamiento de grandes volúmenes de datos y análisis de logs, un reconocedor eficiente es la diferencia entre minutos y horas de procesamiento.</p></div>
+                </div>
+
+            </div>
+        </article>
+        
+    </main>
+
+    <footer>
+        <p>Prof. Jorge López-Cifre, PhD © 2026</p>
+    </footer>
+
+</body>
+</html>

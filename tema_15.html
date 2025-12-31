@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>15 - Limites - Lema de Bombeo (Pumping Lemma) - Prof. Jorge López-Cifre</title>
+    <style>
+        :root {
+            --primary: #003366;
+            --accent: #d4af37;
+            --bg: #f8f9fa;
+            --text: #2c3e50;
+            --card-bg: #ffffff;
+            --border: #e9ecef;
+        }
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 0;
+            line-height: 1.7;
+        }
+        /* Tipografía mejorada */
+        p { margin-bottom: 1rem; }
+        strong, b { color: var(--primary); font-weight: 700; }
+        
+        header {
+            background: var(--primary);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        h1 { margin: 0; font-size: 1.25rem; font-weight: 600; }
+        
+        .btn-volver {
+            background: var(--accent);
+            color: var(--primary);
+            text-decoration: none;
+            padding: 0.5rem 1.2rem;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        .btn-volver:hover { 
+            background: #fff; 
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+
+        main {
+            max-width: 1100px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+
+        .subtema {
+            background: var(--card-bg);
+            border-radius: 12px;
+            margin-bottom: 4rem;
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+        
+        .subtema-header {
+            background: linear-gradient(to right, #f8f9fa, #ffffff);
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid var(--border);
+        }
+        .subtema-header h2 { 
+            margin: 0; 
+            color: var(--primary); 
+            font-size: 1.6rem;
+            border-left: 5px solid var(--accent);
+            padding-left: 1rem;
+        }
+
+        .seccion-contenido {
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2.5rem;
+        }
+
+        @media (min-width: 900px) {
+            .seccion-contenido { grid-template-columns: 1fr 1fr; }
+            .full-width { grid-column: 1 / -1; }
+        }
+
+        .card h3 {
+            color: var(--primary);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-top: 0;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 0.5rem;
+        }
+
+        .formal-box {
+            background-color: #f0f7ff; /* Azul muy muy pálido */
+            border-radius: 8px;
+            padding: 2rem !important;
+            border: 1px solid #cce5ff;
+        }
+
+        /* CSS Específico para corregir SVGs */
+        .diagrama-container {
+            text-align: center;
+            margin: 2rem auto;
+            padding: 1.5rem;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
+            max-width: 100%;
+            overflow-x: auto; /* Si es muy ancho, permite scroll */
+        }
+        
+        /* Forzar comportamiento correcto del SVG */
+        .diagrama-container svg {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+        
+        /* Evitar que el texto dentro del SVG sea ilegible */
+        .diagrama-container text {
+            font-family: sans-serif;
+        }
+
+        footer {
+            text-align: center;
+            padding: 3rem;
+            background: var(--primary);
+            color: rgba(255,255,255,0.8);
+            margin-top: 4rem;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>15 - Limites - Lema de Bombeo (Pumping Lemma)</h1>
+        <a href="javascript:history.back()" class="btn-volver">← Volver</a>
+    </header>
+
+    <main>
+
+        <article class="subtema">
+            <div class="subtema-header">
+                <h2>Fundamentos del Lema de Bombeo para Lenguajes Regulares</h2>
+            </div>
+            <div class="seccion-contenido">
+                
+                <div class="card full-width">
+                    <h3>Historia</h3>
+                    <div><p>El Lema de Bombeo para Lenguajes Regulares es una herramienta fundamental en la teoría de lenguajes formales, cuyo origen se sitúa en la década de 1960. A medida que la disciplina de las ciencias de la computación tomaba forma, surgió la necesidad de métodos rigurosos para clasificar lenguajes y entender las capacidades y limitaciones de los modelos computacionales, como los autómatas finitos. Aunque la idea subyacente de que los autómatas finitos deben repetir estados al procesar cadenas largas es intuitiva, la formalización de esta propiedad como un lema específico para probar la no-regularidad de un lenguaje se atribuye a una consolidación del conocimiento en la comunidad, con influencias de trabajos como los de Michael Rabin y Dana Scott (1959) sobre autómatas finitos. El lema fue rápidamente reconocido como un pilar para establecer la jerarquía de Chomsky y la clasificación de lenguajes.</p></div>
+                </div>
+
+                <div class="card full-width formal-box">
+                    <h3>Descripción Formal</h3>
+                    <div><p>Sea L un lenguaje regular. Entonces existe un número entero p ≥ 1 (conocido como la 'longitud de bombeo') tal que cualquier cadena s en L, con una longitud |s| ≥ p, puede ser descompuesta en tres subcadenas s = xyz. Esta descomposición debe satisfacer las siguientes tres condiciones de manera simultánea:</p>
+<ol>
+<li>La subcadena intermedia y no puede ser vacía: |y| ≥ 1.</li>
+<li>La longitud de las dos primeras subcadenas combinadas, xy, no puede exceder la longitud de bombeo: |xy| ≤ p.</li>
+<li>Para cualquier número entero no negativo i (i ≥ 0), la cadena resultante de 'bombear' y, es decir, xyⁱz, debe seguir siendo un miembro del lenguaje L. Esto implica que podemos repetir la subcadena y cualquier número de veces (incluida cero, cuando i=0, lo que significa eliminar y) y la cadena resultante permanecerá en el lenguaje. Este principio se utiliza principalmente para demostrar que un lenguaje <em>no</em> es regular, buscando una contradicción para una elección específica de s y un i apropiado.</li>
+</ol></div>
+                    
+                    <div class="diagrama-container">
+                        <svg viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg">
+  <rect x="50" y="50" width="500" height="100" fill="#f0f0f0" stroke="black" stroke-width="1"/>
+  <text x="290" y="30" font-family="Arial" font-size="18" text-anchor="middle" fill="black">Cadena s ∈ L (|s| ≥ p)</text>
+
+  <rect x="50" y="60" width="150" height="80" fill="#dcdcdc" stroke="black" stroke-width="0.5"/>
+  <text x="125" y="105" font-family="Arial" font-size="16" text-anchor="middle" fill="black">x</text>
+
+  <rect x="200" y="60" width="100" height="80" fill="#b0e0e6" stroke="black" stroke-width="0.5"/>
+  <text x="250" y="105" font-family="Arial" font-size="16" text-anchor="middle" fill="black">y</text>
+
+  <rect x="300" y="60" width="250" height="80" fill="#dcdcdc" stroke="black" stroke-width="0.5"/>
+  <text x="425" y="105" font-family="Arial" font-size="16" text-anchor="middle" fill="black">z</text>
+
+  <line x1="250" y1="140" x2="250" y2="170" stroke="black" stroke-width="1" stroke-dasharray="4 2"/>
+  <text x="250" y="190" font-family="Arial" font-size="14" text-anchor="middle" fill="black">y puede ser bombeada (yⁱ)</text>
+</svg>
+                        <p style="font-size:0.8rem; color:#666; margin-top:1rem; text-align:center;">
+                            <em>Fig: Representación visual generada.</em>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Intuición</h3>
+                    <div><p>La intuición detrás del Lema de Bombeo para lenguajes regulares es bastante directa: un autómata finito (AF) tiene un número fijo de estados. Si este AF procesa una cadena que es más larga que su número de estados, por el Principio del Palomar, el autómata debe visitar al menos un estado más de una vez durante el procesamiento de la cadena. Este ciclo en el recorrido del AF corresponde a una subcadena (denominada 'y') que fue consumida mientras el autómata pasaba del estado repetido de vuelta a sí mismo. Dado que el autómata vuelve al mismo estado, es posible 'saltarse' este ciclo (tomar i=0, eliminando 'y'), o 'repetirlo' múltiples veces (tomar i&gt;1, insertando más 'y's), y el autómata seguirá terminando en el mismo estado final, si la cadena original lo hacía. Esta propiedad de 'bombeo' es inherente a los autómatas finitos y, por extensión, a los lenguajes regulares que reconocen.</p></div>
+                </div>
+
+                <div class="card">
+                    <h3>Aplicación Real</h3>
+                    <div><p>El Lema de Bombeo para lenguajes regulares es una herramienta crucial en la teoría de la computación, principalmente para demostrar que ciertos lenguajes <em>no</em> son regulares. Esta capacidad es invaluable en varios campos. Por ejemplo, en el diseño de compiladores, los analizadores léxicos suelen implementarse usando autómatas finitos (o expresiones regulares, que son equivalentes). El lema permite a los ingenieros de software comprender las limitaciones de los tokens que un analizador léxico puede reconocer. Lenguajes con estructuras de conteo o emparejamiento como {aⁿbⁿ | n ≥ 0} (cadenas de 'a' seguidas del mismo número de 'b') o lenguajes que requieren un número arbitrario de ocurrencias de un patrón no pueden ser regulares. Conocer estas limitaciones permite a los desarrolladores elegir las herramientas adecuadas (por ejemplo, analizadores sintácticos basados en lenguajes libres de contexto) cuando las expresiones regulares no son suficientes para la tarea.</p></div>
+                </div>
+
+            </div>
+        </article>
+        
+        <article class="subtema">
+            <div class="subtema-header">
+                <h2>El Lema de Bombeo para Lenguajes Libres de Contexto</h2>
+            </div>
+            <div class="seccion-contenido">
+                
+                <div class="card full-width">
+                    <h3>Historia</h3>
+                    <div><p>A medida que la comprensión de los lenguajes formales avanzaba, se hizo evidente que los lenguajes regulares no eran suficientes para describir todas las estructuras sintácticas de interés, como las de los lenguajes de programación. Fue necesario desarrollar una clase de lenguajes más potente: los lenguajes libres de contexto (LFC), generados por gramáticas libres de contexto y reconocidos por autómatas de pila. Para esta nueva clase, también se requería un método para demostrar que un lenguaje <em>no</em> era libre de contexto. Esta necesidad llevó al desarrollo del Lema de Bombeo para LFC, a menudo conocido como el Lema de Bar-Hillel, Perles y Shamir, quienes lo formularon en 1961. Su trabajo fue fundamental para delimitar el poder expresivo de las gramáticas libres de contexto y consolidar la jerarquía de Chomsky, proporcionando una herramienta esencial para el análisis y diseño de lenguajes.</p></div>
+                </div>
+
+                <div class="card full-width formal-box">
+                    <h3>Descripción Formal</h3>
+                    <div><p>Sea L un lenguaje libre de contexto. Entonces existe un número entero p ≥ 1 (la 'longitud de bombeo') tal que cualquier cadena s en L con |s| ≥ p puede ser dividida en cinco subcadenas: s = uvwxy. Esta descomposición debe satisfacer las siguientes tres condiciones:</p>
+<ol>
+<li>La longitud combinada de las subcadenas vwx no debe exceder la longitud de bombeo: |vwx| ≤ p. Esto significa que la parte de la cadena que se 'bombea' es relativamente corta.</li>
+<li>Las subcadenas v y x no pueden ser ambas vacías; al menos una de ellas debe tener una longitud de al menos 1: |vx| ≥ 1. Esto asegura que hay algo que realmente se puede bombear.</li>
+<li>Para cualquier número entero no negativo i (i ≥ 0), la cadena resultante de 'bombear' v y x, es decir, uvⁱwxⁱy, también debe pertenecer al lenguaje L. Similar al lema regular, esto significa que podemos repetir las secciones v y x cualquier número de veces (incluida cero) y la cadena modificada seguirá siendo gramaticalmente válida dentro del lenguaje L. Este lema es una herramienta poderosa para probar la no-contextualidad de un lenguaje.</li>
+</ol></div>
+                    
+                    <div class="diagrama-container">
+                        <svg viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg">
+  <rect x="50" y="50" width="500" height="100" fill="#f0f0f0" stroke="black" stroke-width="1"/>
+  <text x="290" y="30" font-family="Arial" font-size="18" text-anchor="middle" fill="black">Cadena s ∈ L (|s| ≥ p)</text>
+
+  <rect x="50" y="60" width="100" height="80" fill="#dcdcdc" stroke="black" stroke-width="0.5"/>
+  <text x="100" y="105" font-family="Arial" font-size="16" text-anchor="middle" fill="black">u</text>
+
+  <rect x="150" y="60" width="80" height="80" fill="#b0e0e6" stroke="black" stroke-width="0.5"/>
+  <text x="190" y="105" font-family="Arial" font-size="16" text-anchor="middle" fill="black">v</text>
+
+  <rect x="230" y="60" width="140" height="80" fill="#dcdcdc" stroke="black" stroke-width="0.5"/>
+  <text x="300" y="105" font-family="Arial" font-size="16" text-anchor="middle" fill="black">w</text>
+
+  <rect x="370" y="60" width="80" height="80" fill="#b0e0e6" stroke="black" stroke-width="0.5"/>
+  <text x="410" y="105" font-family="Arial" font-size="16" text-anchor="middle" fill="black">x</text>
+
+  <rect x="450" y="60" width="100" height="80" fill="#dcdcdc" stroke="black" stroke-width="0.5"/>
+  <text x="500" y="105" font-family="Arial" font-size="16" text-anchor="middle" fill="black">y</text>
+
+  <line x1="200" y1="140" x2="200" y2="170" stroke="black" stroke-width="1" stroke-dasharray="4 2"/>
+  <line x1="400" y1="140" x2="400" y2="170" stroke="black" stroke-width="1" stroke-dasharray="4 2"/>
+  <text x="300" y="190" font-family="Arial" font-size="14" text-anchor="middle" fill="black">v y x pueden ser bombeadas (vⁱ, xⁱ)</text>
+</svg>
+                        <p style="font-size:0.8rem; color:#666; margin-top:1rem; text-align:center;">
+                            <em>Fig: Representación visual generada.</em>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Intuición</h3>
+                    <div><p>La intuición para el Lema de Bombeo de Lenguajes Libres de Contexto se basa en la forma en que se construyen las cadenas mediante una gramática libre de contexto, o equivalentemente, cómo un autómata de pila las reconoce. Cuando una cadena es suficientemente larga, su árbol de derivación debe contener un camino lo suficientemente largo desde el símbolo inicial hasta una hoja que implicará la repetición de un mismo símbolo no terminal en ese camino. Esta repetición del no terminal significa que hay una subestructura del árbol que se puede 'duplicar' o 'eliminar'. Si un no terminal A deriva en 'αAβ', entonces al 'bombear' se estaría reemplazando A por 'αAβ' repetidamente, lo que a su vez consume dos subcadenas ('v' y 'x') del lenguaje, manteniéndose el resto ('u', 'w', 'y') intacto. Este mecanismo de anidamiento repetible es la clave para la intuición de este lema.</p></div>
+                </div>
+
+                <div class="card">
+                    <h3>Aplicación Real</h3>
+                    <div><p>El Lema de Bombeo para LFC es una herramienta indispensable para demostrar que ciertos lenguajes no pueden ser reconocidos por gramáticas libres de contexto o autómatas de pila. Es fundamental en el campo del diseño de lenguajes de programación y compiladores. Por ejemplo, lenguajes que requieren un conteo equilibrado de <em>tres</em> o más elementos relacionados, como {aⁿbⁿcⁿ | n ≥ 0}, o lenguajes que exigen la duplicación exacta de una cadena arbitraria, como {ww | w ∈ {a,b}*}, no son libres de contexto. Al identificar estas limitaciones, los ingenieros de software pueden determinar cuándo una gramática libre de contexto es insuficiente para definir la sintaxis de un lenguaje, requiriendo en su lugar herramientas más potentes como gramáticas sensibles al contexto o analizadores personalizados para ciertas reglas semánticas que no son capturables sintácticamente por LFC.</p></div>
+                </div>
+
+            </div>
+        </article>
+        
+        <article class="subtema">
+            <div class="subtema-header">
+                <h2>Limitaciones y Estrategias de Uso del Lema de Bombeo</h2>
+            </div>
+            <div class="seccion-contenido">
+                
+                <div class="card full-width">
+                    <h3>Historia</h3>
+                    <div><p>Aunque el Lema de Bombeo, tanto en su versión para lenguajes regulares como para libres de contexto, es una herramienta poderosa en la teoría de lenguajes formales, es crucial entender sus limitaciones. Desde su formulación inicial en la década de 1960, los teóricos se dieron cuenta de que el lema establece una condición <em>necesaria</em> para que un lenguaje pertenezca a una clase (regular o LFC), pero <em>no una condición suficiente</em>. Este matiz llevó al desarrollo de otros lemas más complejos, como el Lema de Ogden para LFC, que abordan algunas de las debilidades del lema original. La comprensión de estas limitaciones ha sido esencial para la evolución de la teoría, permitiendo una clasificación más precisa de los lenguajes y facilitando la creación de herramientas y técnicas más sofisticadas para el análisis computacional.</p></div>
+                </div>
+
+                <div class="card full-width formal-box">
+                    <h3>Descripción Formal</h3>
+                    <div><p>El Lema de Bombeo postula: 'Si L es [regular/LFC], entonces L satisface la propiedad de bombeo.' Esta es una implicación directa. Su contrapositiva es: 'Si L <em>no</em> satisface la propiedad de bombeo, entonces L <em>no</em> es [regular/LFC].' Es en esta forma contrapositiva donde reside su utilidad: como un método de refutación.  Es decir, el lema permite probar la <em>no-pertenencia</em> a una clase de lenguajes. Sin embargo, no se puede inferir la pertenencia. Existen lenguajes que <em>no</em> son regulares (o LFC) pero que, por casualidad o diseño, <em>sí</em> satisfacen las condiciones del Lema de Bombeo. Un ejemplo clásico para lenguajes regulares es L = {aᵏbˡcᵐ | k,l,m ≥ 0, si k=1 entonces l=m}. Este lenguaje es no-regular, pero si se elige un p lo suficientemente grande, cualquier cadena s de longitud ≥ p puede ser 'bombeada' sin violar las condiciones del lema, lo que demuestra que el lema no es una condición suficiente. La propiedad de bombeo no es exclusiva de los lenguajes regulares/LFC.</p></div>
+                    
+                    <div class="diagrama-container">
+                        <svg viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feDropShadow dx="2" dy="2" stdDeviation="2" flood-color="rgba(0,0,0,0.2)"/>
+    </filter>
+  </defs>
+
+  <circle cx="200" cy="100" r="80" fill="#add8e6" stroke="#1e90ff" stroke-width="2" filter="url(#shadow)"/>
+  <text x="200" y="105" font-family="Arial" font-size="18" text-anchor="middle" fill="black">Lenguajes Regulares</text>
+
+  <circle cx="380" cy="100" r="100" fill="#ffe4e1" stroke="#ff6347" stroke-width="2" filter="url(#shadow)"/>
+  <text x="380" y="80" font-family="Arial" font-size="18" text-anchor="middle" fill="black">Lenguajes que</text>
+  <text x="380" y="105" font-family="Arial" font-size="18" text-anchor="middle" fill="black">Satisfacen el</text>
+  <text x="380" y="130" font-family="Arial" font-size="18" text-anchor="middle" fill="black">Pumping Lemma</text>
+
+  <line x1="260" y1="100" x2="290" y2="100" stroke="black" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <text x="275" y="120" font-family="Arial" font-size="14" text-anchor="middle" fill="black">⊆</text>
+
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="black"/>
+    </marker>
+  </defs>
+</svg>
+                        <p style="font-size:0.8rem; color:#666; margin-top:1rem; text-align:center;">
+                            <em>Fig: Representación visual generada.</em>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Intuición</h3>
+                    <div><p>La intuición principal de las limitaciones del Lema de Bombeo radica en que es una prueba de 'falsabilidad', no de 'verificabilidad'. Piensa en ello como un detector de metales: si no pita, sabes que no hay metal. Pero si pita, podría ser metal, o podría ser una lata vieja de refresco. El lema nos da una característica que <em>deben</em> tener los lenguajes regulares/LFC si son suficientemente grandes (la capacidad de 'bombeo'). Si un lenguaje no posee esta característica, entonces definitivamente no es de esa clase. Sin embargo, algunos lenguajes que no son regulares (o LFC) también pueden tener esta propiedad de 'bombeo', engañosamente. Esto se debe a que la propiedad es una consecuencia de la finitud de estados o de la estructura de anidamiento, pero no es la única propiedad que define a estas clases de lenguajes.</p></div>
+                </div>
+
+                <div class="card">
+                    <h3>Aplicación Real</h3>
+                    <div><p>El uso estratégico del Lema de Bombeo es crucial para los estudiantes y profesionales. Para usarlo eficazmente y probar que un lenguaje L <em>no</em> es regular (o LFC), se sigue un proceso por contradicción:
+1.  <strong>Asumir lo contrario</strong>: Suponer que L es regular (o LFC).
+2.  <strong>Invocar el Lema</strong>: Esto implica que existe una longitud de bombeo 'p'.
+3.  <strong>Elegir una cadena crítica</strong>: Seleccionar inteligentemente una cadena 's' en L tal que |s| ≥ p. Esta es la parte más desafiante; la elección de 's' debe ser tal que cualquier intento de bombearla conduzca a una contradicción.
+4.  <strong>Considerar todas las descomposiciones</strong>: Mostrar que para <em>cualquier</em> posible descomposición de 's' (s=xyz para regulares, s=uvwxy para LFC) que cumpla las condiciones del lema, siempre se puede encontrar un 'i' (normalmente i=0 o i=2) para el cual xyⁱz (o uvⁱwxⁱy) <em>no</em> pertenece a L.
+5.  <strong>Concluir la contradicción</strong>: Como no importa cómo se descomponga 's', siempre se viola la pertenencia a L al bombear, la suposición inicial de que L es regular (o LFC) debe ser falsa. Este método es una piedra angular en la comprensión teórica de las capacidades y límites de los modelos computacionales.</p></div>
+                </div>
+
+            </div>
+        </article>
+        
+    </main>
+
+    <footer>
+        <p>Prof. Jorge López-Cifre, PhD © 2026</p>
+    </footer>
+
+</body>
+</html>

@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1 - Lenguajes y gramáticas - Alfabetos, cadenas y operaciones básicas. - Prof. Jorge López-Cifre</title>
+    <style>
+        :root {
+            --primary: #003366;
+            --accent: #d4af37;
+            --bg: #f8f9fa;
+            --text: #2c3e50;
+            --card-bg: #ffffff;
+            --border: #e9ecef;
+        }
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 0;
+            line-height: 1.7;
+        }
+        /* Tipografía mejorada */
+        p { margin-bottom: 1rem; }
+        strong, b { color: var(--primary); font-weight: 700; }
+        
+        header {
+            background: var(--primary);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        h1 { margin: 0; font-size: 1.25rem; font-weight: 600; }
+        
+        .btn-volver {
+            background: var(--accent);
+            color: var(--primary);
+            text-decoration: none;
+            padding: 0.5rem 1.2rem;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        .btn-volver:hover { 
+            background: #fff; 
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+
+        main {
+            max-width: 1100px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+
+        .subtema {
+            background: var(--card-bg);
+            border-radius: 12px;
+            margin-bottom: 4rem;
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+        
+        .subtema-header {
+            background: linear-gradient(to right, #f8f9fa, #ffffff);
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid var(--border);
+        }
+        .subtema-header h2 { 
+            margin: 0; 
+            color: var(--primary); 
+            font-size: 1.6rem;
+            border-left: 5px solid var(--accent);
+            padding-left: 1rem;
+        }
+
+        .seccion-contenido {
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2.5rem;
+        }
+
+        @media (min-width: 900px) {
+            .seccion-contenido { grid-template-columns: 1fr 1fr; }
+            .full-width { grid-column: 1 / -1; }
+        }
+
+        .card h3 {
+            color: var(--primary);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-top: 0;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 0.5rem;
+        }
+
+        .formal-box {
+            background-color: #f0f7ff; /* Azul muy muy pálido */
+            border-radius: 8px;
+            padding: 2rem !important;
+            border: 1px solid #cce5ff;
+        }
+
+        /* CSS Específico para corregir SVGs */
+        .diagrama-container {
+            text-align: center;
+            margin: 2rem auto;
+            padding: 1.5rem;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
+            max-width: 100%;
+            overflow-x: auto; /* Si es muy ancho, permite scroll */
+        }
+        
+        /* Forzar comportamiento correcto del SVG */
+        .diagrama-container svg {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+        
+        /* Evitar que el texto dentro del SVG sea ilegible */
+        .diagrama-container text {
+            font-family: sans-serif;
+        }
+
+        footer {
+            text-align: center;
+            padding: 3rem;
+            background: var(--primary);
+            color: rgba(255,255,255,0.8);
+            margin-top: 4rem;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>1 - Lenguajes y gramáticas - Alfabetos, cadenas y operaciones básicas.</h1>
+        <a href="javascript:history.back()" class="btn-volver">← Volver</a>
+    </header>
+
+    <main>
+
+        <article class="subtema">
+            <div class="subtema-header">
+                <h2>1.1 Alfabetos y Símbolos: Los Fundamentos de la Comunicación Formal</h2>
+            </div>
+            <div class="seccion-contenido">
+                
+                <div class="card full-width">
+                    <h3>Historia</h3>
+                    <div><p>La noción de alfabeto, en el contexto de los lenguajes formales, tiene sus raíces en los intentos de matemáticos y lógicos de principios del siglo XX por formalizar el razonamiento y las construcciones matemáticas. Figuras como David Hilbert, con su programa formalista, y Gottlob Frege, en su búsqueda de un lenguaje universal para la lógica, sentaron las bases para la necesidad de definir los componentes más elementales de cualquier sistema formal. Posteriormente, el trabajo de Alan Turing en la década de 1930, con su máquina abstracta, ya presuponía un conjunto finito de símbolos, un 'alfabeto', sobre el cual operar. Emil Post, con sus sistemas canónicos en los años 40, también enfatizó la importancia de un conjunto finito de 'letras' para generar cadenas. Este concepto es central para la teoría de la computación y la lingüística matemática, estableciendo que incluso los sistemas más complejos se construyen a partir de unidades discretas y bien definidas, permitiendo un análisis riguroso de su estructura y comportamiento.</p></div>
+                </div>
+
+                <div class="card full-width formal-box">
+                    <h3>Descripción Formal</h3>
+                    <div><p>En el estudio de los lenguajes formales, un <strong>alfabeto</strong> es un conjunto finito y no vacío de símbolos, comúnmente denotado por Σ (Sigma mayúscula). Los elementos individuales de Σ se conocen como <strong>símbolos</strong>, <strong>caracteres</strong> o <strong>letras</strong>. La finitud del alfabeto es crucial, ya que permite la implementación computacional y el análisis matemático exhaustivo de los lenguajes construidos sobre él. Que sea no vacío asegura que siempre hay elementos para formar expresiones. </p>
+<p>Formalmente, si Σ es un alfabeto, entonces: 
+1. Σ es un conjunto. 
+2. Σ es finito. 
+3. Σ ≠ ∅ (Σ es no vacío). </p>
+<p>Ejemplos: 
+- El alfabeto binario: Σ₁ = {0, 1}. Su cardinalidad es |Σ₁| = 2. 
+- El alfabeto de letras minúsculas del inglés: Σ₂ = {a, b, c, ..., z}. Su cardinalidad es |Σ₂| = 26. 
+- Un alfabeto de operadores lógicos: Σ₃ = {¬, ∧, ∨, →, ↔}. Su cardinalidad es |Σ₃| = 5. </p>
+<p>Cada símbolo en un alfabeto es una unidad atómica, indivisible, que no posee una estructura interna relevante para el lenguaje formal. La elección del alfabeto es la primera decisión fundamental al definir un lenguaje, ya que todos los elementos más complejos, como las cadenas y los propios lenguajes, se construirán exclusivamente a partir de estos símbolos. La claridad y precisión en la definición del alfabeto son esenciales para evitar ambigüedades en la sintaxis y semántica de los lenguajes resultantes. El concepto de alfabeto es la piedra angular sobre la cual se erigen todas las estructuras de la teoría de lenguajes formales, permitiendo la construcción de sistemas desde sus componentes más básicos.</p></div>
+                    
+                    <div class="diagrama-container">
+                        <svg viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg">
+  <rect x="0" y="0" width="600" height="200" fill="#f5f5f5"/>
+  <text x="20" y="40" font-family="Arial, sans-serif" font-size="24" fill="#333">Alfabeto Σ</text>
+  <circle cx="100" cy="100" r="60" fill="#e0f7fa" stroke="black" stroke-width="2"/>
+  <text x="95" y="108" font-family="Arial, sans-serif" font-size="36" fill="#0097a7">Σ</text>
+
+  <circle cx="250" cy="100" r="30" fill="#ffe0b2" stroke="black" stroke-width="1"/>
+  <text x="243" y="108" font-family="Arial, sans-serif" font-size="20" fill="#ef6c00">s₁</text>
+
+  <circle cx="350" cy="100" r="30" fill="#ffe0b2" stroke="black" stroke-width="1"/>
+  <text x="343" y="108" font-family="Arial, sans-serif" font-size="20" fill="#ef6c00">s₂</text>
+
+  <circle cx="450" cy="100" r="30" fill="#ffe0b2" stroke="black" stroke-width="1"/>
+  <text x="443" y="108" font-family="Arial, sans-serif" font-size="20" fill="#ef6c00">s₃</text>
+
+  <text x="290" y="160" font-family="Arial, sans-serif" font-size="20" fill="#333">... elementos finitos ...</text>
+
+  <line x1="160" y1="100" x2="220" y2="100" stroke="black" stroke-width="1" marker-end="url(#arrowhead)"/>
+  <line x1="160" y1="100" x2="320" y2="100" stroke="black" stroke-width="1" marker-end="url(#arrowhead)"/>
+  <line x1="160" y1="100" x2="420" y2="100" stroke="black" stroke-width="1" marker-end="url(#arrowhead)"/>
+
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="black" />
+    </marker>
+  </defs>
+</svg>
+                        <p style="font-size:0.8rem; color:#666; margin-top:1rem; text-align:center;">
+                            <em>Fig: Representación visual generada.</em>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Intuición</h3>
+                    <div><p>Piensen en los alfabetos como los bloques Lego más pequeños y fundamentales. Antes de construir cualquier cosa compleja –un coche, una casa, un lenguaje– necesitamos tener las piezas básicas. En el caso de los lenguajes formales, estas piezas son los símbolos. Un alfabeto nos dice exactamente qué tipos de 'letras' podemos usar. Si nuestro alfabeto es {0, 1}, solo podemos construir cosas con ceros y unos. No hay espacio para un '2' o una 'a'. Es como un conjunto de reglas muy estrictas que definen el 'vocabulario' inicial. ¿Por qué es importante que sea finito y no vacío? Si fuera infinito, sería imposible para una máquina (o incluso una mente humana) procesar o enumerar todos los posibles símbolos. Si fuera vacío, no podríamos construir absolutamente nada. Así, el alfabeto es la base sólida y discreta sobre la que se construye toda la jerarquía de la complejidad en la computación y la lógica, garantizando que tenemos un conjunto manejable y bien definido de 'átomos' con los que trabajar.</p></div>
+                </div>
+
+                <div class="card">
+                    <h3>Aplicación Real</h3>
+                    <div><p>Los alfabetos son omnipresentes en la ingeniería de software y la informática, aunque a menudo de forma implícita. El ejemplo más claro es el conjunto de caracteres utilizado en cualquier sistema computacional. ASCII, UTF-8 (Unicode), o EBCDIC son, en esencia, alfabetos gigantescos que definen todos los símbolos que una computadora puede representar y procesar. Cada tecla que presionamos en un teclado genera un símbolo de un alfabeto subyacente. En la programación, los tokens (palabras clave, identificadores, operadores) de un lenguaje como Python o Java se forman a partir de un alfabeto de caracteres definidos por el estándar del lenguaje. Los alfabetos también son fundamentales en la biotecnología, donde las secuencias de ADN se representan como cadenas sobre el alfabeto {A, C, G, T}. En criptografía, la seguridad de muchos algoritmos depende de la capacidad de operar sobre alfabetos específicos (por ejemplo, el alfabeto binario para las operaciones a nivel de bit). Incluso en la comunicación de red, los protocolos definen alfabetos de comandos y datos para asegurar la interoperabilidad, demostrando que este concepto abstracto es un pilar fundamental de la computación moderna.</p></div>
+                </div>
+
+            </div>
+        </article>
+        
+        <article class="subtema">
+            <div class="subtema-header">
+                <h2>1.2 Cadenas y su Representación: La Construcción de 'Palabras' Formales</h2>
+            </div>
+            <div class="seccion-contenido">
+                
+                <div class="card full-width">
+                    <h3>Historia</h3>
+                    <div><p>Una vez definidos los símbolos básicos, el siguiente paso lógico en la formalización de los lenguajes fue la noción de 'cadena' o 'palabra'. Este concepto es inherente a la idea misma de 'lenguaje', ya que las palabras son las unidades básicas de significado compuestas por letras. La necesidad de una definición rigurosa de cadena surgió con los trabajos pioneros en lógica matemática y los sistemas de producción. Emil Post y sus sistemas de reescritura en los años 40, así como los desarrollos de Noam Chomsky en la década de 1950 con la jerarquía de lenguajes formales, formalizaron explícitamente cómo las secuencias de símbolos forman entidades más grandes. El concepto de 'cadena' es el puente entre los símbolos atómicos y las estructuras más complejas como las 'sentencias' o 'programas', estableciendo la combinatoria fundamental que permite la expresión de información y algoritmos de manera sistemática y reproducible. La representación precisa de las cadenas ha sido crucial para el desarrollo de la computación.</p></div>
+                </div>
+
+                <div class="card full-width formal-box">
+                    <h3>Descripción Formal</h3>
+                    <div><p>Una <strong>cadena</strong> (o palabra) sobre un alfabeto Σ es una secuencia finita de cero o más símbolos de Σ. A diferencia de un conjunto, el orden de los símbolos en una cadena es significativo, y las repeticiones de símbolos son permitidas. </p>
+<ul>
+<li><strong>Ejemplo</strong>: Si Σ = {a, b}, entonces 'ab', 'baa', 'a', 'bbbb' son cadenas sobre Σ. </li>
+<li>La <strong>longitud</strong> de una cadena w, denotada por |w|, es el número de símbolos que contiene. Por ejemplo, |'baa'| = 3. </li>
+<li>La <strong>cadena vacía</strong> (o palabra vacía), denotada por ε (épsilon), es la cadena que no contiene ningún símbolo. Su longitud es |ε| = 0. Es un concepto fundamental que actúa como identidad para la operación de concatenación. </li>
+</ul>
+<p>El conjunto de todas las cadenas posibles sobre un alfabeto Σ, incluyendo la cadena vacía, se denota por Σ* (Clausura de Kleene o Estrella de Kleene). </p>
+<ul>
+<li><strong>Definición recursiva de Σ</strong>*: </li>
+<li>ε ∈ Σ* </li>
+<li>Si w ∈ Σ<em> y a ∈ Σ, entonces wa ∈ Σ</em> </li>
+<li>Nada más está en Σ* </li>
+</ul>
+<p>El conjunto de todas las cadenas no vacías sobre Σ se denota por Σ⁺ (Cerradura Positiva). Es simplemente Σ<em> excluyendo la cadena vacía, es decir, Σ⁺ = Σ</em> \ {ε}. </p>
+<p>La capacidad de formar cadenas a partir de un alfabeto es la base para la construcción de lenguajes formales. Cada 'sentencia' en un lenguaje de programación, cada 'comando' en un sistema operativo, o cada 'secuencia' en un genoma, es una cadena en el sentido formal, construida a partir de un alfabeto subyacente. La rigurosa definición de cadenas permite el estudio de sus propiedades, como la subcadena, el prefijo, el sufijo, y la concatenación, que son esenciales para el análisis sintáctico y semántico.</p></div>
+                    
+                    <div class="diagrama-container">
+                        <svg viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg">
+  <rect x="0" y="0" width="600" height="200" fill="#f5f5f5"/>
+  <text x="20" y="40" font-family="Arial, sans-serif" font-size="24" fill="#333">Cadena w = s₁s₂s₃s₄</text>
+
+  <rect x="100" y="80" width="80" height="60" fill="#b3e5fc" stroke="black" stroke-width="1"/>
+  <text x="125" y="120" font-family="Arial, sans-serif" font-size="28" fill="#0288d1">s₁</text>
+
+  <rect x="180" y="80" width="80" height="60" fill="#b3e5fc" stroke="black" stroke-width="1"/>
+  <text x="205" y="120" font-family="Arial, sans-serif" font-size="28" fill="#0288d1">s₂</text>
+
+  <rect x="260" y="80" width="80" height="60" fill="#b3e5fc" stroke="black" stroke-width="1"/>
+  <text x="285" y="120" font-family="Arial, sans-serif" font-size="28" fill="#0288d1">s₃</text>
+
+  <rect x="340" y="80" width="80" height="60" fill="#b3e5fc" stroke="black" stroke-width="1"/>
+  <text x="365" y="120" font-family="Arial, sans-serif" font-size="28" fill="#0288d1">s₄</text>
+
+  <text x="450" y="110" font-family="Arial, sans-serif" font-size="20" fill="#333">...</text>
+
+  <text x="180" y="160" font-family="Arial, sans-serif" font-size="20" fill="#333">Secuencia ordenada de símbolos</text>
+</svg>
+                        <p style="font-size:0.8rem; color:#666; margin-top:1rem; text-align:center;">
+                            <em>Fig: Representación visual generada.</em>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Intuición</h3>
+                    <div><p>Si los alfabetos son los ladrillos, las cadenas son las 'paredes' que construimos con esos ladrillos. Una cadena es simplemente una secuencia de símbolos, ordenada y finita. Imaginen una palabra en español como 'computadora'. Está formada por letras (símbolos) en un orden específico. 'aropmutac' no es lo mismo, aunque use las mismas letras. Esa es la esencia de una cadena: el orden importa. La cadena vacía (ε) es como una pared que no tiene ladrillos; es un concepto útil para representar la ausencia de contenido, como cuando un campo de texto está vacío. El conjunto de todas las cadenas posibles sobre un alfabeto (Σ*) es un universo inmenso de 'palabras' potenciales, desde las más cortas hasta las infinitamente largas (pero cada cadena individual es finita). Es el espacio donde residen todos los posibles mensajes, programas o datos que podemos construir con nuestro alfabeto. Comprender las cadenas es esencial porque son la forma en que representamos la información en todos los sistemas digitales.</p></div>
+                </div>
+
+                <div class="card">
+                    <h3>Aplicación Real</h3>
+                    <div><p>Las cadenas son, sin duda, la estructura de datos más fundamental y utilizada en la programación y la informática. Todo lo que vemos en una pantalla, desde el texto de una página web hasta un nombre de archivo, es una cadena. Los lenguajes de programación se basan en cadenas para representar código fuente, identificadores, literales y comentarios. Las URL, direcciones de correo electrónico, contraseñas, nombres de usuario y números de teléfono se manejan como cadenas. En el desarrollo web, las cadenas son clave para JSON, XML y HTML, que son formatos de serialización de datos basados en texto. Los sistemas operativos utilizan cadenas para rutas de archivos y comandos. Los compiladores y los intérpretes de lenguajes de programación primero procesan el código fuente como una cadena de caracteres, luego lo tokenizan en unidades más significativas (también representadas como cadenas o sus derivados) para su análisis sintáctico. Incluso en el ámbito de la seguridad informática, las cadenas son el objeto principal de ataques como la inyección SQL o el desbordamiento de búfer, destacando la necesidad de una comprensión rigurosa de su manipulación y validación.</p></div>
+                </div>
+
+            </div>
+        </article>
+        
+        <article class="subtema">
+            <div class="subtema-header">
+                <h2>1.3 Operaciones Básicas sobre Cadenas y Lenguajes: Manipulando la Información</h2>
+            </div>
+            <div class="seccion-contenido">
+                
+                <div class="card full-width">
+                    <h3>Historia</h3>
+                    <div><p>Las operaciones sobre cadenas y lenguajes han sido esenciales para el desarrollo de la teoría de la computación y los lenguajes formales desde sus inicios. Stephen Kleene, con su introducción de las expresiones regulares en la década de 1950, formalizó muchas de estas operaciones, en particular la clausura de Kleene (la 'estrella') y la concatenación. Este trabajo permitió describir conjuntos de cadenas (lenguajes) de manera concisa y programática. El desarrollo de los compiladores y los análisis léxicos en la década de 1960 hizo que estas operaciones fueran herramientas prácticas indispensables. Noam Chomsky, al definir las gramáticas generativas, implícitamente dependía de operaciones de sustitución y concatenación para generar sentencias. Las operaciones sobre cadenas y lenguajes proporcionan el marco matemático para manipular, combinar y transformar información textual o simbólica, siendo la base de algoritmos para búsqueda de patrones, procesamiento de texto y análisis sintáctico. Su rigurosa definición ha permitido la creación de herramientas de software robustas y eficientes.</p></div>
+                </div>
+
+                <div class="card full-width formal-box">
+                    <h3>Descripción Formal</h3>
+                    <div><p>Las operaciones básicas permiten construir cadenas más complejas y definir conjuntos de cadenas (lenguajes) a partir de otros. Un <strong>lenguaje L</strong> sobre un alfabeto Σ es simplemente un subconjunto de Σ<em>. Es decir, L ⊆ Σ</em>. </p>
+<p><strong>Operaciones sobre Cadenas:</strong> 
+1. <strong>Concatenación (· o yuxtaposición)</strong>: Sean u y v dos cadenas. u·v (o uv) es la cadena formada al adjuntar v al final de u. Ejemplo: Si u = 'ab', v = 'cd', entonces uv = 'abcd'. ε es el elemento neutro: uε = εu = u. 
+2. <strong>Potencia de una cadena (wᵏ)</strong>: w⁰ = ε, w¹ = w, w² = ww, etc. Ejemplo: ('ab')³ = 'ababab'. 
+3. <strong>Inversa (wᴿ)</strong>: La cadena w leída de derecha a izquierda. Ejemplo: ('abc')ᴿ = 'cba'. 
+4. <strong>Prefijo</strong>: Cualquier cadena que resulta de eliminar cero o más símbolos del final de w. 'ab' es prefijo de 'abc'. 
+5. <strong>Sufijo</strong>: Cualquier cadena que resulta de eliminar cero o más símbolos del principio de w. 'bc' es sufijo de 'abc'. 
+6. <strong>Subcadena</strong>: Una secuencia contigua de símbolos dentro de w. 'b' es subcadena de 'abc'. </p>
+<p><strong>Operaciones sobre Lenguajes:</strong> 
+Sean L₁ y L₂ dos lenguajes sobre un alfabeto Σ. 
+1. <strong>Unión (L₁ ∪ L₂)</strong>: {w | w ∈ L₁ o w ∈ L₂}. 
+2. <strong>Intersección (L₁ ∩ L₂)</strong>: {w | w ∈ L₁ y w ∈ L₂}. 
+3. <strong>Concatenación (L₁L₂)</strong>: {uv | u ∈ L₁ y v ∈ L₂}. 
+4. <strong>Potencia de un Lenguaje (Lᵏ)</strong>: L⁰ = {ε}, L¹ = L, L² = LL, etc. 
+5. <strong>Clausura de Kleene (L*)</strong>: L<em> = ∪_{k=0}^∞ Lᵏ = L⁰ ∪ L¹ ∪ L² ∪ ... Representa todas las cadenas que se pueden formar concatenando cero o más cadenas de L. 
+6. </em><em>Cerradura Positiva (L⁺)</em>*: L⁺ = ∪_{k=1}^∞ Lᵏ = L¹ ∪ L² ∪ L³ ∪ ... Representa todas las cadenas que se pueden formar concatenando una o más cadenas de L. </p>
+<p>Estas operaciones proporcionan un álgebra para manipular y describir conjuntos de cadenas, siendo la base para definir las capacidades de reconocimiento de autómatas y la generación de gramáticas.</p></div>
+                    
+                    <div class="diagrama-container">
+                        <svg viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg">
+  <rect x="0" y="0" width="600" height="200" fill="#f5f5f5"/>
+  <text x="20" y="40" font-family="Arial, sans-serif" font-size="24" fill="#333">Operaciones Básicas</text>
+
+  <!-- Concatenación de Cadenas -->
+  <rect x="50" y="70" width="60" height="40" fill="#c8e6c9" stroke="black" stroke-width="1"/>
+  <text x="65" y="97" font-family="Arial, sans-serif" font-size="20" fill="#2e7d32">u</text>
+  <rect x="110" y="70" width="60" height="40" fill="#c8e6c9" stroke="black" stroke-width="1"/>
+  <text x="125" y="97" font-family="Arial, sans-serif" font-size="20" fill="#2e7d32">v</text>
+  <text x="180" y="97" font-family="Arial, sans-serif" font-size="20" fill="#333">→ uv</text>
+
+  <!-- Unión de Lenguajes -->
+  <circle cx="300" cy="90" r="40" fill="#bbdefb" stroke="black" stroke-width="1"/>
+  <text x="290" y="98" font-family="Arial, sans-serif" font-size="24" fill="#1976d2">L₁</text>
+
+  <circle cx="350" cy="90" r="40" fill="#bbdefb" stroke="black" stroke-width="1"/>
+  <text x="340" y="98" font-family="Arial, sans-serif" font-size="24" fill="#1976d2">L₂</text>
+
+  <path d="M 320 80 A 10 10 0 0 1 330 80" fill="none"/>
+  <text x="320" y="140" font-family="Arial, sans-serif" font-size="20" fill="#333">L₁ ∪ L₂</text>
+
+  <path d="M 420 80 C 450 60, 480 60, 510 80 L 510 120 C 480 140, 450 140, 420 120 Z" fill="#f8bbd0" stroke="black" stroke-width="1"/>
+  <text x="445" y="105" font-family="Arial, sans-serif" font-size="20" fill="#d81b60">L*</text>
+
+  <text x="50" y="150" font-family="Arial, sans-serif" font-size="18" fill="#333">Concatenación de cadenas</text>
+  <text x="320" y="165" font-family="Arial, sans-serif" font-size="18" fill="#333">Unión de Lenguajes</text>
+  <text x="450" y="160" font-family="Arial, sans-serif" font-size="18" fill="#333">Clausura de Kleene</text>
+
+</svg>
+                        <p style="font-size:0.8rem; color:#666; margin-top:1rem; text-align:center;">
+                            <em>Fig: Representación visual generada.</em>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Intuición</h3>
+                    <div><p>Las operaciones son como los verbos en nuestro lenguaje formal, nos permiten 'hacer' cosas con las cadenas y los conjuntos de cadenas (lenguajes). La concatenación es la más simple: simplemente pegamos una cadena detrás de otra, como cuando unimos dos palabras para formar una más larga, o dos archivos de texto. La potencia es la repetición: 'ja' al cubo es 'jajaja'. La inversa es mirarla al revés. Estas operaciones básicas sobre cadenas son intuitivas y las usamos constantemente en el día a día sin pensarlo. </p>
+<p>Cuando hablamos de lenguajes, las operaciones se extienden a conjuntos de cadenas. La unión es 'o': cualquier cadena que esté en el primer lenguaje O en el segundo. La intersección es 'y': cualquier cadena que esté en el primer lenguaje Y en el segundo. Pero la más poderosa es la Clausura de Kleene (L<em>), que significa 'cero o más repeticiones de cualquier cadena del lenguaje L'. Si L es {a, b}, entonces L</em> incluye {}, {a}, {b}, {aa}, {ab}, {ba}, {bb}, {aaa}, {aab}, etc. Es como decir 'todo lo que puedas construir combinando los elementos de L de cualquier forma, incluyendo no usar ninguno'. Esto nos permite definir patrones de manera muy concisa y es fundamental para todo, desde las expresiones regulares hasta las definiciones de gramáticas.</p></div>
+                </div>
+
+                <div class="card">
+                    <h3>Aplicación Real</h3>
+                    <div><p>Estas operaciones son el corazón de muchas herramientas informáticas. Las <strong>expresiones regulares</strong>, que son ampliamente utilizadas en lenguajes de programación (Python, Java, JavaScript, etc.), editores de texto, sistemas operativos (grep, sed), y bases de datos, se basan directamente en la concatenación, unión y la clausura de Kleene para definir patrones de búsqueda y manipulación de texto. Por ejemplo, <code>[0-9]+</code> usa la clausura positiva para decir 'uno o más dígitos'. En el diseño de <strong>compiladores</strong>, el analizador léxico (lexer) utiliza estas operaciones para reconocer los 'tokens' (palabras clave, identificadores, números, etc.) en el código fuente, que son, en sí mismos, cadenas que pertenecen a un lenguaje formal. En la <strong>validación de datos</strong>, se usan operaciones de lenguaje para asegurar que las entradas (como direcciones de correo electrónico o números de teléfono) cumplan con un formato específico. La <strong>búsqueda de patrones</strong> en genomas, la <strong>construcción de URLs</strong> y la <strong>manipulación de rutas de archivo</strong> son otros ejemplos cotidianos donde estas operaciones sobre cadenas y lenguajes son aplicadas constantemente, demostrando su utilidad práctica en la creación y procesamiento de información estructurada.</p></div>
+                </div>
+
+            </div>
+        </article>
+        
+    </main>
+
+    <footer>
+        <p>Prof. Jorge López-Cifre, PhD © 2026</p>
+    </footer>
+
+</body>
+</html>

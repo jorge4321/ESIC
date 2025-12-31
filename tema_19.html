@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>19 - Análisis Sintáctico - Ambigüedad y su impacto en compiladores. - Prof. Jorge López-Cifre</title>
+    <style>
+        :root {
+            --primary: #003366;
+            --accent: #d4af37;
+            --bg: #f8f9fa;
+            --text: #2c3e50;
+            --card-bg: #ffffff;
+            --border: #e9ecef;
+        }
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 0;
+            line-height: 1.7;
+        }
+        /* Tipografía mejorada */
+        p { margin-bottom: 1rem; }
+        strong, b { color: var(--primary); font-weight: 700; }
+        
+        header {
+            background: var(--primary);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        h1 { margin: 0; font-size: 1.25rem; font-weight: 600; }
+        
+        .btn-volver {
+            background: var(--accent);
+            color: var(--primary);
+            text-decoration: none;
+            padding: 0.5rem 1.2rem;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        .btn-volver:hover { 
+            background: #fff; 
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+
+        main {
+            max-width: 1100px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+
+        .subtema {
+            background: var(--card-bg);
+            border-radius: 12px;
+            margin-bottom: 4rem;
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+        
+        .subtema-header {
+            background: linear-gradient(to right, #f8f9fa, #ffffff);
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid var(--border);
+        }
+        .subtema-header h2 { 
+            margin: 0; 
+            color: var(--primary); 
+            font-size: 1.6rem;
+            border-left: 5px solid var(--accent);
+            padding-left: 1rem;
+        }
+
+        .seccion-contenido {
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2.5rem;
+        }
+
+        @media (min-width: 900px) {
+            .seccion-contenido { grid-template-columns: 1fr 1fr; }
+            .full-width { grid-column: 1 / -1; }
+        }
+
+        .card h3 {
+            color: var(--primary);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-top: 0;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 0.5rem;
+        }
+
+        .formal-box {
+            background-color: #f0f7ff; /* Azul muy muy pálido */
+            border-radius: 8px;
+            padding: 2rem !important;
+            border: 1px solid #cce5ff;
+        }
+
+        /* CSS Específico para corregir SVGs */
+        .diagrama-container {
+            text-align: center;
+            margin: 2rem auto;
+            padding: 1.5rem;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
+            max-width: 100%;
+            overflow-x: auto; /* Si es muy ancho, permite scroll */
+        }
+        
+        /* Forzar comportamiento correcto del SVG */
+        .diagrama-container svg {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+        
+        /* Evitar que el texto dentro del SVG sea ilegible */
+        .diagrama-container text {
+            font-family: sans-serif;
+        }
+
+        footer {
+            text-align: center;
+            padding: 3rem;
+            background: var(--primary);
+            color: rgba(255,255,255,0.8);
+            margin-top: 4rem;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>19 - Análisis Sintáctico - Ambigüedad y su impacto en compiladores.</h1>
+        <a href="javascript:history.back()" class="btn-volver">← Volver</a>
+    </header>
+
+    <main>
+
+        <article class="subtema">
+            <div class="subtema-header">
+                <h2>¿Qué es la Ambigüedad Sintáctica? Definición y Alcance</h2>
+            </div>
+            <div class="seccion-contenido">
+                
+                <div class="card full-width">
+                    <h3>Historia</h3>
+                    <div><p>La noción de gramática formal fue introducida por Noam Chomsky en la década de 1950, revolucionando el estudio de las lenguas naturales y, posteriormente, sentando las bases para la definición de lenguajes de programación. Con el advenimiento de los primeros compiladores para lenguajes como Fortran y ALGOL en los años 50 y 60, la necesidad de definir la sintaxis de manera precisa se volvió crucial. La Backus-Naur Form (BNF) emergió como un estándar de facto para especificar la sintaxis de lenguajes de programación. Fue en este contexto, al intentar formalizar y automatizar el análisis sintáctico, cuando los científicos de la computación se encontraron con el desafío de la ambigüedad. Una gramática ambigua impedía que un compilador interpretara de manera única una secuencia de símbolos, planteando serios problemas para la construcción de la representación interna del programa y su posterior traducción a código máquina.</p></div>
+                </div>
+
+                <div class="card full-width formal-box">
+                    <h3>Descripción Formal</h3>
+                    <div><p>Una Gramática Libre de Contexto (GLC) G se define como una tupla cuádruple G = (V, T, P, S), donde V es un conjunto finito de variables (símbolos no terminales), T es un conjunto finito de símbolos terminales, P es un conjunto finito de reglas de producción de la forma A → β (donde A ∈ V y β ∈ (V ∪ T)*), y S ∈ V es el símbolo inicial.
+Una GLC G es considerada ambigua si existe al menos una cadena ω que pertenece al lenguaje L(G) generado por G, para la cual existen dos o más árboles de derivación distintos. Alternativamente, una gramática es ambigua si para alguna cadena ω en L(G), hay dos o más derivaciones a la izquierda distintas (o dos o más derivaciones a la derecha distintas). Un árbol de derivación representa la secuencia de aplicaciones de reglas de producción que transforman el símbolo inicial S en una cadena de terminales. Si una única cadena terminal puede ser generada por múltiples configuraciones de derivaciones que resultan en estructuras de árbol fundamentalmente diferentes, entonces la gramática carece de la unicidad necesaria para un análisis sintáctico determinista. Esta falta de unicidad implica que un analizador sintáctico no puede decidir de manera única la estructura sintáctica de una entrada dada, lo cual es inaceptable para un compilador.</p></div>
+                    
+                    <div class="diagrama-container">
+                        <svg viewBox="0 0 600 200" style="background-color:#f8f8f8;border:1px solid #ccc;">
+      <circle cx="300" cy="20" r="15" fill="#a8e6cf" stroke="#333" stroke-width="2"/>
+      <text x="295" y="25" font-family="Arial" font-size="12" fill="#333">E</text>
+      <line x1="300" y1="35" x2="200" y2="70" stroke="#333" stroke-width="2"/>
+      <line x1="300" y1="35" x2="400" y2="70" stroke="#333" stroke-width="2"/>
+      <circle cx="200" cy="85" r="15" fill="#a8e6cf" stroke="#333" stroke-width="2"/>
+      <text x="195" y="90" font-family="Arial" font-size="12" fill="#333">E</text>
+      <circle cx="400" cy="85" r="15" fill="#a8e6cf" stroke="#333" stroke-width="2"/>
+      <text x="395" y="90" font-family="Arial" font-size="12" fill="#333">E</text>
+      <text x="295" y="75" font-family="Arial" font-size="12" fill="#333">+</text>
+      <line x1="200" y1="100" x2="150" y2="135" stroke="#333" stroke-width="2"/>
+      <line x1="200" y1="100" x2="250" y2="135" stroke="#333" stroke-width="2"/>
+      <text x="145" y="150" font-family="Arial" font-size="12" fill="#333">id</text>
+      <text x="245" y="150" font-family="Arial" font-size="12" fill="#333">*</text>
+      <line x1="400" y1="100" x2="350" y2="135" stroke="#333" stroke-width="2"/>
+      <line x1="400" y1="100" x2="450" y2="135" stroke="#333" stroke-width="2"/>
+      <text x="345" y="150" font-family="Arial" font-size="12" fill="#333">id</text>
+      <text x="445" y="150" font-family="Arial" font-size="12" fill="#333">id</text>
+
+      <text x="50" y="170" font-family="Arial" font-size="12" fill="#333">Dos árboles de derivación para "id + id * id"</text>
+      <text x="50" y="185" font-family="Arial" font-size="12" fill="#333">Gramática ambigua: E → E + E | E * E | id</text>
+    </svg>
+                        <p style="font-size:0.8rem; color:#666; margin-top:1rem; text-align:center;">
+                            <em>Fig: Representación visual generada.</em>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Intuición</h3>
+                    <div><p>Imagina que le das una instrucción a alguien: "Coge la manzana y la naranja en la cesta y cómela". ¿Debe coger una manzana y una naranja y luego comerse la manzana, o comerse la manzana y después coger la naranja? El lenguaje natural a menudo es ambiguo, pero los humanos usamos el contexto o el sentido común para desambiguar. Sin embargo, una máquina carece de este "sentido común". En el contexto de lenguajes de programación, una gramática ambigua es como una receta con pasos poco claros. Si tienes la expresión <code>A + B * C</code>, ¿debes calcular primero <code>A + B</code> y luego multiplicar por <code>C</code>, o primero <code>B * C</code> y luego sumar <code>A</code>? Ambas interpretaciones son válidas según una gramática sencilla <code>Exp → Exp + Exp | Exp * Exp | id</code>. Esta falta de una única interpretación para la estructura sintáctica de una cadena es la esencia de la ambigüedad. Un compilador, que debe traducir el código fuente a un formato ejecutable, no puede permitirse esta incertidumbre, ya que llevaría a resultados impredecibles o incorrectos en el programa final.</p></div>
+                </div>
+
+                <div class="card">
+                    <h3>Aplicación Real</h3>
+                    <div><p>La ambigüedad sintáctica tiene un impacto directo y severo en la fase de análisis sintáctico de un compilador. Cuando un analizador sintáctico encuentra una cadena ambigua, no puede construir un único Árbol de Sintaxis Abstracta (AST) que represente la estructura lógica del programa. Esto es problemático porque el AST es la representación fundamental sobre la cual se basan las fases posteriores del compilador, como el análisis semántico, la generación de código intermedio, la optimización y la generación de código máquina. Por ejemplo, en una expresión como <code>a - b - c</code>, si la resta no tiene asociatividad clara (izquierda o derecha), el compilador podría interpretar <code>(a - b) - c</code> o <code>a - (b - c)</code>, produciendo resultados numéricos diferentes. Otro caso clásico es el "dangling else" en estructuras condicionales <code>if-then-else</code>, donde un <code>else</code> puede asociarse a múltiples <code>if</code> precedentes, llevando a lógicas de programa incorrectas. Los compiladores modernos no pueden funcionar con gramáticas ambiguas; o bien el lenguaje está diseñado con una gramática no ambigua, o el analizador sintáctico aplica reglas de desambiguación específicas.</p></div>
+                </div>
+
+            </div>
+        </article>
+        
+        <article class="subtema">
+            <div class="subtema-header">
+                <h2>Identificación de Ambigüedad: Casos Comunes y Dificultades</h2>
+            </div>
+            <div class="seccion-contenido">
+                
+                <div class="card full-width">
+                    <h3>Historia</h3>
+                    <div><p>A medida que los lenguajes de programación crecieron en complejidad desde su concepción, la ambigüedad se manifestó como un problema persistente y difícil. En las décadas de 1960 y 1970, los diseñadores de lenguajes y compiladores se enfrentaron repetidamente a estas incertidumbres al intentar definir gramáticas para lenguajes como ALGOL-60. Fue entonces cuando se comprendió la dificultad intrínseca de la detección general de la ambigüedad. La investigación formal en teoría de lenguajes demostró que el problema de determinar si una GLC arbitraria es ambigua es, de hecho, indecidible. Esto significa que no existe un algoritmo universal que pueda tomar cualquier GLC y, en un tiempo finito, decir con certeza si es ambigua o no. A pesar de esta limitación teórica, se desarrollaron técnicas prácticas para identificar y resolver ambigüedades comunes que surgen en el diseño de lenguajes de programación.</p></div>
+                </div>
+
+                <div class="card full-width formal-box">
+                    <h3>Descripción Formal</h3>
+                    <div><p>Aunque no existe un algoritmo general para determinar la ambigüedad de una GLC (es un problema indecidible), podemos identificar patrones y construir ejemplos concretos. Una gramática es ambigua si para alguna cadena ω en su lenguaje, existen dos o más árboles de derivación distintos.
+Ejemplo 1: Gramática para expresiones aritméticas simples sin precedencia ni asociatividad.
+G = ({E}, {id, +, *, (, )}, P, E)
+P:
+E → E + E
+E → E * E
+E → (E)
+E → id
+Para la cadena "id + id * id", existen dos árboles de derivación distintos, uno que prioriza la suma y otro la multiplicación, lo que demuestra la ambigüedad.
+Ejemplo 2: El problema del "dangling else" (else colgante).
+G = ({S, C}, {if, then, else, expr, stmt}, P, S)
+P:
+S → if expr then S
+S → if expr then S else S
+S → stmt (cualquier otra sentencia)
+Para la cadena "if expr then if expr then stmt else stmt", el <code>else</code> puede asociarse al primer <code>if</code> o al segundo <code>if</code>.
+Primer árbol: <code>if expr then (if expr then stmt) else stmt</code>
+Segundo árbol: <code>if expr then (if expr then stmt else stmt)</code>
+La existencia de estos dos árboles de derivación distintos para la misma cadena confirma la ambigüedad de la gramática. Los analizadores sintácticos a menudo detectan conflictos de <code>shift/reduce</code> o <code>reduce/reduce</code> como indicadores de ambigüedad potencial, aunque estos no siempre implican una ambigüedad en la gramática misma, sino más bien en la técnica de análisis utilizada.</p></div>
+                    
+                    <div class="diagrama-container">
+                        <svg viewBox="0 0 600 200" style="background-color:#f8f8f8;border:1px solid #ccc;">
+      <circle cx="150" cy="20" r="15" fill="#a8e6cf" stroke="#333" stroke-width="2"/>
+      <text x="145" y="25" font-family="Arial" font-size="12" fill="#333">S</text>
+      <line x1="150" y1="35" x2="100" y2="70" stroke="#333" stroke-width="2"/>
+      <line x1="150" y1="35" x2="200" y2="70" stroke="#333" stroke-width="2"/>
+      <line x1="150" y1="35" x2="250" y2="70" stroke="#333" stroke-width="2"/>
+      <text x="95" y="85" font-family="Arial" font-size="12" fill="#333">if</text>
+      <text x="195" y="85" font-family="Arial" font-size="12" fill="#333">then</text>
+      <circle cx="150" cy="115" r="15" fill="#a8e6cf" stroke="#333" stroke-width="2"/>
+      <text x="145" y="120" font-family="Arial" font-size="12" fill="#333">S</text>
+      <text x="245" y="85" font-family="Arial" font-size="12" fill="#333">expr</text>
+      <line x1="150" y1="130" x2="100" y2="165" stroke="#333" stroke-width="2"/>
+      <line x1="150" y1="130" x2="200" y2="165" stroke="#333" stroke-width="2"/>
+      <text x="95" y="180" font-family="Arial" font-size="12" fill="#333">if</text>
+      <text x="195" y="180" font-family="Arial" font-size="12" fill="#333">expr</text>
+      <text x="245" y="180" font-family="Arial" font-size="12" fill="#333">then</text>
+      <text x="295" y="180" font-family="Arial" font-size="12" fill="#333">stmt</text>
+      <text x="345" y="180" font-family="Arial" font-size="12" fill="#333">else</text>
+      <text x="395" y="180" font-family="Arial" font-size="12" fill="#333">stmt</text>
+      <rect x="5" y="5" width="290" height="190" stroke="#ccc" stroke-width="1" fill="none"/>
+      <text x="80" y="195" font-family="Arial" font-size="12" fill="#333">Árbol 1: 'else' asociado al 'if' más externo</text>
+
+      <circle cx="450" cy="20" r="15" fill="#a8e6cf" stroke="#333" stroke-width="2"/>
+      <text x="445" y="25" font-family="Arial" font-size="12" fill="#333">S</text>
+      <line x1="450" y1="35" x2="400" y2="70" stroke="#333" stroke-width="2"/>
+      <line x1="450" y1="35" x2="500" y2="70" stroke="#333" stroke-width="2"/>
+      <line x1="450" y1="35" x2="550" y2="70" stroke="#333" stroke-width="2"/>
+      <text x="395" y="85" font-family="Arial" font-size="12" fill="#333">if</text>
+      <text x="495" y="85" font-family="Arial" font-size="12" fill="#333">then</text>
+      <circle cx="450" cy="115" r="15" fill="#a8e6cf" stroke="#333" stroke-width="2"/>
+      <text x="445" y="120" font-family="Arial" font-size="12" fill="#333">S</text>
+      <text x="545" y="85" font-family="Arial" font-size="12" fill="#333">expr</text>
+      <line x1="450" y1="130" x2="400" y2="165" stroke="#333" stroke-width="2"/>
+      <line x1="450" y1="130" x2="500" y2="165" stroke="#333" stroke-width="2"/>
+      <line x1="450" y1="130" x2="550" y2="165" stroke="#333" stroke-width="2"/>
+      <text x="395" y="180" font-family="Arial" font-size="12" fill="#333">if</text>
+      <text x="495" y="180" font-family="Arial" font-size="12" fill="#333">then</text>
+      <text x="545" y="180" font-family="Arial" font-size="12" fill="#333">else</text>
+      <text x="445" y="180" font-family="Arial" font-size="12" fill="#333">expr</text>
+      <rect x="305" y="5" width="290" height="190" stroke="#ccc" stroke-width="1" fill="none"/>
+      <text x="375" y="195" font-family="Arial" font-size="12" fill="#333">Árbol 2: 'else' asociado al 'if' más interno</text>
+    </svg>
+                        <p style="font-size:0.8rem; color:#666; margin-top:1rem; text-align:center;">
+                            <em>Fig: Representación visual generada.</em>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Intuición</h3>
+                    <div><p>Piensa en la ambigüedad como una falta de claridad en las reglas del juego. Si las reglas permiten múltiples formas de llegar al mismo resultado final, entonces son ambiguas. En un compilador, esto significa que el programa fuente puede ser interpretado de varias maneras válidas desde el punto de vista de la gramática, pero con implicaciones semánticas diferentes. Por ejemplo, en una gramática que no distingue entre una <code>sentencia</code> y un <code>bloque</code>, la construcción <code>if (cond) { S1; S2; } else S3;</code> podría interpretarse de formas inesperadas si las reglas no son explícitas sobre la agrupación. La intuición detrás de la detección de ambigüedad a menudo proviene de observar derivaciones múltiples para una misma cadena o de identificar puntos en la gramática donde un símbolo no terminal puede expandirse de formas que se superponen o entran en conflicto. Es como si la gramática dijera "puedes ir por este camino" o "puedes ir por aquel", sin dar una pauta sobre cuál tomar cuando ambos parecen aplicables.</p></div>
+                </div>
+
+                <div class="card">
+                    <h3>Aplicación Real</h3>
+                    <div><p>Aunque la detección algorítmica general de la ambigüedad es un problema indecidible, los diseñadores de lenguajes y compiladores han desarrollado una vasta experiencia en identificar y evitar patrones de ambigüedad comunes. Las herramientas generadoras de analizadores sintácticos, como YACC (Yet Another Compiler Compiler), Bison o ANTLR, son capaces de detectar muchos tipos de ambigüedades prácticas durante la fase de análisis y suelen reportar "conflictos shift/reduce" o "reduce/reduce". Un conflicto <code>shift/reduce</code> indica que el analizador podría tanto reducir un conjunto de símbolos en un no terminal como avanzar (shift) el siguiente símbolo de entrada. Un conflicto <code>reduce/reduce</code> significa que la gramática permite reducir el mismo conjunto de símbolos de entrada a dos no terminales diferentes. Estos conflictos son fuertes indicadores de ambigüedad potencial en la gramática. Los ingenieros de software, al diseñar DSLs (Domain Specific Languages) o nuevos lenguajes de programación, deben ser conscientes de estos problemas para construir gramáticas robustas que permitan a los compiladores generar un código consistente y predecible.</p></div>
+                </div>
+
+            </div>
+        </article>
+        
+        <article class="subtema">
+            <div class="subtema-header">
+                <h2>Eliminación y Resolución de Ambigüedad: Técnicas y Heurísticas</h2>
+            </div>
+            <div class="seccion-contenido">
+                
+                <div class="card full-width">
+                    <h3>Historia</h3>
+                    <div><p>Enfrentados a la indecidibilidad de la ambigüedad y la necesidad práctica de construir compiladores funcionales, los científicos de la computación desarrollaron técnicas ingeniosas para eliminar o resolver la ambigüedad en gramáticas específicas. A partir de los años 60, se formalizaron los conceptos de precedencia y asociatividad de operadores, elementos esenciales para el análisis correcto de expresiones aritméticas en lenguajes como Fortran y ALGOL. Estos principios se incorporaron directamente en la reescritura de gramáticas para asegurar una única interpretación. Posteriormente, con el desarrollo de analizadores sintácticos más potentes como los parsers LR, se introdujeron mecanismos para resolver conflictos de análisis mediante reglas explícitas de desambiguación, a menudo definidas por el diseñador del lenguaje o el implementador del compilador. Estas estrategias permitieron avanzar en la construcción de compiladores robustos a pesar de las limitaciones teóricas.</p></div>
+                </div>
+
+                <div class="card full-width formal-box">
+                    <h3>Descripción Formal</h3>
+                    <div><p>La resolución de ambigüedad en GLCs se logra mediante varias estrategias, principalmente reescribiendo la gramática o añadiendo reglas de desambiguación a los algoritmos de análisis.
+1.  <strong>Incorporación de Precedencia y Asociatividad:</strong> Para expresiones aritméticas, la ambigüedad se elimina reescribiendo las reglas de producción para imponer un orden específico. Esto se hace creando niveles de no terminales.
+    Ejemplo (gramática no ambigua para <code>id + id * id</code>):
+    E → E + T | T
+    T → T * F | F
+    F → id | (E)
+    En esta gramática, <code>*</code> tiene mayor precedencia que <code>+</code> porque <code>F</code> debe derivarse antes que <code>T</code>, y <code>T</code> antes que <code>E</code>. La asociatividad izquierda para <code>+</code> y <code>*</code> se logra haciendo que el no terminal recursivo aparezca a la izquierda (<code>E → E + T</code>, <code>T → T * F</code>). Para asociatividad derecha, el no terminal recursivo estaría a la derecha.
+2.  <strong>Resolución del "Dangling Else":</strong> Este problema se resuelve modificando la gramática para forzar que cada <code>else</code> se asocie con el <code>if</code> más cercano y no emparejado. Una técnica común es distinguir entre sentencias "emparejadas" y "no emparejadas".
+    Ejemplo (fragmento):
+    S → MatchedStmt | OpenStmt
+    MatchedStmt → if expr then MatchedStmt else MatchedStmt | OtherStmt
+    OpenStmt → if expr then S | if expr then MatchedStmt else OpenStmt
+    Esta gramática garantiza que un <code>else</code> siempre emparejará el <code>if</code> más cercano que aún no tenga un <code>else</code> asociado, eliminando la ambigüedad.
+3.  <strong>Reglas de Desambiguación en Generadores de Parsers:</strong> Cuando no es factible o deseable reescribir la gramática, los generadores de analizadores sintácticos (como YACC/Bison) permiten al usuario especificar reglas explícitas para resolver conflictos <code>shift/reduce</code> o <code>reduce/reduce</code>. Estas reglas pueden incluir:
+    *   Prioridad para <code>shift</code> sobre <code>reduce</code> (común para el <code>dangling else</code>).
+    *   Niveles de precedencia y asociatividad declarados para operadores.
+    La aplicación de estas reglas le da al analizador un criterio para elegir una única derivación cuando la gramática permite múltiples.</p></div>
+                    
+                    <div class="diagrama-container">
+                        <svg viewBox="0 0 600 200" style="background-color:#f8f8f8;border:1px solid #ccc;">
+      <circle cx="300" cy="20" r="15" fill="#a8e6cf" stroke="#333" stroke-width="2"/>
+      <text x="295" y="25" font-family="Arial" font-size="12" fill="#333">E</text>
+      <line x1="300" y1="35" x2="200" y2="70" stroke="#333" stroke-width="2"/>
+      <line x1="300" y1="35" x2="400" y2="70" stroke="#333" stroke-width="2"/>
+      <circle cx="200" cy="85" r="15" fill="#a8e6cf" stroke="#333" stroke-width="2"/>
+      <text x="195" y="90" font-family="Arial" font-size="12" fill="#333">E</text>
+      <text x="295" y="75" font-family="Arial" font-size="12" fill="#333">+</text>
+      <circle cx="400" cy="85" r="15" fill="#a8e6cf" stroke="#333" stroke-width="2"/>
+      <text x="395" y="90" font-family="Arial" font-size="12" fill="#333">T</text>
+      <line x1="200" y1="100" x2="170" y2="135" stroke="#333" stroke-width="2"/>
+      <text x="165" y="150" font-family="Arial" font-size="12" fill="#333">id</text>
+      <line x1="400" y1="100" x2="350" y2="135" stroke="#333" stroke-width="2"/>
+      <line x1="400" y1="100" x2="450" y2="135" stroke="#333" stroke-width="2"/>
+      <circle cx="350" cy="150" r="15" fill="#a8e6cf" stroke="#333" stroke-width="2"/>
+      <text x="345" y="155" font-family="Arial" font-size="12" fill="#333">T</text>
+      <text x="445" y="150" font-family="Arial" font-size="12" fill="#333">F</text>
+      <text x="395" y="135" font-family="Arial" font-size="12" fill="#333">*</text>
+      <line x1="350" y1="165" x2="320" y2="185" stroke="#333" stroke-width="2"/>
+      <text x="315" y="195" font-family="Arial" font-size="12" fill="#333">id</text>
+      <line x1="450" y1="165" x2="420" y2="185" stroke="#333" stroke-width="2"/>
+      <text x="415" y="195" font-family="Arial" font-size="12" fill="#333">id</text>
+      <text x="50" y="170" font-family="Arial" font-size="12" fill="#333">Un único árbol de derivación para "id + id * id"</text>
+      <text x="50" y="185" font-family="Arial" font-size="12" fill="#333">Gramática no ambigua: E → E + T | T; T → T * F | F; F → id</text>
+    </svg>
+                        <p style="font-size:0.8rem; color:#666; margin-top:1rem; text-align:center;">
+                            <em>Fig: Representación visual generada.</em>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Intuición</h3>
+                    <div><p>Resolver la ambigüedad es como establecer un conjunto claro de prioridades y reglas para que, ante cualquier situación, solo haya una interpretación posible. Si antes la gramática decía "puedes sumar o multiplicar, como quieras", ahora se dice "primero multiplica, luego suma". Si un <code>else</code> podría pertenecer a dos <code>if</code>s, se establece una regla universal: "el <code>else</code> siempre va con el <code>if</code> más cercano que aún no tiene <code>else</code>". Se trata de eliminar la libertad de elección del analizador sintáctico imponiendo una estructura explícita en las reglas de producción. Estas "restricciones" adicionales son cruciales para que un programa se comporte de manera predecible, independientemente de cómo se haya escrito. Es como definir un conjunto de instrucciones paso a paso tan detalladas que cualquier persona que las siga obtendrá exactamente el mismo resultado final.</p></div>
+                </div>
+
+                <div class="card">
+                    <h3>Aplicación Real</h3>
+                    <div><p>Las técnicas de resolución de ambigüedad son fundamentales en la ingeniería de compiladores y el diseño de lenguajes de programación. Todo lenguaje de programación de propósito general, como C, Java, Python o JavaScript, tiene reglas de precedencia y asociatividad de operadores bien definidas para sus expresiones. Estas reglas se implementan en la gramática de análisis sintáctico o se manejan directamente por el analizador. Por ejemplo, los generadores de analizadores sintácticos como Bison o ANTLR permiten a los desarrolladores especificar la precedencia y asociatividad de operadores mediante directivas sencillas (<code>%left</code>, <code>%right</code>, <code>%nonassoc</code>), lo que automáticamente reescribe o ajusta el comportamiento del analizador para resolver conflictos <code>shift/reduce</code>. La resolución del "dangling else" es un estándar en la mayoría de los lenguajes tipo C, donde un <code>else</code> siempre se asocia al <code>if</code> más interno no emparejado. Estas estrategias garantizan que los compiladores produzcan árboles de sintaxis abstracta coherentes y correctos, que a su vez son esenciales para la fase de generación de código y la correcta ejecución de los programas.</p></div>
+                </div>
+
+            </div>
+        </article>
+        
+    </main>
+
+    <footer>
+        <p>Prof. Jorge López-Cifre, PhD © 2026</p>
+    </footer>
+
+</body>
+</html>

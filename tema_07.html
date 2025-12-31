@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>7 - Autómatas finitos - Determinismo vs. No Determinismo (AFD vs. AFN) - Prof. Jorge López-Cifre</title>
+    <style>
+        :root {
+            --primary: #003366;
+            --accent: #d4af37;
+            --bg: #f8f9fa;
+            --text: #2c3e50;
+            --card-bg: #ffffff;
+            --border: #e9ecef;
+        }
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 0;
+            line-height: 1.7;
+        }
+        /* Tipografía mejorada */
+        p { margin-bottom: 1rem; }
+        strong, b { color: var(--primary); font-weight: 700; }
+        
+        header {
+            background: var(--primary);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        h1 { margin: 0; font-size: 1.25rem; font-weight: 600; }
+        
+        .btn-volver {
+            background: var(--accent);
+            color: var(--primary);
+            text-decoration: none;
+            padding: 0.5rem 1.2rem;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        .btn-volver:hover { 
+            background: #fff; 
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+
+        main {
+            max-width: 1100px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+
+        .subtema {
+            background: var(--card-bg);
+            border-radius: 12px;
+            margin-bottom: 4rem;
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+        
+        .subtema-header {
+            background: linear-gradient(to right, #f8f9fa, #ffffff);
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid var(--border);
+        }
+        .subtema-header h2 { 
+            margin: 0; 
+            color: var(--primary); 
+            font-size: 1.6rem;
+            border-left: 5px solid var(--accent);
+            padding-left: 1rem;
+        }
+
+        .seccion-contenido {
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2.5rem;
+        }
+
+        @media (min-width: 900px) {
+            .seccion-contenido { grid-template-columns: 1fr 1fr; }
+            .full-width { grid-column: 1 / -1; }
+        }
+
+        .card h3 {
+            color: var(--primary);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-top: 0;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 0.5rem;
+        }
+
+        .formal-box {
+            background-color: #f0f7ff; /* Azul muy muy pálido */
+            border-radius: 8px;
+            padding: 2rem !important;
+            border: 1px solid #cce5ff;
+        }
+
+        /* CSS Específico para corregir SVGs */
+        .diagrama-container {
+            text-align: center;
+            margin: 2rem auto;
+            padding: 1.5rem;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
+            max-width: 100%;
+            overflow-x: auto; /* Si es muy ancho, permite scroll */
+        }
+        
+        /* Forzar comportamiento correcto del SVG */
+        .diagrama-container svg {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+        
+        /* Evitar que el texto dentro del SVG sea ilegible */
+        .diagrama-container text {
+            font-family: sans-serif;
+        }
+
+        footer {
+            text-align: center;
+            padding: 3rem;
+            background: var(--primary);
+            color: rgba(255,255,255,0.8);
+            margin-top: 4rem;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>7 - Autómatas finitos - Determinismo vs. No Determinismo (AFD vs. AFN)</h1>
+        <a href="javascript:history.back()" class="btn-volver">← Volver</a>
+    </header>
+
+    <main>
+
+        <article class="subtema">
+            <div class="subtema-header">
+                <h2>Autómatas Finitos Deterministas (AFD): La Precisión Unívoca</h2>
+            </div>
+            <div class="seccion-contenido">
+                
+                <div class="card full-width">
+                    <h3>Historia</h3>
+                    <div><p>El concepto de autómata finito determinista tiene sus raíces en los trabajos pioneros de Warren McCulloch y Walter Pitts en la década de 1940, quienes modelaron redes neuronales con un comportamiento discreto y lógico. Sin embargo, la formalización rigurosa de los autómatas finitos como modelo computacional se atribuye en gran medida a Stephen Kleene en 1956 con su teorema que vincula las expresiones regulares con estos autómatas. La definición precisa del AFD, tal como la conocemos hoy, fue consolidada por Michael Rabin y Dana Scott en su influyente artículo de 1959, "Finite Automata and Their Decision Problems". Este trabajo estableció la base matemática para el estudio de los lenguajes regulares y sentó las diferencias fundamentales entre máquinas deterministas y no deterministas.</p></div>
+                </div>
+
+                <div class="card full-width formal-box">
+                    <h3>Descripción Formal</h3>
+                    <div><p>Un Autómata Finito Determinista (AFD) se define formalmente como una 5-tupla (Q, Σ, δ, q₀, F), donde:</p>
+<ul>
+<li>Q es un conjunto finito y no vacío de estados.</li>
+<li>Σ es un alfabeto finito y no vacío de símbolos de entrada.</li>
+<li>δ es la función de transición, δ: Q × Σ → Q. Esta función es determinista porque para cada estado en Q y cada símbolo en Σ, hay exactamente una transición a un único estado siguiente.</li>
+<li>q₀ es el estado inicial (q₀ ∈ Q).</li>
+<li>F es un conjunto de estados finales o de aceptación (F ⊆ Q).</li>
+</ul>
+<p>Un AFD acepta una cadena de entrada si, al procesar todos los símbolos de la cadena comenzando en q₀, la secuencia de transiciones lleva a un estado que pertenece al conjunto F. La unicidad de la función de transición garantiza que para cualquier cadena de entrada, el AFD siempre sigue un camino único y predefinido a través de sus estados. No hay ambigüedad ni elección en el comportamiento del autómata, lo que lo hace predecible y directo en su simulación.</p></div>
+                    
+                    <div class="diagrama-container">
+                        <svg width="100%" height="auto"  viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#333" />
+    </marker>
+  </defs>
+  <style>
+    .state { fill: #f0f8ff; stroke: #333; stroke-width: 2px; }
+    .final-state { stroke: #333; stroke-width: 2px; fill: none; }
+    .transition { stroke: #333; stroke-width: 2px; fill: none; marker-end: url(#arrow); }
+    .text { font-family: sans-serif; font-size: 14px; fill: #333; text-anchor: middle; alignment-baseline: central; }
+  </style>
+
+  <!-- Initial state arrow -->
+  <line x1="50" y1="100" x2="95" y2="100" class="transition" marker-end="url(#arrow)"/>
+  
+  <!-- States -->
+  <circle cx="120" cy="100" r="25" class="state" />
+  <text x="120" y="100" class="text">q₀</text>
+
+  <circle cx="270" cy="100" r="25" class="state" />
+  <circle cx="270" cy="100" r="20" class="final-state" />
+  <text x="270" y="100" class="text">q₁</text>
+
+  <circle cx="420" cy="100" r="25" class="state" />
+  <text x="420" y="100" class="text">q₂</text>
+
+  <!-- Transitions -->
+  <!-- q0 --a--> q1 -->
+  <path d="M145 100 H245" class="transition" />
+  <text x="195" y="90" class="text">a</text>
+
+  <!-- q1 --b--> q2 -->
+  <path d="M295 100 H395" class="transition" />
+  <text x="345" y="90" class="text">b</text>
+
+  <!-- q2 --a,b--> q2 (loop) -->
+  <path d="M420 125 A25 25 0 1 1 420 75" class="transition" />
+  <text x="455" y="100" class="text">a, b</text>
+
+  <!-- q0 --b--> q2 -->
+  <path d="M120 125 A70 70 0 0 0 420 125" class="transition" />
+  <text x="270" y="135" class="text">b</text>
+</svg>
+                        <p style="font-size:0.8rem; color:#666; margin-top:1rem; text-align:center;">
+                            <em>Fig: Representación visual generada.</em>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Intuición</h3>
+                    <div><p>Imagina un AFD como una máquina muy disciplinada y con instrucciones claras. Cada vez que le das una entrada (un símbolo), sabe exactamente a qué estado ir después. No hay margen para la duda o la elección. Es como un laberinto en el que, desde cada intersección, solo hay una salida posible para cada acción que tomes. Si llegas al final de la entrada y la máquina está en uno de sus 'estados de éxito' (estados finales), entonces la entrada es aceptada. De lo contrario, es rechazada. Esta naturaleza unívoca hace que los AFD sean muy fáciles de implementar y simular, ya que siempre se sigue un único camino de cómputo. Son la base de muchas operaciones de procesamiento de texto y análisis de patrones simples.</p></div>
+                </div>
+
+                <div class="card">
+                    <h3>Aplicación Real</h3>
+                    <div><p>Los AFD son ampliamente utilizados en la ingeniería de software y la informática debido a su eficiencia y previsibilidad. Una de sus aplicaciones más importantes es en el <strong>análisis léxico</strong> de compiladores e intérpretes. Aquí, un AFD se encarga de reconocer 'tokens' (palabras clave, identificadores, operadores) en el código fuente, formando la primera fase de la compilación. También se utilizan en el diseño de <strong>circuitos secuenciales digitales</strong>, donde cada estado del autómata corresponde a un estado lógico del circuito. En el ámbito de las <strong>expresiones regulares</strong>, aunque muchas herramientas usan AFN por su facilidad de expresión, la implementación subyacente a menudo convierte el AFN en un AFD para lograr una mayor velocidad en la búsqueda de patrones. Son ideales para tareas de <strong>validación de entrada</strong> simples, como verificar formatos de números de teléfono o direcciones de correo electrónico básicas.</p></div>
+                </div>
+
+            </div>
+        </article>
+        
+        <article class="subtema">
+            <div class="subtema-header">
+                <h2>Autómatas Finitos No Deterministas (AFN): La Flexibilidad de Múltiples Caminos</h2>
+            </div>
+            <div class="seccion-contenido">
+                
+                <div class="card full-width">
+                    <h3>Historia</h3>
+                    <div><p>El concepto de no determinismo en autómatas finitos fue introducido por Michael Rabin y Dana Scott en su seminal artículo de 1959. Antes de este trabajo, el 'determinismo' era una suposición implícita en la mayoría de los modelos computacionales. La introducción del no determinismo supuso una revelación teórica, al demostrar que, aunque los AFN ofrecen una mayor flexibilidad en su diseño y pueden ser más compactos para describir ciertos lenguajes, no son más 'poderosos' que los AFD en términos de los lenguajes que pueden reconocer (ambos reconocen los lenguajes regulares). Esta equivalencia fue un resultado fundamental que cambió la percepción de lo que significa la potencia computacional de un modelo.</p></div>
+                </div>
+
+                <div class="card full-width formal-box">
+                    <h3>Descripción Formal</h3>
+                    <div><p>Un Autómata Finito No Determinista (AFN) se define formalmente como una 5-tupla (Q, Σ, δ, q₀, F), donde:</p>
+<ul>
+<li>Q es un conjunto finito y no vacío de estados.</li>
+<li>Σ es un alfabeto finito y no vacío de símbolos de entrada.</li>
+<li>δ es la función de transición, δ: Q × (Σ ∪ {ε}) → P(Q). Esta es la característica clave: para un estado en Q y un símbolo (o ε, la cadena vacía) en Σ, la función de transición puede llevar a cero, uno o varios estados siguientes. P(Q) denota el conjunto potencia de Q, es decir, el conjunto de todos los subconjuntos de Q.</li>
+<li>q₀ es el estado inicial (q₀ ∈ Q).</li>
+<li>F es un conjunto de estados finales o de aceptación (F ⊆ Q).</li>
+</ul>
+<p>Un AFN acepta una cadena de entrada si existe al menos un camino de cómputo, comenzando en q₀ y procesando todos los símbolos de la cadena, que termina en un estado que pertenece al conjunto F. La inclusión de transiciones ε permite al autómata cambiar de estado sin consumir ningún símbolo de entrada, añadiendo aún más flexibilidad a su diseño.</p></div>
+                    
+                    <div class="diagrama-container">
+                        <svg width="100%" height="auto"  viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#333" />
+    </marker>
+  </defs>
+  <style>
+    .state { fill: #f0f8ff; stroke: #333; stroke-width: 2px; }
+    .final-state { stroke: #333; stroke-width: 2px; fill: none; }
+    .transition { stroke: #333; stroke-width: 2px; fill: none; marker-end: url(#arrow); }
+    .text { font-family: sans-serif; font-size: 14px; fill: #333; text-anchor: middle; alignment-baseline: central; }
+  </style>
+
+  <!-- Initial state arrow -->
+  <line x1="50" y1="100" x2="95" y2="100" class="transition" marker-end="url(#arrow)"/>
+  
+  <!-- States -->
+  <circle cx="120" cy="100" r="25" class="state" />
+  <text x="120" y="100" class="text">q₀</text>
+
+  <circle cx="270" cy="100" r="25" class="state" />
+  <text x="270" y="100" class="text">q₁</text>
+
+  <circle cx="420" cy="100" r="25" class="state" />
+  <circle cx="420" cy="100" r="20" class="final-state" />
+  <text x="420" y="100" class="text">q₂</text>
+
+  <!-- Transitions -->
+  <!-- q0 --a,b--> q0 (loop) -->
+  <path d="M120 75 A25 25 0 1 1 120 125" class="transition" />
+  <text x="85" y="100" class="text">a, b</text>
+
+  <!-- q0 --a--> q1 (non-deterministic branch) -->
+  <path d="M145 100 H245" class="transition" />
+  <text x="195" y="90" class="text">a</text>
+
+  <!-- q1 --b--> q2 -->
+  <path d="M295 100 H395" class="transition" />
+  <text x="345" y="90" class="text">b</text>
+
+</svg>
+                        <p style="font-size:0.8rem; color:#666; margin-top:1rem; text-align:center;">
+                            <em>Fig: Representación visual generada.</em>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Intuición</h3>
+                    <div><p>Piensa en un AFN como un autómata que puede 'adivinar' o explorar múltiples posibilidades simultáneamente. Cuando hay una elección (varias transiciones posibles para el mismo símbolo o una transición ε), el AFN no elige una; en cambio, 'se divide' y sigue todos los caminos posibles a la vez, como si tuviera múltiples copias de sí mismo explorando el laberinto. Si al final de la entrada, <em>al menos una</em> de estas 'copias' termina en un estado de aceptación, entonces la cadena es aceptada. Si ninguna de las copias alcanza un estado de aceptación, la cadena es rechazada. Esta capacidad de explorar múltiples caminos hace que los AFN sean a menudo más intuitivos y fáciles de diseñar para ciertos problemas que los AFD, aunque su simulación directa es más compleja.</p></div>
+                </div>
+
+                <div class="card">
+                    <h3>Aplicación Real</h3>
+                    <div><p>Los AFN son extraordinariamente útiles en el diseño y la implementación de sistemas que involucran <strong>reconocimiento de patrones complejos</strong>. Su flexibilidad los hace particularmente adecuados para la compilación de <strong>expresiones regulares</strong>, donde una expresión regular se puede convertir directamente en un AFN de forma muy sencilla. Herramientas como <code>grep</code> o los motores de expresiones regulares en lenguajes de programación (Python, Java, JavaScript) utilizan internamente AFN para realizar búsquedas eficientes. Aunque el AFN suele ser convertido a un AFD para la fase de ejecución y optimización, el AFN sirve como un intermediario natural y fácil de construir. También se aplican en <strong>análisis sintáctico</strong> preliminar en compiladores, en la especificación de <strong>protocolos de red</strong> (donde múltiples estados pueden ser válidos en un momento dado) y en algunos algoritmos de <strong>detección de intrusiones</strong>.</p></div>
+                </div>
+
+            </div>
+        </article>
+        
+        <article class="subtema">
+            <div class="subtema-header">
+                <h2>Equivalencia y Conversión: El Poder Computacional Compartido</h2>
+            </div>
+            <div class="seccion-contenido">
+                
+                <div class="card full-width">
+                    <h3>Historia</h3>
+                    <div><p>El descubrimiento de la equivalencia entre AFD y AFN por Rabin y Scott en 1959 fue un hito fundamental en la teoría de la computación. Demostraron que, a pesar de las aparentes diferencias en su comportamiento (determinista vs. no determinista), ambos modelos tienen exactamente el mismo poder computacional; es decir, reconocen la misma clase de lenguajes: los lenguajes regulares. Este resultado es crucial porque simplifica la teoría y permite a los diseñadores elegir el modelo que mejor se adapte a sus necesidades (AFN para facilidad de diseño, AFD para eficiencia de implementación) sabiendo que pueden convertir entre ellos. La construcción de subconjuntos, el algoritmo para esta conversión, se convirtió en una técnica estándar en la teoría de autómatas.</p></div>
+                </div>
+
+                <div class="card full-width formal-box">
+                    <h3>Descripción Formal</h3>
+                    <div><p>La equivalencia entre AFN y AFD establece que para cada Autómata Finito No Determinista (AFN) M = (Q, Σ, δ, q₀, F), existe un Autómata Finito Determinista (AFD) M' = (Q', Σ, δ', q'₀, F') tal que L(M) = L(M'), donde L(M) denota el lenguaje reconocido por M. El algoritmo de <strong>construcción de subconjuntos</strong> es el método estándar para realizar esta conversión.</p>
+<p>El AFD M' se construye de la siguiente manera:
+*   Q' es el conjunto de todos los subconjuntos de Q (Q' ⊆ P(Q)). Cada estado de Q' es, por lo tanto, un conjunto de estados del AFN original. Esto se debe a que un estado en el AFD simula el conjunto de todos los estados en los que el AFN podría estar simultáneamente.
+*   Σ es el mismo alfabeto.
+*   q'₀ es el ε-cierre de q₀ del AFN original. El ε-cierre de un estado es el conjunto de todos los estados alcanzables desde él sin consumir ningún símbolo de entrada, incluidas las transiciones ε.
+*   F' = { S ∈ Q' | S ∩ F ≠ ∅ }. Un estado del AFD es final si contiene al menos un estado final del AFN.
+*   La función de transición δ': Q' × Σ → Q' se define para cada estado S ∈ Q' y cada símbolo a ∈ Σ como: δ'(S, a) = ε-cierre( ∪_{q ∈ S} δ(q, a) ). Es decir, para cada estado q dentro del conjunto S, calculamos a dónde iría el AFN al leer 'a', y luego tomamos el ε-cierre de la unión de todos estos destinos.</p></div>
+                    
+                    <div class="diagrama-container">
+                        <svg viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#333" />
+    </marker>
+  </defs>
+  <style>
+    .box { fill: #e0e0e0; stroke: #333; stroke-width: 2px; }
+    .label { font-family: sans-serif; font-size: 18px; fill: #333; text-anchor: middle; alignment-baseline: central; font-weight: bold; }
+    .algorithm-text { font-family: sans-serif; font-size: 14px; fill: #555; text-anchor: middle; alignment-baseline: central; }
+    .convert-arrow { stroke: #333; stroke-width: 3px; fill: none; marker-end: url(#arrow); }
+  </style>
+
+  <!-- AFN Box -->
+  <rect x="50" y="50" width="200" height="100" rx="10" ry="10" class="box" />
+  <text x="150" y="100" class="label">AFN</text>
+
+  <!-- Conversion Arrow -->
+  <path d="M260 100 L340 100" class="convert-arrow" />
+  <text x="300" y="80" class="algorithm-text">Construcción de Subconjuntos</text>
+
+  <!-- AFD Box -->
+  <rect x="350" y="50" width="200" height="100" rx="10" ry="10" class="box" />
+  <text x="450" y="100" class="label">AFD</text>
+
+</svg>
+                        <p style="font-size:0.8rem; color:#666; margin-top:1rem; text-align:center;">
+                            <em>Fig: Representación visual generada.</em>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Intuición</h3>
+                    <div><p>La idea clave detrás de la equivalencia es que, aunque un AFN puede seguir múltiples caminos a la vez (explorando el no determinismo), un AFD puede simular este comportamiento. ¿Cómo? Un estado en el AFD no representa un único estado del AFN, sino un <em>conjunto</em> de todos los estados en los que el AFN podría estar en un momento dado. Cuando el AFD procesa un símbolo, calcula el conjunto de todos los posibles estados a los que el AFN podría transicionar desde <em>todos</em> los estados en su conjunto actual. Es como un supervisor que mantiene un registro de todas las 'ramas' del AFN que están siendo exploradas. Si alguna de esas ramas termina en un estado final del AFN original, entonces el estado del AFD (que es el conjunto de esas ramas) se considera un estado final. Así, el AFD simula determinísticamente el comportamiento no determinista del AFN.</p></div>
+                </div>
+
+                <div class="card">
+                    <h3>Aplicación Real</h3>
+                    <div><p>La equivalencia y el proceso de conversión de AFN a AFD tienen profundas implicaciones prácticas. En el desarrollo de <strong>compiladores</strong>, las expresiones regulares que definen los patrones léxicos (tokens) son típicamente convertidas primero a un AFN debido a la facilidad de esta traducción. Luego, para la eficiencia en tiempo de ejecución, este AFN es transformado en un AFD usando la construcción de subconjuntos. Este AFD resultante es entonces utilizado por el analizador léxico para escanear el código fuente. Esta estrategia 'AFN para diseño, AFD para ejecución' es un estándar de la industria. Otro uso es en el diseño de <strong>hardware especializado</strong> para reconocimiento de patrones de alta velocidad, donde la naturaleza determinista de un AFD permite una implementación directa en circuitos lógicos. La comprensión de esta equivalencia es fundamental para cualquier persona que trabaje con reconocimiento de lenguajes y patrones.</p></div>
+                </div>
+
+            </div>
+        </article>
+        
+    </main>
+
+    <footer>
+        <p>Prof. Jorge López-Cifre, PhD © 2026</p>
+    </footer>
+
+</body>
+</html>

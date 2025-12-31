@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>30 - Decidibilidad - Problemas decidibles vs no computables. - Prof. Jorge López-Cifre</title>
+    <style>
+        :root {
+            --primary: #003366;
+            --accent: #d4af37;
+            --bg: #f8f9fa;
+            --text: #2c3e50;
+            --card-bg: #ffffff;
+            --border: #e9ecef;
+        }
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 0;
+            line-height: 1.7;
+        }
+        /* Tipografía mejorada */
+        p { margin-bottom: 1rem; }
+        strong, b { color: var(--primary); font-weight: 700; }
+        
+        header {
+            background: var(--primary);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        h1 { margin: 0; font-size: 1.25rem; font-weight: 600; }
+        
+        .btn-volver {
+            background: var(--accent);
+            color: var(--primary);
+            text-decoration: none;
+            padding: 0.5rem 1.2rem;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        .btn-volver:hover { 
+            background: #fff; 
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+
+        main {
+            max-width: 1100px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+
+        .subtema {
+            background: var(--card-bg);
+            border-radius: 12px;
+            margin-bottom: 4rem;
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+        
+        .subtema-header {
+            background: linear-gradient(to right, #f8f9fa, #ffffff);
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid var(--border);
+        }
+        .subtema-header h2 { 
+            margin: 0; 
+            color: var(--primary); 
+            font-size: 1.6rem;
+            border-left: 5px solid var(--accent);
+            padding-left: 1rem;
+        }
+
+        .seccion-contenido {
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2.5rem;
+        }
+
+        @media (min-width: 900px) {
+            .seccion-contenido { grid-template-columns: 1fr 1fr; }
+            .full-width { grid-column: 1 / -1; }
+        }
+
+        .card h3 {
+            color: var(--primary);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-top: 0;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 0.5rem;
+        }
+
+        .formal-box {
+            background-color: #f0f7ff; /* Azul muy muy pálido */
+            border-radius: 8px;
+            padding: 2rem !important;
+            border: 1px solid #cce5ff;
+        }
+
+        /* CSS Específico para corregir SVGs */
+        .diagrama-container {
+            text-align: center;
+            margin: 2rem auto;
+            padding: 1.5rem;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
+            max-width: 100%;
+            overflow-x: auto; /* Si es muy ancho, permite scroll */
+        }
+        
+        /* Forzar comportamiento correcto del SVG */
+        .diagrama-container svg {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+        
+        /* Evitar que el texto dentro del SVG sea ilegible */
+        .diagrama-container text {
+            font-family: sans-serif;
+        }
+
+        footer {
+            text-align: center;
+            padding: 3rem;
+            background: var(--primary);
+            color: rgba(255,255,255,0.8);
+            margin-top: 4rem;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>30 - Decidibilidad - Problemas decidibles vs no computables.</h1>
+        <a href="javascript:history.back()" class="btn-volver">← Volver</a>
+    </header>
+
+    <main>
+
+        <article class="subtema">
+            <div class="subtema-header">
+                <h2>Problemas Decidibles y la Noción de un Decidor</h2>
+            </div>
+            <div class="seccion-contenido">
+                
+                <div class="card full-width">
+                    <h3>Historia</h3>
+                    <div><p>La búsqueda de la decidibilidad se remonta a principios del siglo XX, con el famoso 'Entscheidungsproblem' (problema de decisión) propuesto por David Hilbert en 1928. Hilbert quería encontrar un algoritmo universal que pudiera decidir la verdad o falsedad de cualquier enunciado matemático. Este desafío inspiró a lógicos y matemáticos como Kurt Gödel, Alonzo Church, Stephen Kleene, Emil Post y Alan Turing. Fue Turing, en 1936, quien proporcionó la formalización de lo que hoy entendemos por 'algoritmo' a través de su Máquina de Turing. Al mismo tiempo que Church con su cálculo lambda, Turing demostró que existían problemas para los cuales tal algoritmo universal no podía existir, sentando las bases de la teoría de la computabilidad y distinguiendo formalmente entre lo que es computable y lo que no lo es, así como los problemas que un algoritmo puede resolver con una respuesta definitiva.</p></div>
+                </div>
+
+                <div class="card full-width formal-box">
+                    <h3>Descripción Formal</h3>
+                    <div><p>Un problema se considera decidible si existe una Máquina de Turing (MT) que puede decidirlo. Una MT que decide un lenguaje L se denomina 'decidor' para L. Formalmente, una Máquina de Turing M = (Q, Σ, Γ, δ, q₀, q_accept, q_reject) se dice que decide un lenguaje L si M acepta todas las cadenas w ∈ L y rechaza todas las cadenas w ∉ L. Lo crucial es que, para todo posible input w ∈ Σ*, M siempre debe terminar su computación, es decir, debe alcanzar el estado q_accept o q_reject en un número finito de pasos. Esto significa que un decidor nunca entra en un bucle infinito. Un lenguaje L es decidible si y solo si existe una MT que lo decide. La clase de lenguajes decidibles se conoce también como la clase de lenguajes recursivos. Esto garantiza que, para cualquier entrada dada a un problema decidible, siempre obtendremos una respuesta 'sí' o 'no' de forma garantizada y en un tiempo finito, aunque este tiempo pueda ser muy largo para ciertos problemas complejos. La capacidad de un decidor de siempre terminar es su característica fundamental.</p></div>
+                    
+                    <div class="diagrama-container">
+                        <svg viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg"><rect x="50" y="80" width="100" height="40" fill="#E0E0E0" stroke="black"/><text x="100" y="105" font-family="Arial" font-size="14" text-anchor="middle">Entrada W</text><path d="M150 100 H200" stroke="black" stroke-width="2"/><rect x="200" y="70" width="120" height="60" fill="#B0E0E6" stroke="black"/><text x="260" y="105" font-family="Arial" font-size="16" text-anchor="middle">DECIDOR (MT)</text><path d="M320 85 H370" stroke="black" stroke-width="2"/><path d="M320 115 H370" stroke="black" stroke-width="2"/><rect x="370" y="70" width="100" height="30" fill="#DDA0DD" stroke="black"/><text x="420" y="88" font-family="Arial" font-size="14" text-anchor="middle">Aceptar</text><rect x="370" y="110" width="100" height="30" fill="#FFB6C1" stroke="black"/><text x="420" y="128" font-family="Arial" font-size="14" text-anchor="middle">Rechazar</text></svg>
+                        <p style="font-size:0.8rem; color:#666; margin-top:1rem; text-align:center;">
+                            <em>Fig: Representación visual generada.</em>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Intuición</h3>
+                    <div><p>Imagina que tienes un problema y quieres una respuesta definitiva: 'sí' o 'no'. Un problema decidible es como tener un manual de instrucciones tan completo que, siguiendo cada paso, siempre llegarás a una conclusión clara. No hay callejones sin salida, ni pasos que te hagan girar en círculos infinitamente. Por ejemplo, decidir si un número es par o impar es decidible: para cualquier número, puedes aplicar la regla de la división por dos y siempre obtendrás una respuesta en un tiempo finito. La clave es la garantía de terminación para <em>todas</em> las entradas posibles. Esto nos da una sensación de seguridad: podemos confiar en que, tarde o temprano, el algoritmo nos dirá la verdad sobre si una entrada pertenece o no al problema en cuestión. Es el ideal de la computación determinista y exhaustiva.</p></div>
+                </div>
+
+                <div class="card">
+                    <h3>Aplicación Real</h3>
+                    <div><p>En la ingeniería de software, muchos problemas fundamentales son decidibles. Por ejemplo, la verificación de la sintaxis de un programa fuente es un problema decidible. Un compilador toma un código y siempre puede decidir si cumple con las reglas gramaticales del lenguaje o no, produciendo un programa ejecutable o un error. La comprobación de tipos estáticos en lenguajes como Java o C++ es otro ejemplo: el compilador decide si las operaciones entre variables son coherentes con sus tipos definidos. La optimización de consultas en bases de datos relacionales, en muchos casos, implica problemas decidibles para determinar la mejor forma de ejecutar una consulta. La búsqueda en un diccionario o una lista finita, la ordenación de elementos, y la mayoría de los algoritmos que usamos diariamente en software tienen la propiedad de ser decidibles, garantizando su terminación y la producción de un resultado definitivo.</p></div>
+                </div>
+
+            </div>
+        </article>
+        
+        <article class="subtema">
+            <div class="subtema-header">
+                <h2>Problemas Reconocibles y Lenguajes Recursivamente Enumerables</h2>
+            </div>
+            <div class="seccion-contenido">
+                
+                <div class="card full-width">
+                    <h3>Historia</h3>
+                    <div><p>Mientras Turing formalizaba la computación, rápidamente surgió la distinción entre problemas para los cuales un algoritmo siempre termina con una respuesta (decidibles) y aquellos donde solo se garantiza una respuesta si la entrada es positiva. Esta categoría, los problemas reconocibles, fue explorada a fondo por Emil Post y otros lógicos en la década de 1940. La clase de lenguajes reconocibles también se conoce como lenguajes recursivamente enumerables (RE), un término que hace referencia a la capacidad de una Máquina de Turing de listar o 'enumerar' todas las cadenas que pertenecen al lenguaje. La diferencia crucial con los decidibles radica en el comportamiento ante entradas negativas: mientras que un decidor siempre rechaza, un reconocedor puede simplemente no terminar su ejecución si la entrada no pertenece al lenguaje, lo que subraya una limitación intrínseca de la computación.</p></div>
+                </div>
+
+                <div class="card full-width formal-box">
+                    <h3>Descripción Formal</h3>
+                    <div><p>Un problema se considera reconocible si existe una Máquina de Turing (MT) que puede reconocerlo. Una MT M se dice que reconoce un lenguaje L si M acepta todas las cadenas w ∈ L, y para las cadenas w ∉ L, M o bien rechaza o bien entra en un bucle infinito (no termina). Es decir, si la entrada pertenece al lenguaje, el reconocedor siempre termina y acepta. Si la entrada no pertenece al lenguaje, el reconoción puede rechazarla o, de manera más problemática, nunca terminar. No hay garantía de que una MT reconocedora termine para entradas que no pertenecen al lenguaje. La clase de lenguajes reconocibles es la clase de lenguajes recursivamente enumerables (RE). Todos los lenguajes decidibles son también reconocibles, ya que un decidor es un tipo especial de reconocedor que siempre termina. Sin embargo, no todos los lenguajes reconocibles son decidibles. El ejemplo paradigmático es el Problema de la Parada (Halting Problem), que es reconocible pero no decidible, como veremos en el siguiente subtema. Un reconocedor puede verse como un algoritmo que 'prueba' cada posibilidad hasta encontrar una que satisfaga la condición del lenguaje, si tal posibilidad existe.</p></div>
+                    
+                    <div class="diagrama-container">
+                        <svg viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg"><rect x="50" y="80" width="100" height="40" fill="#E0E0E0" stroke="black"/><text x="100" y="105" font-family="Arial" font-size="14" text-anchor="middle">Entrada W</text><path d="M150 100 H200" stroke="black" stroke-width="2"/><rect x="200" y="70" width="120" height="60" fill="#C0D9D9" stroke="black"/><text x="260" y="105" font-family="Arial" font-size="16" text-anchor="middle">RECONOCEDOR (MT)</text><path d="M320 85 H370" stroke="black" stroke-width="2"/><path d="M320 115 H370" stroke="black" stroke-width="2"/><rect x="370" y="70" width="100" height="30" fill="#DDA0DD" stroke="black"/><text x="420" y="88" font-family="Arial" font-size="14" text-anchor="middle">Aceptar</text><rect x="370" y="110" width="140" height="30" fill="#FFD700" stroke="black"/><text x="440" y="128" font-family="Arial" font-size="14" text-anchor="middle">Rechazar o Bucle</text></svg>
+                        <p style="font-size:0.8rem; color:#666; margin-top:1rem; text-align:center;">
+                            <em>Fig: Representación visual generada.</em>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Intuición</h3>
+                    <div><p>Piensa en un problema reconocible como un detective buscando una pieza de evidencia. Si la evidencia existe, eventualmente la encontrará y demostrará su caso ('aceptar'). Pero si la evidencia no existe, el detective podría buscar y buscar para siempre sin encontrarla, sin poder nunca decir con certeza que 'no existe' ('rechazar o bucle'). No hay una garantía de que, al final, obtendrás una respuesta de 'no'. Esto es crucial: significa que si un programa está diseñado para reconocer algo, y no te da una respuesta, no puedes saber si es porque lo que busca no existe, o si simplemente no ha terminado de buscar. Es una asimetría fundamental en el poder de la computación.</p></div>
+                </div>
+
+                <div class="card">
+                    <h3>Aplicación Real</h3>
+                    <div><p>Los problemas reconocibles son comunes en áreas donde se busca la verificación de propiedades positivas. Por ejemplo, en la verificación de software, un sistema podría intentar demostrar que un programa tiene una cierta propiedad de seguridad. Si se encuentra una prueba, el programa es 'aceptado' como seguro. Sin embargo, si no se encuentra una prueba en un tiempo razonable, no podemos concluir que el programa sea inseguro; simplemente no hemos podido probar lo contrario (podría estar buscando para siempre). Los antivirus modernos son, en cierto sentido, reconocedores: pueden reconocer patrones de virus conocidos y, si los encuentran, activan una alarma. Pero si un antivirus no encuentra un virus, no significa que el sistema esté libre de ellos; podría haber un virus desconocido o simplemente no reconocido. La búsqueda de soluciones para problemas de optimización complejos, donde encontrar una solución es fácil de verificar pero probar que no hay una mejor es difícil, también cae en esta categoría.</p></div>
+                </div>
+
+            </div>
+        </article>
+        
+        <article class="subtema">
+            <div class="subtema-header">
+                <h2>La Indecidibilidad: Problemas Incomputables y el Problema de la Parada</h2>
+            </div>
+            <div class="seccion-contenido">
+                
+                <div class="card full-width">
+                    <h3>Historia</h3>
+                    <div><p>El concepto de indecidibilidad fue una revelación en la lógica matemática, demostrando las limitaciones inherentes a la computación. Alan Turing, en su seminal artículo de 1936, no solo formalizó el concepto de algoritmo, sino que también presentó el primer ejemplo explícito de un problema indecidible: el Problema de la Parada (Halting Problem). Este descubrimiento fue paralelo a los Teoremas de Incompletitud de Gödel (1931), que demostraban límites fundamentales en los sistemas axiomáticos formales. El trabajo de Turing fue crucial porque estableció que, incluso con la definición más poderosa de lo que significa 'computar', existen preguntas fundamentales que ningún algoritmo universal puede responder con certeza. Esto disipó el 'sueño de Hilbert' de una decidibilidad universal y marcó un hito en la comprensión de la teoría de la computación.</p></div>
+                </div>
+
+                <div class="card full-width formal-box">
+                    <h3>Descripción Formal</h3>
+                    <div><p>Un problema es incomputable o indecidible si no existe ninguna Máquina de Turing (MT) que pueda decidirlo. Es decir, para un problema indecidible L, ninguna MT es un decidor para L. El ejemplo más famoso y fundamental de un problema indecidible es el Problema de la Parada: A_TM = {⟨M, w⟩ | M es una MT y M acepta w}. Otro problema indecidible es el Problema de la Parada mismo, denotado HALT_TM = {⟨M, w⟩ | M es una MT que para en la entrada w}. La prueba de la indecidibilidad de HALT_TM se realiza por contradicción, utilizando una técnica de diagonalización similar a la de Cantor. Asumimos que existe un decidor H para HALT_TM. Este H tomaría ⟨M, w⟩ y siempre terminaría, aceptando si M para en w y rechazando si M no para en w. Luego construimos una nueva MT D que toma como entrada ⟨M⟩ (la descripción de una MT M). D ejecuta H en ⟨M, ⟨M⟩⟩. Si H acepta (M para en ⟨M⟩), entonces D entra en un bucle infinito. Si H rechaza (M no para en ⟨M⟩), entonces D acepta. Ahora, ¿qué sucede si ejecutamos D con su propia descripción como entrada, es decir, D(⟨D⟩)? Si D para en ⟨D⟩, por la construcción de D, debería entrar en un bucle infinito (contradicción). Si D entra en un bucle infinito en ⟨D⟩, por la construcción de D, debería parar (contradicción). Como ambas posibilidades llevan a una contradicción, nuestra suposición inicial de que H existe debe ser falsa. Por lo tanto, HALT_TM es indecidible.</p></div>
+                    
+                    <div class="diagrama-container">
+                        <svg viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg"><rect x="50" y="80" width="100" height="40" fill="#E0E0E0" stroke="black"/><text x="100" y="105" font-family="Arial" font-size="14" text-anchor="middle">Entrada W</text><path d="M150 100 H200" stroke="black" stroke-width="2"/><rect x="200" y="70" width="180" height="60" fill="#FFC0CB" stroke="black"/><text x="290" y="105" font-family="Arial" font-size="16" text-anchor="middle">PROBLEMA INDECIDIBLE</text><path d="M380 100 H430" stroke="black" stroke-width="2"/><text x="515" y="105" font-family="Arial" font-size="24" text-anchor="middle" fill="#FF0000">IMPOSIBLE</text><line x1="450" y1="90" x2="580" y2="120" stroke="#FF0000" stroke-width="3"/><line x1="450" y1="120" x2="580" y2="90" stroke="#FF0000" stroke-width="3"/></svg>
+                        <p style="font-size:0.8rem; color:#666; margin-top:1rem; text-align:center;">
+                            <em>Fig: Representación visual generada.</em>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Intuición</h3>
+                    <div><p>Un problema incomputable es como una pregunta para la que no importa lo inteligente que sea tu algoritmo o lo potente que sea tu ordenador; nunca podrás escribir un programa que dé una respuesta correcta y garantizada para <em>todas</em> las posibles entradas. El ejemplo más famoso es el Problema de la Parada: dada una descripción de un programa y una entrada, ¿este programa terminará su ejecución o se quedará en un bucle infinito? Intuitivamente, parece que deberíamos poder construir un programa que lo averigüe, pero Turing demostró que no es así. Es una limitación fundamental del universo de la computación, similar a los límites de la velocidad de la luz en la física. Significa que hay fronteras que la computación no puede cruzar, no por falta de tecnología, sino por la naturaleza misma de lo que es un 'algoritmo'.</p></div>
+                </div>
+
+                <div class="card">
+                    <h3>Aplicación Real</h3>
+                    <div><p>La existencia de problemas indecidibles tiene profundas implicaciones en la ingeniería de software y la informática. Por ejemplo, no podemos crear un verificador de software universal que, dado cualquier programa, pueda determinar si el programa siempre producirá la salida correcta o si se bloqueará. Esto es una consecuencia directa de la indecidibilidad del Problema de la Parada. Tampoco podemos crear un compilador 'perfecto' que detecte absolutamente todos los errores lógicos o posibles bucles infinitos en cualquier programa. Esto nos obliga a usar heurísticas, métodos formales para propiedades específicas, y pruebas exhaustivas, pero nunca con una garantía del 100% para propiedades generales. En inteligencia artificial, significa que no podemos construir un algoritmo que pueda resolver 'cualquier problema' que se le presente; siempre habrá límites intrínsecos a su capacidad de decisión general. Comprender la indecidibilidad es crucial para establecer expectativas realistas y guiar la investigación y el desarrollo de sistemas computacionales.</p></div>
+                </div>
+
+            </div>
+        </article>
+        
+    </main>
+
+    <footer>
+        <p>Prof. Jorge López-Cifre, PhD © 2026</p>
+    </footer>
+
+</body>
+</html>

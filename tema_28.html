@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>28 - Decidibilidad - Tesis de Church-Turing. - Prof. Jorge López-Cifre</title>
+    <style>
+        :root {
+            --primary: #003366;
+            --accent: #d4af37;
+            --bg: #f8f9fa;
+            --text: #2c3e50;
+            --card-bg: #ffffff;
+            --border: #e9ecef;
+        }
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 0;
+            line-height: 1.7;
+        }
+        /* Tipografía mejorada */
+        p { margin-bottom: 1rem; }
+        strong, b { color: var(--primary); font-weight: 700; }
+        
+        header {
+            background: var(--primary);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        h1 { margin: 0; font-size: 1.25rem; font-weight: 600; }
+        
+        .btn-volver {
+            background: var(--accent);
+            color: var(--primary);
+            text-decoration: none;
+            padding: 0.5rem 1.2rem;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        .btn-volver:hover { 
+            background: #fff; 
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+
+        main {
+            max-width: 1100px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+
+        .subtema {
+            background: var(--card-bg);
+            border-radius: 12px;
+            margin-bottom: 4rem;
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+        
+        .subtema-header {
+            background: linear-gradient(to right, #f8f9fa, #ffffff);
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid var(--border);
+        }
+        .subtema-header h2 { 
+            margin: 0; 
+            color: var(--primary); 
+            font-size: 1.6rem;
+            border-left: 5px solid var(--accent);
+            padding-left: 1rem;
+        }
+
+        .seccion-contenido {
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2.5rem;
+        }
+
+        @media (min-width: 900px) {
+            .seccion-contenido { grid-template-columns: 1fr 1fr; }
+            .full-width { grid-column: 1 / -1; }
+        }
+
+        .card h3 {
+            color: var(--primary);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-top: 0;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 0.5rem;
+        }
+
+        .formal-box {
+            background-color: #f0f7ff; /* Azul muy muy pálido */
+            border-radius: 8px;
+            padding: 2rem !important;
+            border: 1px solid #cce5ff;
+        }
+
+        /* CSS Específico para corregir SVGs */
+        .diagrama-container {
+            text-align: center;
+            margin: 2rem auto;
+            padding: 1.5rem;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
+            max-width: 100%;
+            overflow-x: auto; /* Si es muy ancho, permite scroll */
+        }
+        
+        /* Forzar comportamiento correcto del SVG */
+        .diagrama-container svg {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+        
+        /* Evitar que el texto dentro del SVG sea ilegible */
+        .diagrama-container text {
+            font-family: sans-serif;
+        }
+
+        footer {
+            text-align: center;
+            padding: 3rem;
+            background: var(--primary);
+            color: rgba(255,255,255,0.8);
+            margin-top: 4rem;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>28 - Decidibilidad - Tesis de Church-Turing.</h1>
+        <a href="javascript:history.back()" class="btn-volver">← Volver</a>
+    </header>
+
+    <main>
+
+        <article class="subtema">
+            <div class="subtema-header">
+                <h2>Fundamentos de la Computabilidad y Decidibilidad: ¿Qué Problemas Podemos Resolver?</h2>
+            </div>
+            <div class="seccion-contenido">
+                
+                <div class="card full-width">
+                    <h3>Historia</h3>
+                    <div><p>A principios del siglo XX, la matemática experimentaba una crisis de fundamentos. David Hilbert, en 1900, propuso un programa para formalizar toda la matemática, incluyendo el "Entscheidungsproblem" (problema de decisión): encontrar un algoritmo general que determine la verdad o falsedad de cualquier proposición matemática formal. Este desafío impulsó la búsqueda de una definición rigurosa de "algoritmo" o "computabilidad efectiva". Kurt Gödel, con sus teoremas de incompletitud en los años 30, ya había mostrado límites a la formalización completa. Fue en este fértil terreno donde se gestaron las ideas que llevaron a la formalización de la computación y la decidibilidad. Nombres como Alonzo Church, Alan Turing y Stephen Kleene fueron cruciales para establecer los modelos que definirían qué es intrínsecamente resoluble por métodos mecánicos. La meta era comprender los límites inherentes a la resolución algorítmica de problemas.</p></div>
+                </div>
+
+                <div class="card full-width formal-box">
+                    <h3>Descripción Formal</h3>
+                    <div><p>La computabilidad se formaliza a través de modelos abstractos de computación, siendo el más prominente la Máquina de Turing (MT). Una MT consiste en una cinta infinita, un cabezal de lectura/escritura y un conjunto finito de estados. Un problema es decidible si existe una Máquina de Turing que lo resuelve para cada entrada posible, siempre deteniéndose y produciendo una respuesta de "sí" o "no". Formalmente, un lenguaje L ⊆ Σ* es decidible si existe una MT M que acepta cada cadena w ∈ L y rechaza cada cadena w ∉ L. Esto implica que M se detiene en todas las entradas, garantizando una decisión. La clase de lenguajes decidibles se denomina "lenguajes recursivos". Un lenguaje recursivo es un subconjunto estricto de los lenguajes recursivamente enumerables. Si M se detiene y acepta todas las cadenas en L, pero puede no detenerse para cadenas fuera de L, el lenguaje es recursivamente enumerable (o Turing-reconocible). El concepto de decidibilidad es central para clasificar los problemas computacionales, distinguiendo aquellos para los que existe un procedimiento algorítmico garantizado que siempre termina con una respuesta definitiva, de aquellos que pueden no tenerlo o cuya solución no está garantizada para todas las entradas.</p></div>
+                    
+                    <div class="diagrama-container">
+                        <svg viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg">
+        <rect x="50" y="50" width="150" height="100" fill="#E0F2F7" stroke="#333" stroke-width="2"/>
+        <text x="125" y="105" font-family="Arial" font-size="20" text-anchor="middle" fill="#333">Entrada (w)</text>
+
+        <path d="M200 100 L250 100" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+        <rect x="250" y="50" width="150" height="100" fill="#C8E6C9" stroke="#333" stroke-width="2"/>
+        <text x="325" y="105" font-family="Arial" font-size="20" text-anchor="middle" fill="#333">Máquina de Turing</text>
+        <text x="325" y="125" font-family="Arial" font-size="14" text-anchor="middle" fill="#555">(Decidor)</text>
+
+        <path d="M400 100 L450 100" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+        <rect x="450" y="50" width="100" height="100" fill="#FFECB3" stroke="#333" stroke-width="2"/>
+        <text x="500" y="95" font-family="Arial" font-size="20" text-anchor="middle" fill="#333">Salida</text>
+        <text x="500" y="115" font-family="Arial" font-size="18" text-anchor="middle" fill="#555">("Sí" / "No")</text>
+
+        <defs>
+            <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
+                <polygon points="0 0, 10 3.5, 0 7" fill="#333" />
+            </marker>
+        </defs>
+    </svg>
+                        <p style="font-size:0.8rem; color:#666; margin-top:1rem; text-align:center;">
+                            <em>Fig: Representación visual generada.</em>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Intuición</h3>
+                    <div><p>Imagina que tienes un problema y quieres saber si hay una "receta" infalible para resolverlo. Un problema es decidible si puedes diseñar una serie de instrucciones (un algoritmo) que, sin importar cuál sea la entrada válida para ese problema, siempre te dará una respuesta correcta en un tiempo finito. Piensa en verificar si un número entero es par o impar: siempre puedes dividirlo por dos y observar el resto; la respuesta es siempre inmediata y clara. O considera el problema de determinar si una palabra pertenece al vocabulario de un diccionario específico: puedes buscarla sistemáticamente y siempre encontrarás una respuesta ("sí, está" o "no, no está"). Si un problema es decidible, significa que no hay ambigüedad ni la posibilidad de que tu algoritmo se quede atascado en un bucle infinito o te deje sin una respuesta clara. Es la certeza de que, con suficiente tiempo, llegarás a una conclusión definitiva para cualquier instancia del problema.</p></div>
+                </div>
+
+                <div class="card">
+                    <h3>Aplicación Real</h3>
+                    <div><p>En la ingeniería de software, la decidibilidad es un concepto fundamental, aunque a menudo tácito, que informa nuestras expectativas sobre lo que podemos automatizar. Cuando diseñamos un compilador, por ejemplo, el proceso de análisis sintáctico (parsing) de un lenguaje de programación es un problema decidible. Esto nos garantiza que siempre existirá un algoritmo para determinar si un programa fuente es sintácticamente correcto o no, y el compilador siempre nos dará una respuesta. Las consultas a bases de datos relacionales, las operaciones de búsqueda en estructuras de datos finitas, o la validación de la corrección de un formato de entrada en un formulario web son también ejemplos de problemas decidibles. Saber que un problema es decidible nos da la confianza de que podemos construir una solución algorítmica completa y fiable. Por el contrario, si un problema no fuera decidible, cualquier intento de crear un algoritmo universal que siempre termine y dé una respuesta correcta estaría inherentemente condenado al fracaso, lo que nos obliga a buscar soluciones aproximadas, heurísticas o a restringir el ámbito del problema.</p></div>
+                </div>
+
+            </div>
+        </article>
+        
+        <article class="subtema">
+            <div class="subtema-header">
+                <h2>La Tesis de Church-Turing: La Equivalencia Fundamental de la Computación</h2>
+            </div>
+            <div class="seccion-contenido">
+                
+                <div class="card full-width">
+                    <h3>Historia</h3>
+                    <div><p>La Tesis de Church-Turing surge de trabajos independientes realizados en la década de 1930. Alonzo Church, un matemático estadounidense, desarrolló el cálculo λ (lambda-calculus) en 1932 como un formalismo para funciones computables, enfocándose en la manipulación de expresiones simbólicas. Poco después, en 1936, Alan Turing, un brillante matemático británico, introdujo el concepto de la Máquina de Turing, un modelo abstracto de computación que emulaba las operaciones paso a paso de un calculista humano con lápiz y papel. Ambos modelos, aunque muy diferentes en su naturaleza y enfoque, resultaron ser equivalentes en su poder computacional: lo que uno podía computar, el otro también podía. La confluencia de estos hallazgos, junto con los trabajos de Stephen Kleene sobre funciones recursivas, llevó a la formulación de la Tesis de Church-Turing, que postulaba que estos modelos capturaban la noción intuitiva de "computabilidad efectiva". Este fue un momento crucial para definir los límites de lo que es computable.</p></div>
+                </div>
+
+                <div class="card full-width formal-box">
+                    <h3>Descripción Formal</h3>
+                    <div><p>La Tesis de Church-Turing postula que cualquier función que sea "efectivamente calculable" por un ser humano utilizando un algoritmo finito de pasos bien definidos, puede ser calculada por una Máquina de Turing (MT). O, de manera equivalente, cualquier función que pueda ser calculada por algún modelo de computación "razonable" puede ser calculada por una MT. Es importante destacar que esta afirmación no es un teorema que pueda ser probado matemáticamente, ya que "efectivamente calculable" es una noción intuitiva y no una definición formal que admita una demostración formal; más bien, es una tesis o una hipótesis ampliamente aceptada por la comunidad científica debido a la abrumadora evidencia empírica y teórica. Su fuerza radica en la equivalencia demostrada entre numerosos modelos de computación: el cálculo λ de Church, las funciones recursivas parciales de Kleene y Gödel, las máquinas de Post, las máquinas de registros, y, fundamentalmente, todos los lenguajes de programación modernos. Todos estos modelos tienen el mismo poder computacional que la MT, lo que refuerza la idea de que la MT ha capturado la esencia universal de la computación algorítmica.</p></div>
+                    
+                    <div class="diagrama-container">
+                        <svg viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg">
+        <rect x="50" y="50" width="100" height="100" fill="#E3F2FD" stroke="#333" stroke-width="2"/>
+        <text x="100" y="105" font-family="Arial" font-size="16" text-anchor="middle" fill="#333">Cálculo λ</text>
+
+        <rect x="250" y="50" width="100" height="100" fill="#E8F5E9" stroke="#333" stroke-width="2"/>
+        <text x="300" y="105" font-family="Arial" font-size="16" text-anchor="middle" fill="#333">Máquina de</text>
+        <text x="300" y="125" font-family="Arial" font-size="16" text-anchor="middle" fill="#333">Turing</text>
+
+        <rect x="450" y="50" width="100" height="100" fill="#FFECB3" stroke="#333" stroke-width="2"/>
+        <text x="500" y="105" font-family="Arial" font-size="16" text-anchor="middle" fill="#333">Funciones</text>
+        <text x="500" y="125" font-family="Arial" font-size="16" text-anchor="middle" fill="#333">Recursivas</text>
+
+        <path d="M150 100 Q200 70 250 100" stroke="#333" stroke-width="2" fill="none" marker-end="url(#arrowhead)" marker-start="url(#arrowhead)"/>
+        <path d="M350 100 Q400 70 450 100" stroke="#333" stroke-width="2" fill="none" marker-end="url(#arrowhead)" marker-start="url(#arrowhead)"/>
+        <path d="M150 100 Q300 130 450 100" stroke="#333" stroke-width="2" fill="none" marker-end="url(#arrowhead)" marker-start="url(#arrowhead)"/>
+        <text x="300" y="30" font-family="Arial" font-size="14" text-anchor="middle" fill="#555">Equivalencia Computacional</text>
+
+        <defs>
+            <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
+                <polygon points="0 0, 10 3.5, 0 7" fill="#333" />
+            </marker>
+        </defs>
+    </svg>
+                        <p style="font-size:0.8rem; color:#666; margin-top:1rem; text-align:center;">
+                            <em>Fig: Representación visual generada.</em>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Intuición</h3>
+                    <div><p>Piensa en la Tesis de Church-Turing como la afirmación de que todos los métodos "razonables" para hacer cálculos son fundamentalmente iguales en lo que respecta a qué problemas pueden resolver. Imagina que tienes una receta muy detallada para hornear un pastel. No importa si la sigues tú con tus manos, si le pides a un robot de cocina que lo haga, o si la conviertes en un programa para una impresora 3D de alimentos: el pastel resultante será el mismo, siempre y cuando todos sigan las instrucciones al pie de la letra. De manera similar, la Tesis de Church-Turing dice que, si un problema puede ser resuelto por una serie de pasos bien definidos (un algoritmo) que puedes enseñar a otra persona o escribir en cualquier lenguaje de programación, entonces cualquier "computadora universal" (como una Máquina de Turing) puede resolverlo. No hay un "superordenador" teórico que pueda resolver problemas que una Máquina de Turing no pueda.</p></div>
+                </div>
+
+                <div class="card">
+                    <h3>Aplicación Real</h3>
+                    <div><p>La Tesis de Church-Turing es la piedra angular teórica de toda la informática y la base conceptual de lo que entendemos por "computadora". Implica que cualquier algoritmo que diseñemos hoy para ejecutarse en un ordenador moderno, con su complejo procesador y gigabytes de memoria, podría, en principio, ser implementado y ejecutado por una simple Máquina de Turing. Esto es lo que fundamenta la noción de "máquina universal" y la universalidad de los lenguajes de programación. Nos permite hablar de "computabilidad" como una propiedad intrínseca de un problema, independiente de la tecnología concreta o del paradigma de programación. Las implicaciones prácticas son vastas: valida la existencia de lenguajes de programación de propósito general que son Turing-completos, asegura la portabilidad teórica de algoritmos entre diferentes arquitecturas y sistemas operativos, y establece que podemos estudiar los límites fundamentales de la computación sin estar atados a detalles de implementación específicos de hardware o software.</p></div>
+                </div>
+
+            </div>
+        </article>
+        
+        <article class="subtema">
+            <div class="subtema-header">
+                <h2>Límites Infranqueables: Problemas Indecidibles y el Problema de la Parada</h2>
+            </div>
+            <div class="seccion-contenido">
+                
+                <div class="card full-width">
+                    <h3>Historia</h3>
+                    <div><p>La contribución más revolucionaria de Alan Turing en su artículo de 1936, "On Computable Numbers, with an Application to the Entscheidungsproblem", no solo fue definir la Máquina de Turing como un modelo formal de computación, sino también demostrar de manera contundente que existen problemas para los cuales ningún algoritmo puede proporcionar una solución general. Este descubrimiento sorprendente refutó el famoso "Entscheidungsproblem" de Hilbert, que buscaba un procedimiento mecánico para decidir la verdad de cualquier afirmación matemática. Turing, utilizando un ingenioso argumento de diagonalización similar al de Cantor, presentó el "Problema de la Parada" como el ejemplo canónico de un problema intrínsecamente indecidible. Este hallazgo no solo limitó las aspiraciones del formalismo matemático de Hilbert, sino que también estableció límites fundamentales e infranqueables a lo que las computadoras pueden lograr, incluso con recursos ilimitados de tiempo y memoria, marcando un hito en la comprensión de la teoría de la computación.</p></div>
+                </div>
+
+                <div class="card full-width formal-box">
+                    <h3>Descripción Formal</h3>
+                    <div><p>Un problema es indecidible si no existe una Máquina de Turing (MT) que pueda resolverlo para todas las entradas posibles, es decir, ninguna MT que se detenga en todas las entradas y dé una respuesta correcta de "sí" o "no". El ejemplo canónico es el Problema de la Parada (HP): "Dado un programa P (codificado como una MT) y una entrada I para P, ¿determinará si P se detiene o entra en un bucle infinito en la entrada I?" Turing demostró su indecidibilidad por contradicción. Asumamos que existe una MT H (un "halting decider") que resuelve el HP. H tomaría (P, I) y siempre se detendría, produciendo "sí" (P se detiene) o "no" (P no se detiene). Construimos una nueva máquina D que toma un programa P como entrada. D hace lo siguiente: ejecuta H(P, P). Si H dice que P(P) se detiene, entonces D entra deliberadamente en un bucle infinito; si H dice que P(P) entra en bucle infinito, entonces D se detiene. Ahora, ¿qué ocurre si ejecutamos D(D)? Si D(D) se detiene, por la construcción de D, H(D, D) debe haber dicho que D(D) entra en bucle infinito (¡una contradicción!). Si D(D) entra en bucle infinito, por la construcción de D, H(D, D) debe haber dicho que D(D) se detiene (¡otra contradicción!). Ambas suposiciones llevan a contradicciones lógicas, por lo tanto, la máquina H no puede existir. La indecidibilidad es una propiedad inherente del problema.</p></div>
+                    
+                    <div class="diagrama-container">
+                        <svg viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg">
+        <rect x="50" y="50" width="100" height="100" fill="#E0F2F7" stroke="#333" stroke-width="2"/>
+        <text x="100" y="90" font-family="Arial" font-size="16" text-anchor="middle" fill="#333">Programa</text>
+        <text x="100" y="110" font-family="Arial" font-size="16" text-anchor="middle" fill="#333">(P)</text>
+        <text x="100" y="130" font-family="Arial" font-size="16" text-anchor="middle" fill="#333">Entrada (I)</text>
+
+        <path d="M150 100 L200 100" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+
+        <rect x="200" y="50" width="200" height="100" fill="#FFCDD2" stroke="#333" stroke-width="2"/>
+        <text x="300" y="105" font-family="Arial" font-size="20" text-anchor="middle" fill="#333">¿Problema de la Parada?</text>
+        <text x="300" y="125" font-family="Arial" font-size="14" text-anchor="middle" fill="#555">(Indecidible)</text>
+
+        <path d="M400 100 L450 100" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+
+        <rect x="450" y="50" width="100" height="100" fill="#FFFDE7" stroke="#333" stroke-width="2"/>
+        <text x="500" y="95" font-family="Arial" font-size="20" text-anchor="middle" fill="#333">Salida</text>
+        <text x="500" y="115" font-family="Arial" font-size="18" text-anchor="middle" fill="#555">("Sí" / "No")</text>
+        <text x="500" y="135" font-family="Arial" font-size="14" text-anchor="middle" fill="#F44336">(Imposible)</text>
+
+        <defs>
+            <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
+                <polygon points="0 0, 10 3.5, 0 7" fill="#333" />
+            </marker>
+        </defs>
+    </svg>
+                        <p style="font-size:0.8rem; color:#666; margin-top:1rem; text-align:center;">
+                            <em>Fig: Representación visual generada.</em>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Intuición</h3>
+                    <div><p>Imagina que eres un programador y quieres crear el "debugger definitivo": un programa mágico que pueda tomar cualquier otro programa, junto con sus datos de entrada, y decirte siempre y con certeza si ese programa terminará su ejecución o si se quedará atascado en un bucle infinito. Sería increíble, ¿verdad? Podrías detectar todos los errores de bucle infinito antes de que causen problemas. Sin embargo, el Problema de la Parada nos dice que ese debugger definitivo es imposible de construir. No importa lo inteligente que seas, cuántos recursos computacionales tengas o cuántas reglas intentes aplicar; siempre habrá al menos un programa para el cual tu "debugger mágico" no podrá dar una respuesta correcta y garantizada sin equivocarse o entrar en su propio bucle. Es una limitación fundamental de la computación inherente a la naturaleza de los algoritmos, no de la tecnología o de nuestra habilidad para programar mejor.</p></div>
+                </div>
+
+                <div class="card">
+                    <h3>Aplicación Real</h3>
+                    <div><p>La indecidibilidad del Problema de la Parada tiene profundas implicaciones prácticas en la ingeniería de software y la teoría de la computación. Explica por qué no podemos construir herramientas de análisis estático perfectas que puedan, de forma automática y para cualquier programa arbitrario, detectar la presencia de bucles infinitos, interbloqueos (deadlocks) o violaciones de ciertas propiedades de seguridad muy generales. Esto significa que los desarrolladores deben depender de técnicas como las pruebas exhaustivas (que solo cubren un subconjunto finito de entradas), la verificación formal (aplicable a clases específicas y restringidas de programas), o la programación defensiva. También subraya la necesidad de que los programadores comprendan y gestionen la complejidad de la lógica de sus programas, en lugar de depender de una "caja negra" universal que resuelva mágicamente problemas de terminación o corrección. La imposibilidad de un verificador universal de paradas nos obliga a ser más rigurosos en el diseño de programas y sistemas, aceptando que hay límites a lo que la automatización pura puede lograr en el análisis del comportamiento arbitrario del software.</p></div>
+                </div>
+
+            </div>
+        </article>
+        
+    </main>
+
+    <footer>
+        <p>Prof. Jorge López-Cifre, PhD © 2026</p>
+    </footer>
+
+</body>
+</html>

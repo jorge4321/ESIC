@@ -3,275 +3,258 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>24 - Máquinas de Turing - Arquitectura: Cinta infinita y cabezal. - Prof. Jorge López-Cifre</title>
+    <title>24 - Máquinas de Turing - Arquitectura: Cinta infinita y cabezal.</title>
     <style>
-        :root {
-            --primary: #003366;
-            --accent: #d4af37;
-            --bg: #f8f9fa;
-            --text: #2c3e50;
-            --card-bg: #ffffff;
-            --border: #e9ecef;
-        }
-        body {
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--bg);
-            color: var(--text);
-            margin: 0;
-            padding: 0;
-            line-height: 1.7;
-        }
-        /* Tipografía mejorada */
-        p { margin-bottom: 1rem; }
-        strong, b { color: var(--primary); font-weight: 700; }
-        
-        header {
-            background: var(--primary);
-            color: white;
-            padding: 1rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
-        h1 { margin: 0; font-size: 1.25rem; font-weight: 600; }
-        
-        .btn-volver {
-            background: var(--accent);
-            color: var(--primary);
-            text-decoration: none;
-            padding: 0.5rem 1.2rem;
-            border-radius: 50px;
-            font-weight: bold;
-            font-size: 0.9rem;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-        }
-        .btn-volver:hover { 
+        body { font-family: sans-serif; background: #f4f4f9; color: #333; margin: 0; padding: 20px; }
+        header { background: #2c3e50; color: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; }
+        h1 { margin: 0; }
+        .subtema { background: white; padding: 30px; margin-bottom: 40px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        h2 { color: #2980b9; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+        h3 { color: #7f8c8d; font-size: 0.9em; text-transform: uppercase; margin-top: 25px; letter-spacing: 1px; }
+        .diagrama-box { 
+            text-align: center; 
+            margin: 30px 0; 
+            padding: 20px; 
             background: #fff; 
-            transform: translateY(-1px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-        }
-
-        main {
-            max-width: 1100px;
-            margin: 2rem auto;
-            padding: 0 1.5rem;
-        }
-
-        .subtema {
-            background: var(--card-bg);
-            border-radius: 12px;
-            margin-bottom: 4rem;
-            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
-            overflow: hidden;
-            border: 1px solid var(--border);
-        }
-        
-        .subtema-header {
-            background: linear-gradient(to right, #f8f9fa, #ffffff);
-            padding: 1.5rem 2rem;
-            border-bottom: 1px solid var(--border);
-        }
-        .subtema-header h2 { 
-            margin: 0; 
-            color: var(--primary); 
-            font-size: 1.6rem;
-            border-left: 5px solid var(--accent);
-            padding-left: 1rem;
-        }
-
-        .seccion-contenido {
-            padding: 2rem;
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 2.5rem;
-        }
-
-        @media (min-width: 900px) {
-            .seccion-contenido { grid-template-columns: 1fr 1fr; }
-            .full-width { grid-column: 1 / -1; }
-        }
-
-        .card h3 {
-            color: var(--primary);
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            margin-top: 0;
-            margin-bottom: 1rem;
-            border-bottom: 1px solid #ddd;
-            padding-bottom: 0.5rem;
-        }
-
-        .formal-box {
-            background-color: #f0f7ff; /* Azul muy muy pálido */
+            border: 1px solid #eee; 
             border-radius: 8px;
-            padding: 2rem !important;
-            border: 1px solid #cce5ff;
         }
-
-        /* CSS Específico para corregir SVGs */
-        .diagrama-container {
-            text-align: center;
-            margin: 2rem auto;
-            padding: 1.5rem;
-            background: white;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
-            max-width: 100%;
-            overflow-x: auto; /* Si es muy ancho, permite scroll */
-        }
-        
-        /* Forzar comportamiento correcto del SVG */
-        .diagrama-container svg {
-            max-width: 100%;
-            height: auto;
-            display: block;
-            margin: 0 auto;
-        }
-        
-        /* Evitar que el texto dentro del SVG sea ilegible */
-        .diagrama-container text {
-            font-family: sans-serif;
-        }
-
-        footer {
-            text-align: center;
-            padding: 3rem;
-            background: var(--primary);
-            color: rgba(255,255,255,0.8);
-            margin-top: 4rem;
-            font-size: 0.9rem;
-        }
+        /* Estilos Markdown */
+        p { line-height: 1.6; }
+        strong { color: #2c3e50; }
+        code { background: #f0f0f0; padding: 2px 5px; border-radius: 3px; font-family: monospace; }
     </style>
 </head>
 <body>
-
-    <header>
-        <h1>24 - Máquinas de Turing - Arquitectura: Cinta infinita y cabezal.</h1>
-        <a href="javascript:history.back()" class="btn-volver">← Volver</a>
-    </header>
-
+    <header><h1>24 - Máquinas de Turing - Arquitectura: Cinta infinita y cabezal.</h1></header>
     <main>
 
         <article class="subtema">
-            <div class="subtema-header">
-                <h2>La Cinta Infinita: Memoria Universal y Almacenamiento Teórico</h2>
+            <h2>La Cinta Infinita: El Soporte Universal de Datos</h2>
+            
+            <h3>Historia</h3>
+            <div><p>En 1936, Alan Turing publicó su influyente artículo 'On Computable Numbers, with an Application to the Entscheidungsproblem'. En este trabajo, Turing no buscaba diseñar una computadora física, sino modelar el proceso mental de un humano (al que llamó 'computador') realizando cálculos matemáticos. Observó que los seres humanos utilizan papel cuadriculado para realizar operaciones, y que este papel, aunque finito en la práctica, puede considerarse potencialmente infinito. Así nació el concepto de la cinta de la Máquina de Turing (MT). A diferencia de los autómatas finitos que consumen una entrada y terminan, la cinta proporcionó un espacio de trabajo donde la información no solo se lee, sino que se almacena y recupera, permitiendo que la máquina tenga una memoria 'externa' ilimitada. Este concepto fue revolucionario porque separó por primera vez la lógica de control (estados) de los datos (cinta).</p></div>
+
+            <h3>Descripción Formal</h3>
+            <div><p>La cinta se define formalmente como una secuencia infinita de celdas, cada una capaz de contener un símbolo de un alfabeto de cinta Γ. El alfabeto de cinta debe incluir un símbolo especial denominado 'blanco' (representado comúnmente como ␣ o B), que es el único símbolo que puede aparecer en la cinta un número infinito de veces. Matemáticamente, la configuración de la cinta en un momento dado se puede representar como una función T: ℤ → Γ, donde ℤ representa las posiciones enteras de la cinta. Aunque la cinta es físicamente infinita, en cualquier momento T, solo un número finito de celdas contiene símbolos distintos al blanco. La cinta sirve como el único medio de entrada, salida y almacenamiento temporal. La cadena de entrada inicial w ∈ Σ* (donde Σ ⊂ Γ) se coloca en la cinta comenzando desde una posición específica (usualmente la posición 0), y el resto de la cinta se inicializa con el símbolo blanco. La capacidad de expandirse indefinidamente hacia la derecha (y en algunos modelos hacia la izquierda) garantiza que la máquina nunca se quede sin memoria, cumpliendo con la definición de computabilidad de Turing.</p></div>
+            
+            <div class="diagrama-box">
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg style="max-width:100%; height:auto;" data-width="332pt" data-height="67pt"
+ viewBox="0.00 0.00 332.00 67.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 63)">
+<title>G</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-63 328,-63 328,4 -4,4"/>
+<text text-anchor="middle" x="162" y="-7.8" font-family="Times,serif" font-size="14.00">Representación de la Cinta</text>
+<!-- cell1 -->
+<g id="node1" class="node">
+<title>cell1</title>
+<polygon fill="none" stroke="black" points="36,-59 0,-59 0,-23 36,-23 36,-59"/>
+<text text-anchor="middle" x="18" y="-37.9" font-family="Helvetica,sans-Serif" font-size="12.00">a</text>
+</g>
+<!-- cell2 -->
+<g id="node2" class="node">
+<title>cell2</title>
+<polygon fill="none" stroke="black" points="108,-59 72,-59 72,-23 108,-23 108,-59"/>
+<text text-anchor="middle" x="90" y="-37.9" font-family="Helvetica,sans-Serif" font-size="12.00">b</text>
+</g>
+<!-- cell1&#45;&gt;cell2 -->
+<g id="edge1" class="edge">
+<title>cell1&#45;&gt;cell2</title>
+<path fill="none" stroke="black" d="M36.3,-41C44.02,-41 53.29,-41 61.89,-41"/>
+<polygon fill="black" stroke="black" points="61.9,-44.5 71.9,-41 61.9,-37.5 61.9,-44.5"/>
+</g>
+<!-- cell3 -->
+<g id="node3" class="node">
+<title>cell3</title>
+<polygon fill="none" stroke="black" points="180,-59 144,-59 144,-23 180,-23 180,-59"/>
+<text text-anchor="middle" x="162" y="-37.9" font-family="Helvetica,sans-Serif" font-size="12.00">a</text>
+</g>
+<!-- cell2&#45;&gt;cell3 -->
+<g id="edge2" class="edge">
+<title>cell2&#45;&gt;cell3</title>
+<path fill="none" stroke="black" d="M108.3,-41C116.02,-41 125.29,-41 133.89,-41"/>
+<polygon fill="black" stroke="black" points="133.9,-44.5 143.9,-41 133.9,-37.5 133.9,-44.5"/>
+</g>
+<!-- cell4 -->
+<g id="node4" class="node">
+<title>cell4</title>
+<polygon fill="none" stroke="black" points="252,-59 216,-59 216,-23 252,-23 252,-59"/>
+<text text-anchor="middle" x="234" y="-37.9" font-family="Helvetica,sans-Serif" font-size="12.00">␣</text>
+</g>
+<!-- cell3&#45;&gt;cell4 -->
+<g id="edge3" class="edge">
+<title>cell3&#45;&gt;cell4</title>
+<path fill="none" stroke="black" d="M180.3,-41C188.02,-41 197.29,-41 205.89,-41"/>
+<polygon fill="black" stroke="black" points="205.9,-44.5 215.9,-41 205.9,-37.5 205.9,-44.5"/>
+</g>
+<!-- cell5 -->
+<g id="node5" class="node">
+<title>cell5</title>
+<polygon fill="none" stroke="black" points="324,-59 288,-59 288,-23 324,-23 324,-59"/>
+<text text-anchor="middle" x="306" y="-37.9" font-family="Helvetica,sans-Serif" font-size="12.00">␣</text>
+</g>
+<!-- cell4&#45;&gt;cell5 -->
+<g id="edge4" class="edge">
+<title>cell4&#45;&gt;cell5</title>
+<path fill="none" stroke="black" d="M252.3,-41C260.02,-41 269.29,-41 277.89,-41"/>
+<polygon fill="black" stroke="black" points="277.9,-44.5 287.9,-41 277.9,-37.5 277.9,-44.5"/>
+</g>
+</g>
+</svg>
+
+                <p style="font-size:0.8em; color:#999">Diagrama generado automáticamente</p>
             </div>
-            <div class="seccion-contenido">
-                
-                <div class="card full-width">
-                    <h3>Historia</h3>
-                    <div><p>El concepto de la cinta infinita es fundamental para entender la Máquina de Turing, ideada por Alan Turing en 1936. En su seminal artículo 'On Computable Numbers, with an Application to the Entscheidungsproblem', Turing buscó formalizar el concepto de 'computabilidad'. En una época donde las computadoras eran 'humanos que computaban', la cinta representaba el papel o el cuaderno donde un calculador humano escribía los pasos intermedios de un cálculo. La idea de que esta cinta pudiera ser 'infinita' en ambas direcciones era crucial. No se trataba de una capacidad física ilimitada, sino de una abstracción que garantizaba que la máquina nunca se detendría por falta de espacio para almacenar datos o resultados, una limitación que los dispositivos computacionales reales sí poseen. Esta abstracción fue clave para el desarrollo de la tesis de Church-Turing, que postula que cualquier función computable puede ser computada por una Máquina de Turing.</p></div>
-                </div>
 
-                <div class="card full-width formal-box">
-                    <h3>Descripción Formal</h3>
-                    <div><p>La cinta infinita de una Máquina de Turing (MT) se concibe como una secuencia lineal de celdas, cada una de las cuales puede contener un único símbolo de un alfabeto de la cinta Γ. Este alfabeto incluye un símbolo especial, el 'blanco' (B), que representa una celda vacía. Formalmente, si Σ es el alfabeto de entrada de la máquina (los símbolos que forman la entrada inicial), entonces Γ debe incluir a Σ y al símbolo B (Γ ⊇ Σ ∪ {B}). La cinta se extiende teóricamente al infinito en ambas direcciones (izquierda y derecha), lo que significa que siempre hay espacio disponible para escribir nuevos símbolos o para expandir el cómputo. En el instante inicial, una porción finita de la cinta contiene la palabra de entrada, mientras que todas las demás celdas están ocupadas por el símbolo B. La máquina no necesita saber la longitud de la entrada de antemano. Este modelo de memoria permite una flexibilidad ilimitada para almacenar y recuperar información a medida que avanza la computación, siendo la base de su poder computacional ilimitado en teoría.</p></div>
-                    
-                    <div class="diagrama-container">
-                        <svg viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg"><style>rect { fill: #f0f0f0; stroke: #333; stroke-width: 1;} text { font-family: sans-serif; font-size: 18px; fill: #333; } path { stroke: #666; stroke-width: 2; fill: none; marker-end: url(#arrowhead); }</style><defs><marker id="arrowhead" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7"></polygon></marker></defs><rect x="50" y="80" width="500" height="40" rx="5" ry="5"/><rect x="50" y="80" width="40" height="40"/><text x="65" y="105">B</text><rect x="90" y="80" width="40" height="40"/><text x="105" y="105">a</text><rect x="130" y="80" width="40" height="40"/><text x="145" y="105">b</text><rect x="170" y="80" width="40" height="40"/><text x="185" y="105">c</text><rect x="210" y="80" width="40" height="40"/><text x="225" y="105">B</text><rect x="250" y="80" width="40" height="40"/><text x="265" y="105">B</text><rect x="290" y="80" width="40" height="40"/><text x="305" y="105">x</text><rect x="330" y="80" width="40" height="40"/><text x="345" y="105">y</text><rect x="370" y="80" width="40" height="40"/><text x="385" y="105">z</text><rect x="410" y="80" width="40" height="40"/><text x="425" y="105">B</text><rect x="450" y="80" width="40" height="40"/><text x="465" y="105">B</text><rect x="490" y="80" width="40" height="40"/><text x="505" y="105">B</text><path d="M 30 100 H 45" marker-end="url(#arrowhead)"/><path d="M 555 100 H 570" marker-end="url(#arrowhead)"/><text x="40" y="65" style="font-size: 14px;">Cinta Infinita</text></svg>
-                        <p style="font-size:0.8rem; color:#666; margin-top:1rem; text-align:center;">
-                            <em>Fig: Representación visual generada.</em>
-                        </p>
-                    </div>
-                </div>
+            <h3>Intuición</h3>
+            <div><p>Imagina una cinta cinematográfica que se extiende para siempre en ambas direcciones. Esta cinta está dividida en cuadros o celdas individuales. En cada cuadro, puedes escribir una sola letra o número. La cinta es tu cuaderno de notas; puedes escribir algo en un cuadro, moverte diez cuadros a la derecha para leer lo que escribiste antes, y luego regresar a borrarlo. No importa cuán largo sea el cálculo que estés haciendo, nunca te quedarás sin cuadros para escribir. En el mundo de la informática moderna, la cinta es el equivalente conceptual a una memoria RAM de tamaño ilimitado. A diferencia de un archivo de texto que solo lees de principio a fin, la cinta de Turing te permite saltar a cualquier parte, lo que la convierte en un dispositivo de 'acceso aleatorio' secuencial. Es la diferencia entre seguir un camino recto y tener un desierto infinito donde puedes dejar rastro y volver a él.</p></div>
 
-                <div class="card">
-                    <h3>Intuición</h3>
-                    <div><p>Imagina la cinta infinita como un rollo de papel que nunca se acaba, extendiéndose a tu izquierda y a tu derecha. Cada celda es como un pequeño cuadrado en el papel donde puedes escribir una sola letra o número. Cuando empiezas, tienes una frase escrita en alguna parte del centro, y el resto del papel está en blanco. La clave es que no importa cuán largo sea el cálculo, nunca te quedarás sin espacio para escribir. Esto es crucial porque nos permite separar la limitación de la 'memoria' de la limitación inherente del 'problema' a resolver. Si un problema no puede ser resuelto por una Máquina de Turing, no es porque 'no tenga suficiente memoria', sino porque el problema es intrínsecamente irresoluble por cualquier proceso algorítmico, sin importar cuánta memoria se le dé. Es una idealización que permite estudiar los límites fundamentales de lo computable.</p></div>
-                </div>
-
-                <div class="card">
-                    <h3>Aplicación Real</h3>
-                    <div><p>Aunque ninguna computadora física tiene una cinta verdaderamente 'infinita', el concepto subyacente de la cinta de Turing se ha manifestado en la arquitectura de la memoria de las computadoras modernas. Un disco duro o la memoria RAM pueden verse como aproximaciones finitas de esta cinta. Los sistemas operativos gestionan un espacio de direcciones de memoria virtual que, aunque no infinito, es mucho más grande que la RAM física, dando la ilusión de una gran disponibilidad de memoria. Además, en la ingeniería de software, la 'cinta' se refleja en estructuras de datos como arrays, listas enlazadas o flujos de datos (streams) que pueden crecer dinámicamente. Cuando programamos, a menudo no nos preocupamos por quedarnos sin memoria para almacenar una variable o un elemento de una lista, confiando en que el sistema operativo o el hardware proporcionarán más si es necesario, replicando en cierta medida la despreocupación por el espacio de la cinta infinita. Es un modelo teórico que informa el diseño de hardware y software al establecer los límites superiores de lo que es posible computar.</p></div>
-                </div>
-
-            </div>
+            <h3>Aplicación</h3>
+            <div><p>La cinta infinita es el pilar de la complejidad computacional. Gracias a este concepto, podemos definir las clases de complejidad P y NP. En la práctica, aunque no existen cintas físicas infinitas, el concepto se aplica en la gestión de memoria virtual de los sistemas operativos modernos, donde el disco duro actúa como una extensión de la RAM, simulando un espacio de direccionamiento mucho mayor al físico. También es la base de los lenguajes de programación de 'bajo nivel' como Brainfuck, y define los límites de lo que una computadora puede procesar. Si un problema no puede resolverse en una cinta infinita con un número finito de pasos, se dice que es 'indecidible'.</p></div>
         </article>
         
         <article class="subtema">
-            <div class="subtema-header">
-                <h2>El Cabezal de Lectura/Escritura: El Executor de Operaciones Primitivas</h2>
+            <h2>El Cabezal de Lectura y Escritura: El Agente de Acción</h2>
+            
+            <h3>Historia</h3>
+            <div><p>El desarrollo del cabezal como concepto mecánico surgió de la necesidad de Turing de describir cómo se interactúa con la cinta. En la década de 1930, los sistemas de registro más avanzados eran las cintas perforadas y los teletipos. Turing abstrajo estas máquinas para imaginar un dispositivo que pudiera no solo 'ver' lo que hay en una celda, sino también cambiarlo. Este componente es el puente entre el mundo estático de los datos (la cinta) y el mundo dinámico de la lógica (los estados internos). El cabezal eliminó la necesidad de que la máquina 'viera' toda la cinta a la vez, simplificando el proceso a una serie de pasos locales: observar, decidir, actuar y moverse. Esta visión local fue fundamental para demostrar que comportamientos complejos surgen de reglas extremadamente simples.</p></div>
+
+            <h3>Descripción Formal</h3>
+            <div><p>El cabezal se define por su posición actual p ∈ ℤ sobre la cinta. En cada paso de computación, el cabezal realiza tres funciones atómicas sincronizadas: 1. Lectura: Identifica el símbolo s = T(p) situado en la celda actual. 2. Escritura: Basado en la función de transición δ, reemplaza s por un nuevo símbolo s' ∈ Γ (donde s' puede ser igual a s). 3. Movimiento: Desplaza su posición p a p + 1 (Derecha, R) o p - 1 (Izquierda, L). Formalmente, si la máquina está en el estado q ∈ Q y el cabezal lee σ ∈ Γ, la función de transición se expresa como δ(q, σ) = (q', σ', D), donde q' es el nuevo estado, σ' es el símbolo escrito y D ∈ {L, R} es la dirección del movimiento. El cabezal es el puntero que mantiene el 'estado de ejecución' respecto a los datos.</p></div>
+            
+            <div class="diagrama-box">
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg style="max-width:100%; height:auto;" data-width="358pt" data-height="118pt"
+ viewBox="0.00 0.00 357.83 118.41" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 114.41)">
+<title>G</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-114.41 353.83,-114.41 353.83,4 -4,4"/>
+<text text-anchor="middle" x="174.91" y="-7.8" font-family="Times,serif" font-size="14.00">Acción del Cabezal</text>
+<!-- q_init -->
+<g id="node1" class="node">
+<title>q_init</title>
+<ellipse fill="none" stroke="black" cx="43.71" cy="-66.71" rx="43.91" ry="43.91"/>
+<text text-anchor="middle" x="43.71" y="-63.61" font-family="Helvetica,sans-Serif" font-size="12.00">Estado q0</text>
+</g>
+<!-- q_next -->
+<g id="node2" class="node">
+<title>q_next</title>
+<ellipse fill="none" stroke="black" cx="306.12" cy="-66.71" rx="43.91" ry="43.91"/>
+<text text-anchor="middle" x="306.12" y="-63.61" font-family="Helvetica,sans-Serif" font-size="12.00">Estado q1</text>
+</g>
+<!-- q_init&#45;&gt;q_next -->
+<g id="edge1" class="edge">
+<title>q_init&#45;&gt;q_next</title>
+<path fill="none" stroke="black" d="M87.42,-66.71C132.55,-66.71 203.77,-66.71 252.38,-66.71"/>
+<polygon fill="black" stroke="black" points="252.39,-70.21 262.39,-66.71 252.39,-63.21 252.39,-70.21"/>
+<text text-anchor="middle" x="174.91" y="-69.71" font-family="Helvetica,sans-Serif" font-size="10.00">Lee: &#39;0&#39; / Escribe: &#39;1&#39;, Mueve: R</text>
+</g>
+</g>
+</svg>
+
+                <p style="font-size:0.8em; color:#999">Diagrama generado automáticamente</p>
             </div>
-            <div class="seccion-contenido">
-                
-                <div class="card full-width">
-                    <h3>Historia</h3>
-                    <div><p>El cabezal de la Máquina de Turing es el mecanismo de interacción con la cinta, y su concepción también se remonta al trabajo de Alan Turing en 1936. Turing se imaginó a un 'computador humano' realizando operaciones muy simples: mirando un símbolo en un papel, escribiendo un nuevo símbolo si era necesario, y luego moviendo su atención a un símbolo adyacente. El cabezal es la abstracción mecánica de este 'computador humano'. Representa la parte activa de la máquina que puede leer el contenido de una celda, escribir un nuevo contenido en esa misma celda y, crucialmente, moverse a la izquierda o a la derecha para acceder a otras celdas. Esta combinación de lectura, escritura y movimiento, junto con un conjunto finito de estados internos, dota a la Máquina de Turing de la capacidad de ejecutar cualquier algoritmo concebible. El diseño del cabezal, con sus operaciones atómicas, fue una genialidad que permitió la descomposición de problemas complejos en una serie de pasos elementales y bien definidos.</p></div>
-                </div>
 
-                <div class="card full-width formal-box">
-                    <h3>Descripción Formal</h3>
-                    <div><p>El cabezal de la Máquina de Turing es un puntero activo que, en cada instante de tiempo, está posicionado sobre una única celda de la cinta infinita. Su función se define a través de una función de transición δ que es el corazón de la MT. La función δ toma como entrada el estado actual de la máquina (q ∈ Q) y el símbolo leído de la celda bajo el cabezal (X ∈ Γ), y produce una tupla de tres elementos: un nuevo estado (q' ∈ Q), un símbolo para escribir en la celda actual (Y ∈ Γ), y una dirección de movimiento del cabezal (D ∈ {L, R, S}). 'L' significa mover el cabezal una celda a la izquierda, 'R' significa moverlo una celda a la derecha, y 'S' (o 'N' para 'no move') indica que el cabezal permanece en la misma celda. La operación es atómica: se lee, se escribe y se mueve en un solo paso. Esta interacción local y secuencial del cabezal con la cinta es lo que permite a la MT simular cualquier proceso algorítmico, manipulando datos de forma discreta y sistemática.</p></div>
-                    
-                    <div class="diagrama-container">
-                        <svg viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg"><style>rect { fill: #f0f0f0; stroke: #333; stroke-width: 1;} text { font-family: sans-serif; font-size: 18px; fill: #333; } polygon { fill: #ADD8E6; stroke: #333; stroke-width: 1; } line { stroke: #333; stroke-width: 1; }</style><rect x="100" y="80" width="400" height="40" rx="5" ry="5"/><rect x="100" y="80" width="40" height="40"/><text x="115" y="105">B</text><rect x="140" y="80" width="40" height="40"/><text x="155" y="105">a</text><rect x="180" y="80" width="40" height="40"/><text x="195" y="105">b</text><rect x="220" y="80" width="40" height="40"/><text x="235" y="105">c</text><rect x="260" y="80" width="40" height="40"/><text x="275" y="105">B</text><rect x="300" y="80" width="40" height="40"/><text x="315" y="105">x</text><rect x="340" y="80" width="40" height="40"/><text x="355" y="105">y</text><rect x="380" y="80" width="40" height="40"/><text x="395" y="105">z</text><rect x="420" y="80" width="40" height="40"/><text x="435" y="105">B</text><rect x="460" y="80" width="40" height="40"/><text x="475" y="105">B</text><polygon points="270,40 250,70 290,70"/><text x="260" y="25" style="font-size: 14px;">Cabezal</text><text x="267" y="60" style="font-size: 12px;">↓</text></svg>
-                        <p style="font-size:0.8rem; color:#666; margin-top:1rem; text-align:center;">
-                            <em>Fig: Representación visual generada.</em>
-                        </p>
-                    </div>
-                </div>
+            <h3>Intuición</h3>
+            <div><p>Piensa en el cabezal como el cursor de un procesador de texto o la aguja de un tocadiscos, pero con la capacidad de cambiar la música mientras la toca. Es un ojo que solo puede ver una letra a la vez. No sabe qué hay más allá de esa celda a menos que se mueva hacia allí. El cabezal es el único 'dedo' que tiene la máquina para interactuar con su memoria. Si quieres sumar dos números que están en extremos opuestos de la cinta, el cabezal debe viajar físicamente (celda por celda) de un lado a otro, llevando la información en su 'memoria de corto plazo' (que son los estados internos de la máquina).</p></div>
 
-                <div class="card">
-                    <h3>Intuición</h3>
-                    <div><p>Piensa en el cabezal como tu dedo índice y un bolígrafo. En cualquier momento, tu dedo está apuntando a un solo cuadrado en el rollo de papel (la cinta). Si ves un 'a', podrías decidir cambiarlo por un 'b' (escribir) y luego mover tu dedo al siguiente cuadrado a la derecha o a la izquierda (mover). El 'estado' de la máquina es como tu cerebro, que decide qué hacer basándose en lo que ves y en lo que pensabas antes. Es como si el cabezal fuera el único punto de contacto entre el 'cerebro' de la máquina (sus estados) y su 'memoria' (la cinta). Esta interacción extremadamente simple, limitada a una celda a la vez y con movimientos discretos, es lo que permite a la Máquina de Turing simular la complejidad de cualquier cálculo. No hay atajos, solo pasos metódicos y locales.</p></div>
-                </div>
-
-                <div class="card">
-                    <h3>Aplicación Real</h3>
-                    <div><p>El cabezal de Turing se traduce directamente en el 'puntero de instrucción' o 'program counter' de una CPU moderna. Este puntero siempre indica la siguiente instrucción a ejecutar en la memoria. Al igual que el cabezal, la CPU lee una instrucción, la ejecuta (que puede implicar escribir en la memoria o en registros), y luego actualiza el puntero para pasar a la siguiente instrucción, o saltar a otra ubicación. Los movimientos del cabezal (izquierda/derecha) son análogos a la capacidad de una CPU de acceder a diferentes direcciones de memoria, y la escritura en la cinta es como guardar datos en RAM o en un registro. Conceptos como el acceso secuencial a archivos o la manipulación de cadenas de caracteres en un buffer también reflejan el comportamiento del cabezal, que procesa información celda a celda o carácter a carácter. La simplicidad del cabezal de Turing subraya que, por muy complejas que parezcan las computadoras, sus operaciones fundamentales son una serie de interacciones elementales de lectura, escritura y movimiento de la 'atención'.</p></div>
-                </div>
-
-            </div>
+            <h3>Aplicación</h3>
+            <div><p>Este concepto es el precursor directo del 'Program Counter' (PC) o puntero de instrucción en las CPUs modernas. Así como el cabezal de Turing se mueve por la cinta, el PC se desplaza por las direcciones de memoria para ejecutar instrucciones. También se ve reflejado en la tecnología de discos duros magnéticos (HDD), donde un brazo físico (cabezal) debe posicionarse sobre un sector del disco para leer o escribir datos. En software, los 'Iteradores' en lenguajes como C++ o Java son abstracciones lógicas del cabezal de una Máquina de Turing, permitiendo recorrer estructuras de datos secuencialmente.</p></div>
         </article>
         
         <article class="subtema">
-            <div class="subtema-header">
-                <h2>Integración Arquitectónica: Cinta, Cabezal y el Estado Interno</h2>
+            <h2>Dinámica de Movimiento y Control de Estados</h2>
+            
+            <h3>Historia</h3>
+            <div><p>La capacidad de movimiento bidireccional fue lo que separó a la Máquina de Turing de los Autómatas de Pila (PDA). Mientras que un PDA solo puede acceder al tope de su pila (un movimiento restringido), Turing permitió que su máquina retrocediera y revisara sus pasos. Durante la Segunda Guerra Mundial, esta lógica fue aplicada por Turing en la construcción de 'The Bombe' para descifrar Enigma. El movimiento de los rotores de Enigma puede verse como una forma primitiva de transiciones de estado complejas. La idea de que el movimiento es una consecuencia de la lógica interna permitió unificar la aritmética, la lógica y la manipulación de símbolos en un solo marco teórico.</p></div>
+
+            <h3>Descripción Formal</h3>
+            <div><p>La dinámica de la máquina se captura en la 7-tupla M = (Q, Σ, Γ, δ, q₀, q_accept, q_reject). El movimiento está estrictamente ligado a la función de transición δ: Q × Γ → Q × Γ × {L, R}. Una 'Configuración' de la MT se describe como uqv, donde q es el estado actual, y uv es el contenido de la cinta (el cabezal está sobre el primer símbolo de v). La transición de una configuración a otra define el cómputo. Por ejemplo, si tenemos la configuración abq1ca y δ(q1, c) = (q2, d, L), la nueva configuración será aq2abd. La capacidad de moverse en ambas direcciones permite a la MT simular bucles, condicionales y subrutinas, lo cual es la base de la Tesis de Church-Turing, que afirma que cualquier algoritmo puede ser ejecutado por una MT con estos movimientos básicos.</p></div>
+            
+            <div class="diagrama-box">
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg style="max-width:100%; height:auto;" data-width="340pt" data-height="122pt"
+ viewBox="0.00 0.00 340.50 122.48" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 118.48)">
+<title>G</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-118.48 336.5,-118.48 336.5,4 -4,4"/>
+<text text-anchor="middle" x="166.25" y="-7.8" font-family="Times,serif" font-size="14.00">Lógica de Movimiento (Bucle y Aceptación)</text>
+<!-- start -->
+<g id="node1" class="node">
+<title>start</title>
+<ellipse fill="black" stroke="black" cx="1.8" cy="-67.01" rx="1.8" ry="1.8"/>
+</g>
+<!-- q0 -->
+<g id="node2" class="node">
+<title>q0</title>
+<ellipse fill="none" stroke="black" cx="59.07" cy="-67.01" rx="18.44" ry="18.44"/>
+<text text-anchor="middle" x="59.07" y="-63.91" font-family="Helvetica,sans-Serif" font-size="12.00">q0</text>
+</g>
+<!-- start&#45;&gt;q0 -->
+<g id="edge1" class="edge">
+<title>start&#45;&gt;q0</title>
+<path fill="none" stroke="black" d="M3.76,-67.01C7.11,-67.01 18.7,-67.01 30.33,-67.01"/>
+<polygon fill="black" stroke="black" points="30.34,-70.51 40.34,-67.01 30.34,-63.51 30.34,-70.51"/>
+</g>
+<!-- q0&#45;&gt;q0 -->
+<g id="edge2" class="edge">
+<title>q0&#45;&gt;q0</title>
+<path fill="none" stroke="black" d="M52.64,-84.65C51.44,-94.45 53.58,-103.48 59.07,-103.48 62.5,-103.48 64.62,-99.95 65.43,-94.92"/>
+<polygon fill="black" stroke="black" points="68.94,-94.67 65.49,-84.65 61.94,-94.63 68.94,-94.67"/>
+<text text-anchor="middle" x="59.07" y="-106.48" font-family="Helvetica,sans-Serif" font-size="10.00">0 / 1, R</text>
+</g>
+<!-- q1 -->
+<g id="node3" class="node">
+<title>q1</title>
+<ellipse fill="none" stroke="black" cx="157" cy="-67.01" rx="18.44" ry="18.44"/>
+<text text-anchor="middle" x="157" y="-63.91" font-family="Helvetica,sans-Serif" font-size="12.00">q1</text>
+</g>
+<!-- q0&#45;&gt;q1 -->
+<g id="edge3" class="edge">
+<title>q0&#45;&gt;q1</title>
+<path fill="none" stroke="black" d="M77.66,-67.01C91.86,-67.01 112.09,-67.01 128.44,-67.01"/>
+<polygon fill="black" stroke="black" points="128.52,-70.51 138.52,-67.01 128.52,-63.51 128.52,-70.51"/>
+<text text-anchor="middle" x="108.04" y="-70.01" font-family="Helvetica,sans-Serif" font-size="10.00">␣ / ␣, L</text>
+</g>
+<!-- q_acc -->
+<g id="node4" class="node">
+<title>q_acc</title>
+<ellipse fill="none" stroke="black" cx="288.48" cy="-67.01" rx="40.03" ry="40.03"/>
+<ellipse fill="none" stroke="black" cx="288.48" cy="-67.01" rx="44.03" ry="44.03"/>
+<text text-anchor="middle" x="288.48" y="-63.91" font-family="Helvetica,sans-Serif" font-size="12.00">q_accept</text>
+</g>
+<!-- q1&#45;&gt;q_acc -->
+<g id="edge4" class="edge">
+<title>q1&#45;&gt;q_acc</title>
+<path fill="none" stroke="black" d="M175.74,-67.01C190.85,-67.01 213.39,-67.01 234.28,-67.01"/>
+<polygon fill="black" stroke="black" points="234.36,-70.51 244.36,-67.01 234.36,-63.51 234.36,-70.51"/>
+<text text-anchor="middle" x="209.97" y="-70.01" font-family="Helvetica,sans-Serif" font-size="10.00">1 / 1, S</text>
+</g>
+</g>
+</svg>
+
+                <p style="font-size:0.8em; color:#999">Diagrama generado automáticamente</p>
             </div>
-            <div class="seccion-contenido">
-                
-                <div class="card full-width">
-                    <h3>Historia</h3>
-                    <div><p>La verdadera potencia de la Máquina de Turing reside no solo en la cinta infinita o en el cabezal, sino en la interacción dinámica y definida entre estos componentes y el 'estado interno' de la máquina. Alan Turing concibió esto como un sistema unificado, donde el estado representa la 'memoria de trabajo' o la 'mente' del computador. Históricamente, este modelo fue crucial para establecer una equivalencia entre lo que una máquina puede computar y lo que un ser humano puede computar siguiendo un procedimiento mecánico. La idea de que un conjunto finito de estados internos, combinado con una cinta y un cabezal, podría simular cualquier algoritmo, fue la base para la tesis de Church-Turing. Esta integración arquitectónica no solo dio una definición formal de algoritmo, sino que también abrió la puerta a la conceptualización de las computadoras programables, donde un programa (las reglas de transición) interactúa con los datos (la cinta) a través de una unidad de procesamiento (el cabezal y el control de estados).</p></div>
-                </div>
 
-                <div class="card full-width formal-box">
-                    <h3>Descripción Formal</h3>
-                    <div><p>La Máquina de Turing se define formalmente como una 7-tupla M = (Q, Σ, Γ, δ, q₀, B, F), donde: Q es el conjunto finito de estados; Σ es el alfabeto de entrada; Γ es el alfabeto de la cinta (Σ ⊆ Γ, B ∈ Γ); δ es la función de transición, δ: Q × Γ → Q × Γ × {L, R, S}; q₀ ∈ Q es el estado inicial; B ∈ Γ es el símbolo blanco; F ⊆ Q es el conjunto de estados finales o de aceptación. La cinta proporciona la memoria, el cabezal es el mecanismo de lectura/escritura/movimiento, y el conjunto Q de estados, junto con la función δ, representa el 'cerebro' o la lógica de control de la máquina. En cada paso, la máquina lee el símbolo bajo el cabezal, consulta su estado actual en las reglas de δ, escribe un nuevo símbolo en la celda actual, cambia a un nuevo estado, y mueve el cabezal. Este ciclo se repite hasta que la máquina entra en un estado final o no tiene una transición definida, lo que la detiene. La arquitectura de cinta, cabezal y estados interconectados es la que confiere a la MT su capacidad universal de computación.</p></div>
-                    
-                    <div class="diagrama-container">
-                        <svg viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg"><style>rect { fill: #f0f0f0; stroke: #333; stroke-width: 1;} text { font-family: sans-serif; font-size: 16px; fill: #333; } polygon { fill: #ADD8E6; stroke: #333; stroke-width: 1; } line { stroke: #333; stroke-width: 1; } circle { fill: #90EE90; stroke: #333; stroke-width: 1; } path { stroke: #666; stroke-width: 2; fill: none; marker-end: url(#arrowhead_small); }</style><defs><marker id="arrowhead_small" markerWidth="8" markerHeight="5" refX="0" refY="2.5" orient="auto"><polygon points="0 0, 8 2.5, 0 5"></polygon></marker></defs><rect x="50" y="100" width="500" height="40" rx="5" ry="5"/><rect x="50" y="100" width="40" height="40"/><text x="65" y="125">B</text><rect x="90" y="100" width="40" height="40"/><text x="105" y="125">a</text><rect x="130" y="100" width="40" height="40"/><text x="145" y="125">b</text><rect x="170" y="100" width="40" height="40"/><text x="185" y="125">c</text><rect x="210" y="100" width="40" height="40"/><text x="225" y="125">B</text><rect x="250" y="100" width="40" height="40"/><text x="265" y="125">B</text><rect x="290" y="100" width="40" height="40"/><text x="305" y="125">x</text><rect x="330" y="100" width="40" height="40"/><text x="345" y="125">y</text><rect x="370" y="100" width="40" height="40"/><text x="385" y="125">z</text><rect x="410" y="100" width="40" height="40"/><text x="425" y="125">B</text><rect x="450" y="100" width="40" height="40"/><text x="465" y="125">B</text><rect x="490" y="100" width="40" height="40"/><text x="505" y="125">B</text><path d="M 30 120 H 45" marker-end="url(#arrowhead_small)"/><path d="M 555 120 H 570" marker-end="url(#arrowhead_small)"/><polygon points="270,60 250,90 290,90"/><text x="260" y="45" style="font-size: 14px;">Cabezal</text><rect x="240" y="10" width="120" height="40" rx="5" ry="5" fill="#D3D3D3"/><text x="260" y="35" style="font-size: 14px;" >Control de Estado</text><line x1="270" y1="90" x2="270" y2="50" stroke-dasharray="3 3"/><line x1="290" y1="90" x2="290" y2="50" stroke-dasharray="3 3"/></svg>
-                        <p style="font-size:0.8rem; color:#666; margin-top:1rem; text-align:center;">
-                            <em>Fig: Representación visual generada.</em>
-                        </p>
-                    </div>
-                </div>
+            <h3>Intuición</h3>
+            <div><p>La verdadera magia ocurre cuando combinas el estado mental (el estado de la máquina) con lo que ves (el símbolo en la cinta) para decidir hacia dónde ir. Es como un juego de 'Simón dice' pero infinitamente complejo. Si ves un '1', cámbialo por '0' y muévete a la izquierda; si ves un '0', detente. Estos pequeños pasos, repetidos millones de veces, pueden resolver cualquier problema matemático. El movimiento a la izquierda es fundamental: es lo que permite que la máquina 'recuerde' o 'vuelva a leer' información que ya pasó, permitiendo el procesamiento de lenguajes que no son libres de contexto, como aquellos que requieren comparar tres partes iguales de una cadena.</p></div>
 
-                <div class="card">
-                    <h3>Intuición</h3>
-                    <div><p>La Máquina de Turing es como un 'robot' muy simple. Tiene una memoria ilimitada (la cinta) donde puede almacenar y recuperar datos. Tiene un 'ojo' y una 'mano' (el cabezal) que le permiten mirar un solo dato a la vez, cambiarlo si es necesario, y moverse a otro dato. Pero lo que le da 'inteligencia' es su 'cerebro' o 'control de estado'. Este cerebro tiene un número limitado de 'pensamientos' o estados, y las reglas que le dicen qué hacer (leer, escribir, moverse, cambiar de pensamiento) basándose en su pensamiento actual y lo que ve. La maravilla es que esta combinación de componentes tan sencillos puede realizar cualquier tarea que un algoritmo pueda describir. Es el modelo mínimo necesario para la computación universal, demostrando que la complejidad de los problemas computacionales no proviene de la complejidad de la máquina, sino de la interacción de sus reglas y datos.</p></div>
-                </div>
-
-                <div class="card">
-                    <h3>Aplicación Real</h3>
-                    <div><p>La arquitectura fundamental de la Máquina de Turing, que integra memoria, una unidad de procesamiento y control de estado, es el precursor conceptual de la Arquitectura de von Neumann, que domina las computadoras modernas. La cinta es la memoria (RAM, disco), el cabezal es el puntero de instrucción de la CPU y sus unidades de lectura/escritura, y el conjunto finito de estados y la función de transición son el microcódigo y la lógica de control de la CPU. Un programa de software, en esencia, es una descripción de las transiciones de estado y operaciones que una Máquina de Turing (nuestra computadora) debe realizar sobre su cinta (los datos). Esto es evidente en cómo los compiladores y los intérpretes 'leen' un programa, 'escriben' instrucciones de máquina y 'mueven' la ejecución. Comprender esta arquitectura integrada es vital para entender los fundamentos de la programación, el diseño de algoritmos, y los límites teóricos de la computación, como el famoso Problema de la Parada (Halting Problem), que demuestra que incluso una MT universal no puede resolver todo.</p></div>
-                </div>
-
-            </div>
+            <h3>Aplicación</h3>
+            <div><p>Se aplica en la teoría de la compilación, específicamente en cómo un compilador analiza el código fuente. El análisis semántico a menudo requiere múltiples pasadas sobre el árbol de sintaxis, similar a cómo una MT se mueve de un lado a otro de la cinta. También es la base de los algoritmos de búsqueda y ordenamiento que operan in-place (en el mismo sitio), donde el movimiento del índice de búsqueda imita el movimiento del cabezal. Además, en la inteligencia artificial, los modelos de atención pueden interpretarse como cabezales de Turing sofisticados que deciden en qué parte de la 'cinta' de datos enfocarse.</p></div>
         </article>
-        
-    </main>
-
-    <footer>
-        <p>Prof. Jorge López-Cifre, PhD © 2026</p>
-    </footer>
-
-</body>
-</html>
+        </body></html>

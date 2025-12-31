@@ -3,356 +3,311 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>2 - Lenguajes y gramáticas - Concatenación y clausura de Kleene. - Prof. Jorge López-Cifre</title>
+    <title>2 - Lenguajes y gramáticas - Concatenación y clausura de Kleene.</title>
     <style>
-        :root {
-            --primary: #003366;
-            --accent: #d4af37;
-            --bg: #f8f9fa;
-            --text: #2c3e50;
-            --card-bg: #ffffff;
-            --border: #e9ecef;
-        }
-        body {
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--bg);
-            color: var(--text);
-            margin: 0;
-            padding: 0;
-            line-height: 1.7;
-        }
-        /* Tipografía mejorada */
-        p { margin-bottom: 1rem; }
-        strong, b { color: var(--primary); font-weight: 700; }
-        
-        header {
-            background: var(--primary);
-            color: white;
-            padding: 1rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
-        h1 { margin: 0; font-size: 1.25rem; font-weight: 600; }
-        
-        .btn-volver {
-            background: var(--accent);
-            color: var(--primary);
-            text-decoration: none;
-            padding: 0.5rem 1.2rem;
-            border-radius: 50px;
-            font-weight: bold;
-            font-size: 0.9rem;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-        }
-        .btn-volver:hover { 
+        body { font-family: sans-serif; background: #f4f4f9; color: #333; margin: 0; padding: 20px; }
+        header { background: #2c3e50; color: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; }
+        h1 { margin: 0; }
+        .subtema { background: white; padding: 30px; margin-bottom: 40px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        h2 { color: #2980b9; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+        h3 { color: #7f8c8d; font-size: 0.9em; text-transform: uppercase; margin-top: 25px; letter-spacing: 1px; }
+        .diagrama-box { 
+            text-align: center; 
+            margin: 30px 0; 
+            padding: 20px; 
             background: #fff; 
-            transform: translateY(-1px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-        }
-
-        main {
-            max-width: 1100px;
-            margin: 2rem auto;
-            padding: 0 1.5rem;
-        }
-
-        .subtema {
-            background: var(--card-bg);
-            border-radius: 12px;
-            margin-bottom: 4rem;
-            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
-            overflow: hidden;
-            border: 1px solid var(--border);
-        }
-        
-        .subtema-header {
-            background: linear-gradient(to right, #f8f9fa, #ffffff);
-            padding: 1.5rem 2rem;
-            border-bottom: 1px solid var(--border);
-        }
-        .subtema-header h2 { 
-            margin: 0; 
-            color: var(--primary); 
-            font-size: 1.6rem;
-            border-left: 5px solid var(--accent);
-            padding-left: 1rem;
-        }
-
-        .seccion-contenido {
-            padding: 2rem;
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 2.5rem;
-        }
-
-        @media (min-width: 900px) {
-            .seccion-contenido { grid-template-columns: 1fr 1fr; }
-            .full-width { grid-column: 1 / -1; }
-        }
-
-        .card h3 {
-            color: var(--primary);
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            margin-top: 0;
-            margin-bottom: 1rem;
-            border-bottom: 1px solid #ddd;
-            padding-bottom: 0.5rem;
-        }
-
-        .formal-box {
-            background-color: #f0f7ff; /* Azul muy muy pálido */
+            border: 1px solid #eee; 
             border-radius: 8px;
-            padding: 2rem !important;
-            border: 1px solid #cce5ff;
         }
-
-        /* CSS Específico para corregir SVGs */
-        .diagrama-container {
-            text-align: center;
-            margin: 2rem auto;
-            padding: 1.5rem;
-            background: white;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
-            max-width: 100%;
-            overflow-x: auto; /* Si es muy ancho, permite scroll */
-        }
-        
-        /* Forzar comportamiento correcto del SVG */
-        .diagrama-container svg {
-            max-width: 100%;
-            height: auto;
-            display: block;
-            margin: 0 auto;
-        }
-        
-        /* Evitar que el texto dentro del SVG sea ilegible */
-        .diagrama-container text {
-            font-family: sans-serif;
-        }
-
-        footer {
-            text-align: center;
-            padding: 3rem;
-            background: var(--primary);
-            color: rgba(255,255,255,0.8);
-            margin-top: 4rem;
-            font-size: 0.9rem;
-        }
+        /* Estilos Markdown */
+        p { line-height: 1.6; }
+        strong { color: #2c3e50; }
+        code { background: #f0f0f0; padding: 2px 5px; border-radius: 3px; font-family: monospace; }
     </style>
 </head>
 <body>
-
-    <header>
-        <h1>2 - Lenguajes y gramáticas - Concatenación y clausura de Kleene.</h1>
-        <a href="javascript:history.back()" class="btn-volver">← Volver</a>
-    </header>
-
+    <header><h1>2 - Lenguajes y gramáticas - Concatenación y clausura de Kleene.</h1></header>
     <main>
 
         <article class="subtema">
-            <div class="subtema-header">
-                <h2>1. Concatenación de Lenguajes</h2>
-            </div>
-            <div class="seccion-contenido">
-                
-                <div class="card full-width">
-                    <h3>Historia</h3>
-                    <div><p>La operación de concatenación, fundamental en la teoría de lenguajes formales, tiene sus raíces en los trabajos pioneros de lógicos y matemáticos del siglo XX, como Emil Post y Alonzo Church, quienes exploraron la manipulación de cadenas de símbolos en el contexto de la lógica matemática y la teoría de la computabilidad en las décadas de 1930 y 1940. Sin embargo, fue en la década de 1950, con el surgimiento formal de la teoría de lenguajes y autómatas de la mano de Noam Chomsky, que la concatenación de lenguajes como una operación sobre conjuntos de cadenas adquirió su definición y relevancia actuales. Chomsky y sus contemporáneos necesitaban operaciones para construir lenguajes complejos a partir de otros más simples, lo que era esencial para modelar la sintaxis del lenguaje natural y, posteriormente, los lenguajes de programación. La concatenación se convirtió en una de las operaciones básicas para la formación de expresiones regulares, siendo un pilar para la descripción de patrones y el diseño de compiladores.</p></div>
-                </div>
+            <h2>Concatenación de Lenguajes</h2>
+            
+            <h3>Historia</h3>
+            <div><p>La concatenación de lenguajes tiene sus raíces en los trabajos pioneros de Noam Chomsky en la década de 1950, quien buscaba modelar las estructuras sintácticas del lenguaje natural. Al mismo tiempo, investigadores como Stephen Kleene estaban explorando las propiedades matemáticas de las secuencias de símbolos. La idea de 'pegar' cadenas para formar nuevas palabras es fundamental en la combinatoria de palabras. Originalmente, se veía como una extensión de la operación de producto en álgebra. A medida que la informática evolucionó, la concatenación se convirtió en el bloque de construcción básico para los lenguajes de programación. Fue crucial para definir cómo los tokens simples se agrupan para formar sentencias complejas. El concepto se formalizó dentro de la jerarquía de Chomsky, permitiendo definir lenguajes regulares mediante la unión y el producto de conjuntos de cadenas. Hoy, es la operación más esencial en la teoría de autómatas para describir la secuencia temporal de eventos.</p></div>
 
-                <div class="card full-width formal-box">
-                    <h3>Descripción Formal</h3>
-                    <div><p>Sean Σ un alfabeto y L₁ y L₂ dos lenguajes sobre Σ. La concatenación de L₁ y L₂, denotada como L₁L₂ (o L₁ ⋅ L₂), es un nuevo lenguaje definido como el conjunto de todas las cadenas que se pueden formar tomando una cadena de L₁ y añadiéndole a su derecha una cadena de L₂. Formalmente, se define como:</p>
-<p>L₁L₂ = { w₁w₂ | w₁ ∈ L₁ y w₂ ∈ L₂ }</p>
-<p>Donde w₁w₂ representa la concatenación de las cadenas w₁ y w₂. Esta operación no es conmutativa, es decir, L₁L₂ no es necesariamente igual a L₂L₁. Es asociativa, lo que significa que (L₁L₂)L₃ = L₁(L₂L₃). El lenguaje que contiene solo la cadena vacía, {ε}, actúa como elemento neutro para la concatenación, ya que para cualquier lenguaje L, se cumple que L{ε} = {ε}L = L. Si uno de los lenguajes es el conjunto vacío (∅), entonces el resultado de la concatenación también es el conjunto vacío: L∅ = ∅L = ∅. Por ejemplo, si L₁ = { "a", "b" } y L₂ = { "c", "d" }, entonces L₁L₂ = { "ac", "ad", "bc", "bd" }.</p></div>
-                    
-                    <div class="diagrama-container">
-                        <svg viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg">
-  <rect x="50" y="60" width="120" height="80" fill="#e0e0e0" stroke="black" stroke-width="1" rx="10" ry="10"/>
-  <text x="110" y="105" font-family="Arial" font-size="20" text-anchor="middle">L₁</text>
-
-  <rect x="230" y="60" width="120" height="80" fill="#e0e0e0" stroke="black" stroke-width="1" rx="10" ry="10"/>
-  <text x="290" y="105" font-family="Arial" font-size="20" text-anchor="middle">L₂</text>
-
-  <path d="M170 100 H230" stroke="black" stroke-width="2" marker-end="url(#arrowhead)"/>
-  <defs>
-    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
-      <polygon points="0 0, 10 3.5, 0 7" fill="black" />
-    </marker>
-  </defs>
-  <text x="198" y="80" font-family="Arial" font-size="14" text-anchor="middle">w₁w₂</text>
-
-  <rect x="410" y="60" width="140" height="80" fill="#f0f0f0" stroke="black" stroke-width="2" rx="10" ry="10"/>
-  <text x="480" y="105" font-family="Arial" font-size="20" text-anchor="middle">L₁L₂</text>
-
-  <path d="M350 100 H410" stroke="black" stroke-width="2" marker-end="url(#arrowhead)"/>
+            <h3>Descripción Formal</h3>
+            <div><p>Definición: Sea Σ un alfabeto. Si L₁ y L₂ son lenguajes sobre Σ, la concatenación L₁L₂ (o L₁ · L₂) se define como el conjunto de todas las cadenas formadas al tomar una cadena u ∈ L₁ y una cadena v ∈ L₂, uniéndolas para formar uv. Formalmente: L₁L₂ = { uv | u ∈ L₁, v ∈ L₂ }. </p>
+<p>Propiedades clave:
+1. Asociatividad: (L₁L₂)L₃ = L₁(L₂L₃). Esto implica que el orden de agrupación no altera el lenguaje resultante.
+2. Elemento Identidad: El lenguaje unitario que contiene solo la cadena vacía {ε} actúa como identidad: L{ε} = {ε}L = L.
+3. Elemento Anulante: El lenguaje vacío ∅ actúa como elemento nulo: L∅ = ∅L = ∅.</p>
+<p>Longitud: Si |u| es la longitud de u y |v| es la longitud de v, entonces la longitud de la cadena concatenada es |uv| = |u| + |v|. </p>
+<p>Potencia de un lenguaje: La potencia n-ésima de un lenguaje L se define recursivamente como:
+- L⁰ = {ε}
+- Lⁿ = L · Lⁿ⁻¹ para n &gt; 0.</p>
+<p>En términos de autómatas finitos (AFN), si M₁ acepta L₁ y M₂ acepta L₂, un autómata para L₁L₂ se construye conectando todos los estados finales de M₁ con el estado inicial de M₂ mediante transiciones épsilon (ε), y convirtiendo los estados finales de M₁ en estados no finales (a menos que ε ∈ L₂).</p></div>
+            
+            <div class="diagrama-box">
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg style="max-width:100%; height:auto;" data-width="339pt" data-height="76pt"
+ viewBox="0.00 0.00 339.34 75.94" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 71.94)">
+<title>G</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-71.94 335.34,-71.94 335.34,4 -4,4"/>
+<text text-anchor="middle" x="165.67" y="-7.8" font-family="Times,serif" font-size="14.00">Esquema de concatenación L1L2</text>
+<!-- start -->
+<g id="node1" class="node">
+<title>start</title>
+<ellipse fill="black" stroke="black" cx="1.8" cy="-45.47" rx="1.8" ry="1.8"/>
+</g>
+<!-- q0 -->
+<g id="node2" class="node">
+<title>q0</title>
+<ellipse fill="none" stroke="black" cx="59.07" cy="-45.47" rx="18.44" ry="18.44"/>
+<text text-anchor="middle" x="59.07" y="-42.37" font-family="Helvetica,sans-Serif" font-size="12.00">q0</text>
+</g>
+<!-- start&#45;&gt;q0 -->
+<g id="edge1" class="edge">
+<title>start&#45;&gt;q0</title>
+<path fill="none" stroke="black" d="M3.76,-45.47C7.11,-45.47 18.7,-45.47 30.33,-45.47"/>
+<polygon fill="black" stroke="black" points="30.34,-48.97 40.34,-45.47 30.34,-41.97 30.34,-48.97"/>
+</g>
+<!-- q1 -->
+<g id="node3" class="node">
+<title>q1</title>
+<ellipse fill="none" stroke="black" cx="143" cy="-45.47" rx="18.44" ry="18.44"/>
+<text text-anchor="middle" x="143" y="-42.37" font-family="Helvetica,sans-Serif" font-size="12.00">q1</text>
+</g>
+<!-- q0&#45;&gt;q1 -->
+<g id="edge2" class="edge">
+<title>q0&#45;&gt;q1</title>
+<path fill="none" stroke="black" d="M77.85,-45.47C88.48,-45.47 102.21,-45.47 114.24,-45.47"/>
+<polygon fill="black" stroke="black" points="114.26,-48.97 124.26,-45.47 114.26,-41.97 114.26,-48.97"/>
+<text text-anchor="middle" x="101.04" y="-48.47" font-family="Helvetica,sans-Serif" font-size="10.00">L1</text>
+</g>
+<!-- q2 -->
+<g id="node4" class="node">
+<title>q2</title>
+<ellipse fill="none" stroke="black" cx="220.94" cy="-45.47" rx="18.44" ry="18.44"/>
+<text text-anchor="middle" x="220.94" y="-42.37" font-family="Helvetica,sans-Serif" font-size="12.00">q2</text>
+</g>
+<!-- q1&#45;&gt;q2 -->
+<g id="edge3" class="edge">
+<title>q1&#45;&gt;q2</title>
+<path fill="none" stroke="black" d="M161.61,-45.47C170.72,-45.47 182.04,-45.47 192.28,-45.47"/>
+<polygon fill="black" stroke="black" points="192.42,-48.97 202.42,-45.47 192.42,-41.97 192.42,-48.97"/>
+<text text-anchor="middle" x="181.97" y="-48.47" font-family="Helvetica,sans-Serif" font-size="10.00">ε</text>
+</g>
+<!-- q3 -->
+<g id="node5" class="node">
+<title>q3</title>
+<ellipse fill="none" stroke="black" cx="308.87" cy="-45.47" rx="18.44" ry="18.44"/>
+<ellipse fill="none" stroke="black" cx="308.87" cy="-45.47" rx="22.44" ry="22.44"/>
+<text text-anchor="middle" x="308.87" y="-42.37" font-family="Helvetica,sans-Serif" font-size="12.00">q3</text>
+</g>
+<!-- q2&#45;&gt;q3 -->
+<g id="edge4" class="edge">
+<title>q2&#45;&gt;q3</title>
+<path fill="none" stroke="black" d="M239.74,-45.47C250.16,-45.47 263.63,-45.47 275.83,-45.47"/>
+<polygon fill="black" stroke="black" points="276.13,-48.97 286.13,-45.47 276.13,-41.97 276.13,-48.97"/>
+<text text-anchor="middle" x="262.91" y="-48.47" font-family="Helvetica,sans-Serif" font-size="10.00">L2</text>
+</g>
+</g>
 </svg>
-                        <p style="font-size:0.8rem; color:#666; margin-top:1rem; text-align:center;">
-                            <em>Fig: Representación visual generada.</em>
-                        </p>
-                    </div>
-                </div>
 
-                <div class="card">
-                    <h3>Intuición</h3>
-                    <div><p>Intuitivamente, la concatenación de lenguajes es como 'pegar' palabras. Imagina que tienes dos cajas de lego, L₁ y L₂. Cada 'pieza' en estas cajas es una palabra (una cadena de símbolos). Cuando concatenas L₁ con L₂, lo que haces es tomar <em>cada</em> pieza de la caja L₁ y <em>cada</em> pieza de la caja L₂, y las unes en ese orden. El resultado es una nueva colección de piezas (un nuevo lenguaje) donde cada nueva pieza está formada por una de L₁ seguida de una de L₂. Por ejemplo, si L₁ tiene 'sol' y 'luna', y L₂ tiene 'cito' y 'ada', al concatenar obtienes 'solcito', 'solada', 'lunacito', 'lunada'. Es una forma sistemática de combinar los elementos de dos conjuntos para crear un conjunto más grande y estructurado, siguiendo un orden estricto. Esto permite construir secuencias complejas a partir de bloques básicos, de manera muy similar a cómo las frases se forman concatenando palabras o cómo los programas se construyen concatenando instrucciones.</p></div>
-                </div>
-
-                <div class="card">
-                    <h3>Aplicación Real</h3>
-                    <div><p>La concatenación es una operación omnipresente en la ingeniería de software y la informática. Es fundamental en la construcción de expresiones regulares, donde los patrones se concatenan para describir secuencias más largas, como 'ab' para la cadena 'a' seguida de 'b'. En el análisis léxico de compiladores, la concatenación se utiliza para reconocer identificadores, palabras clave y literales; por ejemplo, una variable 'mi_variable' se reconoce como la concatenación de caracteres válidos. También es crucial en la generación de rutas de archivos y URLs, donde segmentos se concatenan para formar una dirección completa (ej: '/home' + '/user' + '/documento.txt'). En bases de datos, la concatenación de cadenas se usa para formar consultas dinámicas o combinar campos de texto. Incluso en protocolos de red, los paquetes de datos se construyen a menudo por la concatenación de un encabezado y una carga útil. Su simplicidad y potencia la hacen una herramienta indispensable para manipular y generar información estructurada.</p></div>
-                </div>
-
+                <p style="font-size:0.8em; color:#999">Diagrama generado automáticamente</p>
             </div>
+
+            <h3>Intuición</h3>
+            <div><p>Imagina que tienes un conjunto de 'prefijos' y un conjunto de 'sufijos'. La concatenación es el proceso de crear todas las combinaciones posibles tomando uno de cada grupo. Si el primer conjunto es {hola, adiós} y el segundo es {amigo, mundo}, el resultado sería {holaamigo, holamundo, adiósamigo, adiósmundo}. Es como armar un tren: tienes vagones de tipo A y vagones de tipo B, y la regla es que siempre debes poner uno de tipo A seguido de uno de tipo B. No puedes mezclarlos de otra forma ni dejar espacios vacíos, a menos que uno de los conjuntos incluya la 'cadena vacía', que en nuestra analogía sería un vagón invisible que no añade longitud pero permite que el tren avance. Es la operación más básica para construir significado a partir de unidades mínimas.</p></div>
+
+            <h3>Aplicación</h3>
+            <div><p>En el desarrollo de software, la concatenación se usa constantemente en los analizadores léxicos (lexers). Por ejemplo, para reconocer un identificador en un lenguaje de programación, el compilador concatena una letra inicial con una secuencia de letras o números. En bioinformática, se utiliza para modelar la unión de fragmentos de ADN o secuencias de aminoácidos donde el orden es crítico para la función biológica. También es fundamental en la generación de rutas de archivos en sistemas operativos y en la construcción de consultas SQL dinámicas, donde diferentes cláusulas se concatenan para formar una instrucción válida. Sin esta operación, la modularidad en los lenguajes de programación sería inexistente, ya que no podríamos construir expresiones complejas a partir de operandos y operadores simples, ni nombres de variables compuestos por múltiples caracteres.</p></div>
         </article>
         
         <article class="subtema">
-            <div class="subtema-header">
-                <h2>2. Clausura de Kleene (Estrella de Kleene)</h2>
-            </div>
-            <div class="seccion-contenido">
-                
-                <div class="card full-width">
-                    <h3>Historia</h3>
-                    <div><p>La Clausura de Kleene, también conocida como 'estrella de Kleene', fue introducida por el matemático estadounidense Stephen Cole Kleene en 1956 en su influyente artículo 'Representación de Eventos en Redes Nerviosas y Conjuntos Finitos'. Este trabajo fue pionero en la formalización de la relación entre las expresiones regulares (que él llamó 'eventos regulares') y los autómatas finitos, sentando las bases de la teoría de la computación que conocemos hoy. Kleene buscaba un operador que permitiera describir la repetición arbitraria (cero o más veces) de un patrón, lo cual era esencial para modelar el comportamiento de las redes nerviosas y, por extensión, de los dispositivos computacionales. Su notación, L*, se convirtió en una piedra angular de la teoría de lenguajes formales y las expresiones regulares, proporcionando un medio conciso para expresar la iteración y la recursión en la definición de lenguajes. El concepto es tan fundamental que lleva su nombre y es una de las tres operaciones básicas (junto con la unión y la concatenación) que definen los lenguajes regulares.</p></div>
-                </div>
+            <h2>Clausura de Kleene (*)</h2>
+            
+            <h3>Historia</h3>
+            <div><p>La Clausura de Kleene, representada por el asterisco (*), fue introducida por el matemático estadounidense Stephen Cole Kleene en 1951. Kleene fue una figura central en la lógica matemática y la teoría de la computación recursiva. Introdujo este concepto como parte de su invención de las expresiones regulares, que originalmente se diseñaron para describir los eventos en redes nerviosas (modelos de neuronas de McCulloch-Pitts). El 'operador estrella' permitió por primera vez describir procesos repetitivos de longitud indefinida de una manera formal y compacta. Su trabajo sentó las bases para el teorema de Kleene, que establece la equivalencia entre lenguajes regulares, expresiones regulares y autómatas finitos. Esta abstracción fue revolucionaria porque permitió pasar de secuencias finitas a conjuntos infinitos de cadenas mediante una definición finita, transformando la forma en que entendemos los lenguajes de programación y la búsqueda de patrones.</p></div>
 
-                <div class="card full-width formal-box">
-                    <h3>Descripción Formal</h3>
-                    <div><p>Sea Σ un alfabeto y L un lenguaje sobre Σ. La clausura de Kleene de L, denotada como L<em>, es el conjunto de todas las cadenas que se pueden formar concatenando cero o más cadenas de L. Formalmente, L</em> se define como la unión infinita:</p>
-<p>L* = ∪_{i≥0} Lⁱ = L⁰ ∪ L¹ ∪ L² ∪ L³ ∪ ...</p>
+            <h3>Descripción Formal</h3>
+            <div><p>Definición: Sea L un lenguaje sobre un alfabeto Σ. La clausura de Kleene de L, denotada como L*, es el conjunto de todas las posibles concatenaciones de cadenas de L, incluyendo la cadena vacía ε. </p>
+<p>Formalmente, se define como la unión infinita de todas las potencias de L:
+L* = ⋃_{i=0}^{∞} Lⁱ = L⁰ ∪ L¹ ∪ L² ∪ L³ ∪ ...</p>
 <p>Donde:
-- L⁰ = {ε} (el lenguaje que contiene únicamente la cadena vacía).
-- L¹ = L (el lenguaje L en sí mismo).
-- L² = LL (el lenguaje L concatenado consigo mismo una vez).
-- Lⁱ = L concatenado consigo mismo i veces.</p>
-<p>Por lo tanto, L<em> incluye la cadena vacía (ε), todas las cadenas de L, todas las cadenas formadas por la concatenación de dos cadenas de L, de tres cadenas de L, y así sucesivamente, sin límite en el número de concatenaciones. Es el lenguaje más pequeño que contiene a L y a la cadena vacía, y es cerrado bajo la operación de concatenación. Por ejemplo, si L = { "ab", "c" }, entonces L</em> incluiría: ε, "ab", "c", "abab", "abc", "cab", "cc", "ababab", etc.</p></div>
-                    
-                    <div class="diagrama-container">
-                        <svg viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg">
-  <rect x="240" y="60" width="120" height="80" fill="#e0e0e0" stroke="black" stroke-width="1" rx="10" ry="10"/>
-  <text x="300" y="105" font-family="Arial" font-size="20" text-anchor="middle">L</text>
-
-  <path d="M360 100 A60 60 0 0 1 300 150 A60 60 0 0 1 240 100" fill="none" stroke="black" stroke-width="2" marker-end="url(#arrowhead)"/>
-  <text x="300" y="175" font-family="Arial" font-size="14" text-anchor="middle">repetir</text>
-
-  <circle cx="45" cy="100" r="15" fill="none" stroke="black" stroke-width="1"/>
-  <text x="45" y="105" font-family="Arial" font-size="16" text-anchor="middle">ε</text>
-  <path d="M60 100 H240" stroke="black" stroke-width="2" marker-end="url(#arrowhead)"/>
-  
-  <rect x="450" y="60" width="120" height="80" fill="#f0f0f0" stroke="black" stroke-width="2" rx="10" ry="10"/>
-  <text x="510" y="105" font-family="Arial" font-size="20" text-anchor="middle">L*</text>
-  <path d="M360 100 H450" stroke="black" stroke-width="2" marker-end="url(#arrowhead)"/>
-
-  <defs>
-    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
-      <polygon points="0 0, 10 3.5, 0 7" fill="black" />
-    </marker>
-  </defs>
+- L⁰ = {ε} (Siempre contiene la cadena vacía, independientemente de L).
+- L¹ = L
+- Lⁱ = L · Lⁱ⁻¹</p>
+<p>Propiedades:
+1. Idempotencia: (L<em>)</em> = L<em>.
+2. Contención: L ⊆ L</em> y {ε} ⊆ L<em>.
+3. Clausura de la unión: (L</em> ∪ M<em>)</em> = (L ∪ M)*.</p>
+<p>En la jerarquía de lenguajes, si L es un lenguaje regular, L<em> también es un lenguaje regular. En términos de autómatas, para construir un autómata que acepte L</em>, se toma el autómata de L, se añade un nuevo estado inicial que también es final (para aceptar ε), y se añaden transiciones ε desde los estados finales originales de vuelta al estado inicial original para permitir la repetición infinita.</p></div>
+            
+            <div class="diagrama-box">
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg style="max-width:100%; height:auto;" data-width="279pt" data-height="117pt"
+ viewBox="0.00 0.00 278.72 117.09" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 113.09)">
+<title>G</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-113.09 274.72,-113.09 274.72,4 -4,4"/>
+<text text-anchor="middle" x="135.36" y="-7.8" font-family="Times,serif" font-size="14.00">Autómata para {a}*</text>
+<!-- start -->
+<g id="node1" class="node">
+<title>start</title>
+<ellipse fill="black" stroke="black" cx="1.8" cy="-59.63" rx="1.8" ry="1.8"/>
+</g>
+<!-- q_new -->
+<g id="node2" class="node">
+<title>q_new</title>
+<ellipse fill="none" stroke="black" cx="77.23" cy="-59.63" rx="32.74" ry="32.74"/>
+<ellipse fill="none" stroke="black" cx="77.23" cy="-59.63" rx="36.75" ry="36.75"/>
+<text text-anchor="middle" x="77.23" y="-56.53" font-family="Helvetica,sans-Serif" font-size="12.00">q_new</text>
+</g>
+<!-- start&#45;&gt;q_new -->
+<g id="edge1" class="edge">
+<title>start&#45;&gt;q_new</title>
+<path fill="none" stroke="black" d="M3.62,-59.63C6.66,-59.63 17.68,-59.63 30.25,-59.63"/>
+<polygon fill="black" stroke="black" points="30.53,-63.13 40.53,-59.63 30.53,-56.13 30.53,-63.13"/>
+</g>
+<!-- q0 -->
+<g id="node3" class="node">
+<title>q0</title>
+<ellipse fill="none" stroke="black" cx="173.32" cy="-90.63" rx="18.44" ry="18.44"/>
+<text text-anchor="middle" x="173.32" y="-87.53" font-family="Helvetica,sans-Serif" font-size="12.00">q0</text>
+</g>
+<!-- q_new&#45;&gt;q0 -->
+<g id="edge2" class="edge">
+<title>q_new&#45;&gt;q0</title>
+<path fill="none" stroke="black" d="M112.2,-70.82C123.25,-74.46 135.35,-78.45 145.78,-81.88"/>
+<polygon fill="black" stroke="black" points="144.96,-85.3 155.55,-85.1 147.15,-78.65 144.96,-85.3"/>
+<text text-anchor="middle" x="134.35" y="-81.63" font-family="Helvetica,sans-Serif" font-size="10.00">ε</text>
+</g>
+<!-- q1 -->
+<g id="node4" class="node">
+<title>q1</title>
+<ellipse fill="none" stroke="black" cx="252.26" cy="-59.63" rx="18.44" ry="18.44"/>
+<text text-anchor="middle" x="252.26" y="-56.53" font-family="Helvetica,sans-Serif" font-size="12.00">q1</text>
+</g>
+<!-- q0&#45;&gt;q1 -->
+<g id="edge3" class="edge">
+<title>q0&#45;&gt;q1</title>
+<path fill="none" stroke="black" d="M190.64,-84.05C200.73,-79.98 213.92,-74.67 225.42,-70.04"/>
+<polygon fill="black" stroke="black" points="227,-73.17 234.96,-66.19 224.38,-66.68 227,-73.17"/>
+<text text-anchor="middle" x="212.79" y="-78.63" font-family="Helvetica,sans-Serif" font-size="10.00">a</text>
+</g>
+<!-- q1&#45;&gt;q_new -->
+<g id="edge4" class="edge">
+<title>q1&#45;&gt;q_new</title>
+<path fill="none" stroke="black" d="M233.87,-57.04C222.04,-55.41 206,-53.46 191.79,-52.63 169.44,-51.32 144.61,-52.54 123.89,-54.31"/>
+<polygon fill="black" stroke="black" points="123.41,-50.84 113.77,-55.24 124.05,-57.81 123.41,-50.84"/>
+<text text-anchor="middle" x="173.32" y="-55.63" font-family="Helvetica,sans-Serif" font-size="10.00">ε</text>
+</g>
+</g>
 </svg>
-                        <p style="font-size:0.8rem; color:#666; margin-top:1rem; text-align:center;">
-                            <em>Fig: Representación visual generada.</em>
-                        </p>
-                    </div>
-                </div>
 
-                <div class="card">
-                    <h3>Intuición</h3>
-                    <div><p>Piensa en la clausura de Kleene como una capacidad de 'repetir lo que quieras, cuantas veces quieras, o ninguna'. Si tienes una pieza de lego 'A', entonces A* significa que puedes tener: nada (la pieza vacía, ε), una pieza 'A', dos piezas 'AA', tres piezas 'AAA', y así infinitamente. Es como tener una plantilla o un molde, y poder usarlo para generar cualquier secuencia de patrones, incluyendo la posibilidad de no usarlo en absoluto. Esto es increíblemente útil porque muchos patrones en la vida real y en la computación son repetitivos: una lista de elementos (separados por comas), un número (compuesto por dígitos), un párrafo (compuesto por palabras), etc. La clausura de Kleene nos da el poder de describir todas estas posibilidades de repetición de forma concisa.</p></div>
-                </div>
-
-                <div class="card">
-                    <h3>Aplicación Real</h3>
-                    <div><p>La clausura de Kleene es el corazón de las expresiones regulares (regex), una herramienta fundamental para la búsqueda y manipulación de texto. El operador '<em>' en regex permite especificar que un carácter o un grupo de caracteres puede aparecer cero o más veces. Por ejemplo, en <code>a*b</code>, 'a' puede aparecer cero, una, dos o más veces, seguido de una 'b'. Esto es esencial en: 
-1.  </em><em>Validación de entrada</em><em>: Asegurar que un campo acepta un número arbitrario de caracteres válidos (ej., <code>[0-9]*</code> para un número entero). 
-2.  </em><em>Análisis léxico</em><em>: Los compiladores usan la clausura de Kleene para definir tokens como identificadores (<code>[a-zA-Z][a-zA-Z0-9]*</code>) o números (<code>[0-9]+</code>), donde la repetición es clave. 
-3.  </em><em>Búsqueda y reemplazo de texto</em><em>: Herramientas como grep, sed, y editores de texto utilizan <code>*</code> para encontrar patrones complejos en archivos. 
-4.  </em><em>Procesamiento de lenguaje natural</em><em>: Para identificar secuencias de palabras o morfemas repetitivos. 
-5.  </em><em>Diseño de protocolos de comunicación</em>*: Para especificar que ciertos campos o segmentos de datos pueden aparecer un número variable de veces.</p></div>
-                </div>
-
+                <p style="font-size:0.8em; color:#999">Diagrama generado automáticamente</p>
             </div>
+
+            <h3>Intuición</h3>
+            <div><p>La clausura de Kleene representa la idea de 'cero o más repeticiones'. Imagina que tienes un molde para galletas. La operación estrella te da permiso de usar ese molde tantas veces como quieras: puedes no hacer ninguna galleta (cadena vacía), hacer una, hacer dos, o incluso un millón. No hay un límite superior. Si tu lenguaje es { 'a' }, entonces L* es el conjunto de todas las cadenas de 'a's: {ε, 'a', 'aa', 'aaa', ...}. Es la herramienta que usamos para decir 'esto puede repetirse indefinidamente'. Es como un bucle 'while' o 'for' en programación que puede ejecutarse cualquier número de veces, incluyendo ninguna.</p></div>
+
+            <h3>Aplicación</h3>
+            <div><p>La aplicación más famosa de la clausura de Kleene está en las expresiones regulares (regex), utilizadas en casi todos los editores de texto y lenguajes de programación para búsqueda y sustitución. Por ejemplo, la expresión <code>[0-9]*</code> coincide con cualquier número de dígitos. En la definición de lenguajes de programación, se usa para permitir un número ilimitado de espacios en blanco entre tokens o para definir listas de parámetros. También es vital en la teoría de redes para modelar protocolos donde un mensaje puede ser retransmitido un número indeterminado de veces hasta que se reciba un acuse de recibo. En compiladores, permite que el código fuente tenga una longitud arbitraria, siempre que siga las reglas gramaticales repetitivas.</p></div>
         </article>
         
         <article class="subtema">
-            <div class="subtema-header">
-                <h2>3. Clausura Positiva (o Clausura de Kleene Positiva)</h2>
-            </div>
-            <div class="seccion-contenido">
-                
-                <div class="card full-width">
-                    <h3>Historia</h3>
-                    <div><p>Mientras que Stephen Cole Kleene formalizó la 'estrella de Kleene' (<em>) para representar 'cero o más' repeticiones, la necesidad de un operador para 'uno o más' repeticiones surgió naturalmente en la práctica y en el desarrollo de los lenguajes formales y las expresiones regulares. Aunque no se atribuye a una figura única la invención de la 'clausura positiva' (+), se estableció rápidamente como un operador derivado y complementario a la clausura de Kleene. Su inclusión en la sintaxis de las expresiones regulares estandarizadas (como las de POSIX y Perl) a partir de las últimas décadas del siglo XX, refleja su utilidad práctica para definir patrones que deben ocurrir al menos una vez. Su relación con la clausura de Kleene es directa, ya que L⁺ puede ser expresada como LL</em> o como L* sin la cadena vacía, lo que demuestra su arraigo en los fundamentos teóricos establecidos por Kleene y otros pioneros.</p></div>
-                </div>
+            <h2>Clausura Positiva (+)</h2>
+            
+            <h3>Historia</h3>
+            <div><p>La clausura positiva es una variante de la clausura de Kleene que surgió de la necesidad práctica de exigir al menos una ocurrencia de un patrón. Aunque Stephen Kleene formalizó la 'estrella', la comunidad de ciencias de la computación popularizó el símbolo '+' para distinguir casos donde la cadena vacía no es deseada por defecto. Históricamente, esta distinción se volvió crucial con el desarrollo de herramientas Unix como <code>grep</code> y <code>lex</code> en los años 70 en Bell Labs. Los ingenieros notaron que muchas estructuras sintácticas (como los nombres de variables o los números) requieren al menos un carácter para ser válidos. Introducir un operador específico para 'uno o más' simplificó enormemente las expresiones regulares, evitando tener que escribir <code>LL*</code> repetidamente. Se convirtió en un estándar en la sintaxis de expresiones regulares extendidas (ERE).</p></div>
 
-                <div class="card full-width formal-box">
-                    <h3>Descripción Formal</h3>
-                    <div><p>Sea Σ un alfabeto y L un lenguaje sobre Σ. La clausura positiva de L, denotada como L⁺, es el conjunto de todas las cadenas que se pueden formar concatenando una o más cadenas de L. Formalmente, L⁺ se define como la unión infinita:</p>
-<p>L⁺ = ∪_{i≥1} Lⁱ = L¹ ∪ L² ∪ L³ ∪ ...</p>
-<p>Donde:
-- L¹ = L.
-- L² = LL.
-- Lⁱ = L concatenado consigo mismo i veces.</p>
-<p>La diferencia clave con la clausura de Kleene es que L⁺ no incluye la cadena vacía (ε). Es decir, L⁺ contiene todas las cadenas de L<em>, excepto ε. Esta relación se puede expresar como L⁺ = LL</em> o, equivalentemente, L⁺ = L<em> \ {ε} (si L no contiene la cadena vacía, lo cual no es una condición para esta equivalencia general, ya que si L contiene ε, L⁺ seguirá siendo L</em> \ {ε}, siempre que se entienda L* sin ε). En esencia, L⁺ exige al menos una ocurrencia de una cadena del lenguaje L. Por ejemplo, si L = { "0", "1" }, entonces L⁺ sería el lenguaje de todas las cadenas binarias no vacías: { "0", "1", "00", "01", "10", "11", "000", ... }.</p></div>
-                    
-                    <div class="diagrama-container">
-                        <svg viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg">
-  <rect x="240" y="60" width="120" height="80" fill="#e0e0e0" stroke="black" stroke-width="1" rx="10" ry="10"/>
-  <text x="300" y="105" font-family="Arial" font-size="20" text-anchor="middle">L</text>
-
-  <path d="M360 100 A60 60 0 0 1 300 150 A60 60 0 0 1 240 100" fill="none" stroke="black" stroke-width="2" marker-end="url(#arrowhead)"/>
-  <text x="300" y="175" font-family="Arial" font-size="14" text-anchor="middle">repetir</text>
-
-  <rect x="450" y="60" width="120" height="80" fill="#f0f0f0" stroke="black" stroke-width="2" rx="10" ry="10"/>
-  <text x="510" y="105" font-family="Arial" font-size="20" text-anchor="middle">L⁺</text>
-
-  <path d="M360 100 H450" stroke="black" stroke-width="2" marker-end="url(#arrowhead)"/>
-  <text x="405" y="80" font-family="Arial" font-size="14" text-anchor="middle">Al menos uno</text>
-
-  <defs>
-    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
-      <polygon points="0 0, 10 3.5, 0 7" fill="black" />
-    </marker>
-  </defs>
+            <h3>Descripción Formal</h3>
+            <div><p>Definición: Sea L un lenguaje sobre un alfabeto Σ. La clausura positiva de L, denotada como L⁺, es el conjunto de todas las concatenaciones de una o más cadenas de L. </p>
+<p>Formalmente, se define como la unión de todas las potencias de L empezando desde 1:
+L⁺ = ⋃_{i=1}^{∞} Lⁱ = L¹ ∪ L² ∪ L³ ∪ ...</p>
+<p>Relación con la Clausura de Kleene:
+- L<em> = L⁺ ∪ {ε}
+- L⁺ = L · L</em> = L<em> · L
+- Si ε ∉ L, entonces ε ∉ L⁺. Si ε ∈ L, entonces L⁺ = L</em>.</p>
+<p>Propiedades:
+1. Si L es regular, L⁺ es regular.
+2. L⁺ ⊆ L*.
+3. (L⁺)⁺ = L⁺.</p>
+<p>En términos de construcción de autómatas, un autómata para L⁺ es muy similar al de L<em>, pero no permite aceptar la cadena vacía a menos que el lenguaje base L ya la incluya. Se puede construir concatenando el autómata de L con el autómata de L</em>.</p></div>
+            
+            <div class="diagrama-box">
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg style="max-width:100%; height:auto;" data-width="172pt" data-height="105pt"
+ viewBox="0.00 0.00 172.47 104.94" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 100.94)">
+<title>G</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-100.94 168.47,-100.94 168.47,4 -4,4"/>
+<text text-anchor="middle" x="82.24" y="-7.8" font-family="Times,serif" font-size="14.00">Autómata para {a}+</text>
+<!-- start -->
+<g id="node1" class="node">
+<title>start</title>
+<ellipse fill="black" stroke="black" cx="1.8" cy="-45.47" rx="1.8" ry="1.8"/>
+</g>
+<!-- q0 -->
+<g id="node2" class="node">
+<title>q0</title>
+<ellipse fill="none" stroke="black" cx="59.07" cy="-45.47" rx="18.44" ry="18.44"/>
+<text text-anchor="middle" x="59.07" y="-42.37" font-family="Helvetica,sans-Serif" font-size="12.00">q0</text>
+</g>
+<!-- start&#45;&gt;q0 -->
+<g id="edge1" class="edge">
+<title>start&#45;&gt;q0</title>
+<path fill="none" stroke="black" d="M3.76,-45.47C7.11,-45.47 18.7,-45.47 30.33,-45.47"/>
+<polygon fill="black" stroke="black" points="30.34,-48.97 40.34,-45.47 30.34,-41.97 30.34,-48.97"/>
+</g>
+<!-- q1 -->
+<g id="node3" class="node">
+<title>q1</title>
+<ellipse fill="none" stroke="black" cx="142" cy="-45.47" rx="18.44" ry="18.44"/>
+<ellipse fill="none" stroke="black" cx="142" cy="-45.47" rx="22.44" ry="22.44"/>
+<text text-anchor="middle" x="142" y="-42.37" font-family="Helvetica,sans-Serif" font-size="12.00">q1</text>
+</g>
+<!-- q0&#45;&gt;q1 -->
+<g id="edge2" class="edge">
+<title>q0&#45;&gt;q1</title>
+<path fill="none" stroke="black" d="M77.63,-45.47C86.83,-45.47 98.4,-45.47 109.12,-45.47"/>
+<polygon fill="black" stroke="black" points="109.44,-48.97 119.44,-45.47 109.44,-41.97 109.44,-48.97"/>
+<text text-anchor="middle" x="98.54" y="-48.47" font-family="Helvetica,sans-Serif" font-size="10.00">a</text>
+</g>
+<!-- q1&#45;&gt;q1 -->
+<g id="edge3" class="edge">
+<title>q1&#45;&gt;q1</title>
+<path fill="none" stroke="black" d="M134.32,-66.7C133.37,-76.92 135.93,-85.94 142,-85.94 145.89,-85.94 148.34,-82.23 149.35,-76.89"/>
+<polygon fill="black" stroke="black" points="152.85,-76.81 149.69,-66.7 145.86,-76.58 152.85,-76.81"/>
+<text text-anchor="middle" x="142" y="-88.94" font-family="Helvetica,sans-Serif" font-size="10.00">a</text>
+</g>
+</g>
 </svg>
-                        <p style="font-size:0.8rem; color:#666; margin-top:1rem; text-align:center;">
-                            <em>Fig: Representación visual generada.</em>
-                        </p>
-                    </div>
-                </div>
 
-                <div class="card">
-                    <h3>Intuición</h3>
-                    <div><p>La clausura positiva es como la clausura de Kleene, pero con una regla fundamental: 'al menos una vez'. Si con la estrella de Kleene podías no usar la pieza de lego 'A' en absoluto (produciendo ε), con la clausura positiva, estás obligado a usarla al menos una vez. No puedes tener 'nada'; siempre debe haber una instancia de 'A', o 'AA', o 'AAA', y así sucesivamente. Es útil cuando necesitas asegurar que un patrón o un elemento no esté completamente ausente. Por ejemplo, si estás construyendo un número, no quieres que sea vacío; debe tener al menos un dígito. Esta distinción, aunque sutil, es crucial para la validación y el reconocimiento de patrones donde la existencia es una condición necesaria.</p></div>
-                </div>
-
-                <div class="card">
-                    <h3>Aplicación Real</h3>
-                    <div><p>La clausura positiva, representada por el operador '+' en las expresiones regulares, es indispensable en situaciones donde se requiere la presencia obligatoria de un patrón o un conjunto de caracteres. 
-1.  <strong>Validación de números</strong>: Un número entero positivo, por ejemplo, se define como uno o más dígitos, <code>[0-9]+</code>. Esto asegura que no se acepte una cadena vacía como número. 
-2.  <strong>Definición de identificadores</strong>: En muchos lenguajes de programación, un identificador debe comenzar con una letra y puede ser seguido por cero o más letras o dígitos. Sin embargo, si definimos 'identificador' como 'una secuencia de letras y/o dígitos', <code>[a-zA-Z0-9]+</code> podría ser una parte de la definición, asegurando que el identificador no esté vacío. 
-3.  <strong>Listas de elementos</strong>: Si tienes una lista de elementos separados por comas, <code>(elemento,)+</code> asegura que haya al menos un elemento en la lista, y opcionalmente muchos más. 
-4.  <strong>Análisis de URLs</strong>: Para validar componentes de una URL que no pueden ser vacíos, como el nombre de dominio o los segmentos de ruta, se utiliza la clausura positiva. La clausura positiva, al igual que la de Kleene, es una herramienta fundamental en el análisis de texto y la construcción de parsers.</p></div>
-                </div>
-
+                <p style="font-size:0.8em; color:#999">Diagrama generado automáticamente</p>
             </div>
+
+            <h3>Intuición</h3>
+            <div><p>Si la clausura de Kleene es 'cero o más', la clausura positiva es 'uno o más'. Volviendo a la analogía del molde de galletas: con la clausura positiva, estás obligado a hacer al menos una galleta. No puedes elegir el conjunto vacío. Es la diferencia entre decir 'puedes tener postre' (donde podrías no comer nada) y 'debes comer al menos un postre'. Si L = { 'a' }, entonces L⁺ = { 'a', 'aa', 'aaa', ... }. Nota que falta el 'ε'. Se usa cuando la existencia de un elemento es obligatoria para que la estructura tenga sentido.</p></div>
+
+            <h3>Aplicación</h3>
+            <div><p>Se aplica en validaciones de formularios donde un campo no puede estar vacío (por ejemplo, un nombre de usuario requiere <code>[a-z]+</code>). En los lenguajes de programación, se usa para definir constantes numéricas: un número debe tener al menos un dígito para ser considerado un número (<code>[0-9]+</code>). También se utiliza en el diseño de protocolos de comunicación para definir tramas de datos que deben contener al menos un byte de carga útil. En el procesamiento de lenguaje natural, se usa para definir secuencias de palabras que forman frases, asegurando que no se procesen oraciones de longitud cero.</p></div>
         </article>
-        
-    </main>
-
-    <footer>
-        <p>Prof. Jorge López-Cifre, PhD © 2026</p>
-    </footer>
-
-</body>
-</html>
+        </body></html>

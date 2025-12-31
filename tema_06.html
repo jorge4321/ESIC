@@ -3,393 +3,283 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>6 - Máquinas secuenciales - Máquinas de Mealy y Moore - Prof. Jorge López-Cifre</title>
+    <title>6 - Máquinas secuenciales - Máquinas de Mealy y Moore</title>
     <style>
-        :root {
-            --primary: #003366;
-            --accent: #d4af37;
-            --bg: #f8f9fa;
-            --text: #2c3e50;
-            --card-bg: #ffffff;
-            --border: #e9ecef;
-        }
-        body {
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--bg);
-            color: var(--text);
-            margin: 0;
-            padding: 0;
-            line-height: 1.7;
-        }
-        /* Tipografía mejorada */
-        p { margin-bottom: 1rem; }
-        strong, b { color: var(--primary); font-weight: 700; }
-        
-        header {
-            background: var(--primary);
-            color: white;
-            padding: 1rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
-        h1 { margin: 0; font-size: 1.25rem; font-weight: 600; }
-        
-        .btn-volver {
-            background: var(--accent);
-            color: var(--primary);
-            text-decoration: none;
-            padding: 0.5rem 1.2rem;
-            border-radius: 50px;
-            font-weight: bold;
-            font-size: 0.9rem;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-        }
-        .btn-volver:hover { 
+        body { font-family: sans-serif; background: #f4f4f9; color: #333; margin: 0; padding: 20px; }
+        header { background: #2c3e50; color: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; }
+        h1 { margin: 0; }
+        .subtema { background: white; padding: 30px; margin-bottom: 40px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        h2 { color: #2980b9; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+        h3 { color: #7f8c8d; font-size: 0.9em; text-transform: uppercase; margin-top: 25px; letter-spacing: 1px; }
+        .diagrama-box { 
+            text-align: center; 
+            margin: 30px 0; 
+            padding: 20px; 
             background: #fff; 
-            transform: translateY(-1px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-        }
-
-        main {
-            max-width: 1100px;
-            margin: 2rem auto;
-            padding: 0 1.5rem;
-        }
-
-        .subtema {
-            background: var(--card-bg);
-            border-radius: 12px;
-            margin-bottom: 4rem;
-            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
-            overflow: hidden;
-            border: 1px solid var(--border);
-        }
-        
-        .subtema-header {
-            background: linear-gradient(to right, #f8f9fa, #ffffff);
-            padding: 1.5rem 2rem;
-            border-bottom: 1px solid var(--border);
-        }
-        .subtema-header h2 { 
-            margin: 0; 
-            color: var(--primary); 
-            font-size: 1.6rem;
-            border-left: 5px solid var(--accent);
-            padding-left: 1rem;
-        }
-
-        .seccion-contenido {
-            padding: 2rem;
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 2.5rem;
-        }
-
-        @media (min-width: 900px) {
-            .seccion-contenido { grid-template-columns: 1fr 1fr; }
-            .full-width { grid-column: 1 / -1; }
-        }
-
-        .card h3 {
-            color: var(--primary);
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            margin-top: 0;
-            margin-bottom: 1rem;
-            border-bottom: 1px solid #ddd;
-            padding-bottom: 0.5rem;
-        }
-
-        .formal-box {
-            background-color: #f0f7ff; /* Azul muy muy pálido */
+            border: 1px solid #eee; 
             border-radius: 8px;
-            padding: 2rem !important;
-            border: 1px solid #cce5ff;
         }
-
-        /* CSS Específico para corregir SVGs */
-        .diagrama-container {
-            text-align: center;
-            margin: 2rem auto;
-            padding: 1.5rem;
-            background: white;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
-            max-width: 100%;
-            overflow-x: auto; /* Si es muy ancho, permite scroll */
-        }
-        
-        /* Forzar comportamiento correcto del SVG */
-        .diagrama-container svg {
-            max-width: 100%;
-            height: auto;
-            display: block;
-            margin: 0 auto;
-        }
-        
-        /* Evitar que el texto dentro del SVG sea ilegible */
-        .diagrama-container text {
-            font-family: sans-serif;
-        }
-
-        footer {
-            text-align: center;
-            padding: 3rem;
-            background: var(--primary);
-            color: rgba(255,255,255,0.8);
-            margin-top: 4rem;
-            font-size: 0.9rem;
-        }
+        /* Estilos Markdown */
+        p { line-height: 1.6; }
+        strong { color: #2c3e50; }
+        code { background: #f0f0f0; padding: 2px 5px; border-radius: 3px; font-family: monospace; }
     </style>
 </head>
 <body>
-
-    <header>
-        <h1>6 - Máquinas secuenciales - Máquinas de Mealy y Moore</h1>
-        <a href="javascript:history.back()" class="btn-volver">← Volver</a>
-    </header>
-
+    <header><h1>6 - Máquinas secuenciales - Máquinas de Mealy y Moore</h1></header>
     <main>
 
         <article class="subtema">
-            <div class="subtema-header">
-                <h2>1. Fundamentos de las Máquinas Secuenciales y la Máquina de Moore</h2>
-            </div>
-            <div class="seccion-contenido">
-                
-                <div class="card full-width">
-                    <h3>Historia</h3>
-                    <div><p>Las máquinas secuenciales tienen sus raíces en el desarrollo de la teoría de autómatas a mediados del siglo XX, una era de intensa investigación en lógica matemática y los fundamentos de la computación. En este contexto, Edward F. Moore, un pionero en la ciencia de la computación y la teoría de autómatas en Bell Labs, publicó su influyente trabajo 'Gedanken-experiments on Sequential Machines' en 1956. Su contribución fue clave para formalizar un tipo específico de máquina de estados finitos con salidas, donde la salida está intrínsecamente ligada al estado actual de la máquina. Este modelo se convirtió en fundamental para el diseño de circuitos lógicos síncronos y la comprensión teórica de sistemas con memoria. La máquina de Moore representó un avance significativo al proporcionar un marco claro para describir sistemas cuya respuesta no solo dependía de la entrada actual, sino también de una historia de entradas previas codificada en su estado interno. Su simplicidad y predictibilidad la hicieron indispensable en los albores de la computación y la electrónica digital.</p></div>
-                </div>
+            <h2>6.1 - Máquina de Mealy: Reactividad Basada en Transiciones</h2>
+            
+            <h3>Historia</h3>
+            <div><p>La Máquina de Mealy debe su nombre a George H. Mealy, un pionero en la teoría de circuitos lógicos que trabajaba en los Laboratorios Bell. En 1955, publicó su influyente artículo 'A Method for Synthesizing Sequential Circuits', donde propuso un modelo formal para sistemas donde la salida depende tanto del estado actual como de las entradas presentes. Este avance fue fundamental para el desarrollo de las telecomunicaciones y la computación digital temprana. Antes de Mealy, el diseño de circuitos secuenciales era mayormente empírico; su formalización permitió a los ingenieros sintetizar hardware de manera sistemática, reduciendo el número de estados necesarios para realizar tareas complejas. Su enfoque se centraba en la eficiencia, permitiendo que las máquinas respondieran instantáneamente a los cambios en los estímulos externos sin esperar a una transición de estado completa, lo que sentó las bases para los controladores de alta velocidad en la arquitectura de computadoras moderna.</p></div>
 
-                <div class="card full-width formal-box">
-                    <h3>Descripción Formal</h3>
-                    <div><p>Una Máquina de Moore es un tipo de autómata de estados finitos que produce una salida basada únicamente en su estado actual. Formalmente, se define como una 6-tupla (Q, Σ, Δ, δ, λ, q₀), donde:</p>
-<p>Q: Es un conjunto finito y no vacío de estados posibles de la máquina.
-Σ: Es el alfabeto de entrada, un conjunto finito y no vacío de símbolos que la máquina puede recibir.
-Δ: Es el alfabeto de salida, un conjunto finito y no vacío de símbolos que la máquina puede producir.
-δ: Es la función de transición de estado, definida como δ: Q × Σ → Q. Esta función determina el próximo estado de la máquina dado un estado actual y un símbolo de entrada.
-λ: Es la función de salida, definida como λ: Q → Δ. Esta función asigna un símbolo de salida a cada estado de la máquina. La salida depende exclusivamente del estado actual en el que se encuentra la máquina, no de la transición o la entrada en ese instante.
-q₀: Es el estado inicial, un elemento específico de Q donde la máquina comienza su operación.</p>
-<p>En una Máquina de Moore, la salida se genera tan pronto como la máquina entra en un estado, y permanece constante hasta que la máquina transiciona a un nuevo estado. Esto implica que la salida tiene un retardo de un ciclo respecto a la entrada que provoca la transición, ya que la salida se asocia al estado <em>alcanzado</em> después de procesar una entrada.</p></div>
-                    
-                    <div class="diagrama-container">
-                        <svg viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg">
-  <defs>
-    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
-      <path d="M0,0 L0,6 L9,3 z" fill="black" />
-    </marker>
-  </defs>
-
-  <!-- Initial state arrow -->
-  <line x1="50" y1="100" x2="100" y2="100" stroke="black" stroke-width="2" marker-end="url(#arrow)" />
-
-  <!-- State 1 -->
-  <circle cx="150" cy="100" r="40" fill="#E6F2FF" stroke="black" stroke-width="2"/>
-  <text x="150" y="95" font-family="Arial" font-size="16" text-anchor="middle" fill="black">q0</text>
-  <text x="150" y="115" font-family="Arial" font-size="14" text-anchor="middle" fill="darkgreen">/ Salida A</text>
-
-  <!-- State 2 -->
-  <circle cx="300" cy="100" r="40" fill="#E6F2FF" stroke="black" stroke-width="2"/>
-  <text x="300" y="95" font-family="Arial" font-size="16" text-anchor="middle" fill="black">q1</text>
-  <text x="300" y="115" font-family="Arial" font-size="14" text-anchor="middle" fill="darkgreen">/ Salida B</text>
-
-  <!-- State 3 -->
-  <circle cx="450" cy="100" r="40" fill="#E6F2FF" stroke="black" stroke-width="2"/>
-  <text x="450" y="95" font-family="Arial" font-size="16" text-anchor="middle" fill="black">q2</text>
-  <text x="450" y="115" font-family="Arial" font-size="14" text-anchor="middle" fill="darkgreen">/ Salida C</text>
-
-  <!-- Transitions -->
-  <path d="M190 100 H260" stroke="black" stroke-width="2" marker-end="url(#arrow)"/>
-  <text x="225" y="90" font-family="Arial" font-size="14" text-anchor="middle" fill="black">Entrada x</text>
-
-  <path d="M340 100 H410" stroke="black" stroke-width="2" marker-end="url(#arrow)"/>
-  <text x="375" y="90" font-family="Arial" font-size="14" text-anchor="middle" fill="black">Entrada y</text>
-
-  <path d="M410 120 C420 150, 380 150, 360 120" stroke="black" stroke-width="2" marker-end="url(#arrow)"/>
-  <text x="390" y="160" font-family="Arial" font-size="14" text-anchor="middle" fill="black">Entrada z</text>
+            <h3>Descripción Formal</h3>
+            <div><p>Una Máquina de Mealy es una séxtupla formal definida como M = (Q, Σ, Δ, δ, λ, q₀), donde:
+- Q es un conjunto finito de estados.
+- Σ es el alfabeto de entrada.
+- Δ es el alfabeto de salida.
+- δ: Q × Σ → Q es la función de transición de estados.
+- λ: Q × Σ → Δ es la función de salida.
+- q₀ ∈ Q es el estado inicial.</p>
+<p>En este modelo, el valor de la salida λ(q, a) se asocia directamente con la transición producida por la entrada 'a' desde el estado 'q'. Matemáticamente, la salida en el tiempo 't' es una función y(t) = λ(s(t), x(t)), donde s(t) es el estado actual y x(t) es la entrada. A diferencia de los autómatas finitos tradicionales, no hay estados finales de aceptación, ya que el propósito es generar un flujo de salida continuo. La característica distintiva es que la salida cambia en el momento en que cambia la entrada, lo que puede representarse gráficamente en las aristas del diagrama como 'entrada/salida'. Esta estructura permite representar comportamientos complejos con un número mínimo de estados, optimizando los recursos del hardware subyacente.</p></div>
+            
+            <div class="diagrama-box">
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg style="max-width:100%; height:auto;" data-width="143pt" data-height="76pt"
+ viewBox="0.00 0.00 142.80 76.40" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 72.4)">
+<title>G</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-72.4 138.8,-72.4 138.8,4 -4,4"/>
+<!-- S0 -->
+<g id="node1" class="node">
+<title>S0</title>
+<ellipse fill="none" stroke="black" cx="19.7" cy="-19.7" rx="19.9" ry="19.9"/>
+<text text-anchor="middle" x="19.7" y="-16.6" font-family="Helvetica,sans-Serif" font-size="12.00">S0</text>
+</g>
+<!-- S0&#45;&gt;S0 -->
+<g id="edge3" class="edge">
+<title>S0&#45;&gt;S0</title>
+<path fill="none" stroke="black" d="M11.49,-37.93C9.95,-48.06 12.69,-57.4 19.7,-57.4 24.19,-57.4 26.92,-53.57 27.91,-48.15"/>
+<polygon fill="black" stroke="black" points="31.41,-47.93 27.91,-37.93 24.41,-47.93 31.41,-47.93"/>
+<text text-anchor="middle" x="19.7" y="-60.4" font-family="Helvetica,sans-Serif" font-size="10.00">0 / 0</text>
+</g>
+<!-- S1 -->
+<g id="node2" class="node">
+<title>S1</title>
+<ellipse fill="none" stroke="black" cx="115.1" cy="-19.7" rx="19.9" ry="19.9"/>
+<text text-anchor="middle" x="115.1" y="-16.6" font-family="Helvetica,sans-Serif" font-size="12.00">S1</text>
+</g>
+<!-- S0&#45;&gt;S1 -->
+<g id="edge1" class="edge">
+<title>S0&#45;&gt;S1</title>
+<path fill="none" stroke="black" d="M39.6,-19.7C52.64,-19.7 70.22,-19.7 85.03,-19.7"/>
+<polygon fill="black" stroke="black" points="85.22,-23.2 95.22,-19.7 85.22,-16.2 85.22,-23.2"/>
+<text text-anchor="middle" x="67.4" y="-22.7" font-family="Helvetica,sans-Serif" font-size="10.00">1 / 0</text>
+</g>
+<!-- S1&#45;&gt;S0 -->
+<g id="edge2" class="edge">
+<title>S1&#45;&gt;S0</title>
+<path fill="none" stroke="black" d="M96.98,-11.1C90.95,-8.5 84.02,-6 77.4,-4.7 68.68,-2.99 66.12,-2.99 57.4,-4.7 54.09,-5.35 50.7,-6.3 47.39,-7.41"/>
+<polygon fill="black" stroke="black" points="45.89,-4.24 37.82,-11.1 48.41,-10.77 45.89,-4.24"/>
+<text text-anchor="middle" x="67.4" y="-7.7" font-family="Helvetica,sans-Serif" font-size="10.00">0 / 1</text>
+</g>
+<!-- S1&#45;&gt;S1 -->
+<g id="edge4" class="edge">
+<title>S1&#45;&gt;S1</title>
+<path fill="none" stroke="black" d="M106.88,-37.93C105.35,-48.06 108.09,-57.4 115.1,-57.4 119.59,-57.4 122.32,-53.57 123.31,-48.15"/>
+<polygon fill="black" stroke="black" points="126.81,-47.93 123.31,-37.93 119.81,-47.93 126.81,-47.93"/>
+<text text-anchor="middle" x="115.1" y="-60.4" font-family="Helvetica,sans-Serif" font-size="10.00">1 / 1</text>
+</g>
+</g>
 </svg>
-                        <p style="font-size:0.8rem; color:#666; margin-top:1rem; text-align:center;">
-                            <em>Fig: Representación visual generada.</em>
-                        </p>
-                    </div>
-                </div>
 
-                <div class="card">
-                    <h3>Intuición</h3>
-                    <div><p>Para entender una máquina de Moore, podemos pensar en un sistema donde la 'personalidad' o el 'modo' actual determina directamente lo que hace o lo que muestra. Imagina un semáforo: cuando está en el estado 'rojo', su salida es intrínsecamente 'luz roja encendida'. No importa qué carro intente pasar, el semáforo simplemente emite la luz roja hasta que transiciona a otro estado. La salida es una propiedad fija de cada estado. Otro ejemplo podría ser una máquina expendedora: una vez que ha acumulado suficiente dinero y está en el estado 'LISTO PARA DISPENSAR', su salida potencial es el producto seleccionado, y esta salida está asociada a ese estado de 'listo'. La salida no cambia hasta que la máquina pasa a un estado diferente (por ejemplo, 'DISPENSANDO' o 'ESPERANDO MÁS DINERO'). Esto hace que las máquinas de Moore sean ideales para modelar sistemas donde las salidas deben ser estables y predecibles, reflejando el estado interno del sistema de manera clara y sin ambigüedades inmediatas con cada nueva entrada. Es como si el sistema 'pensara' y luego 'actuara' una vez que ha decidido su nuevo estado.</p></div>
-                </div>
-
-                <div class="card">
-                    <h3>Aplicación Real</h3>
-                    <div><p>Las Máquinas de Moore tienen una amplia aplicación en el diseño de hardware digital, especialmente en el ámbito de los circuitos síncronos. Componentes como contadores, registros de desplazamiento y unidades de control para procesadores (CPU) a menudo se modelan y diseñan utilizando principios de Moore, donde las salidas son estables durante un ciclo de reloj y cambian solo en el flanco del reloj al transicionar a un nuevo estado. En la ingeniería de software, se utilizan para modelar sistemas de control donde las salidas no necesitan ser instantáneas con cada entrada, sino que representan un estado consolidado. Por ejemplo, en interfaces de usuario complejas, un estado de 'modo edición' podría tener una salida asociada (mostrar ciertas herramientas) que se mantiene hasta que se cambia a otro 'modo'. También son útiles en la simulación de protocolos de comunicación donde los mensajes de estado se envían después de que el sistema ha procesado completamente una serie de eventos y se ha establecido en un nuevo estado de protocolo. Su predictibilidad las hace ideales para sistemas donde la robustez y la claridad del estado son primordiales.</p></div>
-                </div>
-
+                <p style="font-size:0.8em; color:#999">Diagrama generado automáticamente</p>
             </div>
+
+            <h3>Intuición</h3>
+            <div><p>Imagina que la Máquina de Mealy es como una persona muy reactiva en una conversación. En lugar de esperar a procesar todo lo que dices para darte una respuesta basada en cómo se siente (su estado), su reacción es inmediata al escuchar una palabra específica. Si está de mal humor (estado A) y le dices 'hola' (entrada), su respuesta será un gruñido (salida) mientras cambia a un estado de irritación (estado B). La clave aquí es que la respuesta no depende solo de que esté de mal humor, sino del hecho preciso de que le hablaste en ese momento. En términos técnicos, la salida ocurre 'durante' el viaje entre un estado y otro. Esto hace que las máquinas de Mealy sean extremadamente rápidas porque no tienen que 'entrar' formalmente en el siguiente estado para emitir un resultado; responden al estímulo en tiempo real sobre la flecha de transición.</p></div>
+
+            <h3>Aplicación</h3>
+            <div><p>Las máquinas de Mealy son ampliamente utilizadas en el diseño de microprocesadores y controladores de protocolos de comunicación. Por ejemplo, en el bus de una CPU, el controlador de memoria debe responder a señales de lectura/escritura inmediatamente para evitar ciclos de espera innecesarios. Al usar una máquina de Mealy, el hardware puede activar líneas de control tan pronto como se detecta una señal de habilitación, reduciendo la latencia de procesamiento. También se encuentran en la implementación de módems y sistemas de cifrado de flujo, donde cada bit de entrada debe transformarse en un bit de salida basándose en una clave interna cambiante. Su capacidad para manejar la lógica combinacional de manera eficiente las hace ideales para circuitos donde el área de silicio es limitada y se requiere la máxima velocidad de respuesta ante eventos externos aleatorios.</p></div>
         </article>
         
         <article class="subtema">
-            <div class="subtema-header">
-                <h2>2. La Máquina de Mealy: Una Alternativa Orientada a la Salida</h2>
-            </div>
-            <div class="seccion-contenido">
-                
-                <div class="card full-width">
-                    <h3>Historia</h3>
-                    <div><p>En paralelo y de forma complementaria al trabajo de Moore, George H. Mealy, también investigador en Bell Labs, publicó 'A Method for Synthesizing Sequential Circuits' en 1955. Este artículo introdujo un modelo alternativo para las máquinas secuenciales de estados finitos que ofrecía una flexibilidad diferente en la generación de salidas. Mientras que Moore ligaba las salidas directamente a los estados, Mealy propuso un diseño donde la salida no solo dependía del estado actual, sino también de la entrada recibida en ese preciso instante. Esta distinción fue crucial para el diseño de circuitos que requerían una respuesta más inmediata y dinámica a los eventos de entrada. La máquina de Mealy se estableció rápidamente como una herramienta fundamental, especialmente para aquellos ingenieros que buscaban optimizar el número de estados en sus diseños o que necesitaban que la salida reaccionara instantáneamente a una combinación específica de estado y entrada, sin el retardo inherente a la máquina de Moore. Su desarrollo fue vital para la evolución de la electrónica digital y la computación.</p></div>
-                </div>
+            <h2>6.2 - Máquina de Moore: Estabilidad Basada en el Estado</h2>
+            
+            <h3>Historia</h3>
+            <div><p>Edward F. Moore fue otro gigante de los Laboratorios Bell que, casi simultáneamente con Mealy, desarrolló un modelo alternativo de máquinas secuenciales. En su artículo de 1956, 'Gedanken-experiments on Sequential Machines', Moore introdujo una clase de autómata donde la salida está vinculada exclusivamente al estado interno de la máquina. Su enfoque estaba inspirado en el conductismo y la psicología experimental, tratando a la máquina como una 'caja negra' donde solo podemos observar su comportamiento externo (salidas) en función de sus estados internos. El modelo de Moore fue adoptado rápidamente por su robustez y simplicidad de diseño en sistemas de seguridad. A diferencia del modelo de Mealy, las máquinas de Moore garantizan que la salida sea estable mientras la máquina permanezca en un estado, lo cual fue crucial para evitar fallos de sincronización en los primeros relés telefónicos y sistemas digitales de control industrial.</p></div>
 
-                <div class="card full-width formal-box">
-                    <h3>Descripción Formal</h3>
-                    <div><p>Una Máquina de Mealy es un tipo de autómata de estados finitos que produce una salida basada tanto en su estado actual como en la entrada que recibe en ese momento. Formalmente, se define como una 6-tupla (Q, Σ, Δ, δ, λ, q₀), donde:</p>
-<p>Q: Es un conjunto finito y no vacío de estados posibles de la máquina.
-Σ: Es el alfabeto de entrada, un conjunto finito y no vacío de símbolos que la máquina puede recibir.
-Δ: Es el alfabeto de salida, un conjunto finito y no vacío de símbolos que la máquina puede producir.
-δ: Es la función de transición de estado, definida como δ: Q × Σ → Q. Esta función determina el próximo estado de la máquina dado un estado actual y un símbolo de entrada.
-λ: Es la función de salida, definida como λ: Q × Σ → Δ. Esta es la diferencia clave con la Máquina de Moore; la salida se determina por la combinación del estado actual y el símbolo de entrada que está siendo procesado en ese instante. La salida ocurre en el momento de la transición, no al entrar en el estado.
-q₀: Es el estado inicial, un elemento específico de Q donde la máquina comienza su operación.</p>
-<p>En una Máquina de Mealy, la salida puede cambiar en cualquier momento en que se produce una transición de estado, tan pronto como se aplica una nueva entrada. Esto significa que no hay un retardo de un ciclo entre la entrada y la salida correspondiente, lo que permite respuestas más rápidas y reactivas en comparación con las Máquinas de Moore.</p></div>
-                    
-                    <div class="diagrama-container">
-                        <svg viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg">
-  <defs>
-    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
-      <path d="M0,0 L0,6 L9,3 z" fill="black" />
-    </marker>
-  </defs>
-
-  <!-- Initial state arrow -->
-  <line x1="50" y1="100" x2="100" y2="100" stroke="black" stroke-width="2" marker-end="url(#arrow)" />
-
-  <!-- State 1 -->
-  <circle cx="150" cy="100" r="40" fill="#FFFBE6" stroke="black" stroke-width="2"/>
-  <text x="150" y="105" font-family="Arial" font-size="16" text-anchor="middle" fill="black">q0</text>
-
-  <!-- State 2 -->
-  <circle cx="300" cy="100" r="40" fill="#FFFBE6" stroke="black" stroke-width="2"/>
-  <text x="300" y="105" font-family="Arial" font-size="16" text-anchor="middle" fill="black">q1</text>
-
-  <!-- State 3 -->
-  <circle cx="450" cy="100" r="40" fill="#FFFBE6" stroke="black" stroke-width="2"/>
-  <text x="450" y="105" font-family="Arial" font-size="16" text-anchor="middle" fill="black">q2</text>
-
-  <!-- Transitions with outputs -->
-  <path d="M190 100 H260" stroke="black" stroke-width="2" marker-end="url(#arrow)"/>
-  <text x="225" y="90" font-family="Arial" font-size="14" text-anchor="middle" fill="black">Entrada x / Salida A</text>
-
-  <path d="M340 100 H410" stroke="black" stroke-width="2" marker-end="url(#arrow)"/>
-  <text x="375" y="90" font-family="Arial" font-size="14" text-anchor="middle" fill="black">Entrada y / Salida B</text>
-
-  <path d="M410 120 C420 150, 380 150, 360 120" stroke="black" stroke-width="2" marker-end="url(#arrow)"/>
-  <text x="390" y="160" font-family="Arial" font-size="14" text-anchor="middle" fill="black">Entrada z / Salida C</text>
+            <h3>Descripción Formal</h3>
+            <div><p>Una Máquina de Moore se define formalmente como una séxtupla M = (Q, Σ, Δ, δ, λ, q₀), donde:
+- Q es un conjunto finito de estados.
+- Σ es el alfabeto de entrada.
+- Δ es el alfabeto de salida.
+- δ: Q × Σ → Q es la función de transición.
+- λ: Q → Δ es la función de salida.
+- q₀ ∈ Q es el estado inicial.</p>
+<p>La diferencia crucial con Mealy radica en la función de salida λ. En Moore, λ mapea un estado directamente a un valor de salida, independientemente de la entrada que llevó a ese estado. Matemáticamente, y(t) = λ(s(t)). Esto significa que la salida solo cambia cuando la máquina cambia de estado. En un diagrama de estados, la salida se anota comúnmente dentro del círculo del estado (por ejemplo, 'Estado/Salida'). Para una secuencia de entrada de longitud 'n', una máquina de Moore produce una secuencia de salida de longitud 'n+1', ya que emite una salida inicial correspondiente al estado q₀ antes de procesar cualquier entrada. Este modelo favorece el diseño de sistemas síncronos, donde las salidas están alineadas perfectamente con los flancos de un reloj global.</p></div>
+            
+            <div class="diagrama-box">
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg style="max-width:100%; height:auto;" data-width="166pt" data-height="95pt"
+ viewBox="0.00 0.00 165.73 94.87" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 90.87)">
+<title>G</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-90.87 161.73,-90.87 161.73,4 -4,4"/>
+<!-- S0 -->
+<g id="node1" class="node">
+<title>S0</title>
+<ellipse fill="none" stroke="black" cx="28.93" cy="-28.93" rx="28.87" ry="28.87"/>
+<text text-anchor="middle" x="28.93" y="-25.83" font-family="Helvetica,sans-Serif" font-size="12.00">S0 / 0</text>
+</g>
+<!-- S0&#45;&gt;S0 -->
+<g id="edge3" class="edge">
+<title>S0&#45;&gt;S0</title>
+<path fill="none" stroke="black" d="M19.95,-56.88C19.66,-67.29 22.65,-75.87 28.93,-75.87 32.96,-75.87 35.63,-72.35 36.96,-67.08"/>
+<polygon fill="black" stroke="black" points="40.46,-67.16 37.91,-56.88 33.49,-66.51 40.46,-67.16"/>
+<text text-anchor="middle" x="28.93" y="-78.87" font-family="Helvetica,sans-Serif" font-size="10.00">0</text>
+</g>
+<!-- S1 -->
+<g id="node2" class="node">
+<title>S1</title>
+<ellipse fill="none" stroke="black" cx="128.8" cy="-28.93" rx="28.87" ry="28.87"/>
+<text text-anchor="middle" x="128.8" y="-25.83" font-family="Helvetica,sans-Serif" font-size="12.00">S1 / 1</text>
+</g>
+<!-- S0&#45;&gt;S1 -->
+<g id="edge1" class="edge">
+<title>S0&#45;&gt;S1</title>
+<path fill="none" stroke="black" d="M57.98,-28.93C67.8,-28.93 79.02,-28.93 89.54,-28.93"/>
+<polygon fill="black" stroke="black" points="89.75,-32.43 99.75,-28.93 89.75,-25.43 89.75,-32.43"/>
+<text text-anchor="middle" x="78.87" y="-31.93" font-family="Helvetica,sans-Serif" font-size="10.00">1</text>
+</g>
+<!-- S1&#45;&gt;S0 -->
+<g id="edge2" class="edge">
+<title>S1&#45;&gt;S0</title>
+<path fill="none" stroke="black" d="M102.46,-16.93C94.09,-14.24 84.67,-12.53 75.87,-13.93 72.63,-14.45 69.32,-15.15 66.03,-15.98"/>
+<polygon fill="black" stroke="black" points="64.96,-12.65 56.3,-18.75 66.88,-19.38 64.96,-12.65"/>
+<text text-anchor="middle" x="78.87" y="-16.93" font-family="Helvetica,sans-Serif" font-size="10.00">0</text>
+</g>
+<!-- S1&#45;&gt;S1 -->
+<g id="edge4" class="edge">
+<title>S1&#45;&gt;S1</title>
+<path fill="none" stroke="black" d="M119.82,-56.88C119.52,-67.29 122.52,-75.87 128.8,-75.87 132.82,-75.87 135.5,-72.35 136.82,-67.08"/>
+<polygon fill="black" stroke="black" points="140.33,-67.16 137.78,-56.88 133.36,-66.51 140.33,-67.16"/>
+<text text-anchor="middle" x="128.8" y="-78.87" font-family="Helvetica,sans-Serif" font-size="10.00">1</text>
+</g>
+</g>
 </svg>
-                        <p style="font-size:0.8rem; color:#666; margin-top:1rem; text-align:center;">
-                            <em>Fig: Representación visual generada.</em>
-                        </p>
-                    </div>
-                </div>
 
-                <div class="card">
-                    <h3>Intuición</h3>
-                    <div><p>La Máquina de Mealy es como un sistema que reacciona de manera instantánea a lo que está sucediendo en el momento. Imagina una puerta automática con sensores: su 'estado' podría ser 'puerta cerrada', pero la 'salida' (abrir la puerta) no solo depende de que esté cerrada, sino también de que haya una 'entrada' (una persona acercándose). Si no hay persona, la puerta sigue cerrada. Si hay persona, la puerta se abre <em>en ese instante</em>, sin esperar a que la puerta 'cambie a un estado de apertura' antes de actuar. La acción de abrir está pegada a la detección de la persona mientras la puerta está en el estado de cerrada. Otro ejemplo sería un controlador de ascensor: la salida (mover el ascensor hacia arriba o abajo) depende del estado actual (piso actual, dirección) y de la entrada (botón de llamada presionado en un piso específico). La respuesta es inmediata a la solicitud. Esta inmediatez hace que las máquinas de Mealy sean ideales para modelar sistemas donde la respuesta rápida a la combinación de la situación actual y un evento externo es crítica, sin un retardo perceptible.</p></div>
-                </div>
-
-                <div class="card">
-                    <h3>Aplicación Real</h3>
-                    <div><p>Las Máquinas de Mealy son fundamentales en el diseño de circuitos de control que requieren respuestas rápidas a entradas específicas. Por ejemplo, en el diseño de unidades de control de microprocesadores, ciertas operaciones (como un 'halt' o una interrupción) deben generar una salida inmediatamente al ser detectadas, sin esperar al siguiente ciclo de reloj para que el estado se estabilice. En el desarrollo de software, las máquinas de Mealy son ideales para modelar parseadores o analizadores léxicos, donde la salida (un token léxico) se genera en función del carácter actual que se está leyendo y del estado actual del analizador. También son aplicables en el diseño de protocolos de red, donde la reacción a un paquete de datos entrante (por ejemplo, enviar una confirmación o un error) debe ser instantánea y depender del contenido del paquete junto con el estado actual de la conexión. Su capacidad para generar salidas sin retardo las hace preferibles en sistemas donde la latencia es una preocupación crítica.</p></div>
-                </div>
-
+                <p style="font-size:0.8em; color:#999">Diagrama generado automáticamente</p>
             </div>
+
+            <h3>Intuición</h3>
+            <div><p>Piensa en la Máquina de Moore como un semáforo. El color de la luz (la salida) depende únicamente de en qué fase se encuentra el sistema (el estado: Rojo, Amarillo o Verde). No importa si los coches tocan el claxon o si es mediodía (entradas); la luz solo cambia cuando el sistema interno decide pasar al siguiente estado. Si el semáforo está en 'Estado Rojo', la salida es siempre 'Luz Roja'. Una entrada (como un temporizador o un sensor de tráfico) solo sirve para mover la máquina al 'Estado Verde', y una vez allí, la salida cambia a 'Luz Verde'. Existe un sentido de estabilidad y predictibilidad: sabes exactamente qué salida esperar simplemente mirando en qué estado se encuentra la máquina, sin necesidad de conocer los eventos externos inmediatos que están ocurriendo.</p></div>
+
+            <h3>Aplicación</h3>
+            <div><p>La aplicación por excelencia de las máquinas de Moore es el diseño de controladores lógicos programables (PLC) para semáforos, ascensores y puertas automáticas. En un ascensor, la salida 'Abrir Puerta' depende de que el estado sea 'Piso Alcanzado' y 'Detenido', garantizando que la puerta no se abra accidentalmente por una entrada espuria mientras el ascensor se mueve. También son vitales en el diseño de FPGAs y ASICs para lógica de control síncrona, ya que al desacoplar la salida de las variaciones de entrada, se eliminan los 'glitches' o picos de tensión no deseados que podrían corromper los datos en circuitos de alta frecuencia. Su naturaleza predecible facilita enormemente las tareas de verificación y depuración de sistemas críticos donde la seguridad es la máxima prioridad.</p></div>
         </article>
         
         <article class="subtema">
-            <div class="subtema-header">
-                <h2>3. Comparación y Equivalencia entre Máquinas de Mealy y Moore</h2>
-            </div>
-            <div class="seccion-contenido">
-                
-                <div class="card full-width">
-                    <h3>Historia</h3>
-                    <div><p>A medida que los modelos de máquinas de Mealy y Moore se consolidaban en la década de 1950, se hizo evidente para los teóricos que, a pesar de sus diferencias estructurales en la generación de salidas, ambos modelos poseían una capacidad computacional equivalente. Esta revelación fue crucial para la teoría de autómatas, ya que demostró que la elección entre Mealy y Moore era más una cuestión de conveniencia de diseño, eficiencia o claridad conceptual, que de limitaciones inherentes de poder. Los trabajos subsiguientes se centraron en establecer formalmente las transformaciones que permiten convertir cualquier máquina de Moore en una máquina de Mealy equivalente y viceversa. Esta equivalencia no solo enriqueció la comprensión teórica de las máquinas secuenciales, sino que también proporcionó a los diseñadores herramientas flexibles para implementar el mismo comportamiento de sistema utilizando el modelo que mejor se adaptara a sus requisitos específicos, ya fuera minimizando el número de estados, el retardo de la salida, o la complejidad de la lógica combinacional.</p></div>
-                </div>
+            <h2>6.3 - Conversión y Equivalencia: Del Diseño a la Optimización</h2>
+            
+            <h3>Historia</h3>
+            <div><p>La relación entre los modelos de Mealy y Moore fue objeto de intenso estudio durante finales de los años 50. Se demostró teóricamente que ambos modelos son computacionalmente equivalentes; es decir, cualquier comportamiento que pueda ser descrito por una máquina de Mealy puede ser replicado por una máquina de Moore, y viceversa. Este descubrimiento fue fundamental para el desarrollo de herramientas de automatización de diseño electrónico (EDA). Históricamente, los ingenieros solían empezar con una descripción de Moore por su claridad conceptual y luego la convertían a Mealy para reducir el número de estados y ahorrar componentes físicos (como transistores o flip-flops). El proceso de conversión se convirtió en un algoritmo estándar en la enseñanza de la informática, permitiendo a los diseñadores elegir el modelo que mejor se adaptara a las restricciones de tiempo y espacio de sus sistemas específicos.</p></div>
 
-                <div class="card full-width formal-box">
-                    <h3>Descripción Formal</h3>
-                    <div><p>Aunque las máquinas de Mealy y Moore difieren en el momento y la dependencia de sus salidas, son computacionalmente equivalentes. Esto significa que para cualquier Máquina de Mealy existe una Máquina de Moore que produce la misma secuencia de salidas para cualquier secuencia de entradas, y viceversa.</p>
-<p><strong>Diferencias Clave:</strong>
-*   <strong>Función de Salida:</strong> En Moore (λ: Q → Δ), la salida está ligada al estado. En Mealy (λ: Q × Σ → Δ), la salida está ligada a la transición (estado actual y entrada).
-*   <strong>Retardo de Salida:</strong> Las máquinas de Moore exhiben un retardo de un ciclo; la salida asociada a un estado 'q' aparece <em>después</em> de que se ha entrado en 'q'. Las máquinas de Mealy no tienen este retardo; la salida aparece instantáneamente con la entrada que causa la transición.
-*   <strong>Número de Estados:</strong> Una máquina de Mealy equivalente a una de Moore puede tener potencialmente menos estados. Una conversión de Mealy a Moore generalmente requiere un aumento en el número de estados (Q' ≤ |Q| × |Δ|), donde cada nuevo estado en Moore representa un par (estado_Mealy, salida_Mealy).</p>
-<p><strong>Equivalencia Formal:</strong>
-*   <strong>De Moore a Mealy:</strong> Una Máquina de Moore M = (Q, Σ, Δ, δ, λ_Moore, q₀) se puede convertir a una Máquina de Mealy M' = (Q, Σ, Δ, δ, λ_Mealy, q₀) donde λ_Mealy(q, a) = λ_Moore(δ(q, a)). La salida de una transición en Mealy es simplemente la salida del estado al que se llega en Moore.
-*   <strong>De Mealy a Moore:</strong> Una Máquina de Mealy M' = (Q, Σ, Δ, δ', λ_Mealy, q₀') se puede convertir a una Máquina de Moore M = (Q', Σ, Δ, δ, λ_Moore, q₀). Aquí, Q' es un conjunto de estados 'nuevos' definidos como pares (q, o) donde q ∈ Q y o ∈ Δ. La función de salida λ_Moore((q, o)) = o. Las transiciones δ se definen para mantener la coherencia. Este proceso puede ser más complejo y aumentar significativamente el número de estados.</p></div>
-                    
-                    <div class="diagrama-container">
-                        <svg viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg">
-  <defs>
-    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
-      <path d="M0,0 L0,6 L9,3 z" fill="black" />
-    </marker>
-  </defs>
-
-  <!-- Moore Machine -->
-  <rect x="50" y="30" width="200" height="70" rx="10" ry="10" fill="#E6F2FF" stroke="black" stroke-width="2"/>
-  <text x="150" y="60" font-family="Arial" font-size="18" text-anchor="middle" fill="black">Máquina de Moore</text>
-  <text x="150" y="85" font-family="Arial" font-size="14" text-anchor="middle" fill="darkgreen">Salida f(Estado)</text>
-
-  <line x1="0" y1="65" x2="50" y2="65" stroke="black" stroke-width="2" marker-end="url(#arrow)"/>
-  <text x="25" y="55" font-family="Arial" font-size="14" text-anchor="middle" fill="black">Entrada</text>
-
-  <line x1="250" y1="65" x2="300" y2="65" stroke="black" stroke-width="2" marker-end="url(#arrow)"/>
-  <text x="275" y="55" font-family="Arial" font-size="14" text-anchor="middle" fill="black">Salida</text>
-
-  <!-- Mealy Machine -->
-  <rect x="350" y="30" width="200" height="70" rx="10" ry="10" fill="#FFFBE6" stroke="black" stroke-width="2"/>
-  <text x="450" y="60" font-family="Arial" font-size="18" text-anchor="middle" fill="black">Máquina de Mealy</text>
-  <text x="450" y="85" font-family="Arial" font-size="14" text-anchor="middle" fill="darkred">Salida f(Estado, Entrada)</text>
-
-  <line x1="300" y1="65" x2="350" y2="65" stroke="black" stroke-width="2" marker-end="url(#arrow)"/>
-  <text x="325" y="55" font-family="Arial" font-size="14" text-anchor="middle" fill="black">Entrada</text>
-
-  <line x1="550" y1="65" x2="600" y2="65" stroke="black" stroke-width="2" marker-end="url(#arrow)"/>
-  <text x="575" y="55" font-family="Arial" font-size="14" text-anchor="middle" fill="black">Salida</text>
-
-  <!-- Equivalence message -->
-  <text x="300" y="150" font-family="Arial" font-size="16" text-anchor="middle" fill="black">Ambas son computacionalmente equivalentes</text>
-  <line x1="200" y1="130" x2="400" y2="130" stroke="black" stroke-width="1" stroke-dasharray="5,5"/>
+            <h3>Descripción Formal</h3>
+            <div><p>La equivalencia formal establece que para cada máquina de Mealy Mₑ, existe una máquina de Moore Mₒ tal que para cualquier cadena de entrada w, las salidas producidas son idénticas (ignorando la salida inicial extra de Moore). </p>
+<p>Para convertir de Moore a Mealy:
+La transformación es directa. Si un estado Moore 'q' tiene salida 'x', todas las transiciones que entran a 'q' en el modelo de Mealy tendrán la etiqueta 'entrada/x'. El número de estados se mantiene igual.</p>
+<p>Para convertir de Mealy a Moore:
+El proceso es más complejo y a menudo aumenta el número de estados. Si un estado 'q' en Mealy recibe transiciones con diferentes salidas (por ejemplo, entrada '0' produce salida 'a' y entrada '1' produce salida 'b'), el estado 'q' debe dividirse en dos estados Moore: 'q_a' con salida fija 'a' y 'q_b' con salida fija 'b'. Cada estado resultante hereda las mismas transiciones de salida que el estado original. Este algoritmo de división asegura que la salida sea una función pura del estado, cumpliendo la definición de Moore a costa de una mayor complejidad estructural.</p></div>
+            
+            <div class="diagrama-box">
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg style="max-width:100%; height:auto;" data-width="348pt" data-height="130pt"
+ viewBox="0.00 0.00 348.38 129.95" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 125.95)">
+<title>G</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-125.95 344.38,-125.95 344.38,4 -4,4"/>
+<!-- Q1_0 -->
+<g id="node1" class="node">
+<title>Q1_0</title>
+<ellipse fill="none" stroke="black" cx="133.95" cy="-46.48" rx="42.45" ry="42.45"/>
+<ellipse fill="none" stroke="black" cx="133.95" cy="-46.48" rx="46.45" ry="46.45"/>
+<text text-anchor="middle" x="133.95" y="-43.38" font-family="Helvetica,sans-Serif" font-size="12.00">Q1 (out:0)</text>
+</g>
+<!-- Q1_0&#45;&gt;Q1_0 -->
+<g id="edge4" class="edge">
+<title>Q1_0&#45;&gt;Q1_0</title>
+<path fill="none" stroke="black" d="M122.14,-91.67C123.02,-102.72 126.95,-110.95 133.95,-110.95 138.55,-110.95 141.82,-107.41 143.78,-101.85"/>
+<polygon fill="black" stroke="black" points="147.28,-102.15 145.77,-91.67 140.41,-100.81 147.28,-102.15"/>
+<text text-anchor="middle" x="133.95" y="-113.95" font-family="Helvetica,sans-Serif" font-size="10.00">input B</text>
+</g>
+<!-- Q1_1 -->
+<g id="node2" class="node">
+<title>Q1_1</title>
+<ellipse fill="none" stroke="black" cx="293.9" cy="-46.48" rx="42.45" ry="42.45"/>
+<ellipse fill="none" stroke="black" cx="293.9" cy="-46.48" rx="46.45" ry="46.45"/>
+<text text-anchor="middle" x="293.9" y="-43.38" font-family="Helvetica,sans-Serif" font-size="12.00">Q1 (out:1)</text>
+</g>
+<!-- Q1_0&#45;&gt;Q1_1 -->
+<g id="edge2" class="edge">
+<title>Q1_0&#45;&gt;Q1_1</title>
+<path fill="none" stroke="black" d="M180.64,-46.48C198.32,-46.48 218.73,-46.48 237.25,-46.48"/>
+<polygon fill="black" stroke="black" points="237.32,-49.98 247.32,-46.48 237.32,-42.98 237.32,-49.98"/>
+<text text-anchor="middle" x="213.93" y="-49.48" font-family="Helvetica,sans-Serif" font-size="10.00">input A</text>
+</g>
+<!-- Q1_1&#45;&gt;Q1_0 -->
+<g id="edge3" class="edge">
+<title>Q1_1&#45;&gt;Q1_0</title>
+<path fill="none" stroke="black" d="M248.75,-34.66C242.31,-33.34 235.73,-32.21 229.43,-31.48 215.74,-29.88 212.11,-29.88 198.43,-31.48 195.38,-31.83 192.26,-32.28 189.13,-32.8"/>
+<polygon fill="black" stroke="black" points="188.3,-29.39 179.11,-34.66 189.58,-36.27 188.3,-29.39"/>
+<text text-anchor="middle" x="213.93" y="-34.48" font-family="Helvetica,sans-Serif" font-size="10.00">input B</text>
+</g>
+<!-- Q1_1&#45;&gt;Q1_1 -->
+<g id="edge5" class="edge">
+<title>Q1_1&#45;&gt;Q1_1</title>
+<path fill="none" stroke="black" d="M279.43,-90.77C280.32,-102.28 285.14,-110.95 293.9,-110.95 299.79,-110.95 303.9,-107.04 306.23,-100.98"/>
+<polygon fill="black" stroke="black" points="309.74,-101.28 308.38,-90.77 302.89,-99.84 309.74,-101.28"/>
+<text text-anchor="middle" x="293.9" y="-113.95" font-family="Helvetica,sans-Serif" font-size="10.00">input A</text>
+</g>
+<!-- Start -->
+<g id="node3" class="node">
+<title>Start</title>
+<ellipse fill="none" stroke="black" cx="25.24" cy="-46.48" rx="25.48" ry="25.48"/>
+<text text-anchor="middle" x="25.24" y="-43.38" font-family="Helvetica,sans-Serif" font-size="12.00">Start</text>
+</g>
+<!-- Start&#45;&gt;Q1_0 -->
+<g id="edge1" class="edge">
+<title>Start&#45;&gt;Q1_0</title>
+<path fill="none" stroke="black" d="M50.72,-46.48C58.67,-46.48 67.85,-46.48 77.13,-46.48"/>
+<polygon fill="black" stroke="black" points="77.18,-49.98 87.18,-46.48 77.18,-42.98 77.18,-49.98"/>
+</g>
+</g>
 </svg>
-                        <p style="font-size:0.8rem; color:#666; margin-top:1rem; text-align:center;">
-                            <em>Fig: Representación visual generada.</em>
-                        </p>
-                    </div>
-                </div>
 
-                <div class="card">
-                    <h3>Intuición</h3>
-                    <div><p>La principal intuición detrás de la comparación es que, aunque Mealy y Moore describen la forma en que un sistema genera salidas de manera diferente (una ligada al estado, la otra a la transición y la entrada), ambos modelos son lo suficientemente potentes como para describir el <em>mismo</em> comportamiento secuencial. Piensa en ellos como dos lenguajes ligeramente distintos para describir el mismo proceso. Moore es más 'prudente' o 'estable': el sistema primero decide en qué estado se encuentra y luego, basándose en ese estado, emite una salida. Mealy es más 'reactivo': el sistema emite una salida 'en el momento', basándose en lo que está sucediendo ahora mismo (la entrada actual) y su situación actual (su estado). La elección entre uno y otro a menudo se reduce a cuál de las dos descripciones resulta más natural o eficiente para un problema específico. Si la salida debe cambiar instantáneamente con una entrada, Mealy es más directo. Si la salida debe ser una propiedad estable del 'modo' en el que se encuentra el sistema, Moore es más intuitivo y a menudo lleva a diseños más claros.</p></div>
-                </div>
-
-                <div class="card">
-                    <h3>Aplicación Real</h3>
-                    <div><p>La comprensión de la equivalencia y las diferencias entre las máquinas de Mealy y Moore es crucial en varios campos de la ingeniería y la informática. En el diseño de hardware, esta elección impacta directamente la complejidad de la lógica combinacional, el número de registros (estados) y los tiempos de retardo. Los diseñadores a menudo eligen el modelo Moore para sistemas donde las salidas deben ser estables y libres de 'glitches' (cambios momentáneos indeseados) durante un ciclo de reloj. Por otro lado, Mealy es preferido cuando se necesitan respuestas más rápidas y el retardo de salida es crítico. En el desarrollo de software, al modelar comportamientos de sistemas complejos, la elección puede influir en la legibilidad y mantenibilidad del código. Por ejemplo, en la implementación de máquinas de estados en software, un enfoque Mealy podría ser más eficiente para un parser, mientras que un enfoque Moore podría ser más claro para el control de un flujo de trabajo. La capacidad de convertir entre ambos modelos permite a los ingenieros optimizar sus diseños para diferentes métricas de rendimiento y complejidad, asegurando que pueden siempre lograr el comportamiento deseado, independientemente del modelo inicial elegido.</p></div>
-                </div>
-
+                <p style="font-size:0.8em; color:#999">Diagrama generado automáticamente</p>
             </div>
+
+            <h3>Intuición</h3>
+            <div><p>Convertir entre Mealy y Moore es como traducir entre dos idiomas que dicen lo mismo de formas diferentes. Mealy es un idioma de 'acción' (la respuesta está en el movimiento), mientras que Moore es un idioma de 'ser' (la respuesta está en la identidad del estado). Si tienes una máquina de Mealy que dice 'si estás en la puerta y tocas el timbre, suena la campana', para pasarla a Moore debes crear un estado específico llamado 'Estado de Sonar Campana'. La máquina de Moore diría: 'si tocas el timbre, entra al Estado de Sonar Campana; y mientras estés ahí, la campana estará sonando'. Notarás que Moore a veces necesita 'crear' más situaciones (estados) para describir lo mismo, pero ofrece la ventaja de que nunca hay duda de qué está pasando: si estás en ese estado, la campana suena, punto.</p></div>
+
+            <h3>Aplicación</h3>
+            <div><p>Esta capacidad de conversión es crucial en la optimización de compiladores y en la síntesis lógica de hardware. En el diseño de circuitos VLSI (Very Large Scale Integration), los algoritmos de optimización transforman partes de una máquina de Moore en Mealy para acortar las rutas críticas de datos y cumplir con los requisitos de 'timing'. Por el contrario, en sistemas donde se requiere una interfaz de usuario limpia y sin parpadeos, se prefiere convertir la lógica de Mealy a Moore para asegurar que la salida (como una imagen en pantalla) sea estable durante todo el ciclo de reloj. Los ingenieros de software también utilizan estos conceptos en el patrón de diseño 'State Machine' para simplificar el flujo de control en aplicaciones complejas, permitiendo cambiar entre representaciones según convenga para la legibilidad o el rendimiento.</p></div>
         </article>
-        
-    </main>
-
-    <footer>
-        <p>Prof. Jorge López-Cifre, PhD © 2026</p>
-    </footer>
-
-</body>
-</html>
+        </body></html>

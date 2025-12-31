@@ -3,359 +3,301 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>20 - Autómatas a pila - Memoria LIFO (Pushdown Automata). - Prof. Jorge López-Cifre</title>
+    <title>20 - Autómatas a pila - Memoria LIFO (Pushdown Automata).</title>
     <style>
-        :root {
-            --primary: #003366;
-            --accent: #d4af37;
-            --bg: #f8f9fa;
-            --text: #2c3e50;
-            --card-bg: #ffffff;
-            --border: #e9ecef;
-        }
-        body {
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--bg);
-            color: var(--text);
-            margin: 0;
-            padding: 0;
-            line-height: 1.7;
-        }
-        /* Tipografía mejorada */
-        p { margin-bottom: 1rem; }
-        strong, b { color: var(--primary); font-weight: 700; }
-        
-        header {
-            background: var(--primary);
-            color: white;
-            padding: 1rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
-        h1 { margin: 0; font-size: 1.25rem; font-weight: 600; }
-        
-        .btn-volver {
-            background: var(--accent);
-            color: var(--primary);
-            text-decoration: none;
-            padding: 0.5rem 1.2rem;
-            border-radius: 50px;
-            font-weight: bold;
-            font-size: 0.9rem;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-        }
-        .btn-volver:hover { 
+        body { font-family: sans-serif; background: #f4f4f9; color: #333; margin: 0; padding: 20px; }
+        header { background: #2c3e50; color: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; }
+        h1 { margin: 0; }
+        .subtema { background: white; padding: 30px; margin-bottom: 40px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        h2 { color: #2980b9; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+        h3 { color: #7f8c8d; font-size: 0.9em; text-transform: uppercase; margin-top: 25px; letter-spacing: 1px; }
+        .diagrama-box { 
+            text-align: center; 
+            margin: 30px 0; 
+            padding: 20px; 
             background: #fff; 
-            transform: translateY(-1px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-        }
-
-        main {
-            max-width: 1100px;
-            margin: 2rem auto;
-            padding: 0 1.5rem;
-        }
-
-        .subtema {
-            background: var(--card-bg);
-            border-radius: 12px;
-            margin-bottom: 4rem;
-            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
-            overflow: hidden;
-            border: 1px solid var(--border);
-        }
-        
-        .subtema-header {
-            background: linear-gradient(to right, #f8f9fa, #ffffff);
-            padding: 1.5rem 2rem;
-            border-bottom: 1px solid var(--border);
-        }
-        .subtema-header h2 { 
-            margin: 0; 
-            color: var(--primary); 
-            font-size: 1.6rem;
-            border-left: 5px solid var(--accent);
-            padding-left: 1rem;
-        }
-
-        .seccion-contenido {
-            padding: 2rem;
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 2.5rem;
-        }
-
-        @media (min-width: 900px) {
-            .seccion-contenido { grid-template-columns: 1fr 1fr; }
-            .full-width { grid-column: 1 / -1; }
-        }
-
-        .card h3 {
-            color: var(--primary);
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            margin-top: 0;
-            margin-bottom: 1rem;
-            border-bottom: 1px solid #ddd;
-            padding-bottom: 0.5rem;
-        }
-
-        .formal-box {
-            background-color: #f0f7ff; /* Azul muy muy pálido */
+            border: 1px solid #eee; 
             border-radius: 8px;
-            padding: 2rem !important;
-            border: 1px solid #cce5ff;
         }
-
-        /* CSS Específico para corregir SVGs */
-        .diagrama-container {
-            text-align: center;
-            margin: 2rem auto;
-            padding: 1.5rem;
-            background: white;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
-            max-width: 100%;
-            overflow-x: auto; /* Si es muy ancho, permite scroll */
-        }
-        
-        /* Forzar comportamiento correcto del SVG */
-        .diagrama-container svg {
-            max-width: 100%;
-            height: auto;
-            display: block;
-            margin: 0 auto;
-        }
-        
-        /* Evitar que el texto dentro del SVG sea ilegible */
-        .diagrama-container text {
-            font-family: sans-serif;
-        }
-
-        footer {
-            text-align: center;
-            padding: 3rem;
-            background: var(--primary);
-            color: rgba(255,255,255,0.8);
-            margin-top: 4rem;
-            font-size: 0.9rem;
-        }
+        /* Estilos Markdown */
+        p { line-height: 1.6; }
+        strong { color: #2c3e50; }
+        code { background: #f0f0f0; padding: 2px 5px; border-radius: 3px; font-family: monospace; }
     </style>
 </head>
 <body>
-
-    <header>
-        <h1>20 - Autómatas a pila - Memoria LIFO (Pushdown Automata).</h1>
-        <a href="javascript:history.back()" class="btn-volver">← Volver</a>
-    </header>
-
+    <header><h1>20 - Autómatas a pila - Memoria LIFO (Pushdown Automata).</h1></header>
     <main>
 
         <article class="subtema">
-            <div class="subtema-header">
-                <h2>Introducción a los Autómatas a Pila: Arquitectura y Conceptos Básicos</h2>
+            <h2>Arquitectura del Autómata a Pila y el Mecanismo LIFO</h2>
+            
+            <h3>Historia</h3>
+            <div><p>La evolución de los Autómatas a Pila (PDA) se remonta a la década de 1960, surgiendo de la necesidad de modelar lenguajes que los autómatas finitos no podían procesar, específicamente aquellos con estructuras anidadas o de balanceo. Anthony Oettinger propuso inicialmente el concepto de 'almacén de empuje' (pushdown store) en 1961 para el análisis de lenguajes naturales. Casi simultáneamente, Robert Evey y Marcel-Paul Schützenberger formalizaron la relación entre estos dispositivos y las gramáticas de libre contexto propuestas por Noam Chomsky. La innovación clave fue la introducción de una memoria auxiliar infinita, pero con acceso restringido, siguiendo el principio Last-In, First-Out (LIFO). Este avance permitió que la teoría de la computación pasara de reconocer patrones puramente lineales (regulares) a estructuras jerárquicas, sentando las bases para el desarrollo de los primeros compiladores y analizadores sintácticos de lenguajes de programación de alto nivel como ALGOL y FORTRAN.</p></div>
+
+            <h3>Descripción Formal</h3>
+            <div><p>Un Autómata a Pila se define formalmente como una 7-tupla M = (Q, Σ, Γ, δ, q₀, Z, F), donde: 
+- Q es un conjunto finito de estados.
+- Σ es el alfabeto de entrada.
+- Γ es el alfabeto de la pila.
+- δ: Q × (Σ ∪ {ε}) × Γ → 𝒫(Q × Γ*) es la función de transición. Recibe un estado, un símbolo de entrada (o épsilon) y el símbolo superior de la pila, y devuelve un conjunto de pares (estado siguiente, cadena de símbolos a insertar en la pila).
+- q₀ ∈ Q es el estado inicial.
+- Z ∈ Γ es el símbolo inicial de la pila (marcador de fondo).
+- F ⊆ Q es el conjunto de estados finales o de aceptación.</p>
+<p>La configuración del autómata se describe como una 'Descripción Instantánea' (ID) (q, w, γ), donde q es el estado actual, w es la cadena restante y γ es el contenido actual de la pila. El autómata acepta una cadena si, tras procesarla completamente, el sistema llega a un estado f ∈ F (aceptación por estado final) o si la pila queda vacía (aceptación por pila vacía), dependiendo del criterio de diseño definido.</p></div>
+            
+            <div class="diagrama-box">
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg style="max-width:100%; height:auto;" data-width="302pt" data-height="89pt"
+ viewBox="0.00 0.00 302.41 88.94" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 84.94)">
+<title>G</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-84.94 298.41,-84.94 298.41,4 -4,4"/>
+<!-- start -->
+<g id="node1" class="node">
+<title>start</title>
+<ellipse fill="black" stroke="black" cx="1.8" cy="-22.47" rx="1.8" ry="1.8"/>
+</g>
+<!-- q0 -->
+<g id="node2" class="node">
+<title>q0</title>
+<ellipse fill="none" stroke="black" cx="59.07" cy="-22.47" rx="18.44" ry="18.44"/>
+<text text-anchor="middle" x="59.07" y="-19.37" font-family="Helvetica,sans-Serif" font-size="12.00">q0</text>
+</g>
+<!-- start&#45;&gt;q0 -->
+<g id="edge1" class="edge">
+<title>start&#45;&gt;q0</title>
+<path fill="none" stroke="black" d="M3.76,-22.47C7.11,-22.47 18.7,-22.47 30.33,-22.47"/>
+<polygon fill="black" stroke="black" points="30.34,-25.97 40.34,-22.47 30.34,-18.97 30.34,-25.97"/>
+</g>
+<!-- q0&#45;&gt;q0 -->
+<g id="edge2" class="edge">
+<title>q0&#45;&gt;q0</title>
+<path fill="none" stroke="black" d="M52.64,-40.1C51.44,-49.91 53.58,-58.94 59.07,-58.94 62.5,-58.94 64.62,-55.41 65.43,-50.37"/>
+<polygon fill="black" stroke="black" points="68.94,-50.12 65.49,-40.1 61.94,-50.08 68.94,-50.12"/>
+<text text-anchor="middle" x="59.07" y="-72.94" font-family="Helvetica,sans-Serif" font-size="10.00">0, Z / 0Z</text>
+<text text-anchor="middle" x="59.07" y="-61.94" font-family="Helvetica,sans-Serif" font-size="10.00">0, 0 / 00</text>
+</g>
+<!-- q1 -->
+<g id="node3" class="node">
+<title>q1</title>
+<ellipse fill="none" stroke="black" cx="163" cy="-22.47" rx="18.44" ry="18.44"/>
+<text text-anchor="middle" x="163" y="-19.37" font-family="Helvetica,sans-Serif" font-size="12.00">q1</text>
+</g>
+<!-- q0&#45;&gt;q1 -->
+<g id="edge3" class="edge">
+<title>q0&#45;&gt;q1</title>
+<path fill="none" stroke="black" d="M77.82,-22.47C93.39,-22.47 116.28,-22.47 134.26,-22.47"/>
+<polygon fill="black" stroke="black" points="134.45,-25.97 144.45,-22.47 134.45,-18.97 134.45,-25.97"/>
+<text text-anchor="middle" x="111.04" y="-25.47" font-family="Helvetica,sans-Serif" font-size="10.00">1, 0 / ε</text>
+</g>
+<!-- q1&#45;&gt;q1 -->
+<g id="edge4" class="edge">
+<title>q1&#45;&gt;q1</title>
+<path fill="none" stroke="black" d="M154.29,-38.97C152.19,-49.2 155.09,-58.94 163,-58.94 168.19,-58.94 171.23,-54.74 172.11,-48.97"/>
+<polygon fill="black" stroke="black" points="175.61,-48.82 171.72,-38.97 168.61,-49.1 175.61,-48.82"/>
+<text text-anchor="middle" x="163" y="-61.94" font-family="Helvetica,sans-Serif" font-size="10.00">1, 0 / ε</text>
+</g>
+<!-- q2 -->
+<g id="node4" class="node">
+<title>q2</title>
+<ellipse fill="none" stroke="black" cx="271.94" cy="-22.47" rx="18.44" ry="18.44"/>
+<ellipse fill="none" stroke="black" cx="271.94" cy="-22.47" rx="22.44" ry="22.44"/>
+<text text-anchor="middle" x="271.94" y="-19.37" font-family="Helvetica,sans-Serif" font-size="12.00">q2</text>
+</g>
+<!-- q1&#45;&gt;q2 -->
+<g id="edge5" class="edge">
+<title>q1&#45;&gt;q2</title>
+<path fill="none" stroke="black" d="M181.66,-22.47C197.21,-22.47 220.22,-22.47 238.99,-22.47"/>
+<polygon fill="black" stroke="black" points="239.19,-25.97 249.19,-22.47 239.19,-18.97 239.19,-25.97"/>
+<text text-anchor="middle" x="215.47" y="-25.47" font-family="Helvetica,sans-Serif" font-size="10.00">ε, Z / Z</text>
+</g>
+</g>
+</svg>
+
+                <p style="font-size:0.8em; color:#999">Diagrama generado automáticamente</p>
             </div>
-            <div class="seccion-contenido">
-                
-                <div class="card full-width">
-                    <h3>Historia</h3>
-                    <div><p>Los autómatas finitos eran insuficientes para reconocer lenguajes con estructuras de anidamiento, como las expresiones aritméticas o las sentencias de programación balanceadas. En este contexto, la necesidad de un modelo computacional más potente llevó al desarrollo de los autómatas a pila (AP). Surgieron a finales de la década de 1950 y principios de la de 1960, impulsados por la investigación en lingüística formal de Noam Chomsky sobre las gramáticas independientes de contexto (GIC). Investigadores como Anthony G. Oettinger en 1959 y N. O. M. Sager en 1960 ya trabajaban en sistemas que utilizaban una pila para el procesamiento de lenguajes. El concepto se formalizó como una máquina abstracta capaz de leer una cinta de entrada y utilizar una memoria auxiliar tipo pila, lo que le otorgaba la capacidad de "recordar" un contexto arbitrariamente profundo, algo que los autómatas finitos no podían hacer. Su invención fue crucial para tender un puente entre la teoría de los lenguajes formales y la computación real.</p></div>
-                </div>
 
-                <div class="card full-width formal-box">
-                    <h3>Descripción Formal</h3>
-                    <div><p>Un autómata a pila (AP) es una máquina abstracta que extiende la funcionalidad de un autómata finito añadiendo una memoria auxiliar de tipo pila. Esta pila opera bajo el principio LIFO (Last-In, First-Out), lo que significa que el último elemento que se añade es el primero en ser extraído. Los componentes fundamentales de un AP incluyen:
-1.  Control Finito de Estados (Q): Un conjunto finito de estados que el autómata puede ocupar, similar a la unidad de control de un procesador, gestionando el comportamiento actual del AP.
-2.  Cinta de Entrada (Σ): Una secuencia finita de símbolos de entrada que se lee de izquierda a derecha, un símbolo a la vez. El AP puede optar por leer un símbolo de la cinta o realizar una transición ε (transición vacía), lo que significa que cambia de estado o modifica la pila sin consumir entrada.
-3.  Pila (Γ): Una memoria auxiliar con capacidad ilimitada, donde se pueden almacenar y recuperar símbolos del alfabeto de la pila. Las operaciones básicas son PUSH (añadir un símbolo a la cima de la pila) y POP (eliminar el símbolo de la cima de la pila). La naturaleza LIFO de la pila es clave para manejar dependencias anidadas.
-4.  Función de Transición (δ): Define las reglas de movimiento del AP. Es una relación que especifica cómo el AP se mueve de un estado a otro basándose en el estado actual, el símbolo de entrada leído (o ε), y el símbolo en la cima de la pila. Una transición puede cambiar el estado y modificar el contenido de la pila (reemplazar la cima por una cadena de símbolos).
-5.  Estado Inicial (q₀): El único estado en el que comienza la ejecución del autómata, desde el cual todas las transiciones posteriores son evaluadas.
-6.  Símbolo Inicial de la Pila (Z₀): Un símbolo especial que se coloca en la pila al inicio de cada computación. Sirve para asegurar que la pila no esté inicialmente vacía y para marcar el "fondo" o la base de la pila, permitiendo detectar cuándo la pila está completamente vacía durante la ejecución (si Z₀ se retira).
-7.  Estados de Aceptación (F): Un subconjunto de Q. Si el autómata consume toda la cadena de entrada y termina en uno de estos estados, la cadena se considera aceptada. Otra forma de aceptación es por pila vacía. Ambos criterios son equivalentes en términos de poder de reconocimiento.</p></div>
-                    
-                    <div class="diagrama-container">
-                        <svg viewBox="0 0 600 200">
-      <rect x="10" y="50" width="150" height="100" stroke="black" fill="#E0F2F7" rx="10" ry="10"/>
-      <text x="35" y="105" font-family="Arial" font-size="16" fill="black">Cinta de Entrada</text>
-      <path d="M160 100 H 200" stroke="black" stroke-width="2"/>
-      <path d="M200 100 L 220 90 L 220 110 Z" fill="black"/>
+            <h3>Intuición</h3>
+            <div><p>Imagine un autómata finito convencional que tiene conectada una 'pila de platos' infinita a su lado. El autómata puede leer un símbolo de su cinta de entrada, pero a diferencia de un autómata finito, tiene la capacidad de mirar qué plato hay en la parte superior de la pila. Basándose en lo que lee en la entrada y en lo que ve en la pila, puede decidir: 1. Quitar el plato superior (Pop), 2. Poner platos nuevos encima (Push), o 3. No hacer nada. La restricción fundamental es que solo puede interactuar con el elemento superior; no puede ver qué hay debajo sin quitar lo de arriba. Esta memoria LIFO (lo último en entrar es lo primero en salir) le permite 'recordar' cuántas veces ha ocurrido un evento para compararlo con un evento futuro, como contar cuántos paréntesis se han abierto para asegurarse de cerrar la misma cantidad exacta después.</p></div>
 
-      <rect x="250" y="50" width="100" height="100" stroke="black" fill="#FFFBE0" rx="10" ry="10"/>
-      <text x="260" y="105" font-family="Arial" font-size="16" fill="black">Control Finito</text>
-
-      <path d="M350 100 H 390" stroke="black" stroke-width="2"/>
-      <path d="M390 100 L 410 90 L 410 110 Z" fill="black"/>
-
-      <rect x="440" y="50" width="50" height="100" stroke="black" fill="#E8F5E9" rx="5" ry="5"/>
-      <text x="442" y="105" font-family="Arial" font-size="16" fill="black" transform="rotate(90 465 105)">Pila (LIFO)</text>
-      <rect x="440" y="120" width="50" height="30" stroke="black" fill="#DCE775"/>
-      <rect x="440" y="90" width="50" height="30" stroke="black" fill="#FFCC80"/>
-      <rect x="440" y="60" width="50" height="30" stroke="black" fill="#B39DDB"/>
-
-      <path d="M300 150 V 170 H 465 V 150" stroke="black" stroke-width="1"/>
-      <path d="M465 150 L 455 130 L 475 130 Z" fill="black"/>
-      <path d="M465 150 L 455 170 L 475 170 Z" fill="black"/>
-      <text x="370" y="185" font-family="Arial" font-size="12" fill="black">Operaciones PUSH/POP</text>
-    </svg>
-                        <p style="font-size:0.8rem; color:#666; margin-top:1rem; text-align:center;">
-                            <em>Fig: Representación visual generada.</em>
-                        </p>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <h3>Intuición</h3>
-                    <div><p>Piensa en los autómatas a pila como una versión "mejorada" de los autómatas finitos. Mientras que un autómata finito solo tiene una memoria limitada (sus estados), un AP tiene una memoria auxiliar ilimitada, la pila. Imagina que necesitas verificar si una expresión matemática tiene los paréntesis bien balanceados, como "(a + (b * c))". Un autómata finito no podría hacer esto porque no sabe cuántos paréntesis abiertos ha visto si tiene que recordar un número arbitrario. La pila resuelve este problema: cada vez que ves un paréntesis abierto, lo "empujas" a la pila; cada vez que ves uno cerrado, "sacas" uno de la pila. Si al final la pila está vacía y la expresión fue leída completamente, los paréntesis están balanceados. La clave es que la pila recuerda el orden de los elementos anidados (LIFO), crucial para estructuras recursivas y dependientes del contexto.</p></div>
-                </div>
-
-                <div class="card">
-                    <h3>Aplicación Real</h3>
-                    <div><p>Los autómatas a pila son el modelo teórico fundamental detrás de los parsers (analizadores sintácticos) que se utilizan en los compiladores e intérpretes de lenguajes de programación. Cuando escribes código en C++, Java o Python, un parser basado en principios de AP se encarga de verificar que tu sintaxis sea correcta, es decir, que las sentencias estén bien formadas, las llaves <code>{}</code> y los paréntesis <code>()</code> estén balanceados, y las estructuras anidadas sigan las reglas del lenguaje. Más allá de los compiladores, los AP también son aplicables en el procesamiento de lenguajes de marcado como XML o HTML, donde la anidación de etiquetas es crucial. Cualquier tarea que implique verificar la correcta anidación o el emparejamiento de símbolos en una secuencia se beneficia conceptualmente de un autómata a pila, sirviendo como una base teórica para el diseño de algoritmos eficientes.</p></div>
-                </div>
-
-            </div>
+            <h3>Aplicación</h3>
+            <div><p>La aplicación más emblemática de los PDA es el análisis sintáctico (parsing) de expresiones matemáticas y lenguajes de programación. Se utilizan para validar el balanceo de delimitadores (paréntesis, llaves, corchetes) en editores de código y compiladores. En el procesamiento de formatos de intercambio de datos como JSON y XML, los autómatas a pila son esenciales para verificar que cada etiqueta de apertura tenga su correspondiente etiqueta de cierre en el orden correcto. Sin este mecanismo LIFO, sería imposible procesar la recursividad inherente de estos formatos. También se emplean en la evaluación de expresiones en notación polaca inversa (RPN), donde los operandos se apilan hasta que se encuentra un operador, permitiendo cálculos complejos sin necesidad de paréntesis explícitos.</p></div>
         </article>
         
         <article class="subtema">
-            <div class="subtema-header">
-                <h2>Autómatas a Pila: Definición Formal, Transiciones y Criterios de Aceptación</h2>
+            <h2>Determinismo vs. No Determinismo en PDA</h2>
+            
+            <h3>Historia</h3>
+            <div><p>A diferencia de los autómatas finitos, donde el determinismo (DFA) y el no determinismo (NFA) tienen la misma potencia expresiva, en los autómatas a pila la distinción es crítica. Los Autómatas a Pila Deterministas (DPDA) fueron estudiados profundamente por Seymour Ginsburg y Sheila Greibach en 1966. Descubrieron que los DPDA solo pueden reconocer una subclase de los lenguajes de libre contexto, denominados Lenguajes de Libre Contexto Deterministas (DCFL). Por otro lado, los Autómatas a Pila No Deterministas (NPDA) son capaces de reconocer la totalidad de los lenguajes de libre contexto. Esta distinción fue fundamental para la ingeniería de software, ya que los lenguajes de programación modernos se diseñan para ser deterministas (normalmente mediante gramáticas LALR o LL(k)) para garantizar que el proceso de compilación sea eficiente y lineal en tiempo.</p></div>
+
+            <h3>Descripción Formal</h3>
+            <div><p>Un PDA es determinista (DPDA) si cumple simultáneamente dos condiciones para cualquier estado q ∈ Q, símbolo de entrada a ∈ Σ ∪ {ε} y símbolo de pila X ∈ Γ:
+1. |δ(q, a, X)| ≤ 1: Para cualquier combinación de estado, entrada y tope de pila, existe a lo sumo una transición posible.
+2. Si δ(q, ε, X) no está vacío, entonces δ(q, a, X) debe estar vacío para todo a ∈ Σ: Si el autómata puede realizar un movimiento épsilon (sin leer entrada), no debe tener movimientos alternativos leyendo un símbolo de entrada con el mismo tope de pila.</p>
+<p>Formalmente, la capacidad de un NPDA de 'adivinar' la ramificación correcta le permite reconocer lenguajes como los palíndromos de longitud par {wwᴿ | w ∈ {0,1}*}, donde el centro de la cadena no está marcado. Un DPDA, en cambio, requiere un marcador central explícito (como en {w#wᴿ}) para saber cuándo dejar de apilar y comenzar a desapilar.</p></div>
+            
+            <div class="diagrama-box">
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg style="max-width:100%; height:auto;" data-width="351pt" data-height="147pt"
+ viewBox="0.00 0.00 351.45 146.56" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 142.56)">
+<title>G</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-142.56 347.45,-142.56 347.45,4 -4,4"/>
+<!-- q0 -->
+<g id="node1" class="node">
+<title>q0</title>
+<ellipse fill="none" stroke="black" cx="36.32" cy="-36.32" rx="36.14" ry="36.14"/>
+<text text-anchor="middle" x="36.32" y="-33.22" font-family="Helvetica,sans-Serif" font-size="12.00">q_inicio</text>
+</g>
+<!-- q1 -->
+<g id="node2" class="node">
+<title>q1</title>
+<ellipse fill="none" stroke="black" cx="173.88" cy="-36.32" rx="33.49" ry="33.49"/>
+<text text-anchor="middle" x="173.88" y="-33.22" font-family="Helvetica,sans-Serif" font-size="12.00">q_read</text>
+</g>
+<!-- q0&#45;&gt;q1 -->
+<g id="edge1" class="edge">
+<title>q0&#45;&gt;q1</title>
+<path fill="none" stroke="black" d="M72.94,-36.32C90.46,-36.32 111.72,-36.32 130.12,-36.32"/>
+<polygon fill="black" stroke="black" points="130.29,-39.82 140.29,-36.32 130.29,-32.82 130.29,-39.82"/>
+<text text-anchor="middle" x="106.64" y="-39.32" font-family="Helvetica,sans-Serif" font-size="10.00">ε, Z / Z</text>
+</g>
+<!-- q1&#45;&gt;q1 -->
+<g id="edge2" class="edge">
+<title>q1&#45;&gt;q1</title>
+<path fill="none" stroke="black" d="M167.7,-69.34C167.82,-79.55 169.88,-87.56 173.88,-87.56 176.38,-87.56 178.12,-84.43 179.11,-79.59"/>
+<polygon fill="black" stroke="black" points="182.62,-79.62 180.06,-69.34 175.65,-78.97 182.62,-79.62"/>
+<text text-anchor="middle" x="173.88" y="-101.56" font-family="Helvetica,sans-Serif" font-size="10.00">a, Z / AZ</text>
+<text text-anchor="middle" x="173.88" y="-90.56" font-family="Helvetica,sans-Serif" font-size="10.00">a, A / AA</text>
+</g>
+<!-- q1&#45;&gt;q1 -->
+<g id="edge3" class="edge">
+<title>q1&#45;&gt;q1</title>
+<path fill="none" stroke="black" d="M162.54,-67.73C159.47,-88.72 163.25,-109.56 173.88,-109.56 182.77,-109.56 186.87,-95 186.18,-77.96"/>
+<polygon fill="black" stroke="black" points="189.64,-77.36 185.22,-67.73 182.67,-78.01 189.64,-77.36"/>
+<text text-anchor="middle" x="173.88" y="-112.56" font-family="Helvetica,sans-Serif" font-size="10.00">b, A / ε</text>
+</g>
+<!-- q2 -->
+<g id="node3" class="node">
+<title>q2</title>
+<ellipse fill="none" stroke="black" cx="309.29" cy="-36.32" rx="30.31" ry="30.31"/>
+<ellipse fill="none" stroke="black" cx="309.29" cy="-36.32" rx="34.33" ry="34.33"/>
+<text text-anchor="middle" x="309.29" y="-33.22" font-family="Helvetica,sans-Serif" font-size="12.00">q_acc</text>
+</g>
+<!-- q1&#45;&gt;q2 -->
+<g id="edge4" class="edge">
+<title>q1&#45;&gt;q2</title>
+<path fill="none" stroke="black" d="M207.17,-36.32C224.48,-36.32 246.04,-36.32 264.81,-36.32"/>
+<polygon fill="black" stroke="black" points="264.9,-39.82 274.9,-36.32 264.9,-32.82 264.9,-39.82"/>
+<text text-anchor="middle" x="241.12" y="-39.32" font-family="Helvetica,sans-Serif" font-size="10.00">ε, Z / Z</text>
+</g>
+</g>
+</svg>
+
+                <p style="font-size:0.8em; color:#999">Diagrama generado automáticamente</p>
             </div>
-            <div class="seccion-contenido">
-                
-                <div class="card full-width">
-                    <h3>Historia</h3>
-                    <div><p>La formalización rigurosa de los autómatas a pila fue un hito crucial en la década de 1960, estableciendo su equivalencia con las gramáticas independientes de contexto (GIC), un descubrimiento fundamental en la teoría de los lenguajes formales. Noam Chomsky, junto con otros pioneros como Schützenberger, J. W. Thatcher y Michael O. Rabin, contribuyeron significativamente a la comprensión de estos modelos. La distinción entre autómatas a pila determinísticos y no determinísticos también emergió en esta época, revelando que la no determinismo añade un poder computacional significativo a los AP, permitiéndoles reconocer todos los lenguajes independientes de contexto, mientras que los AP determinísticos solo pueden reconocer un subconjunto. Esta claridad teórica fue esencial para sentar las bases de la ingeniería de compiladores y el diseño de lenguajes de programación modernos.</p></div>
-                </div>
 
-                <div class="card full-width formal-box">
-                    <h3>Descripción Formal</h3>
-                    <div><p>Un autómata a pila (AP) se define formalmente como una 7-tupla M = (Q, Σ, Γ, δ, q₀, Z₀, F), donde:
-*   Q es un conjunto finito de estados posibles del autómata.
-*   Σ es el alfabeto de entrada, un conjunto finito de símbolos que el AP puede leer de la cinta de entrada.
-*   Γ es el alfabeto de la pila, un conjunto finito de símbolos que pueden ser almacenados en la pila. Típicamente, Σ y Γ pueden tener elementos en común, pero conceptualmente son distintos.
-*   δ es la función de transición finita. Su dominio es Q × (Σ ∪ {ε}) × Γ, y su codominio es P(Q × Γ<em>). Esto significa que para cada combinación de un estado actual <code>q</code> ∈ Q, un símbolo de entrada <code>a</code> ∈ (Σ ∪ {ε}) (donde <code>ε</code> denota una transición sin leer entrada), y un símbolo <code>X</code> ∈ Γ en la cima de la pila, la función <code>δ</code> produce un conjunto finito de pares (p, γ). Aquí, <code>p</code> ∈ Q es el siguiente estado al que el autómata puede transicionar, y <code>γ</code> ∈ Γ</em> es la cadena de símbolos que reemplazará al símbolo <code>X</code> en la cima de la pila.
-    *   Si <code>γ = ε</code>, el símbolo <code>X</code> es extraído (POP) de la pila.
-    *   Si <code>γ = X</code>, el símbolo <code>X</code> permanece en la pila (no hay cambio neto en la cima).
-    *   Si <code>γ = YZ</code> (donde <code>Y, Z</code> ∈ Γ<em>), el símbolo <code>X</code> es extraído y la cadena <code>YZ</code> se empuja a la pila, con <code>Z</code> siendo el nuevo símbolo de la cima. Esta operación es a menudo vista como el reemplazo de <code>X</code> por <code>Y</code> y luego el apilamiento de <code>Z</code> (o viceversa, la convención puede variar ligeramente pero el efecto es el mismo). La posibilidad de que <code>δ</code> produzca un </em>conjunto* de pares es lo que define a un AP no determinista.</p>
-<ul>
-<li>q₀ ∈ Q es el estado inicial en el que se encuentra el AP al comienzo de cualquier cómputo.</li>
-<li>Z₀ ∈ Γ es el símbolo inicial de la pila, un marcador especial que se coloca en la pila antes de que el procesamiento de la cadena de entrada comience.</li>
-<li>F ⊆ Q es el conjunto de estados de aceptación. Un autómata a pila acepta una cadena de entrada <code>w</code> si, comenzando en <code>q₀</code> con <code>Z₀</code> en la pila, y consumiendo <code>w</code>, el AP puede llegar a una configuración (q, ε, γ') tal que <code>q</code> ∈ F (aceptación por estado final). Alternativamente, la aceptación puede definirse por pila vacía, donde el AP acepta <code>w</code> si la pila queda vacía después de consumir <code>w</code>. Ambos criterios son equivalentes en poder de reconocimiento.</li>
-</ul></div>
-                    
-                    <div class="diagrama-container">
-                        <svg viewBox="0 0 600 200">
-      <defs>
-        <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
-          <polygon points="0 0, 10 3.5, 0 7" fill="black" />
-        </marker>
-      </defs>
+            <h3>Intuición</h3>
+            <div><p>Piense en un NPDA como un explorador que, al llegar a una bifurcación, puede clonarse a sí mismo para seguir todos los caminos posibles simultáneamente. Si alguno de sus 'clones' llega a un estado de aceptación con la pila correcta, la cadena es aceptada. Esto es útil para lenguajes ambiguos. El DPDA, por el contrario, es como un tren sobre rieles: en cada punto, el símbolo actual de la entrada y el que está arriba en la pila dictan un único movimiento posible. No hay dudas ni múltiples caminos. Aunque el NPDA es más 'poderoso' teóricamente, el DPDA es el que realmente implementamos en las máquinas reales porque no queremos que un compilador 'adivine' lo que quisimos escribir; queremos que siga reglas lógicas estrictas y rápidas.</p></div>
 
-      <circle cx="100" cy="100" r="40" stroke="black" stroke-width="2" fill="#D1C4E9"/>
-      <text x="85" y="105" font-family="Arial" font-size="18" fill="black">q</text>
-
-      <circle cx="500" cy="100" r="40" stroke="black" stroke-width="2" fill="#C8E6C9"/>
-      <text x="485" y="105" font-family="Arial" font-size="18" fill="black">p</text>
-
-      <path d="M140 100 C 250 50, 350 50, 460 100" stroke="black" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
-      <text x="270" y="40" font-family="Arial" font-size="14" fill="black">a, X → γ</text>
-
-      <rect x="10" y="10" width="80" height="20" stroke="black" fill="#BBDEFB" rx="5" ry="5"/>
-      <text x="20" y="25" font-family="Arial" font-size="12" fill="black">Input (a)</text>
-
-      <rect x="520" y="10" width="70" height="20" stroke="black" fill="#BBDEFB" rx="5" ry="5"/>
-      <text x="530" y="25" font-family="Arial" font-size="12" fill="black">Stack (γ)</text>
-
-      <rect x="10" y="170" width="80" height="20" stroke="black" fill="#F8BBD0" rx="5" ry="5"/>
-      <text x="20" y="185" font-family="Arial" font-size="12" fill="black">Stack (X)</text>
-    </svg>
-                        <p style="font-size:0.8rem; color:#666; margin-top:1rem; text-align:center;">
-                            <em>Fig: Representación visual generada.</em>
-                        </p>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <h3>Intuición</h3>
-                    <div><p>La función de transición <code>δ</code> es el "cerebro" del autómata a pila. Le dice qué hacer en cada situación. Imagina una máquina expendedora (<code>q</code>) que lee una moneda (<code>a</code>) y tiene un billete en la ranura superior (<code>X</code>). La función <code>δ</code> le diría: "Si estás en el estado <code>q</code>, lees una moneda de 1 euro, y la ranura tiene un billete de 5, entonces cambia a un nuevo estado <code>p</code> y saca el billete de 5 y pon dos de 2 euros" (simbólicamente, <code>X</code> es reemplazado por <code>Y Z</code>). Lo crucial es que el AP toma decisiones basándose no solo en el símbolo de entrada y su estado actual, sino también en el símbolo que está en la <em>cima</em> de su pila. Esto permite que el AP "recuerde" información temporalmente y la utilice para guiar su proceso. La posibilidad de <code>ε</code>-transiciones significa que puede modificar su pila o estado sin consumir ningún símbolo de entrada, permitiendo una mayor flexibilidad para manejar estructuras complejas.</p></div>
-                </div>
-
-                <div class="card">
-                    <h3>Aplicación Real</h3>
-                    <div><p>La aplicación más directa y significativa de la definición formal de los autómatas a pila se encuentra en el diseño y la implementación de los analizadores sintácticos (parsers) para lenguajes de programación. Las reglas de una gramática independiente de contexto (que define la sintaxis de un lenguaje) se pueden transformar en un autómata a pila que reconoce si una secuencia de tokens (la salida de un analizador léxico) forma un programa sintácticamente válido. Herramientas como Yacc, Bison o ANTLR son generadores de parsers que, a partir de una descripción de la gramática, construyen un autómata (a menudo una versión determinística del AP, como los parsers LR o LL) capaz de realizar esta tarea de reconocimiento. Esto es fundamental para que el compilador entienda la estructura de tu código y pueda generar el código máquina correspondiente o que un intérprete pueda ejecutarlo correctamente.</p></div>
-                </div>
-
-            </div>
+            <h3>Aplicación</h3>
+            <div><p>Los DPDA son la base de los analizadores sintácticos eficientes en la construcción de compiladores. Herramientas como Yacc (Yet Another Compiler-Compiler) o Bison generan tablas de análisis que funcionan esencialmente como un autómata a pila determinista. En redes de computadoras, se utilizan para el análisis de protocolos que tienen campos de longitud variable o estructuras anidadas. Los NPDA, aunque menos comunes en implementaciones directas de software debido a su complejidad computacional, son fundamentales en la teoría de la complejidad y en el diseño de algoritmos de reconocimiento de lenguaje natural, donde una oración puede tener múltiples interpretaciones sintácticas válidas que deben ser exploradas antes de decidirse por una.</p></div>
         </article>
         
         <article class="subtema">
-            <div class="subtema-header">
-                <h2>La Relación entre Autómatas a Pila y Lenguajes Independientes de Contexto: Implicaciones y Aplicaciones Prácticas</h2>
+            <h2>Relación entre PDA y Gramáticas de Libre Contexto (CFG)</h2>
+            
+            <h3>Historia</h3>
+            <div><p>La equivalencia entre los Autómatas a Pila y las Gramáticas de Libre Contexto (CFG) es uno de los pilares de la Jerarquía de Chomsky. Este descubrimiento se consolidó a mediados de los años 60. Se demostró que para cada gramática de libre contexto existe un NPDA que reconoce el mismo lenguaje, y viceversa. Esta relación es simbiótica: mientras que la gramática proporciona una descripción generativa y humana de la estructura del lenguaje (cómo se 'construyen' las sentencias), el autómata proporciona una descripción operacional (cómo se 'reconocen' o validan). Esta equivalencia permitió a los científicos de la computación convertir especificaciones gramaticales abstractas en algoritmos de reconocimiento mecánicos, lo que dio origen a la generación automática de código para parsers.</p></div>
+
+            <h3>Descripción Formal</h3>
+            <div><p>La conversión de una CFG G = (V, Σ, R, S) a un PDA M se realiza típicamente mediante el método 'Top-Down'. El PDA resultante tiene un solo estado principal q y utiliza la pila para expandir las variables de la gramática. Las reglas de transición se definen como:
+1. Para cada producción A → α en R, se añade la transición: δ(q, ε, A) = {(q, α)}. Esto significa que el autómata reemplaza el símbolo no terminal en el tope de la pila por su cuerpo de producción.
+2. Para cada terminal a ∈ Σ, se añade la transición: δ(q, a, a) = {(q, ε)}. Esto significa que si el terminal en la entrada coincide con el terminal en el tope de la pila, se 'emparejan' y se eliminan.</p>
+<p>El autómata comienza con el símbolo inicial S en la pila. Si logra vaciar la pila consumiendo toda la entrada, la cadena pertenece al lenguaje generado por la gramática. Este proceso demuestra que el poder de la recursividad en las gramáticas es exactamente igual al poder de una pila infinita en los autómatas.</p></div>
+            
+            <div class="diagrama-box">
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg style="max-width:100%; height:auto;" data-width="283pt" data-height="166pt"
+ viewBox="0.00 0.00 283.41 166.41" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 162.41)">
+<title>G</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-162.41 279.41,-162.41 279.41,4 -4,4"/>
+<!-- start -->
+<g id="node1" class="node">
+<title>start</title>
+<ellipse fill="black" stroke="black" cx="1.8" cy="-34.78" rx="1.8" ry="1.8"/>
+</g>
+<!-- q -->
+<g id="node2" class="node">
+<title>q</title>
+<ellipse fill="none" stroke="black" cx="105.23" cy="-34.78" rx="32.75" ry="32.75"/>
+<text text-anchor="middle" x="105.23" y="-31.68" font-family="Helvetica,sans-Serif" font-size="12.00">q_loop</text>
+</g>
+<!-- start&#45;&gt;q -->
+<g id="edge1" class="edge">
+<title>start&#45;&gt;q</title>
+<path fill="none" stroke="black" d="M3.94,-34.78C9.83,-34.78 37.53,-34.78 62.32,-34.78"/>
+<polygon fill="black" stroke="black" points="62.34,-38.28 72.34,-34.78 62.34,-31.28 62.34,-38.28"/>
+<text text-anchor="middle" x="38.1" y="-37.78" font-family="Helvetica,sans-Serif" font-size="10.00">Push S</text>
+</g>
+<!-- q&#45;&gt;q -->
+<g id="edge2" class="edge">
+<title>q&#45;&gt;q</title>
+<path fill="none" stroke="black" d="M99.04,-66.91C99.1,-77.23 101.17,-85.41 105.23,-85.41 107.83,-85.41 109.61,-82.05 110.57,-76.93"/>
+<polygon fill="black" stroke="black" points="114.06,-77.17 111.41,-66.91 107.09,-76.58 114.06,-77.17"/>
+<text text-anchor="middle" x="105.23" y="-110.41" font-family="Helvetica,sans-Serif" font-size="10.00">ε, S / AB</text>
+<text text-anchor="middle" x="105.23" y="-99.41" font-family="Helvetica,sans-Serif" font-size="10.00">ε, A / a</text>
+<text text-anchor="middle" x="105.23" y="-88.41" font-family="Helvetica,sans-Serif" font-size="10.00">ε, B / b</text>
+</g>
+<!-- q&#45;&gt;q -->
+<g id="edge3" class="edge">
+<title>q&#45;&gt;q</title>
+<path fill="none" stroke="black" d="M94.38,-65.61C90.46,-90.66 94.08,-118.41 105.23,-118.41 114.9,-118.41 118.9,-97.54 117.23,-75.66"/>
+<polygon fill="black" stroke="black" points="120.7,-75.14 116.07,-65.61 113.74,-75.95 120.7,-75.14"/>
+<text text-anchor="middle" x="105.23" y="-132.41" font-family="Helvetica,sans-Serif" font-size="10.00">a, a / ε</text>
+<text text-anchor="middle" x="105.23" y="-121.41" font-family="Helvetica,sans-Serif" font-size="10.00">b, b / ε</text>
+</g>
+<!-- q_end -->
+<g id="node3" class="node">
+<title>q_end</title>
+<ellipse fill="none" stroke="black" cx="240.63" cy="-34.78" rx="30.59" ry="30.59"/>
+<ellipse fill="none" stroke="black" cx="240.63" cy="-34.78" rx="34.56" ry="34.56"/>
+<text text-anchor="middle" x="240.63" y="-31.68" font-family="Helvetica,sans-Serif" font-size="12.00">q_end</text>
+</g>
+<!-- q&#45;&gt;q_end -->
+<g id="edge4" class="edge">
+<title>q&#45;&gt;q_end</title>
+<path fill="none" stroke="black" d="M138.18,-34.78C155.35,-34.78 176.78,-34.78 195.52,-34.78"/>
+<polygon fill="black" stroke="black" points="195.61,-38.28 205.61,-34.78 195.61,-31.28 195.61,-38.28"/>
+<text text-anchor="middle" x="171.85" y="-37.78" font-family="Helvetica,sans-Serif" font-size="10.00">ε, Z / Z</text>
+</g>
+</g>
+</svg>
+
+                <p style="font-size:0.8em; color:#999">Diagrama generado automáticamente</p>
             </div>
-            <div class="seccion-contenido">
-                
-                <div class="card full-width">
-                    <h3>Historia</h3>
-                    <div><p>La conexión profunda entre los autómatas a pila y los lenguajes independientes de contexto (LIC) es una piedra angular de la informática teórica, establecida formalmente en la década de 1960. El trabajo pionero de Noam Chomsky en la jerarquía de lenguajes formales clasificó a los LIC (Tipo 2) como aquellos que pueden ser generados por gramáticas independientes de contexto. Poco después, se demostró el teorema fundamental que establece una equivalencia perfecta: un lenguaje es independiente de contexto si y solo si puede ser aceptado por un autómata a pila. Esta equivalencia proporcionó una base teórica sólida para entender la complejidad de los lenguajes de programación y sus compiladores, validando el uso de la pila como la estructura de datos clave para el análisis sintáctico.</p></div>
-                </div>
 
-                <div class="card full-width formal-box">
-                    <h3>Descripción Formal</h3>
-                    <div><p>La relación entre los Autómatas a Pila (AP) y los Lenguajes Independientes de Contexto (LIC) es una de las correspondencias más significativas en la teoría de los lenguajes formales. Constituye el corazón de la Jerarquía de Chomsky en lo que respecta a los lenguajes de Tipo 2.
-*   Teorema de Equivalencia Fundamental: Un lenguaje L es un Lenguaje Independiente de Contexto si y solo si es aceptado por algún Autómata a Pila. Esto significa que la clase de lenguajes reconocibles por APs es idéntica a la clase de lenguajes generables por Gramáticas Independientes de Contexto (GICs). Este teorema establece un puente crucial entre los modelos generativos (GICs) y los modelos de reconocimiento (APs), demostrando que ambos tienen la misma capacidad descriptiva. Esto valida el diseño de la pila como la estructura de memoria adecuada para procesar la sintaxis definida por GICs.
-*   Determinismo vs. No-Determinismo en APs: Es vital entender que, a diferencia de los autómatas finitos (donde los DFA y NFA tienen el mismo poder), para los autómatas a pila, el no-determinismo amplía su poder de reconocimiento.
-    *   Autómatas a Pila Determinísticos (APD): Son APs cuyas funciones de transición δ siempre producen un único par (p, γ) para cualquier combinación de estado, símbolo de entrada y símbolo de pila. Además, no pueden tener transiciones ε si hay una transición con un símbolo de entrada desde el mismo estado y cima de pila. Los APDs reconocen una clase de lenguajes llamada Lenguajes Independientes de Contexto Determinísticos (LICD), que es un subconjunto <em>estricto</em> de los LIC. Muchos lenguajes de programación se diseñan para ser LICD para permitir un análisis sintáctico eficiente.
-    *   Autómatas a Pila No Determinísticos (APND): Pueden tener múltiples transiciones posibles para una misma configuración o permitir transiciones ε simultáneamente con transiciones que leen entrada. Los APNDs son capaces de reconocer <em>todos</em> los Lenguajes Independientes de Contexto. Esto implica que existen LIC que no pueden ser reconocidos por ningún APD, demostrando que el no-determinismo es inherentemente más potente para los APs.</p>
-<p>La implicación práctica de esta distinción radica en la eficiencia del parsing: los parsers basados en APD son más sencillos y rápidos de construir, pero no pueden manejar todos los LIC.</p></div>
-                    
-                    <div class="diagrama-container">
-                        <svg viewBox="0 0 600 200">
-      <circle cx="300" cy="100" r="90" stroke="black" stroke-width="2" fill="#E8F5E9"/>
-      <text x="260" y="105" font-family="Arial" font-size="18" fill="black">LIC</text>
+            <h3>Intuición</h3>
+            <div><p>Imagine que tiene un manual de instrucciones (la Gramática) que dice que para construir una 'Casa' necesita un 'Techo' y una 'Base'. En su pila, usted pone la palabra 'Casa'. El autómata mira la pila, ve 'Casa' y, siguiendo el manual, la quita y pone en su lugar 'Techo' y 'Base'. Luego intenta construir el 'Techo' comparándolo con lo que ve en la realidad (la entrada). Si el manual dice que un 'Techo' es un triángulo de madera, y usted ve madera en la entrada, puede quitar 'Techo' de su lista mental (la pila). Si al final del día ha construido todo lo que el manual decía y no le sobran materiales ni instrucciones, entonces ha validado con éxito la estructura. El autómata a pila es simplemente el ejecutor que sigue las reglas de la gramática usando la pila como su lista de tareas pendientes.</p></div>
 
-      <circle cx="300" cy="100" r="60" stroke="black" stroke-width="2" fill="#BBDEFB"/>
-      <text x="260" y="105" font-family="Arial" font-size="16" fill="black">LICD</text>
-
-      <circle cx="300" cy="100" r="30" stroke="black" stroke-width="2" fill="#FFECB3"/>
-      <text x="260" y="105" font-family="Arial" font-size="14" fill="black">Regulares</text>
-
-      <line x1="300" y1="190" x2="300" y2="10" stroke="black" stroke-width="1" stroke-dasharray="5,5"/>
-      <text x="310" y="195" font-family="Arial" font-size="12" fill="black">Autómatas a Pila</text>
-      <text x="310" y="150" font-family="Arial" font-size="12" fill="black">AP Determinísticos</text>
-      <text x="310" y="70" font-family="Arial" font-size="12" fill="black">Autómatas Finitos</text>
-    </svg>
-                        <p style="font-size:0.8rem; color:#666; margin-top:1rem; text-align:center;">
-                            <em>Fig: Representación visual generada.</em>
-                        </p>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <h3>Intuición</h3>
-                    <div><p>¿Por qué un AP es la herramienta perfecta para los LIC? Los LIC se caracterizan por poder describir estructuras anidadas y recursivas, como las cláusulas "si-entonces-sino" en programación, las etiquetas anidadas en XML/HTML, o las frases nominales dentro de frases verbales en lenguaje natural. Estas estructuras requieren que un "contexto" (como el hecho de haber visto un "si" o una etiqueta de apertura) sea "recordado" hasta que se encuentre su contraparte (un "sino" o una etiqueta de cierre). La pila, con su naturaleza LIFO, es ideal para esto: "empuja" un contexto cuando entras en una estructura anidada y lo "saca" cuando sales. Esto permite al AP hacer un seguimiento de qué símbolos de cierre corresponden a qué símbolos de apertura, sin importar cuán profundo sea el anidamiento.</p></div>
-                </div>
-
-                <div class="card">
-                    <h3>Aplicación Real</h3>
-                    <div><p>La aplicación más prevalente de los autómatas a pila en la ingeniería de software actual es, sin duda, en la fase de análisis sintáctico de los compiladores e intérpretes. Cada lenguaje de programación tiene una gramática que define su sintaxis, y la mayoría de estas gramáticas son independientes de contexto (o muy cercanas a serlo). Los parsers generados por herramientas como ANTLR, Bison/Yacc o los parsers escritos a mano para JSON o YAML, son esencialmente implementaciones eficientes de autómatas a pila determinísticos. También son fundamentales en el procesamiento de XML y JSON, donde la validación de la estructura anidada de documentos se mapea directamente a la capacidad de un AP para manejar la pila de etiquetas o claves. Además, en el procesamiento del lenguaje natural, los AP se utilizan en modelos para el análisis sintáctico de oraciones, identificando la estructura gramatical de una frase.</p></div>
-                </div>
-
-            </div>
+            <h3>Aplicación</h3>
+            <div></div>
         </article>
-        
-    </main>
-
-    <footer>
-        <p>Prof. Jorge López-Cifre, PhD © 2026</p>
-    </footer>
-
-</body>
-</html>
+        </body></html>

@@ -3,275 +3,281 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>3 - Lenguajes y gramáticas - La Jerarquía de Chomsky (Tipos 0-3). - Prof. Jorge López-Cifre</title>
+    <title>3 - Lenguajes y gramáticas - La Jerarquía de Chomsky (Tipos 0-3).</title>
     <style>
-        :root {
-            --primary: #003366;
-            --accent: #d4af37;
-            --bg: #f8f9fa;
-            --text: #2c3e50;
-            --card-bg: #ffffff;
-            --border: #e9ecef;
-        }
-        body {
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--bg);
-            color: var(--text);
-            margin: 0;
-            padding: 0;
-            line-height: 1.7;
-        }
-        /* Tipografía mejorada */
-        p { margin-bottom: 1rem; }
-        strong, b { color: var(--primary); font-weight: 700; }
-        
-        header {
-            background: var(--primary);
-            color: white;
-            padding: 1rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
-        h1 { margin: 0; font-size: 1.25rem; font-weight: 600; }
-        
-        .btn-volver {
-            background: var(--accent);
-            color: var(--primary);
-            text-decoration: none;
-            padding: 0.5rem 1.2rem;
-            border-radius: 50px;
-            font-weight: bold;
-            font-size: 0.9rem;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-        }
-        .btn-volver:hover { 
+        body { font-family: sans-serif; background: #f4f4f9; color: #333; margin: 0; padding: 20px; }
+        header { background: #2c3e50; color: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; }
+        h1 { margin: 0; }
+        .subtema { background: white; padding: 30px; margin-bottom: 40px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        h2 { color: #2980b9; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+        h3 { color: #7f8c8d; font-size: 0.9em; text-transform: uppercase; margin-top: 25px; letter-spacing: 1px; }
+        .diagrama-box { 
+            text-align: center; 
+            margin: 30px 0; 
+            padding: 20px; 
             background: #fff; 
-            transform: translateY(-1px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-        }
-
-        main {
-            max-width: 1100px;
-            margin: 2rem auto;
-            padding: 0 1.5rem;
-        }
-
-        .subtema {
-            background: var(--card-bg);
-            border-radius: 12px;
-            margin-bottom: 4rem;
-            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
-            overflow: hidden;
-            border: 1px solid var(--border);
-        }
-        
-        .subtema-header {
-            background: linear-gradient(to right, #f8f9fa, #ffffff);
-            padding: 1.5rem 2rem;
-            border-bottom: 1px solid var(--border);
-        }
-        .subtema-header h2 { 
-            margin: 0; 
-            color: var(--primary); 
-            font-size: 1.6rem;
-            border-left: 5px solid var(--accent);
-            padding-left: 1rem;
-        }
-
-        .seccion-contenido {
-            padding: 2rem;
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 2.5rem;
-        }
-
-        @media (min-width: 900px) {
-            .seccion-contenido { grid-template-columns: 1fr 1fr; }
-            .full-width { grid-column: 1 / -1; }
-        }
-
-        .card h3 {
-            color: var(--primary);
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            margin-top: 0;
-            margin-bottom: 1rem;
-            border-bottom: 1px solid #ddd;
-            padding-bottom: 0.5rem;
-        }
-
-        .formal-box {
-            background-color: #f0f7ff; /* Azul muy muy pálido */
+            border: 1px solid #eee; 
             border-radius: 8px;
-            padding: 2rem !important;
-            border: 1px solid #cce5ff;
         }
-
-        /* CSS Específico para corregir SVGs */
-        .diagrama-container {
-            text-align: center;
-            margin: 2rem auto;
-            padding: 1.5rem;
-            background: white;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
-            max-width: 100%;
-            overflow-x: auto; /* Si es muy ancho, permite scroll */
-        }
-        
-        /* Forzar comportamiento correcto del SVG */
-        .diagrama-container svg {
-            max-width: 100%;
-            height: auto;
-            display: block;
-            margin: 0 auto;
-        }
-        
-        /* Evitar que el texto dentro del SVG sea ilegible */
-        .diagrama-container text {
-            font-family: sans-serif;
-        }
-
-        footer {
-            text-align: center;
-            padding: 3rem;
-            background: var(--primary);
-            color: rgba(255,255,255,0.8);
-            margin-top: 4rem;
-            font-size: 0.9rem;
-        }
+        /* Estilos Markdown */
+        p { line-height: 1.6; }
+        strong { color: #2c3e50; }
+        code { background: #f0f0f0; padding: 2px 5px; border-radius: 3px; font-family: monospace; }
     </style>
 </head>
 <body>
-
-    <header>
-        <h1>3 - Lenguajes y gramáticas - La Jerarquía de Chomsky (Tipos 0-3).</h1>
-        <a href="javascript:history.back()" class="btn-volver">← Volver</a>
-    </header>
-
+    <header><h1>3 - Lenguajes y gramáticas - La Jerarquía de Chomsky (Tipos 0-3).</h1></header>
     <main>
 
         <article class="subtema">
-            <div class="subtema-header">
-                <h2>Gramáticas Irrestrictas (Tipo 0) y Sensibles al Contexto (Tipo 1): Los Fundamentos Amplios</h2>
+            <h2>Lenguajes Regulares y Gramáticas de Tipo 3</h2>
+            
+            <h3>Historia</h3>
+            <div><p>La definición de los lenguajes regulares se consolidó en la década de 1950, impulsada por los trabajos de Noam Chomsky en lingüística y Stephen Kleene en lógica matemática. Kleene introdujo las expresiones regulares en 1951 para describir el comportamiento de los modelos de redes neuronales de McCulloch y Pitts. Chomsky, en su afán por formalizar el lenguaje natural, clasificó estas gramáticas como el nivel más restrictivo de su jerarquía (Tipo 3). Este periodo marcó el nacimiento de la teoría de autómatas, donde se demostró la equivalencia entre las gramáticas regulares, las expresiones regulares y los autómatas finitos. Inicialmente, se pensó que podrían modelar fragmentos significativos del lenguaje humano, pero pronto se descubrió que su falta de memoria estructural los hacía insuficientes para estructuras anidadas complejas. Sin embargo, su simplicidad y eficiencia computacional los convirtieron en la piedra angular del desarrollo de los primeros compiladores y herramientas de búsqueda de texto.</p></div>
+
+            <h3>Descripción Formal</h3>
+            <div><p>Una gramática regular G se define formalmente como una cuádrupla G = (V, Σ, P, S), donde V es el conjunto de variables (no terminales), Σ es el alfabeto de terminales, P es el conjunto de reglas de producción y S es el símbolo inicial. En las gramáticas de Tipo 3, las producciones deben ser lineales a la derecha o lineales a la izquierda. En una gramática lineal a la derecha, las reglas tienen la forma A → a o A → aB, donde A, B ∈ V y a ∈ Σ. Un lenguaje L es regular si y solo si existe un Autómata Finito Determinista (AFD) M = (Q, Σ, δ, q0, F) que lo reconoce. La función de transición δ: Q × Σ → Q determina el cambio de estado. Los lenguajes regulares son cerrados bajo las operaciones de unión (L1 ∪ L2), concatenación (L1L2), clausura de Kleene (L<em>), intersección y complemento. El Teorema de Myhill-Nerode proporciona una condición necesaria y suficiente para que un lenguaje sea regular basado en las clases de equivalencia de los prefijos. Un ejemplo clásico es L = {w ∈ {a, b}</em> | w contiene un número par de 'a'}, que puede ser generado por una gramática con reglas S → bS | aA | ε y A → bA | aS.</p></div>
+            
+            <div class="diagrama-box">
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg style="max-width:100%; height:auto;" data-width="200pt" data-height="95pt"
+ viewBox="0.00 0.00 199.56 94.87" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 90.87)">
+<title>G</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-90.87 195.56,-90.87 195.56,4 -4,4"/>
+<!-- start -->
+<g id="node1" class="node">
+<title>start</title>
+<ellipse fill="black" stroke="black" cx="1.8" cy="-28.93" rx="1.8" ry="1.8"/>
+</g>
+<!-- q0 -->
+<g id="node2" class="node">
+<title>q0</title>
+<ellipse fill="none" stroke="black" cx="66.15" cy="-28.93" rx="21.58" ry="21.58"/>
+<ellipse fill="none" stroke="black" cx="66.15" cy="-28.93" rx="25.59" ry="25.59"/>
+<text text-anchor="middle" x="66.15" y="-25.83" font-family="Helvetica,sans-Serif" font-size="12.00">Par</text>
+</g>
+<!-- start&#45;&gt;q0 -->
+<g id="edge1" class="edge">
+<title>start&#45;&gt;q0</title>
+<path fill="none" stroke="black" d="M3.88,-28.93C7.28,-28.93 18.23,-28.93 29.95,-28.93"/>
+<polygon fill="black" stroke="black" points="30.28,-32.43 40.28,-28.93 30.28,-25.43 30.28,-32.43"/>
+</g>
+<!-- q0&#45;&gt;q0 -->
+<g id="edge2" class="edge">
+<title>q0&#45;&gt;q0</title>
+<path fill="none" stroke="black" d="M57.97,-53.55C57.4,-63.8 60.13,-72.48 66.15,-72.48 70,-72.48 72.5,-68.91 73.66,-63.66"/>
+<polygon fill="black" stroke="black" points="77.16,-63.76 74.32,-53.55 70.17,-63.3 77.16,-63.76"/>
+<text text-anchor="middle" x="66.15" y="-75.48" font-family="Helvetica,sans-Serif" font-size="10.00">b</text>
+</g>
+<!-- q1 -->
+<g id="node3" class="node">
+<title>q1</title>
+<ellipse fill="none" stroke="black" cx="162.62" cy="-28.93" rx="28.87" ry="28.87"/>
+<text text-anchor="middle" x="162.62" y="-25.83" font-family="Helvetica,sans-Serif" font-size="12.00">Impar</text>
+</g>
+<!-- q0&#45;&gt;q1 -->
+<g id="edge3" class="edge">
+<title>q0&#45;&gt;q1</title>
+<path fill="none" stroke="black" d="M91.97,-28.93C101.56,-28.93 112.76,-28.93 123.34,-28.93"/>
+<polygon fill="black" stroke="black" points="123.63,-32.43 133.63,-28.93 123.63,-25.43 123.63,-32.43"/>
+<text text-anchor="middle" x="112.69" y="-31.93" font-family="Helvetica,sans-Serif" font-size="10.00">a</text>
+</g>
+<!-- q1&#45;&gt;q0 -->
+<g id="edge5" class="edge">
+<title>q1&#45;&gt;q0</title>
+<path fill="none" stroke="black" d="M136.27,-16.81C127.9,-14.11 118.48,-12.43 109.69,-13.93 106.45,-14.49 103.13,-15.26 99.83,-16.17"/>
+<polygon fill="black" stroke="black" points="98.66,-12.88 90.17,-19.22 100.76,-19.55 98.66,-12.88"/>
+<text text-anchor="middle" x="112.69" y="-16.93" font-family="Helvetica,sans-Serif" font-size="10.00">a</text>
+</g>
+<!-- q1&#45;&gt;q1 -->
+<g id="edge4" class="edge">
+<title>q1&#45;&gt;q1</title>
+<path fill="none" stroke="black" d="M153.64,-56.88C153.35,-67.29 156.34,-75.87 162.62,-75.87 166.65,-75.87 169.32,-72.35 170.65,-67.08"/>
+<polygon fill="black" stroke="black" points="174.16,-67.16 171.6,-56.88 167.19,-66.51 174.16,-67.16"/>
+<text text-anchor="middle" x="162.62" y="-78.87" font-family="Helvetica,sans-Serif" font-size="10.00">b</text>
+</g>
+</g>
+</svg>
+
+                <p style="font-size:0.8em; color:#999">Diagrama generado automáticamente</p>
             </div>
-            <div class="seccion-contenido">
-                
-                <div class="card full-width">
-                    <h3>Historia</h3>
-                    <div><p>La Jerarquía de Chomsky, introducida por el lingüista Noam Chomsky en 1956 y formalizada en 1959, fue un hito fundamental para la lingüística teórica y, posteriormente, para la ciencia de la computación. Chomsky, interesado en modelar la sintaxis del lenguaje natural, propuso una clasificación de gramáticas formales por su poder expresivo. El Tipo 0, las gramáticas irrestrictas, representó la categoría más amplia y potente, equivalente en capacidad a las Máquinas de Turing. Posteriormente, se establecieron relaciones cruciales entre estos modelos y la computabilidad. Las gramáticas sensibles al contexto (Tipo 1) surgieron como una restricción de las irrestrictas, buscando un equilibrio entre poder y tratabilidad, inspiradas en la idea de que el contexto de una palabra afecta su posible sustitución en una frase. Estas primeras clasificaciones establecieron los límites teóricos de lo que las máquinas podían procesar, sentando las bases de la computación teórica.</p></div>
-                </div>
 
-                <div class="card full-width formal-box">
-                    <h3>Descripción Formal</h3>
-                    <div><p>Una <strong>Gramática Irrestricta (Tipo 0)</strong> se define como G = (V, T, P, S), donde V es un alfabeto finito de símbolos (variables y terminales), T ⊆ V es el conjunto de símbolos terminales, S ∈ V\T es el símbolo inicial (no terminal), y P es un conjunto finito de reglas de producción. Cada regla tiene la forma α → β, donde α ∈ V⁺ (una cadena no vacía de símbolos de V) y β ∈ V<em> (una cadena de símbolos de V, posiblemente vacía). No existen restricciones sobre la longitud o los tipos de símbolos en α y β. Los lenguajes generados por estas gramáticas se conocen como Lenguajes Recursivamente Enumerables (LRE) y son reconocidos por Máquinas de Turing, el modelo más general de cómputo. Son capaces de expresar cualquier lenguaje que pueda ser generado por un algoritmo. Una </em><em>Gramática Sensible al Contexto (GSC o Tipo 1)</em><em> también se define como G = (V, T, P, S), pero con una restricción clave en sus reglas de producción. Para cada regla α → β en P, se debe cumplir que |α| ≤ |β|, con la única excepción de que S → ε (el símbolo inicial puede producir la cadena vacía) si ε ∈ L(G) y S no aparece en el lado derecho de ninguna otra producción. Más comúnmente, las reglas son de la forma γAδ → γβδ, donde A ∈ V\T, β ∈ V⁺, y γ, δ ∈ V</em>. Esto significa que un no terminal A solo puede ser reemplazado por β si está en el contexto γ y δ, y la longitud de la cadena no puede decrecer (excepto por la producción del vacío desde S). Los lenguajes generados se llaman Lenguajes Sensibles al Contexto (LSC) y son reconocidos por Autómatas Lineales Acotados (ALAS).</p></div>
-                    
-                    <div class="diagrama-container">
-                        <svg viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg"><defs><marker id="arrowhead" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="#333" /></marker></defs><rect x="50" y="50" width="200" height="100" rx="10" ry="10" fill="#e0e0e0" stroke="#333" stroke-width="1" /><text x="150" y="105" text-anchor="middle" font-family="Arial" font-size="18" fill="#333">Tipo 0 (LRE)</text><rect x="350" y="50" width="200" height="100" rx="10" ry="10" fill="#d0d0d0" stroke="#333" stroke-width="1" /><text x="450" y="105" text-anchor="middle" font-family="Arial" font-size="18" fill="#333">Tipo 1 (LSC)</text><path d="M250 100 L350 100" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)" /><text x="290" y="90" text-anchor="middle" font-family="Arial" font-size="14" fill="#333">Restricción de longitud</text><circle cx="150" cy="100" r="40" fill="none" stroke="#666" stroke-dasharray="3 3" /><text x="150" y="100" text-anchor="middle" font-family="Arial" font-size="12" fill="#666">Máquina de Turing</text><circle cx="450" cy="100" r="40" fill="none" stroke="#666" stroke-dasharray="3 3" /><text x="450" y="100" text-anchor="middle" font-family="Arial" font-size="12" fill="#666">Autómata Lineal Acotado</text></svg>
-                        <p style="font-size:0.8rem; color:#666; margin-top:1rem; text-align:center;">
-                            <em>Fig: Representación visual generada.</em>
-                        </p>
-                    </div>
-                </div>
+            <h3>Intuición</h3>
+            <div><p>Imagina que estás caminando por un laberinto donde cada habitación tiene una instrucción simple y no tienes papel ni lápiz para anotar nada. Solo puedes recordar en qué habitación estás en este momento. Este es el comportamiento de un lenguaje regular. No tienen memoria de 'conteo' a largo plazo. Pueden reconocer patrones repetitivos como 'un número cualquiera de ceros seguidos de un uno', pero no pueden comparar cantidades, como asegurar que haya exactamente el mismo número de ceros que de unos (0ⁿ1ⁿ). Son excelentes para detectar palabras clave, validar formatos de correos electrónicos o números de teléfono, donde el patrón sigue una secuencia lineal sin dependencias profundas o anidamientos infinitos. Su estructura es comparable a un interruptor de luz con estados definidos: cada entrada provoca un cambio de estado previsible, y el resultado final depende exclusivamente de dónde terminas tras procesar toda la cadena de entrada.</p></div>
 
-                <div class="card">
-                    <h3>Intuición</h3>
-                    <div><p>Las gramáticas irrestrictas (Tipo 0) son como el "poder total" de la computación. Imagina un programa de ordenador sin límites de memoria o tiempo: puede hacer cualquier cosa que sea teóricamente computable. Son increíblemente poderosas, capaces de modelar los problemas más complejos, pero por esa misma razón, son muy difíciles de analizar o predecir su comportamiento. No existe un algoritmo general que pueda determinar si una gramática Tipo 0 dada generará una cadena específica (el problema de la pertenencia es indecidible). Las gramáticas sensibles al contexto (Tipo 1) introducen una primera capa de restricción. La idea principal es que la forma en que se transforma una parte de la cadena depende de lo que hay a su alrededor, su "contexto". Además, estas gramáticas tienen una regla clave: las producciones no pueden hacer que las cadenas se vuelvan más cortas de manera arbitraria. Esto significa que la "información" no puede simplemente desaparecer. Piensa en el lenguaje natural: la palabra 'banco' tiene diferentes significados y usos dependiendo de si hablamos de 'banco de arena' o 'banco financiero'. El contexto es vital. Esta restricción las hace un poco más manejables que las de Tipo 0, pero siguen siendo bastante complejas.</p></div>
-                </div>
-
-                <div class="card">
-                    <h3>Aplicación Real</h3>
-                    <div><p>Aunque las gramáticas Tipo 0 son demasiado poderosas para ser utilizadas directamente en la especificación de lenguajes de programación o protocolos, su importancia es fundamental en la teoría de la computabilidad. Nos ayudan a comprender los límites inherentes de lo que se puede computar y los problemas indecidibles, lo que es esencial para el diseño de algoritmos y la comprensión de la complejidad computacional. En el ámbito del procesamiento de lenguaje natural (PLN) avanzado, las gramáticas sensibles al contexto (Tipo 1) tienen cierta relevancia. Pueden modelar fenómenos lingüísticos donde el contexto sintáctico o semántico de una palabra o frase es crucial para su correcta interpretación, como las concordancias complejas, la anáfora o ciertas estructuras idiomáticas que no pueden ser capturadas por gramáticas más simples. Aunque no son el pilar de los compiladores modernos como las gramáticas libres de contexto, su estudio contribuye a la comprensión de las capacidades y limitaciones de los modelos de lenguaje más sofisticados y en la investigación de la arquitectura de sistemas expertos o sistemas de comprensión de lenguaje natural en áreas muy específicas.</p></div>
-                </div>
-
-            </div>
+            <h3>Aplicación</h3>
+            <div><p>La aplicación más omnipresente de los lenguajes regulares se encuentra en los motores de expresiones regulares (Regex) integrados en casi todos los lenguajes de programación modernos. Se utilizan para el análisis léxico (lexing) en la fase inicial de la compilación, donde el código fuente se divide en tokens (palabras clave, identificadores, operadores). También son fundamentales en el diseño de protocolos de red, donde los estados de la conexión se modelan mediante autómatas finitos. En el hardware, los circuitos lógicos secuenciales y los controladores de semáforos operan bajo estos principios. Las herramientas de búsqueda como 'grep' en sistemas Unix utilizan algoritmos de emparejamiento de patrones basados en autómatas para procesar grandes volúmenes de texto a velocidades optimizadas, aprovechando que el tiempo de procesamiento es lineal respecto a la longitud de la entrada.</p></div>
         </article>
         
         <article class="subtema">
-            <div class="subtema-header">
-                <h2>Gramáticas Libres de Contexto (Tipo 2): La Base de los Lenguajes de Programación</h2>
+            <h2>Lenguajes Libres de Contexto (Tipo 2) y Autómatas de Pila</h2>
+            
+            <h3>Historia</h3>
+            <div><p>A finales de la década de 1950, mientras se desarrollaba el lenguaje de programación ALGOL 60, John Backus y Peter Naur introdujeron una notación para describir la sintaxis del lenguaje, conocida hoy como BNF (Backus-Naur Form). Simultáneamente, Noam Chomsky identificó esta clase de lenguajes como el Tipo 2 en su jerarquía. Chomsky observó que los lenguajes naturales poseen una estructura jerárquica de constituyentes que las gramáticas regulares no podían capturar. En 1960, se estableció la relación fundamental entre estas gramáticas y los Autómatas de Pila (Pushdown Automata). Este avance fue crucial para la informática, ya que permitió la creación de analizadores sintácticos (parsers) eficientes. La capacidad de estos lenguajes para manejar el anidamiento y la recursividad los convirtió en el estándar de facto para la definición de la estructura de casi todos los lenguajes de programación de alto nivel.</p></div>
+
+            <h3>Descripción Formal</h3>
+            <div><p>Una gramática libre de contexto (GLC) es una cuádrupla G = (V, Σ, P, S) donde las reglas de producción en P son de la forma A → γ, con A ∈ V y γ ∈ (V ∪ Σ)<em>. La característica 'libre de contexto' significa que la variable A puede ser reemplazada por γ sin importar los símbolos que la rodean. El modelo computacional asociado es el Autómata de Pila (AP), definido como M = (Q, Σ, Γ, δ, q0, Z0, F), donde Γ es el alfabeto de la pila y Z0 el símbolo inicial de la misma. La función de transición δ: Q × (Σ ∪ {ε}) × Γ → P(Q × Γ</em>) permite al autómata leer un símbolo, observar el tope de la pila y decidir cambiar de estado y manipular la pila (push/pop). Un lenguaje L es libre de contexto si existe una GLC que lo genere o un AP que lo acepte. Existen formas normales, como la Forma Normal de Chomsky (FNC), donde todas las producciones son de tipo A → BC o A → a, facilitando algoritmos de reconocimiento como el algoritmo CYK.</p></div>
+            
+            <div class="diagrama-box">
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg style="max-width:100%; height:auto;" data-width="289pt" data-height="176pt"
+ viewBox="0.00 0.00 289.50 175.95" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 171.95)">
+<title>G</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-171.95 285.5,-171.95 285.5,4 -4,4"/>
+<!-- start -->
+<g id="node1" class="node">
+<title>start</title>
+<ellipse fill="black" stroke="black" cx="1.8" cy="-44.01" rx="1.8" ry="1.8"/>
+</g>
+<!-- q -->
+<g id="node2" class="node">
+<title>q</title>
+<ellipse fill="none" stroke="black" cx="77.54" cy="-44.01" rx="36.87" ry="36.87"/>
+<text text-anchor="middle" x="77.54" y="-40.91" font-family="Helvetica,sans-Serif" font-size="12.00">q_ready</text>
+</g>
+<!-- start&#45;&gt;q -->
+<g id="edge1" class="edge">
+<title>start&#45;&gt;q</title>
+<path fill="none" stroke="black" d="M3.63,-44.01C6.65,-44.01 17.56,-44.01 30.05,-44.01"/>
+<polygon fill="black" stroke="black" points="30.29,-47.51 40.29,-44.01 30.29,-40.51 30.29,-47.51"/>
+</g>
+<!-- q&#45;&gt;q -->
+<g id="edge2" class="edge">
+<title>q&#45;&gt;q</title>
+<path fill="none" stroke="black" d="M74.18,-80.98C74.34,-91.17 75.46,-98.95 77.54,-98.95 78.83,-98.95 79.75,-95.91 80.3,-91.14"/>
+<polygon fill="black" stroke="black" points="83.81,-91.17 80.89,-80.98 76.82,-90.77 83.81,-91.17"/>
+<text text-anchor="middle" x="77.54" y="-101.95" font-family="Helvetica,sans-Serif" font-size="10.00">a, Z0 / AZ0</text>
+</g>
+<!-- q&#45;&gt;q -->
+<g id="edge3" class="edge">
+<title>q&#45;&gt;q</title>
+<path fill="none" stroke="black" d="M71.04,-80.41C69.99,-99.58 72.16,-116.95 77.54,-116.95 81.95,-116.95 84.2,-105.26 84.28,-90.48"/>
+<polygon fill="black" stroke="black" points="87.78,-90.32 84.03,-80.41 80.78,-90.5 87.78,-90.32"/>
+<text text-anchor="middle" x="77.54" y="-119.95" font-family="Helvetica,sans-Serif" font-size="10.00">a, A / AA</text>
+</g>
+<!-- q&#45;&gt;q -->
+<g id="edge4" class="edge">
+<title>q&#45;&gt;q</title>
+<path fill="none" stroke="black" d="M68.66,-79.96C65.45,-107.26 68.41,-134.95 77.54,-134.95 85.52,-134.95 88.78,-113.75 87.32,-90.16"/>
+<polygon fill="black" stroke="black" points="90.79,-89.6 86.41,-79.96 83.81,-90.23 90.79,-89.6"/>
+<text text-anchor="middle" x="77.54" y="-137.95" font-family="Helvetica,sans-Serif" font-size="10.00">b, A / ε</text>
+</g>
+<!-- f -->
+<g id="node3" class="node">
+<title>f</title>
+<ellipse fill="none" stroke="black" cx="237.48" cy="-44.01" rx="40.03" ry="40.03"/>
+<ellipse fill="none" stroke="black" cx="237.48" cy="-44.01" rx="44.03" ry="44.03"/>
+<text text-anchor="middle" x="237.48" y="-40.91" font-family="Helvetica,sans-Serif" font-size="12.00">q_accept</text>
+</g>
+<!-- q&#45;&gt;f -->
+<g id="edge5" class="edge">
+<title>q&#45;&gt;f</title>
+<path fill="none" stroke="black" d="M114.77,-44.01C135.07,-44.01 160.76,-44.01 183.3,-44.01"/>
+<polygon fill="black" stroke="black" points="183.4,-47.51 193.4,-44.01 183.4,-40.51 183.4,-47.51"/>
+<text text-anchor="middle" x="153.97" y="-47.01" font-family="Helvetica,sans-Serif" font-size="10.00">ε, Z0 / Z0</text>
+</g>
+</g>
+</svg>
+
+                <p style="font-size:0.8em; color:#999">Diagrama generado automáticamente</p>
             </div>
-            <div class="seccion-contenido">
-                
-                <div class="card full-width">
-                    <h3>Historia</h3>
-                    <div><p>Las Gramáticas Libres de Contexto (GFC) fueron también formuladas por Noam Chomsky, pero su relevancia práctica explotó con la emergencia de los lenguajes de programación en las décadas de 1950 y 1960. Un hito crucial fue el desarrollo de la Forma de Backus-Naur (BNF) por John Backus y Peter Naur para describir la sintaxis del lenguaje de programación ALGOL 60. La BNF, que es esencialmente una notación para GFC, se convirtió rápidamente en el estándar de facto para especificar la sintaxis de casi todos los lenguajes de programación. Esta formalización permitió a los diseñadores de compiladores desarrollar algoritmos eficientes para el análisis sintáctico (parsing), un paso fundamental en la traducción de código fuente a código ejecutable. Las GFC demostraron ser el equilibrio perfecto entre poder expresivo y manejabilidad algorítmica para la mayoría de las necesidades de la informática.</p></div>
-                </div>
 
-                <div class="card full-width formal-box">
-                    <h3>Descripción Formal</h3>
-                    <div><p>Una <strong>Gramática Libre de Contexto (GFC o Tipo 2)</strong> se define como G = (V, T, P, S). Aquí, V es el conjunto de símbolos, T ⊆ V es el conjunto de símbolos terminales, S ∈ V\T es el símbolo inicial, y P es un conjunto finito de reglas de producción. La característica distintiva y restrictiva de una GFC es que cada regla de producción debe tener la forma A → β, donde A ∈ V\T (es decir, A debe ser un único símbolo no terminal) y β ∈ V<em> (una cadena de símbolos de V, que puede ser vacía). Esto significa que un no terminal A puede ser reemplazado por la cadena β sin importar qué símbolos lo rodeen; el contexto no influye en la producción. La longitud de β puede ser mayor, igual o menor que 1. Los lenguajes generados por estas gramáticas se conocen como Lenguajes Libres de Contexto (LLC). Los LLC son reconocidos por </em><em>Autómatas de Pila (AP)</em><em>. Un AP es un autómata finito no determinista extendido con una pila de memoria ilimitada. La pila permite al autómata "recordar" información sobre su pasado, lo que es crucial para manejar estructuras anidadas como paréntesis o bloques de código, una característica fundamental de los LLC. Formalmente, un AP se define como M = (Q, Σ, Γ, δ, q₀, Z₀, F), donde Q es el conjunto de estados, Σ el alfabeto de entrada, Γ el alfabeto de pila, δ la función de transición (Q × (Σ ∪ {ε}) × Γ → P(Q × Γ</em>)), q₀ el estado inicial, Z₀ el símbolo inicial de la pila y F el conjunto de estados finales.</p></div>
-                    
-                    <div class="diagrama-container">
-                        <svg viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg"><defs><marker id="arrowhead" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="#333" /></marker></defs><rect x="50" y="50" width="200" height="100" rx="10" ry="10" fill="#c0c0c0" stroke="#333" stroke-width="1" /><text x="150" y="105" text-anchor="middle" font-family="Arial" font-size="18" fill="#333">Tipo 2 (LLC)</text><rect x="350" y="50" width="200" height="100" rx="10" ry="10" fill="#b0b0b0" stroke="#333" stroke-width="1" /><text x="450" y="105" text-anchor="middle" font-family="Arial" font-size="18" fill="#333">Autómata de Pila</text><path d="M250 100 L350 100" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)" /><text x="290" y="90" text-anchor="middle" font-family="Arial" font-size="14" fill="#333">Reconocido por</text><path d="M400 70 A50 30 0 0 1 500 70" fill="none" stroke="#666" stroke-dasharray="3 3" /><path d="M400 130 A50 30 0 0 0 500 130" fill="none" stroke="#666" stroke-dasharray="3 3" /><text x="450" y="100" text-anchor="middle" font-family="Arial" font-size="12" fill="#666">Pila</text><circle cx="450" cy="70" r="5" fill="#666" /><circle cx="450" cy="130" r="5" fill="#666" /><line x1="450" y1="75" x2="450" y2="125" stroke="#666" stroke-width="1" /></svg>
-                        <p style="font-size:0.8rem; color:#666; margin-top:1rem; text-align:center;">
-                            <em>Fig: Representación visual generada.</em>
-                        </p>
-                    </div>
-                </div>
+            <h3>Intuición</h3>
+            <div><p>A diferencia de los lenguajes regulares, los libres de contexto poseen una memoria de tipo LIFO (Last-In, First-Out) mediante el uso de una pila. Esto les permite gestionar estructuras anidadas. Piensa en una conversación donde abres paréntesis para dar un detalle: '(esto (es (una) nota) extra)'. Para saber cuándo cerrar cada paréntesis correctamente, debes 'recordar' cuántos has abierto. El autómata de pila 'apila' un símbolo cada vez que ve '(' y lo 'desapila' cuando ve ')'. Si al final la pila está vacía, la estructura es correcta. Esta capacidad permite modelar lenguajes donde hay una correspondencia simétrica o jerárquica, como el lenguaje de los palíndromos o el lenguaje de expresiones matemáticas balanceadas, algo que es físicamente imposible para un autómata finito sin memoria adicional.</p></div>
 
-                <div class="card">
-                    <h3>Intuición</h3>
-                    <div><p>El término "libre de contexto" es la clave para entender este tipo de gramáticas. Significa que, cuando tenemos una regla para reemplazar un símbolo, esa regla se aplica universalmente, sin importar qué otros símbolos estén a su alrededor. Piensa en las reglas de un lenguaje de programación: una 'expresión' puede ser un 'número' o 'expresión + expresión'. Esta regla es válida siempre, ya sea que la expresión esté dentro de un 'if', un 'while', o una asignación. Esta independencia contextual simplifica enormemente el proceso de análisis. Es como construir una estructura con piezas LEGO: cada pieza tiene una forma definida y sabes cómo encaja con otras, sin que su posición específica en la estructura final altere sus propiedades internas. Esta característica permite a los analizadores sintácticos (parsers) trabajar de manera eficiente para verificar si una cadena de texto (código fuente, por ejemplo) se ajusta a las reglas de la gramática.</p></div>
-                </div>
-
-                <div class="card">
-                    <h3>Aplicación Real</h3>
-                    <div><p>Las Gramáticas Libres de Contexto son la piedra angular en la definición y procesamiento de la sintaxis de casi todos los lenguajes de programación modernos (C, Java, Python, JavaScript, etc.). La notación BNF y sus variantes (como EBNF) son formas directas de GFC. Los compiladores y los intérpretes utilizan GFC para la fase de análisis sintáctico (parsing): toman el flujo de tokens (elementos léxicos) y construyen un árbol de análisis sintáctico (parse tree) para verificar que la estructura del código es válida según las reglas del lenguaje. También se aplican en la definición de formatos de datos estructurados como XML y JSON, donde las reglas de anidamiento y la jerarquía de elementos pueden ser modeladas eficientemente con GFC. En el procesamiento de lenguaje natural, las GFC se utilizan para analizar la estructura sintáctica de las oraciones, ayudando a desambiguar frases y entender las relaciones entre las palabras. Además, son fundamentales en el diseño de interfaces de usuario y en la validación de entrada de datos con estructuras complejas.</p></div>
-                </div>
-
-            </div>
+            <h3>Aplicación</h3>
+            <div><p>La aplicación principal reside en la fase de análisis sintáctico de los compiladores. Los lenguajes como C, Java o Python utilizan gramáticas libres de contexto para definir su estructura (bucles, funciones, condicionales). Herramientas como Yacc, Bison o ANTLR toman una especificación de gramática Tipo 2 y generan automáticamente el código del parser. Además, el intercambio de datos en la web depende de estos lenguajes: JSON y XML son lenguajes libres de contexto que requieren una estructura de etiquetas o llaves balanceadas. En la lingüística computacional, se utilizan para representar árboles sintácticos que muestran cómo se dividen las oraciones en sujeto, predicado y otros complementos, permitiendo a las máquinas 'entender' la jerarquía de una frase, aunque no necesariamente su significado profundo.</p></div>
         </article>
         
         <article class="subtema">
-            <div class="subtema-header">
-                <h2>Gramáticas Regulares (Tipo 3): Los Cimientos de las Expresiones Regulares</h2>
+            <h2>Gramáticas Sensibles al Contexto (Tipo 1) y Sin Restricciones (Tipo 0)</h2>
+            
+            <h3>Historia</h3>
+            <div><p>Las capas superiores de la jerarquía de Chomsky representan los límites de la computabilidad. Las gramáticas de Tipo 1 (Sensibles al Contexto) fueron propuestas por Chomsky para modelar fenómenos lingüísticos donde el significado o la forma de una palabra dependen de su entorno, una característica común en lenguajes naturales que las gramáticas Tipo 2 no logran capturar del todo. Por otro lado, las gramáticas de Tipo 0 (Sin Restricciones) se alinean perfectamente con el concepto de 'computabilidad' definido por Alan Turing en 1936. La equivalencia entre las gramáticas de Tipo 0 y las Máquinas de Turing demostró que cualquier problema que pueda ser resuelto por un algoritmo puede ser expresado mediante una gramática de este tipo. Este descubrimiento unificó la lingüística formal con la teoría de la computación, estableciendo los límites teóricos de lo que una máquina puede llegar a procesar o generar.</p></div>
+
+            <h3>Descripción Formal</h3>
+            <div><p>Las gramáticas de Tipo 1, o Sensibles al Contexto, tienen reglas de la forma αAβ → αγβ, donde γ ≠ ε. El nombre proviene de que A solo se reemplaza por γ si está en el contexto de α y β. Alternativamente, se definen por la condición |α| ≤ |β| para toda regla α → β. El modelo autómata es el Autómata Linealmente Acotado (LBA), que es una Máquina de Turing cuya cinta está limitada por el tamaño de la entrada. Las gramáticas de Tipo 0, o Sin Restricciones, permiten cualquier producción α → β donde α ∈ (V ∪ Σ)+ y β ∈ (V ∪ Σ)*. No hay restricciones de longitud o contexto. Estas gramáticas generan los Lenguajes Recursivamente Enumerables. El modelo autómata es la Máquina de Turing (MT) universal. Un lenguaje es de Tipo 0 si existe una MT que acepte sus cadenas, aunque la máquina podría entrar en un bucle infinito para cadenas que no pertenecen al lenguaje (problema de la parada).</p></div>
+            
+            <div class="diagrama-box">
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg style="max-width:100%; height:auto;" data-width="253pt" data-height="308pt"
+ viewBox="0.00 0.00 252.66 308.33" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 304.33)">
+<title>G</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-304.33 248.66,-304.33 248.66,4 -4,4"/>
+<!-- T0 -->
+<g id="node1" class="node">
+<title>T0</title>
+<ellipse fill="#f9f9f9" stroke="black" cx="122.33" cy="-276.29" rx="105.22" ry="24.08"/>
+<text text-anchor="middle" x="122.33" y="-279.69" font-family="Helvetica,sans-Serif" font-size="12.00">Tipo 0: Sin Restricciones</text>
+<text text-anchor="middle" x="122.33" y="-266.69" font-family="Helvetica,sans-Serif" font-size="12.00">(Máquina de Turing)</text>
+</g>
+<!-- T1 -->
+<g id="node2" class="node">
+<title>T1</title>
+<ellipse fill="#eeeeee" stroke="black" cx="122.33" cy="-192.21" rx="122.16" ry="24.08"/>
+<text text-anchor="middle" x="122.33" y="-195.61" font-family="Helvetica,sans-Serif" font-size="12.00">Tipo 1: Sensibles al Contexto</text>
+<text text-anchor="middle" x="122.33" y="-182.61" font-family="Helvetica,sans-Serif" font-size="12.00">(LBA)</text>
+</g>
+<!-- T1&#45;&gt;T0 -->
+<g id="edge3" class="edge">
+<title>T1&#45;&gt;T0</title>
+<path fill="none" stroke="black" d="M122.33,-216.51C122.33,-224.46 122.33,-233.52 122.33,-242.09"/>
+<polygon fill="black" stroke="black" points="118.83,-242.22 122.33,-252.22 125.83,-242.22 118.83,-242.22"/>
+</g>
+<!-- T2 -->
+<g id="node3" class="node">
+<title>T2</title>
+<ellipse fill="#dddddd" stroke="black" cx="122.33" cy="-108.12" rx="110.12" ry="24.08"/>
+<text text-anchor="middle" x="122.33" y="-111.52" font-family="Helvetica,sans-Serif" font-size="12.00">Tipo 2: Libres de Contexto</text>
+<text text-anchor="middle" x="122.33" y="-98.52" font-family="Helvetica,sans-Serif" font-size="12.00">(PDA)</text>
+</g>
+<!-- T2&#45;&gt;T1 -->
+<g id="edge2" class="edge">
+<title>T2&#45;&gt;T1</title>
+<path fill="none" stroke="black" d="M122.33,-132.43C122.33,-140.38 122.33,-149.43 122.33,-158.01"/>
+<polygon fill="black" stroke="black" points="118.83,-158.13 122.33,-168.13 125.83,-158.13 118.83,-158.13"/>
+</g>
+<!-- T3 -->
+<g id="node4" class="node">
+<title>T3</title>
+<ellipse fill="#cccccc" stroke="black" cx="122.33" cy="-24.04" rx="78.48" ry="24.08"/>
+<text text-anchor="middle" x="122.33" y="-27.44" font-family="Helvetica,sans-Serif" font-size="12.00">Tipo 3: Regulares</text>
+<text text-anchor="middle" x="122.33" y="-14.44" font-family="Helvetica,sans-Serif" font-size="12.00">(DFA/NFA)</text>
+</g>
+<!-- T3&#45;&gt;T2 -->
+<g id="edge1" class="edge">
+<title>T3&#45;&gt;T2</title>
+<path fill="none" stroke="black" d="M122.33,-48.34C122.33,-56.3 122.33,-65.35 122.33,-73.93"/>
+<polygon fill="black" stroke="black" points="118.83,-74.05 122.33,-84.05 125.83,-74.05 118.83,-74.05"/>
+</g>
+</g>
+</svg>
+
+                <p style="font-size:0.8em; color:#999">Diagrama generado automáticamente</p>
             </div>
-            <div class="seccion-contenido">
-                
-                <div class="card full-width">
-                    <h3>Historia</h3>
-                    <div><p>Las Gramáticas Regulares (GR) son el tipo más restrictivo y, por tanto, el más simple de la Jerarquía de Chomsky. Su estudio y formalización se entrelazan con el trabajo de Stephen Kleene, quien en la década de 1950 introdujo y popularizó el concepto de 'expresiones regulares', demostrando su equivalencia con los autómatas finitos. Este descubrimiento fue trascendental porque proporcionó un formalismo matemático riguroso para describir patrones de texto y secuencias de eventos discretos. Las gramáticas regulares son la base teórica para el diseño de circuitos lógicos, la construcción de herramientas de búsqueda de texto y el análisis léxico en los compiladores. Su simplicidad las hizo ampliamente adoptadas en diversas áreas de la computación, consolidándose como una herramienta indispensable en la ingeniería de software y la teoría de la computación.</p></div>
-                </div>
 
-                <div class="card full-width formal-box">
-                    <h3>Descripción Formal</h3>
-                    <div><p>Una <strong>Gramática Regular (GR o Tipo 3)</strong> se define como G = (V, T, P, S). V, T y S tienen las mismas definiciones que en las gramáticas anteriores. La restricción más severa radica en las reglas de producción P. Una GR puede ser de dos formas, mutuamente excluyentes para una gramática específica: <strong>derecha-lineal</strong> o <strong>izquierda-lineal</strong>. Para una gramática derecha-lineal, las reglas deben ser de la forma A → aB o A → a, donde A, B ∈ V\T (no terminales) y a ∈ T (terminal). Alternativamente, se permite S → ε si ε ∈ L(G) y S no aparece en el lado derecho de ninguna otra regla. Para una gramática izquierda-lineal, las reglas son de la forma A → Ba o A → a. En ambos casos, solo puede haber un no terminal y, si existe, debe estar en un extremo de la cadena producida. Los lenguajes generados por estas gramáticas se llaman Lenguajes Regulares (LR). Los LR son reconocidos por <strong>Autómatas Finitos (AF)</strong>, que son máquinas con un número finito de estados y sin memoria adicional (como una pila). Un AF se define como M = (Q, Σ, δ, q₀, F), donde Q es el conjunto de estados, Σ el alfabeto de entrada, δ la función de transición (Q × Σ → Q), q₀ el estado inicial y F el conjunto de estados finales. El AF cambia de estado basándose únicamente en el estado actual y el símbolo de entrada, sin poder "recordar" secuencias complejas.</p></div>
-                    
-                    <div class="diagrama-container">
-                        <svg viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg"><defs><marker id="arrowhead" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="#333" /></marker></defs><rect x="50" y="50" width="200" height="100" rx="10" ry="10" fill="#b0b0b0" stroke="#333" stroke-width="1" /><text x="150" y="105" text-anchor="middle" font-family="Arial" font-size="18" fill="#333">Tipo 3 (LR)</text><rect x="350" y="50" width="200" height="100" rx="10" ry="10" fill="#a0a0a0" stroke="#333" stroke-width="1" /><text x="450" y="105" text-anchor="middle" font-family="Arial" font-size="18" fill="#333">Autómata Finito</text><path d="M250 100 L350 100" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)" /><text x="290" y="90" text-anchor="middle" font-family="Arial" font-size="14" fill="#333">Reconocido por</text><circle cx="400" cy="100" r="20" fill="#f0f0f0" stroke="#333" /><text x="400" y="105" text-anchor="middle" font-family="Arial" font-size="12" fill="#333">q₀</text><circle cx="500" cy="100" r="20" fill="#f0f0f0" stroke="#333" stroke-width="2" /><text x="500" y="105" text-anchor="middle" font-family="Arial" font-size="12" fill="#333">q₁</text><path d="M420 100 L480 100" stroke="#333" stroke-width="1" marker-end="url(#arrowhead)" /><text x="450" y="90" text-anchor="middle" font-family="Arial" font-size="10" fill="#333">a</text></svg>
-                        <p style="font-size:0.8rem; color:#666; margin-top:1rem; text-align:center;">
-                            <em>Fig: Representación visual generada.</em>
-                        </p>
-                    </div>
-                </div>
+            <h3>Intuición</h3>
+            <div><p>Las gramáticas de Tipo 1 son como un sistema de escritura donde las reglas cambian según lo que ya has escrito. Requieren una memoria que crezca proporcionalmente al tamaño del problema, pero no infinita. Un ejemplo es el lenguaje {aⁿbⁿcⁿ}, que requiere coordinar tres grupos iguales, algo que una pila simple no puede hacer. Las gramáticas de Tipo 0 son el 'caos absoluto' controlado: no hay límites. Representan el poder total de una computadora moderna. Cualquier cosa que sea 'calculable' vive aquí. Si puedes escribir un programa en C++ o Python para resolver un problema, ese problema está en el Tipo 0. La diferencia crucial es que en el Tipo 1 siempre podemos saber si una cadena es válida (es decidible), mientras que en el Tipo 0 hay preguntas que la lógica simplemente no puede responder (indecidibilidad).</p></div>
 
-                <div class="card">
-                    <h3>Intuición</h3>
-                    <div><p>Las gramáticas regulares son las más simples y restrictivas de la jerarquía. Piensa en ellas como máquinas muy básicas que solo pueden recordar su estado actual, sin una memoria adicional que les permita contar o llevar un registro de estructuras anidadas. Son como un semáforo: tiene un número fijo de estados (rojo, amarillo, verde) y transiciones predefinidas entre ellos. No puede recordar cuántas veces ha estado en 'rojo' o qué patrón complejo de luces ha emitido. Esta limitación las hace perfectas para describir patrones secuenciales o repetitivos simples. Su simplicidad permite que los algoritmos de reconocimiento sean extremadamente eficientes. Si una tarea puede ser descrita por una gramática regular, es casi seguro que habrá una solución algorítmica muy rápida y de bajo consumo de recursos.</p></div>
-                </div>
-
-                <div class="card">
-                    <h3>Aplicación Real</h3>
-                    <div><p>Las Gramáticas Regulares son la base teórica de las <strong>Expresiones Regulares (RegEx)</strong>, una herramienta indispensable en el mundo de la programación y la administración de sistemas. Se utilizan para la validación de formatos (ej. direcciones de correo electrónico, números de teléfono, URLs), la búsqueda y reemplazo de patrones de texto en editores o lenguajes de scripting (Python, Perl, JavaScript), y el filtrado de logs. En la construcción de compiladores, las GR son fundamentales para la fase de <strong>análisis léxico (scanner o tokenizer)</strong>. Aquí, el código fuente es dividido en unidades básicas (tokens) como identificadores, palabras clave, números y operadores. Cada tipo de token se define mediante una expresión regular. También son esenciales en el diseño de <strong>máquinas de estado finito</strong> para modelar el comportamiento de sistemas secuenciales, como protocolos de comunicación, controladores de dispositivos, o la lógica de interfaces de usuario sencillas. Su eficiencia y simplicidad las hacen ideales para tareas que implican el reconocimiento de patrones directos y sin estructuras anidadas complejas.</p></div>
-                </div>
-
-            </div>
+            <h3>Aplicación</h3>
+            <div><p>Aunque las gramáticas de Tipo 1 y 0 no se usan directamente para escribir compiladores debido a su altísima complejidad computacional (NP-completo o superior), son esenciales en la investigación de Inteligencia Artificial y Lógica Matemática. Los lenguajes sensibles al contexto se aplican en el análisis avanzado de lenguajes naturales complejos y en la bioinformática para modelar el plegamiento de proteínas y secuencias de ADN con dependencias cruzadas. Las gramáticas de Tipo 0 sirven como el modelo teórico para estudiar la computabilidad y los límites de la tecnología. Nos ayudan a entender problemas 'imposibles' (como el problema de la parada), ahorrando a los ingenieros el esfuerzo de intentar programar soluciones para problemas que matemáticamente se ha demostrado que no tienen una solución algorítmica general.</p></div>
         </article>
-        
-    </main>
-
-    <footer>
-        <p>Prof. Jorge López-Cifre, PhD © 2026</p>
-    </footer>
-
-</body>
-</html>
+        </body></html>

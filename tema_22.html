@@ -3,309 +3,203 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>22 - Equivalencias - Equivalencia entre GIC y Autómatas a Pila. - Prof. Jorge López-Cifre</title>
+    <title>22 - Equivalencias - Equivalencia entre GIC y Autómatas a Pila.</title>
     <style>
-        :root {
-            --primary: #003366;
-            --accent: #d4af37;
-            --bg: #f8f9fa;
-            --text: #2c3e50;
-            --card-bg: #ffffff;
-            --border: #e9ecef;
-        }
-        body {
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--bg);
-            color: var(--text);
-            margin: 0;
-            padding: 0;
-            line-height: 1.7;
-        }
-        /* Tipografía mejorada */
-        p { margin-bottom: 1rem; }
-        strong, b { color: var(--primary); font-weight: 700; }
-        
-        header {
-            background: var(--primary);
-            color: white;
-            padding: 1rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
-        h1 { margin: 0; font-size: 1.25rem; font-weight: 600; }
-        
-        .btn-volver {
-            background: var(--accent);
-            color: var(--primary);
-            text-decoration: none;
-            padding: 0.5rem 1.2rem;
-            border-radius: 50px;
-            font-weight: bold;
-            font-size: 0.9rem;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-        }
-        .btn-volver:hover { 
+        body { font-family: sans-serif; background: #f4f4f9; color: #333; margin: 0; padding: 20px; }
+        header { background: #2c3e50; color: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; }
+        h1 { margin: 0; }
+        .subtema { background: white; padding: 30px; margin-bottom: 40px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        h2 { color: #2980b9; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+        h3 { color: #7f8c8d; font-size: 0.9em; text-transform: uppercase; margin-top: 25px; letter-spacing: 1px; }
+        .diagrama-box { 
+            text-align: center; 
+            margin: 30px 0; 
+            padding: 20px; 
             background: #fff; 
-            transform: translateY(-1px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-        }
-
-        main {
-            max-width: 1100px;
-            margin: 2rem auto;
-            padding: 0 1.5rem;
-        }
-
-        .subtema {
-            background: var(--card-bg);
-            border-radius: 12px;
-            margin-bottom: 4rem;
-            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
-            overflow: hidden;
-            border: 1px solid var(--border);
-        }
-        
-        .subtema-header {
-            background: linear-gradient(to right, #f8f9fa, #ffffff);
-            padding: 1.5rem 2rem;
-            border-bottom: 1px solid var(--border);
-        }
-        .subtema-header h2 { 
-            margin: 0; 
-            color: var(--primary); 
-            font-size: 1.6rem;
-            border-left: 5px solid var(--accent);
-            padding-left: 1rem;
-        }
-
-        .seccion-contenido {
-            padding: 2rem;
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 2.5rem;
-        }
-
-        @media (min-width: 900px) {
-            .seccion-contenido { grid-template-columns: 1fr 1fr; }
-            .full-width { grid-column: 1 / -1; }
-        }
-
-        .card h3 {
-            color: var(--primary);
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            margin-top: 0;
-            margin-bottom: 1rem;
-            border-bottom: 1px solid #ddd;
-            padding-bottom: 0.5rem;
-        }
-
-        .formal-box {
-            background-color: #f0f7ff; /* Azul muy muy pálido */
+            border: 1px solid #eee; 
             border-radius: 8px;
-            padding: 2rem !important;
-            border: 1px solid #cce5ff;
         }
-
-        /* CSS Específico para corregir SVGs */
-        .diagrama-container {
-            text-align: center;
-            margin: 2rem auto;
-            padding: 1.5rem;
-            background: white;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
-            max-width: 100%;
-            overflow-x: auto; /* Si es muy ancho, permite scroll */
-        }
-        
-        /* Forzar comportamiento correcto del SVG */
-        .diagrama-container svg {
-            max-width: 100%;
-            height: auto;
-            display: block;
-            margin: 0 auto;
-        }
-        
-        /* Evitar que el texto dentro del SVG sea ilegible */
-        .diagrama-container text {
-            font-family: sans-serif;
-        }
-
-        footer {
-            text-align: center;
-            padding: 3rem;
-            background: var(--primary);
-            color: rgba(255,255,255,0.8);
-            margin-top: 4rem;
-            font-size: 0.9rem;
-        }
+        /* Estilos Markdown */
+        p { line-height: 1.6; }
+        strong { color: #2c3e50; }
+        code { background: #f0f0f0; padding: 2px 5px; border-radius: 3px; font-family: monospace; }
     </style>
 </head>
 <body>
-
-    <header>
-        <h1>22 - Equivalencias - Equivalencia entre GIC y Autómatas a Pila.</h1>
-        <a href="javascript:history.back()" class="btn-volver">← Volver</a>
-    </header>
-
+    <header><h1>22 - Equivalencias - Equivalencia entre GIC y Autómatas a Pila.</h1></header>
     <main>
 
         <article class="subtema">
-            <div class="subtema-header">
-                <h2>Fundamentos: Gramáticas Libres de Contexto y Autómatas a Pila</h2>
+            <h2>De GIC a Autómatas a Pila: Simulación de Derivaciones</h2>
+            
+            <h3>Historia</h3>
+            <div><p>La relación entre las Gramáticas Independientes del Contexto (GIC) y los Autómatas a Pila (AP) fue establecida formalmente a finales de la década de 1950 y principios de los 60, principalmente a través de los trabajos de Noam Chomsky y Marcel-Paul Schützenberger. En aquel entonces, la lingüística computacional buscaba una forma de mecanizar el análisis sintáctico de los lenguajes naturales. Chomsky propuso las gramáticas como un modelo generativo, mientras que la ingeniería de software emergente necesitaba modelos de reconocimiento. El descubrimiento de que cualquier GIC podía transformarse en un AP permitió el desarrollo de los primeros algoritmos de análisis sintáctico (parsing). Este hito unificó la visión generativa de los matemáticos con la visión procedimental de los ingenieros, sentando las bases para la creación de compiladores modernos y la teoría de la computación contemporánea.</p></div>
+
+            <h3>Descripción Formal</h3>
+            <div><p>Dada una GIC G = (V, Σ, P, S), podemos construir un AP M = ({q}, Σ, V ∪ Σ, δ, q, S, ∅) que acepta por pila vacía. La función de transición δ se define mediante dos reglas principales: 1) Para cada variable A ∈ V, si existe una producción A → α en P, entonces (q, α) ∈ δ(q, ε, A). Esta regla permite al autómata expandir variables en la pila simulando una derivación por la izquierda. 2) Para cada terminal a ∈ Σ, δ(q, a, a) = {(q, ε)}. Esta regla permite al autómata 'consumir' un símbolo de la entrada si coincide con el tope de la pila. El autómata comienza con el símbolo inicial S en la pila. El lenguaje aceptado por el AP, L(M), es exactamente igual al lenguaje generado por la gramática, L(G). Matemáticamente, se demuestra que existe una correspondencia biunívoca entre las derivaciones más a la izquierda en G y las secuencias de movimientos en M.</p></div>
+            
+            <div class="diagrama-box">
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg style="max-width:100%; height:auto;" data-width="47pt" data-height="102pt"
+ viewBox="0.00 0.00 47.00 102.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 98)">
+<title>G</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-98 43,-98 43,4 -4,4"/>
+<!-- q0 -->
+<g id="node1" class="node">
+<title>q0</title>
+<ellipse fill="none" stroke="black" cx="19.5" cy="-18" rx="18" ry="18"/>
+<text text-anchor="middle" x="19.5" y="-14.9" font-family="Helvetica,sans-Serif" font-size="12.00">q</text>
+</g>
+<!-- q0&#45;&gt;q0 -->
+<g id="edge1" class="edge">
+<title>q0&#45;&gt;q0</title>
+<path fill="none" stroke="black" d="M16.26,-35.78C15.71,-45.31 16.79,-54 19.5,-54 21.15,-54 22.19,-50.77 22.63,-46.1"/>
+<polygon fill="black" stroke="black" points="26.14,-45.82 22.74,-35.78 19.14,-45.75 26.14,-45.82"/>
+<text text-anchor="middle" x="19.5" y="-57" font-family="Helvetica,sans-Serif" font-size="10.00">ε, A → α</text>
+</g>
+<!-- q0&#45;&gt;q0 -->
+<g id="edge2" class="edge">
+<title>q0&#45;&gt;q0</title>
+<path fill="none" stroke="black" d="M14.18,-35.42C11.15,-52.79 12.93,-72 19.5,-72 24.79,-72 26.97,-59.56 26.04,-45.65"/>
+<polygon fill="black" stroke="black" points="29.48,-44.93 24.82,-35.42 22.53,-45.77 29.48,-44.93"/>
+<text text-anchor="middle" x="19.5" y="-75" font-family="Helvetica,sans-Serif" font-size="10.00">a, a → ε</text>
+</g>
+</g>
+</svg>
+
+                <p style="font-size:0.8em; color:#999">Diagrama generado automáticamente</p>
             </div>
-            <div class="seccion-contenido">
-                
-                <div class="card full-width">
-                    <h3>Historia</h3>
-                    <div><p>La teoría de los lenguajes formales se solidificó a mediados del siglo XX, impulsada por figuras como Noam Chomsky, quien en 1956 introdujo la jerarquía de Chomsky para clasificar los lenguajes formales. Dentro de esta jerarquía, los lenguajes libres de contexto (LLC) surgieron como una clase fundamental, capaces de describir la sintaxis de los lenguajes de programación. Paralelamente, en la década de 1960, se desarrollaron los autómatas a pila (AP) como modelos computacionales para reconocer estos lenguajes. Autores como Oettinger, Schützenberger, Chomsky y Evey contribuyeron significativamente a su formalización y comprensión. El contexto de su creación estaba estrechamente ligado a la necesidad de construir compiladores eficientes y entender los límites teóricos del análisis sintáctico (parsing) de lenguajes artificiales.</p></div>
-                </div>
 
-                <div class="card full-width formal-box">
-                    <h3>Descripción Formal</h3>
-                    <div><p>Una Gramática Libre de Contexto (GIC) se define como una 4-tupla G = (V, Σ, R, S), donde:
-- V es un conjunto finito de variables (símbolos no terminales).
-- Σ es un conjunto finito de símbolos terminales (el alfabeto del lenguaje), con V ∩ Σ = ∅.
-- R es un conjunto finito de reglas de producción, cada una de la forma A → β, donde A ∈ V y β ∈ (V ∪ Σ)*.
-- S ∈ V es el símbolo inicial.
-Un lenguaje libre de contexto L(G) es el conjunto de todas las cadenas de terminales que pueden derivarse de S mediante cero o más aplicaciones de las reglas de producción.</p>
-<p>Un Autómata a Pila (AP) se define como una 7-tupla M = (Q, Σ, Γ, δ, q₀, Z₀, F), donde:
-- Q es un conjunto finito de estados.
-- Σ es el alfabeto de entrada.
-- Γ es el alfabeto de la pila.
-- δ es la función de transición, δ: Q × (Σ ∪ {ε}) × Γ → P(Q × Γ*), donde P denota el conjunto potencia. Es importante notar que δ puede ser no determinista.
-- q₀ ∈ Q es el estado inicial.
-- Z₀ ∈ Γ es el símbolo inicial de la pila.
-- F ⊆ Q es el conjunto de estados finales (aceptación por estado final).
-Un AP acepta una cadena de entrada si existe una secuencia de transiciones que lleva desde el estado inicial con la pila inicial a un estado final, consumiendo toda la cadena de entrada. Alternativamente, un AP puede aceptar por pila vacía.</p></div>
-                    
-                    <div class="diagrama-container">
-                        <svg viewBox="0 0 600 200" style="font-family: sans-serif; font-size: 14px;"><defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="5" refY="3" orient="auto"><path d="M0,0 L5,3 L0,6 Z" fill="black" /></marker></defs><g><text x="10" y="20" font-weight="bold">Autómata a Pila (AP)</text><rect x="50" y="50" width="100" height="80" fill="#e0f7fa" stroke="black" stroke-width="1" /><text x="75" y="95" font-size="18px">Q</text><rect x="160" y="50" width="100" height="80" fill="#e8f5e9" stroke="black" stroke-width="1" /><text x="190" y="95" font-size="18px">Σ</text><rect x="270" y="50" width="100" height="80" fill="#fff3e0" stroke="black" stroke-width="1" /><text x="295" y="95" font-size="18px">Γ</text><rect x="380" y="50" width="100" height="80" fill="#fce4ec" stroke="black" stroke-width="1" /><text x="405" y="95" font-size="18px">δ</text><rect x="490" y="50" width="100" height="80" fill="#e3f2fd" stroke="black" stroke-width="1" /><text x="515" y="95" font-size="18px">Pila</text><path d="M150,90 H160" stroke="black" marker-end="url(#arrow)" /><path d="M260,90 H270" stroke="black" marker-end="url(#arrow)" /><path d="M370,90 H380" stroke="black" marker-end="url(#arrow)" /><line x1="430" y1="130" x2="430" y2="160" stroke="black" stroke-width="1" /><rect x="410" y="160" width="40" height="20" fill="#ffebee" stroke="black" stroke-width="1" /><text x="415" y="175">Z₀</text><rect x="410" y="140" width="40" height="20" fill="#ffebee" stroke="black" stroke-width="1" /><text x="415" y="155">...</text></g></svg>
-                        <p style="font-size:0.8rem; color:#666; margin-top:1rem; text-align:center;">
-                            <em>Fig: Representación visual generada.</em>
-                        </p>
-                    </div>
-                </div>
+            <h3>Intuición</h3>
+            <div><p>Imagina que tienes una receta (la gramática) y quieres verificar si un plato servido (la cadena de entrada) sigue exactamente esa receta. El autómata a pila actúa como un cocinero que mantiene una lista de tareas en su cabeza (la pila). Cuando la receta dice que un ingrediente complejo (una variable) se compone de otros elementos, el cocinero desglosa esa tarea en su lista. Cuando la receta pide un ingrediente básico (un terminal), el cocinero mira el plato y comprueba si ese ingrediente está ahí. Si al final el plato se termina y el cocinero no tiene más tareas pendientes en su lista, el plato es válido. La pila sirve para recordar qué partes de la estructura sintáctica aún deben encontrarse en la entrada.</p></div>
 
-                <div class="card">
-                    <h3>Intuición</h3>
-                    <div><p>Intuitivamente, una Gramática Libre de Contexto (GIC) es un conjunto de reglas que nos permite construir "frases" válidas en un lenguaje. Piensen en ella como una receta para generar estructuras, donde los ingredientes pueden ser a su vez otras recetas o elementos básicos. Por ejemplo, en un lenguaje de programación, una GIC define cómo una 'expresión' se compone de 'términos' y 'operadores', o cómo una 'sentencia' se forma a partir de 'variables' y 'asignaciones'. Por otro lado, un Autómata a Pila (AP) es una máquina que tiene una memoria de trabajo especial, llamada "pila", que opera bajo el principio LIFO (Last-In, First-Out). Imaginen a alguien leyendo una frase (entrada) y usando una pila de notas (la pila del AP) para recordar cosas que necesita procesar más tarde. Cuando el lector encuentra una subestructura, guarda una nota en la pila; cuando termina con ella, saca la nota correspondiente. La capacidad de guardar y recuperar información de forma anidada (como la pila) es clave para manejar la naturaleza recursiva de los lenguajes libres de contexto.</p></div>
-                </div>
-
-                <div class="card">
-                    <h3>Aplicación Real</h3>
-                    <div><p>Las Gramáticas Libres de Contexto son la piedra angular de la descripción sintáctica de casi todos los lenguajes de programación modernos (Java, Python, C++, etc.). Los diseñadores de lenguajes las utilizan para definir de manera precisa las reglas gramaticales, lo que permite a los programadores escribir código válido y a las herramientas entenderlo. En la ingeniería de software, las GIC son fundamentales en la fase de análisis sintáctico (parsing) de los compiladores e intérpretes. Cuando escribimos un programa, un parser, que internamente se comporta como un autómata a pila, verifica si el código cumple con las reglas de la GIC del lenguaje y construye un árbol de análisis sintáctico. Este árbol es la base para la posterior fase de análisis semántico y generación de código. Más allá de los compiladores, también se aplican en la definición de formatos de datos como XML o JSON, donde las reglas de estructura son context-free, y en el procesamiento de lenguajes naturales, aunque con limitaciones debido a la complejidad del contexto humano.</p></div>
-                </div>
-
-            </div>
+            <h3>Aplicación</h3>
+            <div><p>Esta equivalencia es la base de los analizadores sintácticos descendentes (Top-Down Parsers), como los de tipo LL(k). En el desarrollo de software, cuando escribes código en lenguajes como Python o Java, el compilador utiliza una pila (a menudo de forma implícita a través de la recursividad) para verificar que tus paréntesis, corchetes y estructuras de control estén correctamente anidados. Sin esta conversión de reglas gramaticales a procesos mecánicos basados en pilas, sería imposible validar la sintaxis de los lenguajes de programación de manera eficiente.</p></div>
         </article>
         
         <article class="subtema">
-            <div class="subtema-header">
-                <h2>De Gramáticas Libres de Contexto a Autómatas a Pila: La Construcción</h2>
+            <h2>De Autómatas a Pila a GIC: El Método de las Tripletas</h2>
+            
+            <h3>Historia</h3>
+            <div><p>Si bien convertir una gramática en un autómata resultaba intuitivo para el diseño de compiladores, la demostración inversa —que cualquier lenguaje aceptado por un autómata a pila puede ser generado por una GIC— fue un reto teórico mayor. Fue abordado por investigadores como Evey en 1963. El problema radicaba en cómo capturar los estados internos del autómata dentro de las reglas estáticas de una gramática. La solución vino con la invención del método de las 'tripletas' o 'estados compuestos'. Este avance permitió cerrar el círculo de la jerarquía de Chomsky para los lenguajes de Tipo 2, demostrando que la capacidad de memoria de una pila es exactamente equivalente a la recursividad de las reglas de producción independientes del contexto.</p></div>
+
+            <h3>Descripción Formal</h3>
+            <div><p>Sea M = (Q, Σ, Γ, δ, q₀, Z₀, F) un AP. Construimos una GIC G = (V, Σ, P, S) donde las variables en V tienen la forma [p, Z, q], que representa el hecho de que el autómata pasa del estado p al estado q mientras elimina el símbolo Z de la pila. Las producciones se generan así: 1) Para el símbolo inicial, S → [q₀, Z₀, q] para cada q ∈ Q. 2) Si δ(p, a, X) contiene (r, Y₁Y₂...Yₖ), entonces se añaden producciones [p, X, qₖ] → a[r, Y₁, q₁][q₁, Y₂, q₂]...[qₖ₋₁, Yₖ, qₖ] para todas las combinaciones posibles de estados q₁, ..., qₖ ∈ Q. Si k=0 (la pila se vacía), la producción es [p, X, r] → a. Este proceso garantiza que la gramática genere una cadena si y solo si el autómata la acepta vaciando su pila.</p></div>
+            
+            <div class="diagrama-box">
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg style="max-width:100%; height:auto;" data-width="178pt" data-height="73pt"
+ viewBox="0.00 0.00 178.00 73.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 69)">
+<title>G</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-69 174,-69 174,4 -4,4"/>
+<!-- p -->
+<g id="node1" class="node">
+<title>p</title>
+<ellipse fill="none" stroke="black" cx="18" cy="-18" rx="18" ry="18"/>
+<text text-anchor="middle" x="18" y="-14.9" font-family="Helvetica,sans-Serif" font-size="12.00">p</text>
+</g>
+<!-- r -->
+<g id="node2" class="node">
+<title>r</title>
+<ellipse fill="none" stroke="black" cx="141" cy="-18" rx="18" ry="18"/>
+<text text-anchor="middle" x="141" y="-14.9" font-family="Helvetica,sans-Serif" font-size="12.00">r</text>
+</g>
+<!-- p&#45;&gt;r -->
+<g id="edge1" class="edge">
+<title>p&#45;&gt;r</title>
+<path fill="none" stroke="black" d="M36.08,-18C55.96,-18 89.08,-18 112.58,-18"/>
+<polygon fill="black" stroke="black" points="112.62,-21.5 122.62,-18 112.62,-14.5 112.62,-21.5"/>
+<text text-anchor="middle" x="79.5" y="-21" font-family="Helvetica,sans-Serif" font-size="10.00">a, X / Y1Y2</text>
+</g>
+<!-- r&#45;&gt;r -->
+<g id="edge2" class="edge">
+<title>r&#45;&gt;r</title>
+<path fill="none" stroke="black" d="M130.85,-33.17C127.77,-43.66 131.16,-54 141,-54 147.46,-54 151.14,-49.55 152.03,-43.52"/>
+<polygon fill="black" stroke="black" points="155.49,-42.83 151.15,-33.17 148.51,-43.43 155.49,-42.83"/>
+<text text-anchor="middle" x="141" y="-57" font-family="Helvetica,sans-Serif" font-size="10.00">... (desapilar)</text>
+</g>
+</g>
+</svg>
+
+                <p style="font-size:0.8em; color:#999">Diagrama generado automáticamente</p>
             </div>
-            <div class="seccion-contenido">
-                
-                <div class="card full-width">
-                    <h3>Historia</h3>
-                    <div><p>La demostración formal de que todo lenguaje generado por una Gramática Libre de Contexto puede ser reconocido por un Autómata a Pila fue un hito crucial en la teoría de la computación. Esta equivalencia fue establecida por Noam Chomsky y Marcel P. Schützenberger en la década de 1960. El desarrollo de esta construcción sirvió para formalizar la relación entre los mecanismos de generación de lenguajes (gramáticas) y los mecanismos de reconocimiento (autómatas). Esta comprensión fue esencial para el progreso en el diseño de compiladores y la validación de la corrección sintáctica de programas. Los primeros trabajos en el área buscaban un modelo computacional que reflejara con precisión la estructura recursiva y jerárquica de los lenguajes, encontrando en el AP la herramienta teórica adecuada para ello.</p></div>
-                </div>
 
-                <div class="card full-width formal-box">
-                    <h3>Descripción Formal</h3>
-                    <div><p>Dado una GIC G = (V, Σ, R, S), podemos construir un AP M = (Q, Σ, Γ, δ, q₀, Z₀, F) que acepta L(G) por pila vacía. Una construcción común utiliza un AP no determinista con un único estado. Sea M = ({q}, Σ, V ∪ Σ ∪ {Z₀}, δ, q, Z₀, ∅), donde Z₀ es un nuevo símbolo de pila inicial. La función de transición δ se define con las siguientes reglas:
-1.  <strong>Inicialización</strong>: δ(q, ε, Z₀) = {(q, S Z₀)}
-    Esta regla coloca el símbolo inicial de la gramática S en la pila, con Z₀ en la base, preparando el autómata para simular la derivación.
-2.  <strong>Expansión de no terminales</strong>: Para cada regla de producción A → β en R:
-    δ(q, ε, A) = {(q, β)}
-    Si el símbolo superior de la pila es un no terminal A, el AP puede reemplazarlo por el lado derecho β de cualquier producción A → β. Esto simula la aplicación de una regla de producción en la GIC. El AP no consume entrada (ε) durante esta operación.
-3.  <strong>Coincidencia de terminales</strong>: Para cada símbolo terminal a ∈ Σ:
-    δ(q, a, a) = {(q, ε)}
-    Si el símbolo superior de la pila es un terminal 'a' y el siguiente símbolo de entrada también es 'a', el AP consume ambos y elimina 'a' de la pila. Esto simula la coincidencia de un terminal en la cadena generada con la entrada.</p>
-<p>El AP M acepta una cadena w si y solo si, después de procesar w, la pila queda vacía. La simulación funciona como un parser top-down, donde la pila mantiene los símbolos que aún deben ser generados o emparejados. El autómata no determinista explora todas las posibles derivaciones hasta encontrar una que coincida con la entrada.</p></div>
-                    
-                    <div class="diagrama-container">
-                        <svg viewBox="0 0 600 200" style="font-family: sans-serif; font-size: 14px;"><defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="5" refY="3" orient="auto"><path d="M0,0 L5,3 L0,6 Z" fill="black" /></marker></defs><g><rect x="250" y="70" width="100" height="60" rx="10" ry="10" fill="#e0f7fa" stroke="black" stroke-width="1" /><text x="280" y="105" font-size="18px">q</text><path d="M100,100 L240,100" stroke="black" marker-end="url(#arrow)" /><text x="130" y="90">q₀</text><circle cx="100" cy="100" r="5" fill="black" /><path d="M260,70 Q200,30 250,50 Q300,70 340,70" fill="none" stroke="black" marker-end="url(#arrow)" /><text x="240" y="40">ε, Z₀ → S Z₀</text><path d="M350,100 L490,100" stroke="black" marker-end="url(#arrow)" /><text x="400" y="90">A → β</text><circle cx="500" cy="100" r="5" fill="none" stroke="black" stroke-width="1" /><path d="M340,130 Q300,170 250,150 Q200,130 260,130" fill="none" stroke="black" marker-end="url(#arrow)" /><text x="240" y="160">a, a → ε</text><text x="30" y="180">* Simulación de derivación izquierda de GIC</text></g></svg>
-                        <p style="font-size:0.8rem; color:#666; margin-top:1rem; text-align:center;">
-                            <em>Fig: Representación visual generada.</em>
-                        </p>
-                    </div>
-                </div>
+            <h3>Intuición</h3>
+            <div><p>La idea es traducir 'viajes' del autómata en 'reglas' de la gramática. Una variable [p, Z, q] es como una promesa: 'puedo llegar del estado p al estado q, y en el camino habré limpiado el símbolo Z de mi pila'. La gramática descompone estas promesas grandes en promesas más pequeñas basadas en las transiciones del autómata. Si el autómata lee un símbolo y cambia de estado, la gramática anota ese símbolo y crea nuevas promesas para los nuevos símbolos que aparecieron en la pila. Es como reconstruir el itinerario de un viajero basándose únicamente en los puntos donde cambió su equipaje.</p></div>
 
-                <div class="card">
-                    <h3>Intuición</h3>
-                    <div><p>Piensen en esta construcción como un "simulador" de la gramática. El autómata a pila tiene un único estado interno porque no necesita recordar estados complejos; todo lo que necesita recordar está en su pila. Cuando el autómata inicia, pone el símbolo inicial de la gramática en la pila. A partir de ahí, tiene dos tipos de operaciones: si ve un no terminal en la parte superior de la pila, lo reemplaza por una de sus posibles expansiones (el lado derecho de una regla de producción de la GIC). Esto es como decir: "Para generar esta parte, tengo que generar esto otro". Si ve un terminal en la parte superior de la pila, intenta emparejarlo con el siguiente símbolo de la entrada. Si coinciden, ambos desaparecen. La cadena es aceptada si al final toda la entrada ha sido consumida y la pila está vacía, lo que significa que todas las reglas de la gramática han sido aplicadas y todos los terminales han sido emparejados. Este proceso imita directamente cómo se construye una cadena en la GIC mediante derivaciones por la izquierda.</p></div>
-                </div>
-
-                <div class="card">
-                    <h3>Aplicación Real</h3>
-                    <div><p>La construcción de un AP a partir de una GIC es la base teórica de los parsers descendentes (top-down parsers) en los compiladores. Un parser LL(k), por ejemplo, es una forma determinista de esta construcción. Estos parsers son ampliamente utilizados porque son intuitivos y relativamente fáciles de implementar. Permiten a un compilador analizar la sintaxis de un programa, verificando si se ajusta a las reglas gramaticales del lenguaje. Herramientas como ANTLR o YACC (aunque YACC tiende a usar parsers LR, que son otra clase de APs deterministas) se basan en estos principios para generar parsers automáticamente a partir de una descripción gramatical. Entender esta construcción nos permite apreciar cómo un conjunto abstracto de reglas (la GIC) se traduce en un mecanismo concreto (el AP) que puede procesar y validar el código que escribimos, siendo un pilar fundamental en la ingeniería de compiladores y el diseño de lenguajes.</p></div>
-                </div>
-
-            </div>
+            <h3>Aplicación</h3>
+            <div><p>Se utiliza en la ingeniería inversa de protocolos de comunicación y en la extracción de gramáticas a partir de sistemas legados. Cuando tenemos un sistema que se comporta como un autómata (mantiene estados y una pila) pero no tenemos su especificación formal, este método permite derivar las reglas lógicas que rigen su comportamiento. También es fundamental en la verificación formal de sistemas (Model Checking) para convertir modelos de ejecución en especificaciones algebraicas verificables.</p></div>
         </article>
         
         <article class="subtema">
-            <div class="subtema-header">
-                <h2>De Autómatas a Pila a Gramáticas Libres de Contexto: La Reversa y la Equivalencia</h2>
+            <h2>El Teorema de Equivalencia y el Lenguaje de Dyck</h2>
+            
+            <h3>Historia</h3>
+            <div><p>El teorema de equivalencia es uno de los pilares de la teoría de lenguajes formales. Un concepto estrechamente ligado es el Lenguaje de Dyck, nombrado en honor al matemático Walther von Dyck. Este lenguaje consiste en cadenas de paréntesis correctamente balanceados. En la década de 1960, se demostró que el lenguaje de Dyck es el 'corazón' de todos los lenguajes independientes del contexto (Teorema de Chomsky-Schützenberger). Este hallazgo consolidó la idea de que la pila no es solo una estructura de datos, sino la representación física de la jerarquía y el anidamiento, que son las características definitorias de las GIC.</p></div>
+
+            <h3>Descripción Formal</h3>
+            <div><p>El Teorema de Equivalencia establece que L es un Lenguaje Independiente del Contexto (LIC) si y solo si existe un Autómata a Pila M tal que L = L(M). La prueba se divide en dos partes: 1) L es LIC ⇒ ∃ AP que acepta por pila vacía (construcción de simulación). 2) ∃ AP ⇒ L es LIC (construcción de tripletas). Un corolario importante es que los AP que aceptan por estado final son equivalentes a los que aceptan por pila vacía. Formalmente, para cualquier AP M₁, existe M₂ tal que L(M₁) = N(M₂), donde L es aceptación por estado final y N es por pila vacía. Esto demuestra la robustez del modelo: no importa la condición de parada, la potencia computacional reside en la pila.</p></div>
+            
+            <div class="diagrama-box">
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg style="max-width:100%; height:auto;" data-width="99pt" data-height="116pt"
+ viewBox="0.00 0.00 99.00 116.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 112)">
+<title>G</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-112 95,-112 95,4 -4,4"/>
+<!-- GIC -->
+<g id="node1" class="node">
+<title>GIC</title>
+<polygon fill="none" stroke="black" points="91,-36 0,-36 0,0 91,0 91,-36"/>
+<text text-anchor="middle" x="45.5" y="-14.9" font-family="Helvetica,sans-Serif" font-size="12.00">Gramática (G)</text>
+</g>
+<!-- AP -->
+<g id="node2" class="node">
+<title>AP</title>
+<polygon fill="none" stroke="black" points="89.5,-108 1.5,-108 1.5,-72 89.5,-72 89.5,-108"/>
+<text text-anchor="middle" x="45.5" y="-86.9" font-family="Helvetica,sans-Serif" font-size="12.00">Autómata (M)</text>
+</g>
+<!-- GIC&#45;&gt;AP -->
+<g id="edge1" class="edge">
+<title>GIC&#45;&gt;AP</title>
+<path fill="none" stroke="black" d="M45.5,-36.17C45.5,-43.87 45.5,-53.03 45.5,-61.58"/>
+<polygon fill="black" stroke="black" points="42,-61.59 45.5,-71.59 49,-61.59 42,-61.59"/>
+<text text-anchor="middle" x="37" y="-51.5" font-family="Helvetica,sans-Serif" font-size="10.00">Simulación</text>
+</g>
+<!-- AP&#45;&gt;GIC -->
+<g id="edge2" class="edge">
+<title>AP&#45;&gt;GIC</title>
+<path fill="none" stroke="black" d="M59.88,-71.92C63.78,-60.86 64.75,-54.53 62.81,-45.84"/>
+<polygon fill="black" stroke="black" points="66.11,-44.68 59.89,-36.1 59.41,-46.69 66.11,-44.68"/>
+<text text-anchor="middle" x="54" y="-51.5" font-family="Helvetica,sans-Serif" font-size="10.00">Tripletas</text>
+</g>
+</g>
+</svg>
+
+                <p style="font-size:0.8em; color:#999">Diagrama generado automáticamente</p>
             </div>
-            <div class="seccion-contenido">
-                
-                <div class="card full-width">
-                    <h3>Historia</h3>
-                    <div><p>La demostración de la equivalencia completa requería no solo construir un AP a partir de una GIC, sino también la construcción inversa: una GIC a partir de un AP. Esta parte de la demostración consolidó la clase de lenguajes libres de contexto como precisamente aquellos que pueden ser reconocidos por autómatas a pila. Los trabajos de Chomsky, Evey y otros en la década de 1960 fueron esenciales para esta comprensión dual. La formulación de esta equivalencia tuvo implicaciones profundas en la computación teórica, al establecer un puente entre la capacidad generativa de las gramáticas y la capacidad de reconocimiento de las máquinas. Esta dualidad es fundamental para entender los límites de lo que se puede "decir" en un lenguaje y lo que una máquina puede "entender" de ese lenguaje, reforzando la teoría de la computabilidad y la complejidad.</p></div>
-                </div>
 
-                <div class="card full-width formal-box">
-                    <h3>Descripción Formal</h3>
-                    <div><p>Dado un AP M = (Q, Σ, Γ, δ, q₀, Z₀, F) que acepta por pila vacía (sin pérdida de generalidad, un AP que acepta por estado final puede ser transformado a uno que acepta por pila vacía), podemos construir una GIC G = (V, Σ, R, S) tal que L(G) = L(M).</p>
-<p>Los no terminales de la GIC serán de la forma [qᵢ, X, qⱼ], donde qᵢ, qⱼ ∈ Q y X ∈ Γ. Este no terminal representa la capacidad de ir del estado qᵢ al estado qⱼ, consumiendo X de la pila y generando alguna cadena de terminales entre esos dos puntos. El símbolo inicial de la GIC es S.</p>
-<p>El conjunto de reglas de producción R se define de la siguiente manera:
-1.  <strong>Símbolo inicial</strong>: Para cada estado q ∈ Q, agregamos la regla:
-    S → [q₀, Z₀, q]
-    Esta regla inicializa la derivación, indicando que el lenguaje comienza reconociendo la pila inicial Z₀ desde el estado inicial q₀ hasta cualquier estado final o intermedio q.
-2.  <strong>Transiciones del AP</strong>: Para cada transición δ(q₁, a, X) = {(q₂, Y₁Y₂...Yₖ)} donde q₁, q₂ ∈ Q, a ∈ Σ ∪ {ε}, X ∈ Γ, y Y₁, ..., Yₖ ∈ Γ<em> (si k=0, entonces Y</em> es ε):
-    Para cada combinación posible de estados intermedios q₃, q₄, ..., qₖ₊₁ ∈ Q, se añade la regla:
-    [q₁, X, qₖ₊₁] → a [q₂, Y₁, q₃] [q₃, Y₂, q₄] ... [qₖ, Yₖ, qₖ₊₁]
-    Si k=0 (la pila se vacía o se reemplaza por ε), la regla es simplemente:
-    [q₁, X, q₂] → a
-    Estas reglas capturan cómo una secuencia de terminales puede ser generada mientras el AP transiciona de un estado a otro y manipula la pila. Cada no terminal [qᵢ, Yⱼ, qⱼ₊₁] representa una subcomputación del AP.</p></div>
-                    
-                    <div class="diagrama-container">
-                        <svg viewBox="0 0 600 200" style="font-family: sans-serif; font-size: 14px;"><defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="5" refY="3" orient="auto"><path d="M0,0 L5,3 L0,6 Z" fill="black" /></marker></defs><g><text x="10" y="20" font-weight="bold">AP → GIC (Conceptual)</text><circle cx="100" cy="70" r="20" fill="#e0f7fa" stroke="black" stroke-width="1" /><text x="95" y="75">qᵢ</text><circle cx="200" cy="70" r="20" fill="#e0f7fa" stroke="black" stroke-width="1" /><text x="195" y="75">qⱼ</text><circle cx="300" cy="70" r="20" fill="#e0f7fa" stroke="black" stroke-width="1" /><text x="295" y="75">qₖ</text><path d="M120,70 H180" stroke="black" marker-end="url(#arrow)" /><text x="145" y="60">a, X → Y</text><path d="M220,70 H280" stroke="black" marker-end="url(#arrow)" /><text x="245" y="60">b, Y → Z</text><rect x="400" y="50" width="180" height="100" rx="10" ry="10" fill="#e8f5e9" stroke="black" stroke-width="1" /><text x="420" y="70" font-weight="bold">GIC Producciones</text><text x="420" y="90">S → [q₀, Z₀, q_final]</text><text x="420" y="110">[qᵢ, X, qⱼ] → a [qᵢ, Y₁, q₂] ...</text><text x="420" y="130">[qᵢ, X, qⱼ] → ε (si pila vacía)</text><path d="M320,80 Q360,120 380,100" stroke="black" marker-end="url(#arrow)" /></g></svg>
-                        <p style="font-size:0.8rem; color:#666; margin-top:1rem; text-align:center;">
-                            <em>Fig: Representación visual generada.</em>
-                        </p>
-                    </div>
-                </div>
+            <h3>Intuición</h3>
+            <div><p>La equivalencia nos dice que la 'recursividad' (gramáticas) y la 'memoria LIFO' (pilas) son dos caras de la misma moneda. Si puedes describir un lenguaje mediante reglas de sustitución que no dependen del entorno, puedes procesarlo usando una memoria donde lo último que guardas es lo primero que sacas. Es como organizar cajas: puedes describir cómo se anidan las cajas (gramática) o puedes seguir el proceso de abrir y cerrar cajas una por una (autómata). Ambos métodos te llevarán a entender la misma estructura.</p></div>
 
-                <div class="card">
-                    <h3>Intuición</h3>
-                    <div><p>Para entender cómo construimos una GIC a partir de un AP, piensen en cada no terminal de la GIC como una "promesa". El no terminal [qᵢ, X, qⱼ] promete generar una secuencia de terminales (una parte del lenguaje) mientras el AP pasa del estado qᵢ al estado qⱼ, eliminando el símbolo X de la pila. Es como decir: "Puedo pasar de este estado a este otro, quitando esto de la pila, si genero esta secuencia de cosas en la entrada". Las reglas de producción de la GIC entonces describen cómo se cumplen esas promesas. Si el AP hace una transición consumiendo un terminal 'a' y reemplazando 'X' por 'Y₁Y₂...Yₖ' en la pila, la regla de la GIC dirá: para ir de 'qᵢ' a 'qⱼ' quitando 'X', necesito generar 'a' y luego cumplir las promesas de 'q₂' a 'q₃' quitando 'Y₁', de 'q₃' a 'q₄' quitando 'Y₂', y así sucesivamente. Al unir todas estas "promesas" y sus "cumplimientos", la GIC resultante describe exactamente el mismo conjunto de cadenas que el AP puede reconocer.</p></div>
-                </div>
-
-                <div class="card">
-                    <h3>Aplicación Real</h3>
-                    <div><p>La equivalencia entre GIC y AP tiene profundas implicaciones teóricas y prácticas. Teóricamente, significa que la clase de los lenguajes libres de contexto es robusta: no importa si se definen por reglas generativas (GIC) o por máquinas de reconocimiento (AP), el conjunto de lenguajes que describen es el mismo. Esto valida la elección de los LLC para la sintaxis de lenguajes de programación. En la práctica, aunque la construcción directa de una GIC a partir de un AP no se usa tan frecuentemente como la inversa en el diseño de compiladores, es fundamental para el desarrollo de herramientas de análisis de lenguajes. Por ejemplo, en la investigación de seguridad o en el análisis estático de código, es posible que se defina la "lógica" de un lenguaje malicioso o un patrón de vulnerabilidad mediante un AP y luego se desee generar una gramática para comprender mejor su estructura o para generar ejemplos. Además, esta equivalencia es clave para la prueba de propiedades de los lenguajes libres de contexto, como el Teorema de Pumping para LLC, y para entender la complejidad inherente a los problemas de análisis sintáctico.</p></div>
-                </div>
-
-            </div>
+            <h3>Aplicación</h3>
+            <div><p>Esta equivalencia permite a los desarrolladores de herramientas de software (como ANTLR o Yacc/Bison) elegir la mejor representación. Permite tomar una especificación abstracta de un lenguaje (GIC) y transformarla automáticamente en un programa ejecutable eficiente (AP). Sin este teorema, el diseño de lenguajes de marcado como XML o JSON carecería de una base matemática sólida para asegurar que siempre pueden ser procesados de manera predecible por cualquier máquina.</p></div>
         </article>
-        
-    </main>
-
-    <footer>
-        <p>Prof. Jorge López-Cifre, PhD © 2026</p>
-    </footer>
-
-</body>
-</html>
+        </body></html>

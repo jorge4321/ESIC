@@ -3,405 +3,316 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>21 - Autómatas a pila - Reconocimiento de palíndromos y paréntesis. - Prof. Jorge López-Cifre</title>
+    <title>21 - Autómatas a pila - Reconocimiento de palíndromos y paréntesis.</title>
     <style>
-        :root {
-            --primary: #003366;
-            --accent: #d4af37;
-            --bg: #f8f9fa;
-            --text: #2c3e50;
-            --card-bg: #ffffff;
-            --border: #e9ecef;
-        }
-        body {
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--bg);
-            color: var(--text);
-            margin: 0;
-            padding: 0;
-            line-height: 1.7;
-        }
-        /* Tipografía mejorada */
-        p { margin-bottom: 1rem; }
-        strong, b { color: var(--primary); font-weight: 700; }
-        
-        header {
-            background: var(--primary);
-            color: white;
-            padding: 1rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
-        h1 { margin: 0; font-size: 1.25rem; font-weight: 600; }
-        
-        .btn-volver {
-            background: var(--accent);
-            color: var(--primary);
-            text-decoration: none;
-            padding: 0.5rem 1.2rem;
-            border-radius: 50px;
-            font-weight: bold;
-            font-size: 0.9rem;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-        }
-        .btn-volver:hover { 
+        body { font-family: sans-serif; background: #f4f4f9; color: #333; margin: 0; padding: 20px; }
+        header { background: #2c3e50; color: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; }
+        h1 { margin: 0; }
+        .subtema { background: white; padding: 30px; margin-bottom: 40px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        h2 { color: #2980b9; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+        h3 { color: #7f8c8d; font-size: 0.9em; text-transform: uppercase; margin-top: 25px; letter-spacing: 1px; }
+        .diagrama-box { 
+            text-align: center; 
+            margin: 30px 0; 
+            padding: 20px; 
             background: #fff; 
-            transform: translateY(-1px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-        }
-
-        main {
-            max-width: 1100px;
-            margin: 2rem auto;
-            padding: 0 1.5rem;
-        }
-
-        .subtema {
-            background: var(--card-bg);
-            border-radius: 12px;
-            margin-bottom: 4rem;
-            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
-            overflow: hidden;
-            border: 1px solid var(--border);
-        }
-        
-        .subtema-header {
-            background: linear-gradient(to right, #f8f9fa, #ffffff);
-            padding: 1.5rem 2rem;
-            border-bottom: 1px solid var(--border);
-        }
-        .subtema-header h2 { 
-            margin: 0; 
-            color: var(--primary); 
-            font-size: 1.6rem;
-            border-left: 5px solid var(--accent);
-            padding-left: 1rem;
-        }
-
-        .seccion-contenido {
-            padding: 2rem;
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 2.5rem;
-        }
-
-        @media (min-width: 900px) {
-            .seccion-contenido { grid-template-columns: 1fr 1fr; }
-            .full-width { grid-column: 1 / -1; }
-        }
-
-        .card h3 {
-            color: var(--primary);
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            margin-top: 0;
-            margin-bottom: 1rem;
-            border-bottom: 1px solid #ddd;
-            padding-bottom: 0.5rem;
-        }
-
-        .formal-box {
-            background-color: #f0f7ff; /* Azul muy muy pálido */
+            border: 1px solid #eee; 
             border-radius: 8px;
-            padding: 2rem !important;
-            border: 1px solid #cce5ff;
         }
-
-        /* CSS Específico para corregir SVGs */
-        .diagrama-container {
-            text-align: center;
-            margin: 2rem auto;
-            padding: 1.5rem;
-            background: white;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
-            max-width: 100%;
-            overflow-x: auto; /* Si es muy ancho, permite scroll */
-        }
-        
-        /* Forzar comportamiento correcto del SVG */
-        .diagrama-container svg {
-            max-width: 100%;
-            height: auto;
-            display: block;
-            margin: 0 auto;
-        }
-        
-        /* Evitar que el texto dentro del SVG sea ilegible */
-        .diagrama-container text {
-            font-family: sans-serif;
-        }
-
-        footer {
-            text-align: center;
-            padding: 3rem;
-            background: var(--primary);
-            color: rgba(255,255,255,0.8);
-            margin-top: 4rem;
-            font-size: 0.9rem;
-        }
+        /* Estilos Markdown */
+        p { line-height: 1.6; }
+        strong { color: #2c3e50; }
+        code { background: #f0f0f0; padding: 2px 5px; border-radius: 3px; font-family: monospace; }
     </style>
 </head>
 <body>
-
-    <header>
-        <h1>21 - Autómatas a pila - Reconocimiento de palíndromos y paréntesis.</h1>
-        <a href="javascript:history.back()" class="btn-volver">← Volver</a>
-    </header>
-
+    <header><h1>21 - Autómatas a pila - Reconocimiento de palíndromos y paréntesis.</h1></header>
     <main>
 
         <article class="subtema">
-            <div class="subtema-header">
-                <h2>Introducción al Autómata a Pila: Componentes y Funcionamiento</h2>
-            </div>
-            <div class="seccion-contenido">
-                
-                <div class="card full-width">
-                    <h3>Historia</h3>
-                    <div><p>La formalización de los lenguajes y sus reconocedores tiene sus raíces en la lingüística matemática, particularmente en el trabajo pionero de Noam Chomsky en los años 50 sobre la jerarquía de lenguajes. El concepto de Autómata a Pila (AP) emergió a principios de los años 60 como un modelo computacional capaz de reconocer lenguajes más complejos que los autómatas finitos. Su introducción se atribuye a S. Oettinger en 1961, quien desarrolló un modelo para la traducción automática. Sin embargo, la definición formal tal como la conocemos hoy, conectándolo directamente con las gramáticas libres de contexto, fue consolidada por M. P. Schützenberger en 1963. Este desarrollo fue crucial para la teoría de la compilación, ya que permitió una base matemática rigurosa para el análisis sintáctico de los lenguajes de programación, que por su naturaleza contextual necesitaban una 'memoria' más allá de los estados finitos.</p></div>
-                </div>
+            <h2>Fundamentos del Autómata a Pila y la Memoria LIFO</h2>
+            
+            <h3>Historia</h3>
+            <div><p>La historia de los Autómatas a Pila (PDA) está intrínsecamente ligada al desarrollo de la jerarquía de Chomsky a finales de la década de 1950. Noam Chomsky, al buscar modelar la sintaxis de los lenguajes naturales, identificó que los autómatas finitos eran insuficientes para capturar estructuras anidadas. Simultáneamente, investigadores como Marcel-Paul Schützenberger trabajaron en la formalización de estos modelos mecánicos que añadían una memoria infinita en forma de pila. La pila introdujo el concepto de 'Last-In, First-Out' (LIFO), permitiendo que el autómata recordara información previa para compararla con entradas futuras. Este avance fue fundamental para la informática naciente, ya que permitió el desarrollo de los primeros compiladores para lenguajes como ALGOL 60, sentando las bases de la teoría de lenguajes independientes del contexto y transformando la computación teórica en una herramienta práctica para la ingeniería de software moderna.</p></div>
 
-                <div class="card full-width formal-box">
-                    <h3>Descripción Formal</h3>
-                    <div><p>Un Autómata a Pila (AP) es una máquina abstracta que extiende las capacidades de un Autómata Finito al incorporar una pila (o 'stack') como una estructura de memoria adicional. Formalmente, un AP se define como una 7-tupla M = (Q, Σ, Γ, δ, q₀, Z₀, F), donde:</p>
-<ul>
-<li>Q es un conjunto finito de estados.</li>
-<li>Σ es el alfabeto de entrada, un conjunto finito de símbolos de entrada.</li>
-<li>Γ es el alfabeto de la pila, un conjunto finito de símbolos que pueden almacenarse en la pila.</li>
-<li>δ es la función de transición, un mapeo Q × (Σ ∪ {ε}) × Γ → P(Q × Γ*). Esto significa que, dado un estado actual, un símbolo de entrada (o ε para transición espontánea) y el símbolo superior de la pila, el AP puede pasar a un nuevo estado y reemplazar el símbolo superior de la pila por una cadena de símbolos (push, pop o no-op).</li>
-<li>q₀ ∈ Q es el estado inicial.</li>
-<li>Z₀ ∈ Γ es el símbolo inicial de la pila, que siempre está presente al inicio.</li>
-<li>F ⊆ Q es el conjunto de estados finales o de aceptación.</li>
-</ul>
-<p>El AP acepta una cadena de entrada si, después de procesarla completamente, el autómata se encuentra en un estado de aceptación (aceptación por estado final) o si la pila está vacía (aceptación por pila vacía). La capacidad de la pila de almacenar una cantidad ilimitada de símbolos y de operar bajo el principio LIFO (Last In, First Out) es lo que le permite reconocer lenguajes independientes del contexto, a diferencia de los autómatas finitos que solo pueden reconocer lenguajes regulares.</p></div>
-                    
-                    <div class="diagrama-container">
-                        <svg viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg">
-  <rect x="0" y="0" width="600" height="200" fill="#f8f8f8" stroke="none"/>
-  
-  <rect x="50" y="70" width="100" height="60" fill="#e0e0e0" stroke="black" stroke-width="1" rx="5" ry="5"/>
-  <text x="100" y="105" font-family="Arial" font-size="14" text-anchor="middle" fill="black">Unidad de Control</text>
-
-  <rect x="200" y="70" width="150" height="60" fill="#e0e0e0" stroke="black" stroke-width="1" rx="5" ry="5"/>
-  <text x="275" y="105" font-family="Arial" font-size="14" text-anchor="middle" fill="black">Cinta de Entrada</text>
-  <path d="M200 100 H150" stroke="black" stroke-width="1" marker-end="url(#arrowhead)"/>
-  <path d="M275 130 V160" stroke="black" stroke-width="1" marker-end="url(#arrowhead)"/>
-  
-  <rect x="400" y="50" width="80" height="100" fill="#e0e0e0" stroke="black" stroke-width="1" rx="5" ry="5"/>
-  <rect x="400" y="100" width="80" height="50" fill="#c0c0c0" stroke="black" stroke-width="1"/>
-  <rect x="400" y="100" width="80" height="25" fill="#d0d0d0" stroke="black" stroke-width="1"/>
-  <text x="440" y="140" font-family="Arial" font-size="12" text-anchor="middle" fill="black">Z₀</text>
-  <text x="440" y="115" font-family="Arial" font-size="12" text-anchor="middle" fill="black">A</text>
-  <text x="440" y="70" font-family="Arial" font-size="14" text-anchor="middle" fill="black">Pila</text>
-
-  <path d="M150 100 H200" stroke="black" stroke-width="1" marker-end="url(#arrowhead)"/>
-  <path d="M150 90 H400" stroke="black" stroke-width="1" marker-end="url(#arrowhead)"/>
-  <path d="M400 90 H150" stroke="black" stroke-width="1" marker-end="url(#arrowhead)"/>
-
-  <defs>
-    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
-      <polygon points="0 0, 10 3.5, 0 7" fill="black" />
-    </marker>
-  </defs>
+            <h3>Descripción Formal</h3>
+            <div><p>Formalmente, un Autómata a Pila (PDA) se define como una 7-tupla M = (Q, Σ, Γ, δ, q₀, Z₀, F). Donde Q es un conjunto finito de estados, Σ es el alfabeto de entrada, y Γ es el alfabeto de la pila. La función de transición δ es el núcleo del sistema: δ: Q × (Σ ∪ {ε}) × Γ → 𝒫(Q × Γ*). Esta función toma el estado actual, un símbolo de entrada (o una transición vacía ε) y el símbolo en la cima de la pila, devolviendo un conjunto de pares de nuevos estados y cadenas de símbolos para reemplazar la cima de la pila. El estado inicial es q₀, Z₀ es el símbolo inicial de la pila, y F ⊆ Q es el conjunto de estados de aceptación. Un PDA puede aceptar una cadena de dos formas: por estado final o por pila vacía. La descripción instantánea de un PDA se representa como (q, w, γ), donde q es el estado, w es la entrada restante y γ es el contenido actual de la pila. La capacidad de manipular la pila mediante operaciones de 'push' (apilar) y 'pop' (desapilar) permite reconocer lenguajes que requieren conteo o emparejamiento, algo imposible para un autómata finito regular. La transición δ(q, a, X) = {(p, YZ)} indica que al leer 'a' con 'X' en la cima, se pasa al estado 'p' y se reemplaza 'X' por 'YZ', dejando 'Y' en la nueva cima.</p></div>
+            
+            <div class="diagrama-box">
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg style="max-width:100%; height:auto;" data-width="197pt" data-height="111pt"
+ viewBox="0.00 0.00 197.47 110.94" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 106.94)">
+<title>G</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-106.94 193.47,-106.94 193.47,4 -4,4"/>
+<!-- start -->
+<g id="node1" class="node">
+<title>start</title>
+<ellipse fill="black" stroke="black" cx="1.8" cy="-22.47" rx="1.8" ry="1.8"/>
+</g>
+<!-- q0 -->
+<g id="node2" class="node">
+<title>q0</title>
+<ellipse fill="none" stroke="black" cx="59.07" cy="-22.47" rx="18.44" ry="18.44"/>
+<text text-anchor="middle" x="59.07" y="-19.37" font-family="Helvetica,sans-Serif" font-size="12.00">q0</text>
+</g>
+<!-- start&#45;&gt;q0 -->
+<g id="edge1" class="edge">
+<title>start&#45;&gt;q0</title>
+<path fill="none" stroke="black" d="M3.76,-22.47C7.11,-22.47 18.7,-22.47 30.33,-22.47"/>
+<polygon fill="black" stroke="black" points="30.34,-25.97 40.34,-22.47 30.34,-18.97 30.34,-25.97"/>
+</g>
+<!-- q0&#45;&gt;q0 -->
+<g id="edge2" class="edge">
+<title>q0&#45;&gt;q0</title>
+<path fill="none" stroke="black" d="M52.64,-40.1C51.44,-49.91 53.58,-58.94 59.07,-58.94 62.5,-58.94 64.62,-55.41 65.43,-50.37"/>
+<polygon fill="black" stroke="black" points="68.94,-50.12 65.49,-40.1 61.94,-50.08 68.94,-50.12"/>
+<text text-anchor="middle" x="59.07" y="-72.94" font-family="Helvetica,sans-Serif" font-size="10.00">a, Z0 / AZ0</text>
+<text text-anchor="middle" x="59.07" y="-61.94" font-family="Helvetica,sans-Serif" font-size="10.00">a, A / AA</text>
+</g>
+<!-- q1 -->
+<g id="node3" class="node">
+<title>q1</title>
+<ellipse fill="none" stroke="black" cx="167" cy="-22.47" rx="18.44" ry="18.44"/>
+<ellipse fill="none" stroke="black" cx="167" cy="-22.47" rx="22.44" ry="22.44"/>
+<text text-anchor="middle" x="167" y="-19.37" font-family="Helvetica,sans-Serif" font-size="12.00">q1</text>
+</g>
+<!-- q0&#45;&gt;q1 -->
+<g id="edge3" class="edge">
+<title>q0&#45;&gt;q1</title>
+<path fill="none" stroke="black" d="M77.56,-22.47C92.96,-22.47 115.76,-22.47 134.36,-22.47"/>
+<polygon fill="black" stroke="black" points="134.45,-25.97 144.45,-22.47 134.45,-18.97 134.45,-25.97"/>
+<text text-anchor="middle" x="111.04" y="-25.47" font-family="Helvetica,sans-Serif" font-size="10.00">b, A / ε</text>
+</g>
+<!-- q1&#45;&gt;q1 -->
+<g id="edge4" class="edge">
+<title>q1&#45;&gt;q1</title>
+<path fill="none" stroke="black" d="M162.02,-44.53C161.54,-54.4 163.21,-62.94 167,-62.94 169.38,-62.94 170.91,-59.6 171.62,-54.69"/>
+<polygon fill="black" stroke="black" points="175.12,-54.65 171.99,-44.53 168.13,-54.4 175.12,-54.65"/>
+<text text-anchor="middle" x="167" y="-65.94" font-family="Helvetica,sans-Serif" font-size="10.00">b, A / ε</text>
+</g>
+<!-- q1&#45;&gt;q1 -->
+<g id="edge5" class="edge">
+<title>q1&#45;&gt;q1</title>
+<path fill="none" stroke="black" d="M158.55,-43.45C154.69,-61.66 157.51,-80.94 167,-80.94 174.72,-80.94 178.02,-68.21 176.92,-53.67"/>
+<polygon fill="black" stroke="black" points="180.34,-52.85 175.46,-43.45 173.41,-53.84 180.34,-52.85"/>
+<text text-anchor="middle" x="167" y="-83.94" font-family="Helvetica,sans-Serif" font-size="10.00">ε, Z0 / Z0</text>
+</g>
+</g>
 </svg>
-                        <p style="font-size:0.8rem; color:#666; margin-top:1rem; text-align:center;">
-                            <em>Fig: Representación visual generada.</em>
-                        </p>
-                    </div>
-                </div>
 
-                <div class="card">
-                    <h3>Intuición</h3>
-                    <div><p>Imagina un Autómata Finito como una persona con una memoria muy limitada: solo puede recordar su estado actual (dónde está en el proceso). No puede recordar cuántas veces ha visto algo o qué vio hace mucho tiempo. Un Autómata a Pila añade a esta persona una libreta de notas especial: una 'pila' de notas. Puede escribir una nota en la parte superior (push) o leer y quitar la nota de la parte superior (pop). Lo crucial es que solo puede acceder a la última nota que escribió. Esta capacidad de 'recordar' y 'olvidar' de manera estructurada (LIFO) le permite manejar relaciones de 'dependencia a largo plazo'. Por ejemplo, si ve un 'abre' y necesita un 'cierra' correspondiente mucho más tarde, puede apilar el 'abre' y desapilarlo cuando vea el 'cierra'. Es una forma sencilla pero potente de añadir memoria controlada a un autómata.</p></div>
-                </div>
-
-                <div class="card">
-                    <h3>Aplicación Real</h3>
-                    <div><p>Los Autómatas a Pila son fundamentales en la informática, especialmente en el desarrollo de compiladores y el procesamiento de lenguajes. La aplicación más directa es en el análisis sintáctico (parsing) de lenguajes de programación. Cuando escribimos código, el compilador utiliza implícitamente un AP para verificar que la estructura del programa sea correcta, por ejemplo, que todas las llaves '{' tengan su correspondiente '}', que los paréntesis estén balanceados y que las sentencias sigan la gramática del lenguaje. Más allá de los compiladores, los AP se utilizan en la validación de documentos estructurados como XML o JSON, donde se debe verificar que las etiquetas de apertura tengan sus correspondientes etiquetas de cierre y que la anidación sea correcta. También encuentran aplicaciones en sistemas de gestión de bases de datos para consultas complejas, en el procesamiento de lenguaje natural para analizar estructuras gramaticales de frases, y en el diseño de circuitos lógicos para verificar la validez de secuencias de eventos o estados.</p></div>
-                </div>
-
+                <p style="font-size:0.8em; color:#999">Diagrama generado automáticamente</p>
             </div>
+
+            <h3>Intuición</h3>
+            <div><p>Para entender un autómata a pila, imagina a una persona leyendo una lista de instrucciones con una pila de platos frente a ella. A diferencia de un autómata finito, que solo puede recordar en qué paso está (su estado), el autómata a pila puede escribir notas en platos y apilarlos. Solo puede ver y quitar el plato que está arriba de todo. Si necesita recordar cuántas veces vio un símbolo 'A', coloca un plato marcado con 'A' por cada uno que encuentra. Cuando luego aparecen símbolos 'B', puede ir quitando un plato de la pila por cada 'B'. Si al final de la lectura no quedan platos y terminó en un estado satisfactorio, la cadena es válida. Esta memoria permite gestionar estructuras de 'espejo' o de apertura y cierre. La pila actúa como un historial selectivo donde el último dato guardado es el primero en ser consultado, lo que resulta perfecto para procesos de anidación donde lo último que se abre debe ser lo primero que se cierra.</p></div>
+
+            <h3>Aplicación</h3>
+            <div><p>La aplicación más crítica de los autómatas a pila se encuentra en el diseño de compiladores y analizadores sintácticos (parsers). Cuando un compilador lee código fuente en lenguajes como C++, Java o Python, utiliza un PDA para verificar que la estructura jerárquica del código sea correcta. Por ejemplo, se utiliza para validar la precedencia de operadores en expresiones aritméticas (asegurando que los cálculos dentro de paréntesis se evalúen primero) y para el análisis de bloques de código delimitados por llaves. Fuera del ámbito de la compilación, se emplean en el procesamiento de formatos de intercambio de datos como JSON y XML, donde cada etiqueta de apertura debe tener una etiqueta de cierre correspondiente en el orden inverso. También son esenciales en el procesamiento de lenguaje natural para analizar la estructura gramatical de oraciones complejas que contienen cláusulas subordinadas anidadas, permitiendo a las máquinas entender la relación entre diferentes partes de una frase según su jerarquía sintáctica.</p></div>
         </article>
         
         <article class="subtema">
-            <div class="subtema-header">
-                <h2>El Poder de la Pila: Reconocimiento de Palíndromos</h2>
-            </div>
-            <div class="seccion-contenido">
-                
-                <div class="card full-width">
-                    <h3>Historia</h3>
-                    <div><p>El estudio de los palíndromos, secuencias que se leen igual de adelante hacia atrás que de atrás hacia adelante, es tan antiguo como el lenguaje mismo, apareciendo en diversas culturas y lenguas. Desde el punto de vista computacional, la dificultad de reconocer palíndromos llevó a los teóricos de la computación a buscar modelos más potentes que los autómatas finitos. Los autómatas finitos no pueden reconocer lenguajes como {aⁿbⁿ | n ≥ 0} o {w wᴿ | w ∈ Σ*} porque carecen de la memoria para 'contar' o 'recordar' la primera mitad de una cadena. La aparición de los Autómatas a Pila, con su capacidad de almacenar y recuperar símbolos en un orden LIFO, resolvió este problema en los años 60, estableciendo a los palíndromos como un ejemplo canónico de lenguaje independiente del contexto que los AP pueden reconocer eficazmente.</p></div>
-                </div>
+            <h2>El Lenguaje de Dyck: Reconocimiento de Paréntesis</h2>
+            
+            <h3>Historia</h3>
+            <div><p>El estudio de las secuencias de paréntesis balanceados fue formalizado por el matemático alemán Walther von Dyck a finales del siglo XIX. El 'Lenguaje de Dyck' representa una de las aplicaciones más puras y fundamentales de la teoría de grupos y lenguajes formales. Von Dyck investigó las propiedades algebraicas de las permutaciones y cómo las estructuras simbólicas podían representar operaciones matemáticas. En la década de 1960, con el auge de la informática, el Lenguaje de Dyck se convirtió en el ejemplo canónico para ilustrar el poder de los lenguajes libres de contexto. Se descubrió que cualquier lenguaje libre de contexto puede ser visto, en cierto sentido, como una proyección de un lenguaje de Dyck (Teorema de Chomsky-Schützenberger). Este hallazgo elevó el problema de los paréntesis de un simple ejercicio de lógica a un pilar fundamental de la computación teórica, demostrando que la anidación es la característica definitoria de la complejidad gramatical.</p></div>
 
-                <div class="card full-width formal-box">
-                    <h3>Descripción Formal</h3>
-                    <div><p>Para reconocer un lenguaje de palíndromos, como L = {w c wᴿ | w ∈ {a, b}*}, donde 'c' es un marcador central, un Autómata a Pila (AP) opera de la siguiente manera. Supongamos M = (Q, Σ, Γ, δ, q₀, Z₀, F) con Q = {q₀, q₁, q₂}, Σ = {a, b, c}, Γ = {A, B, Z₀}. Las transiciones clave serían:</p>
-<ol>
-<li>
-<p><strong>Fase de Apilamiento (Push)</strong>: Mientras el AP lee la primera mitad de la cadena (el 'w'), apila cada símbolo en la pila. Por ejemplo, δ(q₀, a, X) = (q₀, AX) para cualquier X ∈ Γ y δ(q₀, b, X) = (q₀, BX). Esto 'recuerda' la primera parte de la cadena en orden inverso.</p>
-</li>
-<li>
-<p><strong>Transición al Centro</strong>: Al leer el símbolo central 'c', el AP cambia de estado sin modificar la pila: δ(q₀, c, X) = (q₁, X) para cualquier X ∈ Γ. Si el palíndromo no tiene un marcador central (como {w wᴿ}), esta transición es una ε-transición, lo cual introduce no determinismo esencial.</p>
-</li>
-<li>
-<p><strong>Fase de Desapilamiento (Pop) y Verificación</strong>: Después de leer 'c', el AP lee la segunda mitad de la cadena (el 'wᴿ'). Por cada símbolo leído, espera encontrar su coincidencia en la cima de la pila y lo desapila. Por ejemplo, δ(q₁, a, A) = (q₁, ε) y δ(q₁, b, B) = (q₁, ε). Si hay una coincidencia, el proceso continúa; si no, la cadena no es un palíndromo.</p>
-</li>
-<li>
-<p><strong>Aceptación</strong>: Si la cadena ha sido procesada completamente y la pila contiene solo Z₀ (o está vacía, dependiendo de la definición de aceptación) y el autómata está en un estado final, la cadena es aceptada. Por ejemplo, δ(q₁, ε, Z₀) = (q₂, Z₀), con q₂ ∈ F. Esta estrategia demuestra cómo la pila actúa como un espejo invertido para verificar la simetría de la cadena.</p>
-</li>
-</ol></div>
-                    
-                    <div class="diagrama-container">
-                        <svg viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg">
-  <rect x="0" y="0" width="600" height="200" fill="#f8f8f8" stroke="none"/>
-
-  <g class="nodes">
-    <circle cx="100" cy="100" r="20" fill="#add8e6" stroke="black" stroke-width="1"/>
-    <text x="100" y="105" font-family="Arial" font-size="14" text-anchor="middle" fill="black">q₀</text>
-
-    <circle cx="300" cy="100" r="20" fill="#add8e6" stroke="black" stroke-width="1"/>
-    <text x="300" y="105" font-family="Arial" font-size="14" text-anchor="middle" fill="black">q₁</text>
-
-    <circle cx="500" cy="100" r="20" fill="#add8e6" stroke="black" stroke-width="1" stroke-dasharray="3,3"/>
-    <circle cx="500" cy="100" r="15" fill="none" stroke="black" stroke-width="1"/>
-    <text x="500" y="105" font-family="Arial" font-size="14" text-anchor="middle" fill="black">q₂</text>
-  </g>
-
-  <g class="edges">
-    <path d="M120 100 H280" stroke="black" stroke-width="1" marker-end="url(#arrowhead)"/>
-    <text x="200" y="90" font-family="Arial" font-size="12" text-anchor="middle" fill="black">c, X → X</text>
-    
-    <path d="M320 100 H480" stroke="black" stroke-width="1" marker-end="url(#arrowhead)"/>
-    <text x="400" y="90" font-family="Arial" font-size="12" text-anchor="middle" fill="black">ε, Z₀ → Z₀</text>
-    
-    <path d="M100 80 A50 50 0 1 0 100 120" fill="none" stroke="black" stroke-width="1" marker-end="url(#arrowhead)"/>
-    <text x="120" y="50" font-family="Arial" font-size="12" fill="black">a, X → AX</text>
-    <text x="120" y="65" font-family="Arial" font-size="12" fill="black">b, X → BX</text>
-
-    <path d="M300 80 A50 50 0 1 0 300 120" fill="none" stroke="black" stroke-width="1" marker-end="url(#arrowhead)"/>
-    <text x="320" y="50" font-family="Arial" font-size="12" fill="black">a, A → ε</text>
-    <text x="320" y="65" font-family="Arial" font-size="12" fill="black">b, B → ε</text>
-  </g>
-
-  <defs>
-    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
-      <polygon points="0 0, 10 3.5, 0 7" fill="black" />
-    </marker>
-  </defs>
+            <h3>Descripción Formal</h3>
+            <div><p>El Lenguaje de Dyck D₁ sobre el alfabeto Σ = { '(', ')' } se define inductivamente: 1. La cadena vacía ε está en D₁. 2. Si u está en D₁, entonces (u) está en D₁. 3. Si u y v están en D₁, entonces uv está en D₁. Formalmente, un PDA que reconoce este lenguaje opera con Σ = { '(', ')' } y Γ = { 'X', 'Z₀' }. Las transiciones son: δ(q₀, '(', Z₀) = {(q₀, XZ₀)}, δ(q₀, '(', X) = {(q₀, XX)}, δ(q₀, ')', X) = {(q₀, ε)}, y finalmente δ(q₀, ε, Z₀) = {(q₁, Z₀)} donde q₁ es el estado de aceptación. Este autómata es determinista (DPDA) porque para cualquier entrada y símbolo en la pila, hay exactamente una acción posible. El invariante del sistema es que el número de símbolos 'X' en la pila representa el exceso actual de paréntesis abiertos que aún no han sido cerrados. Si en algún momento se recibe un ')' y la pila solo contiene Z₀, la cadena es rechazada inmediatamente por subflujo (underflow), lo que corresponde a un cierre sin apertura previa.</p></div>
+            
+            <div class="diagrama-box">
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg style="max-width:100%; height:auto;" data-width="213pt" data-height="138pt"
+ viewBox="0.00 0.00 213.16 137.78" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 133.78)">
+<title>G</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-133.78 209.16,-133.78 209.16,4 -4,4"/>
+<!-- start -->
+<g id="node1" class="node">
+<title>start</title>
+<ellipse fill="black" stroke="black" cx="1.8" cy="-24.31" rx="1.8" ry="1.8"/>
+</g>
+<!-- q0 -->
+<g id="node2" class="node">
+<title>q0</title>
+<ellipse fill="none" stroke="black" cx="59.07" cy="-24.31" rx="18.44" ry="18.44"/>
+<text text-anchor="middle" x="59.07" y="-21.21" font-family="Helvetica,sans-Serif" font-size="12.00">q0</text>
+</g>
+<!-- start&#45;&gt;q0 -->
+<g id="edge1" class="edge">
+<title>start&#45;&gt;q0</title>
+<path fill="none" stroke="black" d="M3.76,-24.31C7.11,-24.31 18.7,-24.31 30.33,-24.31"/>
+<polygon fill="black" stroke="black" points="30.34,-27.81 40.34,-24.31 30.34,-20.81 30.34,-27.81"/>
+</g>
+<!-- q0&#45;&gt;q0 -->
+<g id="edge2" class="edge">
+<title>q0&#45;&gt;q0</title>
+<path fill="none" stroke="black" d="M56.9,-42.7C56.56,-52.21 57.29,-60.78 59.07,-60.78 60.15,-60.78 60.85,-57.6 61.15,-52.96"/>
+<polygon fill="black" stroke="black" points="64.65,-52.73 61.24,-42.7 57.65,-52.67 64.65,-52.73"/>
+<text text-anchor="middle" x="59.07" y="-63.78" font-family="Helvetica,sans-Serif" font-size="10.00">&#39;(&#39;, Z0 / XZ0</text>
+</g>
+<!-- q0&#45;&gt;q0 -->
+<g id="edge3" class="edge">
+<title>q0&#45;&gt;q0</title>
+<path fill="none" stroke="black" d="M55.46,-42.45C53.53,-59.82 54.73,-78.78 59.07,-78.78 62.56,-78.78 64.02,-66.5 63.45,-52.66"/>
+<polygon fill="black" stroke="black" points="66.92,-52.16 62.68,-42.45 59.94,-52.68 66.92,-52.16"/>
+<text text-anchor="middle" x="59.07" y="-81.78" font-family="Helvetica,sans-Serif" font-size="10.00">&#39;(&#39;, X / XX</text>
+</g>
+<!-- q0&#45;&gt;q0 -->
+<g id="edge4" class="edge">
+<title>q0&#45;&gt;q0</title>
+<path fill="none" stroke="black" d="M54.51,-42.51C50.48,-67 52,-96.78 59.07,-96.78 65.2,-96.78 67.15,-74.38 64.93,-52.47"/>
+<polygon fill="black" stroke="black" points="68.4,-51.97 63.62,-42.51 61.46,-52.88 68.4,-51.97"/>
+<text text-anchor="middle" x="59.07" y="-99.78" font-family="Helvetica,sans-Serif" font-size="10.00">&#39;)&#39;, X / ε</text>
+</g>
+<!-- q1 -->
+<g id="node3" class="node">
+<title>q1</title>
+<ellipse fill="none" stroke="black" cx="180.85" cy="-24.31" rx="20.16" ry="20.16"/>
+<ellipse fill="none" stroke="black" cx="180.85" cy="-24.31" rx="24.13" ry="24.13"/>
+<text text-anchor="middle" x="180.85" y="-21.21" font-family="Helvetica,sans-Serif" font-size="12.00">q_f</text>
+</g>
+<!-- q0&#45;&gt;q1 -->
+<g id="edge5" class="edge">
+<title>q0&#45;&gt;q1</title>
+<path fill="none" stroke="black" d="M77.74,-24.31C95.72,-24.31 124.02,-24.31 146.28,-24.31"/>
+<polygon fill="black" stroke="black" points="146.33,-27.81 156.33,-24.31 146.33,-20.81 146.33,-27.81"/>
+<text text-anchor="middle" x="117.04" y="-27.31" font-family="Helvetica,sans-Serif" font-size="10.00">ε, Z0 / Z0</text>
+</g>
+</g>
 </svg>
-                        <p style="font-size:0.8rem; color:#666; margin-top:1rem; text-align:center;">
-                            <em>Fig: Representación visual generada.</em>
-                        </p>
-                    </div>
-                </div>
 
-                <div class="card">
-                    <h3>Intuición</h3>
-                    <div><p>Piensa en cómo podrías verificar manualmente si una palabra es un palíndromo. Leerías la primera mitad y la 'guardarías' en tu memoria. Luego, leerías la segunda mitad, comparando cada letra con la última que recordabas, pero en orden inverso. Si las letras coinciden y tu memoria se 'vacía' exactamente cuando terminas la palabra, es un palíndromo. La pila de un AP hace exactamente esto de forma automática. Cuando lee la primera mitad de la palabra, 'apila' cada letra. Esto significa que la primera letra se guarda al fondo, la segunda encima, y así sucesivamente. Al llegar al centro (o punto de inflexión), empieza a desapilar. La última letra que apiló (la del medio de la primera mitad) es la primera que sale y se compara con la primera letra de la segunda mitad de la palabra. Si coinciden, se desapila, y se repite el proceso. Así, la pila actúa como un 'espejo' que invierte el orden de la primera mitad para permitir la comparación con la segunda mitad.</p></div>
-                </div>
-
-                <div class="card">
-                    <h3>Aplicación Real</h3>
-                    <div><p>Aunque el reconocimiento de palíndromos puros puede parecer un problema académico, la mecánica subyacente del Autómata a Pila para resolverlo tiene amplias aplicaciones prácticas. En bioinformática, por ejemplo, secuencias de ADN o ARN pueden formar 'estructuras de horquilla' que son esencialmente palíndromos invertidos, y los AP se utilizan para identificarlas, lo cual es crucial para entender la función de los genes. En el procesamiento de lenguaje natural, la detección de simetrías o estructuras repetitivas en cadenas de texto puede ser útil para ciertos análisis gramaticales o estilísticos. En el desarrollo de software, la lógica de 'push-pop' es omnipresente: desde la validación de contraseñas complejas que pueden requerir ciertas simetrías, hasta algoritmos de búsqueda de patrones donde una sección debe ser el reverso de otra. Además, el entendimiento de cómo la pila maneja la memoria para reconocer estructuras simétricas es fundamental para comprender algoritmos más complejos de matching y verificación.</p></div>
-                </div>
-
+                <p style="font-size:0.8em; color:#999">Diagrama generado automáticamente</p>
             </div>
+
+            <h3>Intuición</h3>
+            <div><p>La intuición detrás de los paréntesis es la de 'deuda y pago'. Cada paréntesis de apertura '(' representa una obligación o una deuda que debe ser saldada en el futuro. Cada paréntesis de cierre ')' representa el pago de la deuda más reciente adquirida. La pila es el libro contable de estas deudas. Cuando ves un '(', pones una marca en la pila. Cuando ves un ')', borras la marca más reciente. Para que la secuencia sea correcta, se deben cumplir dos reglas: nunca puedes intentar pagar una deuda que no tienes (no puedes cerrar un paréntesis que no se ha abierto) y, al terminar de leer toda la secuencia, no debes quedar con ninguna deuda pendiente (todos los paréntesis abiertos deben haber sido cerrados). Es el mecanismo más simple de conteo relativo, donde no importa el número total de símbolos, sino la integridad de su jerarquía anidada.</p></div>
+
+            <h3>Aplicación</h3>
+            <div><p>En el desarrollo de software, esta lógica se aplica en los validadores de sintaxis de prácticamente todos los editores de código (IDE). Funciones como el 'bracket matching' resaltan el paréntesis de apertura correspondiente cuando el cursor se sitúa sobre uno de cierre. Además, es la base de los motores de evaluación de expresiones matemáticas en calculadoras y hojas de cálculo como Excel, donde fórmulas complejas con múltiples niveles de anidación deben ser validadas antes de calcularse. En el ámbito de la seguridad informática, el análisis de lenguajes de Dyck se utiliza para detectar ataques de inyección y malformaciones en protocolos de comunicación que utilizan formatos estructurados. También es vital en el procesamiento de documentos estructurados como XML o HTML, donde el navegador debe asegurar que cada etiqueta <div> o <body> se cierre correctamente para renderizar la página de forma consistente.</p></div>
         </article>
         
         <article class="subtema">
-            <div class="subtema-header">
-                <h2>Autómatas a Pila y Análisis Sintáctico: Balanceo de Paréntesis</h2>
-            </div>
-            <div class="seccion-contenido">
-                
-                <div class="card full-width">
-                    <h3>Historia</h3>
-                    <div><p>El problema del balanceo de paréntesis y otras estructuras delimitadas (corchetes, llaves) surgió con fuerza en los inicios de la computación, cuando se desarrollaban los primeros lenguajes de programación como FORTRAN y LISP en los años 50 y 60. La necesidad de que los compiladores pudieran verificar la corrección estructural del código fuente llevó al desarrollo de métodos formales de análisis sintáctico. Noam Chomsky, con sus gramáticas libres de contexto (GLC), proporcionó el marco teórico, y pronto se reconoció que los Autómatas a Pila eran el modelo computacional ideal para reconocer los lenguajes generados por estas gramáticas. El balanceo de paréntesis se convirtió en un ejemplo fundamental y didáctico de cómo los AP pueden aplicar este marco teórico para verificar la sintaxis de expresiones y estructuras anidadas, sentando las bases de la moderna teoría de compiladores.</p></div>
-                </div>
+            <h2>Reconocimiento de Palíndromos y No-Determinismo</h2>
+            
+            <h3>Historia</h3>
+            <div><p>El reconocimiento de palíndromos (palabras que se leen igual al derecho y al revés) ha sido un desafío clásico en la teoría de la computación. Mientras que los palíndromos con un marcador central (como 'abcxcba') son fáciles de procesar de forma determinista, los palíndromos de longitud par o sin marcador central ('abccba') introdujeron la necesidad de los Autómatas a Pila No-Deterministas (NPDA). Esta distinción fue crucial para entender que no todos los lenguajes independientes del contexto pueden ser procesados por máquinas deterministas. Durante los años 60 y 70, la investigación en palíndromos ayudó a definir las fronteras entre las clases de lenguajes P y NP en el contexto de la gramática. El palíndromo se convirtió en el contraejemplo estándar para demostrar que la memoria de pila, aunque potente, requiere de la capacidad de 'adivinar' o explorar múltiples caminos cuando no hay una señal clara de dónde termina la primera mitad de la cadena.</p></div>
 
-                <div class="card full-width formal-box">
-                    <h3>Descripción Formal</h3>
-                    <div><p>El lenguaje de paréntesis balanceados es un lenguaje independiente del contexto clásico. Un AP puede reconocerlo de manera directa. Consideremos el lenguaje L = {w | w es una secuencia de paréntesis balanceados}, donde Σ = {'(', ')'}. Un AP M = (Q, Σ, Γ, δ, q₀, Z₀, F) para este lenguaje podría ser:</p>
-<ul>
-<li>Q = {q₀, q₁}</li>
-<li>Σ = {'(', ')'}</li>
-<li>Γ = {'(', Z₀}</li>
-<li>q₀ es el estado inicial.</li>
-<li>Z₀ es el símbolo inicial de la pila.</li>
-<li>F = {q₁} (aceptación por estado final, o por pila vacía si q₁ es el estado donde la pila está vacía).</li>
-</ul>
-<p>Las transiciones serían:</p>
-<ol>
-<li><strong>Apilar Abrir Paréntesis</strong>: Cuando se lee un '(', se apila en la pila. Esto 'recuerda' que hay un paréntesis abierto que necesita ser cerrado. δ(q₀, '(', X) = (q₀, '(X)) para cualquier X ∈ Γ.</li>
-<li><strong>Desapilar Cerrar Paréntesis</strong>: Cuando se lee un ')', si la cima de la pila es un '(', se desapila. Esto significa que se ha encontrado el cierre para un paréntesis abierto previamente. δ(q₀, ')', '(') = (q₀, ε).</li>
-<li><strong>Error (implícito)</strong>: Si se lee ')' y la cima de la pila no es '(', o si la pila solo contiene Z₀, la cadena es inválida y el autómata se detiene sin aceptar.</li>
-<li><strong>Aceptación</strong>: Si la entrada se consume por completo y la pila contiene solo Z₀, significa que todos los paréntesis abiertos han sido balanceados por un paréntesis de cierre. Entonces, el AP transita a un estado final. δ(q₀, ε, Z₀) = (q₁, Z₀). Si la aceptación es por pila vacía, se puede definir δ(q₀, ε, Z₀) = (q₁, ε), donde q₁ es el estado final.</li>
-</ol>
-<p>Este AP garantiza que cada paréntesis de apertura tenga su correspondiente cierre en el orden correcto de anidación.</p></div>
-                    
-                    <div class="diagrama-container">
-                        <svg viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg">
-  <rect x="0" y="0" width="600" height="200" fill="#f8f8f8" stroke="none"/>
-
-  <g class="nodes">
-    <circle cx="150" cy="100" r="20" fill="#add8e6" stroke="black" stroke-width="1"/>
-    <text x="150" y="105" font-family="Arial" font-size="14" text-anchor="middle" fill="black">q₀</text>
-    <circle cx="450" cy="100" r="20" fill="#add8e6" stroke="black" stroke-width="1" stroke-dasharray="3,3"/>
-    <circle cx="450" cy="100" r="15" fill="none" stroke="black" stroke-width="1"/>
-    <text x="450" y="105" font-family="Arial" font-size="14" text-anchor="middle" fill="black">q₁</text>
-  </g>
-
-  <g class="edges">
-    <path d="M150 80 A50 50 0 1 0 150 120" fill="none" stroke="black" stroke-width="1" marker-end="url(#arrowhead)"/>
-    <text x="170" y="50" font-family="Arial" font-size="12" fill="black">(, X → (X</text>
-
-    <path d="M150 120 A50 50 0 1 1 150 80" fill="none" stroke="black" stroke-width="1" marker-end="url(#arrowhead)"/>
-    <text x="170" y="150" font-family="Arial" font-size="12" fill="black">), ( → ε</text>
-
-    <path d="M170 100 H430" stroke="black" stroke-width="1" marker-end="url(#arrowhead)"/>
-    <text x="300" y="90" font-family="Arial" font-size="12" text-anchor="middle" fill="black">ε, Z₀ → Z₀</text>
-  </g>
-
-  <defs>
-    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
-      <polygon points="0 0, 10 3.5, 0 7" fill="black" />
-    </marker>
-  </defs>
+            <h3>Descripción Formal</h3>
+            <div><p>Para un alfabeto Σ = {a, b}, el lenguaje de los palíndromos es L = {w ∈ Σ* | w = wᴿ}. El reconocimiento de L requiere un NPDA. Sea M = ({q₀, q₁, q₂}, Σ, {a, b, Z₀}, δ, q₀, Z₀, {q₂}). La función de transición δ incluye: 1. Apilado (fase de lectura de la primera mitad): δ(q₀, a, X) = {(q₀, aX)}, δ(q₀, b, X) = {(q₀, bX)}. 2. Adivinación del centro (no-determinismo): Para palíndromos impares, δ(q₀, a, X) contiene (q₁, X) y δ(q₀, b, X) contiene (q₁, X). Para palíndromos pares, δ(q₀, ε, X) contiene (q₁, X). 3. Emparejamiento (fase de comparación): δ(q₁, a, a) = {(q₁, ε)}, δ(q₁, b, b) = {(q₁, ε)}. 4. Aceptación: δ(q₁, ε, Z₀) = {(q₂, Z₀)}. El no-determinismo es esencial aquí porque el autómata debe 'decidir' en cada paso si ha llegado al punto medio de la cadena para empezar a desapilar y comparar, explorando todas las ramas posibles en paralelo.</p></div>
+            
+            <div class="diagrama-box">
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg style="max-width:100%; height:auto;" data-width="421pt" data-height="194pt"
+ viewBox="0.00 0.00 420.59 193.72" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 189.72)">
+<title>G</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-189.72 416.59,-189.72 416.59,4 -4,4"/>
+<!-- start -->
+<g id="node1" class="node">
+<title>start</title>
+<ellipse fill="black" stroke="black" cx="1.8" cy="-41.86" rx="1.8" ry="1.8"/>
+</g>
+<!-- q0 -->
+<g id="node2" class="node">
+<title>q0</title>
+<ellipse fill="none" stroke="black" cx="82.46" cy="-41.86" rx="41.72" ry="41.72"/>
+<text text-anchor="middle" x="82.46" y="-38.76" font-family="Helvetica,sans-Serif" font-size="12.00">q0 (Push)</text>
+</g>
+<!-- start&#45;&gt;q0 -->
+<g id="edge1" class="edge">
+<title>start&#45;&gt;q0</title>
+<path fill="none" stroke="black" d="M3.68,-41.86C6.75,-41.86 17.41,-41.86 29.9,-41.86"/>
+<polygon fill="black" stroke="black" points="30.2,-45.36 40.2,-41.86 30.2,-38.36 30.2,-45.36"/>
+</g>
+<!-- q0&#45;&gt;q0 -->
+<g id="edge2" class="edge">
+<title>q0&#45;&gt;q0</title>
+<path fill="none" stroke="black" d="M76.91,-83.54C77.3,-93.94 79.15,-101.72 82.46,-101.72 84.58,-101.72 86.1,-98.53 87.02,-93.5"/>
+<polygon fill="black" stroke="black" points="90.51,-93.84 88.01,-83.54 83.54,-93.15 90.51,-93.84"/>
+<text text-anchor="middle" x="82.46" y="-126.72" font-family="Helvetica,sans-Serif" font-size="10.00">a, Z0/aZ0</text>
+<text text-anchor="middle" x="82.46" y="-115.72" font-family="Helvetica,sans-Serif" font-size="10.00">a, a/aa</text>
+<text text-anchor="middle" x="82.46" y="-104.72" font-family="Helvetica,sans-Serif" font-size="10.00">b, a/ba</text>
+</g>
+<!-- q0&#45;&gt;q0 -->
+<g id="edge3" class="edge">
+<title>q0&#45;&gt;q0</title>
+<path fill="none" stroke="black" d="M71.91,-82.65C69.57,-108.58 73.08,-134.72 82.46,-134.72 90.63,-134.72 94.35,-114.89 93.62,-92.63"/>
+<polygon fill="black" stroke="black" points="97.11,-92.41 93.01,-82.65 90.13,-92.84 97.11,-92.41"/>
+<text text-anchor="middle" x="82.46" y="-159.72" font-family="Helvetica,sans-Serif" font-size="10.00">b, Z0/bZ0</text>
+<text text-anchor="middle" x="82.46" y="-148.72" font-family="Helvetica,sans-Serif" font-size="10.00">b, b/bb</text>
+<text text-anchor="middle" x="82.46" y="-137.72" font-family="Helvetica,sans-Serif" font-size="10.00">a, b/ab</text>
+</g>
+<!-- q1 -->
+<g id="node3" class="node">
+<title>q1</title>
+<ellipse fill="none" stroke="black" cx="256.49" cy="-41.86" rx="38.33" ry="38.33"/>
+<text text-anchor="middle" x="256.49" y="-38.76" font-family="Helvetica,sans-Serif" font-size="12.00">q1 (Pop)</text>
+</g>
+<!-- q0&#45;&gt;q1 -->
+<g id="edge4" class="edge">
+<title>q0&#45;&gt;q1</title>
+<path fill="none" stroke="black" d="M124.62,-42.65C130.56,-42.74 136.6,-42.81 142.32,-42.86 168.1,-43.08 174.54,-43.09 200.32,-42.86 202.83,-42.84 205.41,-42.81 208.02,-42.78"/>
+<polygon fill="black" stroke="black" points="208.15,-46.27 218.1,-42.63 208.05,-39.27 208.15,-46.27"/>
+<text text-anchor="middle" x="171.32" y="-67.86" font-family="Helvetica,sans-Serif" font-size="10.00">ε, Z0/Z0</text>
+<text text-anchor="middle" x="171.32" y="-56.86" font-family="Helvetica,sans-Serif" font-size="10.00">ε, a/a</text>
+<text text-anchor="middle" x="171.32" y="-45.86" font-family="Helvetica,sans-Serif" font-size="10.00">ε, b/b</text>
+</g>
+<!-- q0&#45;&gt;q1 -->
+<g id="edge5" class="edge">
+<title>q0&#45;&gt;q1</title>
+<path fill="none" stroke="black" d="M120.42,-23.53C127.53,-20.76 135.03,-18.34 142.32,-16.86 167.58,-11.72 175.12,-11.42 200.32,-16.86 204.48,-17.76 208.71,-19 212.87,-20.45"/>
+<polygon fill="black" stroke="black" points="211.84,-23.8 222.43,-24.16 214.37,-17.28 211.84,-23.8"/>
+<text text-anchor="middle" x="171.32" y="-30.86" font-family="Helvetica,sans-Serif" font-size="10.00">a, a/a</text>
+<text text-anchor="middle" x="171.32" y="-19.86" font-family="Helvetica,sans-Serif" font-size="10.00">b, b/b (impar)</text>
+</g>
+<!-- q1&#45;&gt;q1 -->
+<g id="edge6" class="edge">
+<title>q1&#45;&gt;q1</title>
+<path fill="none" stroke="black" d="M242.61,-77.51C242.76,-88.96 247.38,-98.03 256.49,-98.03 262.6,-98.03 266.7,-93.93 268.77,-87.77"/>
+<polygon fill="black" stroke="black" points="272.29,-87.93 270.36,-77.51 265.37,-86.86 272.29,-87.93"/>
+<text text-anchor="middle" x="256.49" y="-112.03" font-family="Helvetica,sans-Serif" font-size="10.00">a, a/ε</text>
+<text text-anchor="middle" x="256.49" y="-101.03" font-family="Helvetica,sans-Serif" font-size="10.00">b, b/ε</text>
+</g>
+<!-- q2 -->
+<g id="node4" class="node">
+<title>q2</title>
+<ellipse fill="none" stroke="black" cx="390.12" cy="-41.86" rx="18.44" ry="18.44"/>
+<ellipse fill="none" stroke="black" cx="390.12" cy="-41.86" rx="22.44" ry="22.44"/>
+<text text-anchor="middle" x="390.12" y="-38.76" font-family="Helvetica,sans-Serif" font-size="12.00">q2</text>
+</g>
+<!-- q1&#45;&gt;q2 -->
+<g id="edge7" class="edge">
+<title>q1&#45;&gt;q2</title>
+<path fill="none" stroke="black" d="M294.86,-41.86C314.52,-41.86 338.37,-41.86 357.17,-41.86"/>
+<polygon fill="black" stroke="black" points="357.3,-45.36 367.3,-41.86 357.3,-38.36 357.3,-45.36"/>
+<text text-anchor="middle" x="331.15" y="-44.86" font-family="Helvetica,sans-Serif" font-size="10.00">ε, Z0/Z0</text>
+</g>
+</g>
 </svg>
-                        <p style="font-size:0.8rem; color:#666; margin-top:1rem; text-align:center;">
-                            <em>Fig: Representación visual generada.</em>
-                        </p>
-                    </div>
-                </div>
 
-                <div class="card">
-                    <h3>Intuición</h3>
-                    <div><p>Piensa en el balanceo de paréntesis como un juego de abrir y cerrar cajas. Cada vez que abres una caja (un paréntesis de apertura), la pones encima de las cajas que ya están abiertas. Cuando cierras una caja (un paréntesis de cierre), solo puedes cerrar la caja que está más arriba, la última que abriste. Si intentas cerrar una caja cuando no hay ninguna abierta, o si cierras una que no es la que está más arriba, algo está mal. El AP utiliza su pila para replicar este comportamiento. Cada '(' se 'apila' (se pone una nota en la pila). Cada ')' busca una '(' en la cima de la pila para 'desapilar' (quitar esa nota). Si la pila se vacía perfectamente al final de la expresión, significa que cada 'abrir' tuvo su 'cerrar' correspondiente y en el orden correcto. Es una manera inteligente de verificar la estructura anidada y jerárquica de lenguajes complejos.</p></div>
-                </div>
-
-                <div class="card">
-                    <h3>Aplicación Real</h3>
-                    <div><p>La aplicación más prevalente del reconocimiento de paréntesis balanceados mediante Autómatas a Pila es en el diseño y construcción de compiladores e intérpretes para lenguajes de programación. Cada vez que un desarrollador escribe código con llaves, corchetes o paréntesis, el parser del compilador emplea una lógica similar a la de un AP para asegurarse de que estas estructuras estén correctamente anidadas y balanceadas. Esto es crucial para la sintaxis de expresiones aritméticas, bloques de código, llamadas a funciones y declaraciones de estructuras de datos. Más allá de los lenguajes de programación, esta técnica es vital para la validación de documentos en formatos estructurados como XML y JSON, donde la correcta anidación de etiquetas y objetos es fundamental. También se utiliza en editores de texto e IDEs para resaltar errores de sintaxis en tiempo real, en verificadores de código, y en herramientas para analizar y transformar árboles sintácticos de programas, garantizando que la estructura subyacente del código sea siempre válida.</p></div>
-                </div>
-
+                <p style="font-size:0.8em; color:#999">Diagrama generado automáticamente</p>
             </div>
+
+            <h3>Intuición</h3>
+            <div><p>Reconocer un palíndromo es como doblar una hoja de papel exactamente por la mitad para ver si los dibujos en ambos lados coinciden. El problema es que, mientras lees la cadena, no sabes dónde está el doblez. La estrategia es: mientras avanzas, vas guardando cada letra en la pila. En cualquier momento, puedes decidir que has llegado a la mitad. A partir de ahí, por cada nueva letra que leas, debes sacar una de la pila y verificar que sean iguales. Si te equivocas de punto medio, esa rama de ejecución fallará. Sin embargo, como es un autómata no-deterministia, si existe al menos una forma de 'adivinar' el centro correctamente y terminar con la pila vacía, el autómata aceptará la palabra. Es una búsqueda de simetría donde la pila invierte el orden de la primera mitad para compararla directamente con la segunda.</p></div>
+
+            <h3>Aplicación</h3>
+            <div></div>
         </article>
-        
-    </main>
-
-    <footer>
-        <p>Prof. Jorge López-Cifre, PhD © 2026</p>
-    </footer>
-
-</body>
-</html>
+        </body></html>

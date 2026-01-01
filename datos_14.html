@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>14 - Organización de Grandes Volúmenes - Estructuras de Datos: El Objeto Tabla y sus Ventajas.</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #f4f4f9; color: #333; margin: 0; padding: 20px; line-height: 1.6; }
+        header { background: #2c3e50; color: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; text-align:center; }
+        h1 { margin: 0; font-size: 1.5rem; }
+
+        .subtema {
+            background: white;
+            padding: 40px;
+            margin-bottom: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        h2 { color: #2980b9; border-bottom: 2px solid #eee; padding-bottom: 10px; margin-top: 0; }
+        h3 { color: #7f8c8d; font-size: 0.9em; text-transform: uppercase; margin-top: 30px; letter-spacing: 1px; border-left: 3px solid #d4af37; padding-left: 10px; }
+
+        .diagrama-box {
+            text-align: center;
+            margin: 30px 0;
+            padding: 20px;
+            background: #fafafa;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            /* Centramos el SVG vertical y horizontalmente */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 150px;
+        }
+
+        /* Estilos Markdown */
+        p { margin-bottom: 1rem; }
+        strong { color: #2c3e50; font-weight: 600; }
+        code { background: #f0f0f0; padding: 2px 5px; border-radius: 3px; font-family: monospace; color: #c0392b; }
+        ul { padding-left: 20px; }
+        li { margin-bottom: 0.5rem; }
+    </style>
+</head>
+<body>
+    <header><h1>14 - Organización de Grandes Volúmenes - Estructuras de Datos: El Objeto Tabla y sus Ventajas.</h1></header>
+    <main>
+
+        <article class="subtema">
+            <h2>La Tabla de Símbolos: Gestión Eficiente de Identificadores</h2>
+
+            <h3>Historia</h3>
+            <div><p>La evolución de las tablas de símbolos está intrínsecamente ligada al nacimiento de los primeros lenguajes de alto nivel a finales de los años 50, como FORTRAN y LISP. En los albores de la computación, los programadores gestionaban direcciones de memoria manualmente. Con la invención de los compiladores por pioneros como Grace Hopper y John Backus, surgió la necesidad de una estructura que permitiera asociar nombres mnemotécnicos (identificadores) con atributos específicos (dirección, tipo, alcance). Inicialmente, estas tablas eran listas lineales rudimentarias cuya búsqueda era ineficiente (O(n)). Sin embargo, con el crecimiento en la complejidad de los programas y el desarrollo de lenguajes estructurados en bloques como ALGOL 60, la organización de grandes volúmenes de datos simbólicos exigió el paso hacia estructuras jerárquicas y dinámicas. Hoy en día, la tabla de símbolos es el corazón de cualquier analizador semántico, permitiendo la resolución de nombres en milisegundos incluso en bases de código que contienen millones de líneas de instrucciones.</p></div>
+
+            <h3>Descripción Formal</h3>
+            <div><p>Desde la perspectiva de los Lenguajes Formales, una Tabla de Símbolos se define como un mapeo funcional T: Σ<em> → A, donde Σ</em> representa el conjunto de todas las cadenas posibles sobre un alfabeto (los nombres de los identificadores) y A es un conjunto de tuplas de atributos {type, scope, address, value, line_number}. Matemáticamente, la tabla gestiona el 'Binding' o ligadura de identificadores. </p>
+<p>Formalmente, se implementa como un Diccionario Abstracto de Datos que soporta las operaciones fundamentales: 
+1. insert(name, attributes): T ∪ {(name, attributes)}. 
+2. lookup(name): Devuelve a ∈ A tal que (name, a) ∈ T, o ⊥ si no existe.
+3. delete(scope): Elimina todas las entradas asociadas a un nivel jerárquico específico. </p>
+<p>Para manejar grandes volúmenes, se utiliza la noción de 'Scope Stack' (Pila de Ámbitos), donde T = S₁ ∪ S₂ ∪ ... ∪ Sₙ. La búsqueda de un símbolo s se define como lookup(s, Sᵢ) donde i es el nivel más profundo, subiendo recursivamente hacia la raíz si el símbolo no se encuentra. La eficiencia en la organización se mide por la función de coste temporal del acceso, la cual se optimiza mediante árboles balanceados (O(log n)) o funciones de dispersión (O(1)). En lenguajes con tipado estático, la tabla debe ser capaz de almacenar descriptores de tipos complejos, lo que implica que A contiene punteros a otras estructuras de datos que definen registros o clases, permitiendo la validación formal de la gramática atribuida.</p></div>
+
+            <div class="diagrama-box">
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg style="max-width: 80%; max-height: 350px; height: auto; width: auto;" data-width="408pt" data-height="84pt"
+ viewBox="0.00 0.00 408.00 83.70" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 79.7)">
+<title>G</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-79.7 404,-79.7 404,4 -4,4"/>
+<!-- scope_stack -->
+<g id="node1" class="node">
+<title>scope_stack</title>
+<polygon fill="none" stroke="black" points="0,-0.5 0,-63.5 101,-63.5 101,-0.5 0,-0.5"/>
+<text text-anchor="middle" x="50.5" y="-49.9" font-family="Helvetica,sans-Serif" font-size="12.00">Global Scope</text>
+<polyline fill="none" stroke="black" points="0,-42.5 101,-42.5 "/>
+<text text-anchor="middle" x="50.5" y="-28.9" font-family="Helvetica,sans-Serif" font-size="12.00">Function Scope</text>
+<polyline fill="none" stroke="black" points="0,-21.5 101,-21.5 "/>
+<text text-anchor="middle" x="50.5" y="-7.9" font-family="Helvetica,sans-Serif" font-size="12.00">Block Scope</text>
+</g>
+<!-- table_entries -->
+<g id="node2" class="node">
+<title>table_entries</title>
+<polygon fill="none" stroke="black" points="175,-4 175,-40 400,-40 400,-4 175,-4"/>
+<text text-anchor="middle" x="207.5" y="-18.9" font-family="Helvetica,sans-Serif" font-size="12.00">var_x: int</text>
+<polyline fill="none" stroke="black" points="240,-4 240,-40 "/>
+<text text-anchor="middle" x="286" y="-18.9" font-family="Helvetica,sans-Serif" font-size="12.00">user_id: string</text>
+<polyline fill="none" stroke="black" points="332,-4 332,-40 "/>
+<text text-anchor="middle" x="366" y="-18.9" font-family="Helvetica,sans-Serif" font-size="12.00">total: float</text>
+</g>
+<!-- scope_stack&#45;&gt;table_entries -->
+<g id="edge1" class="edge">
+<title>scope_stack:f1&#45;&gt;table_entries:e2</title>
+<path fill="none" stroke="black" d="M101,-32C179.41,-32 276.34,-115.1 284.89,-51.04"/>
+<polygon fill="black" stroke="black" points="288.39,-51.19 285.5,-41 281.4,-50.77 288.39,-51.19"/>
+<text text-anchor="middle" x="138" y="-45" font-family="Helvetica,sans-Serif" font-size="10.00">points to</text>
+</g>
+<!-- scope_stack&#45;&gt;table_entries -->
+<g id="edge2" class="edge">
+<title>scope_stack:f2&#45;&gt;table_entries:e1</title>
+<path fill="none" stroke="black" d="M101,-11C126.08,-11 132.29,-13.72 157,-18 160.53,-18.61 162.85,-19.45 165.03,-20.21"/>
+<polygon fill="black" stroke="black" points="164.54,-23.68 175,-22 165.78,-16.79 164.54,-23.68"/>
+<text text-anchor="middle" x="138" y="-21" font-family="Helvetica,sans-Serif" font-size="10.00">contains</text>
+</g>
+</g>
+</svg>
+
+            </div>
+            <p style="font-size:0.8em; color:#999; text-align:center; margin-top:-20px; margin-bottom:30px;">
+                <em>Figura: Diagrama generado automáticamente mediante Graphviz</em>
+            </p>
+
+            <h3>Intuición</h3>
+            <div><p>Imagina que estás organizando una biblioteca gigantesca sin un catálogo. Cada vez que alguien pregunta por un libro, tendrías que recorrer todos los estantes. La 'Tabla de Símbolos' es ese catálogo centralizado. En el contexto de un compilador o un sistema que maneja grandes volúmenes de datos, la tabla no solo guarda el nombre del 'libro' (la variable), sino también en qué pasillo está (su dirección de memoria), de qué trata (su tipo de dato) y quién tiene permiso para leerlo (su ámbito o scope). Cuando el programa crece, no podemos permitirnos buscar uno por uno. El objeto tabla organiza la información de tal forma que, sin importar si tenemos diez o diez millones de variables, podamos encontrar la ficha técnica de cada una de manera casi instantánea. Es la diferencia entre buscar una aguja en un pajar y tener un imán potente que atrae exactamente lo que necesitas. Sin esta organización, los lenguajes de programación modernos simplemente colapsarían bajo su propio peso de información.</p></div>
+
+            <h3>Aplicación</h3>
+            <div><p>En la práctica, la tabla de símbolos se utiliza en todos los entornos de desarrollo integrado (IDEs) para funcionalidades como el 'Auto-completado' o 'IntelliSense'. Cuando escribes el nombre de un objeto y aparece un punto, el IDE consulta la tabla de símbolos para mostrarte qué métodos están disponibles en ese contexto específico. También es crucial en la depuración (debugging), ya que permite al programador ver los valores actuales de las variables mapeando las direcciones físicas de la memoria de vuelta a los nombres que el humano puede entender. En sistemas de Big Data, estructuras similares se usan para catalogar metadatos de columnas en grandes almacenes de datos, permitiendo que los motores de consulta sepan exactamente qué tipo de datos están procesando antes de ejecutar operaciones costosas en el clúster.</p></div>
+        </article>
+        
+        <article class="subtema">
+            <h2>Tablas de Transición: La Columna Vertebral de los Autómatas</h2>
+
+            <h3>Historia</h3>
+            <div><p>La formalización de los autómatas finitos por Kleene, Myhill y Nerode en la década de 1950 requería una forma de representación que fuera más allá de los diagramas de estados, los cuales se volvían inmanejables para sistemas complejos. Así nació la Tabla de Transición. Durante la Guerra Fría, esta estructura fue fundamental para el diseño de circuitos lógicos y sistemas de control en la ingeniería de conmutación. En los años 70, con la creación de herramientas como Lex y Yacc por parte de AT&amp;T Bell Labs, las tablas de transición se convirtieron en el estándar para implementar analizadores léxicos eficientes. La capacidad de convertir una expresión regular compleja en una tabla determinista permitió que el procesamiento de texto y la búsqueda de patrones escalaran de manera exponencial, sentando las bases de los motores de búsqueda modernos y los sistemas de seguridad de red que filtran paquetes en tiempo real.</p></div>
+
+            <h3>Descripción Formal</h3>
+            <div><p>Un Autómata Finito Determinista (DFA) se define formalmente como una 5-tupla M = (Q, Σ, δ, q₀, F). El 'Objeto Tabla' es la representación tabular de la función de transición δ: Q × Σ → Q. </p>
+<p>En esta tabla:
+- Las filas corresponden al conjunto de estados Q = {q₀, q₁, ..., qₙ}.
+- Las columnas corresponden a los símbolos del alfabeto Σ = {σ₁, σ₂, ..., σₘ}.
+- La celda T[qᵢ, σⱼ] contiene el estado resultante qₖ tal que δ(qᵢ, σⱼ) = qₖ.</p>
+<p>La principal ventaja formal de la tabla es que reduce la operación de transición a un acceso directo a memoria (indexing), eliminando la necesidad de evaluar estructuras condicionales (if/else o switch). Para un autómata no determinista (NFA), la celda T[qᵢ, σⱼ] contiene un subconjunto de estados P(Q). </p>
+<p>Cuando se manejan grandes volúmenes de estados, se emplean técnicas de 'Compresión de Tablas'. Dado que muchas celdas pueden estar vacías (transiciones de error), se utilizan representaciones de dispersión o la técnica de 'Double-Offset Indexing' para minimizar el espacio en caché sin sacrificar la velocidad de acceso O(1). Esto es crítico en sistemas embebidos donde la memoria es limitada pero la velocidad de procesamiento de flujo de datos debe ser constante.</p></div>
+
+            <div class="diagrama-box">
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg style="max-width: 80%; max-height: 350px; height: auto; width: auto;" data-width="172pt" data-height="82pt"
+ viewBox="0.00 0.00 172.47 81.94" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 77.94)">
+<title>G</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-77.94 168.47,-77.94 168.47,4 -4,4"/>
+<!-- start -->
+<g id="node1" class="node">
+<title>start</title>
+<ellipse fill="black" stroke="black" cx="1.8" cy="-22.47" rx="1.8" ry="1.8"/>
+</g>
+<!-- q0 -->
+<g id="node2" class="node">
+<title>q0</title>
+<ellipse fill="none" stroke="black" cx="59.07" cy="-22.47" rx="18.44" ry="18.44"/>
+<text text-anchor="middle" x="59.07" y="-19.37" font-family="Helvetica,sans-Serif" font-size="12.00">q0</text>
+</g>
+<!-- start&#45;&gt;q0 -->
+<g id="edge1" class="edge">
+<title>start&#45;&gt;q0</title>
+<path fill="none" stroke="black" d="M3.76,-22.47C7.11,-22.47 18.7,-22.47 30.33,-22.47"/>
+<polygon fill="black" stroke="black" points="30.34,-25.97 40.34,-22.47 30.34,-18.97 30.34,-25.97"/>
+</g>
+<!-- q0&#45;&gt;q0 -->
+<g id="edge2" class="edge">
+<title>q0&#45;&gt;q0</title>
+<path fill="none" stroke="black" d="M52.64,-40.1C51.44,-49.91 53.58,-58.94 59.07,-58.94 62.5,-58.94 64.62,-55.41 65.43,-50.37"/>
+<polygon fill="black" stroke="black" points="68.94,-50.12 65.49,-40.1 61.94,-50.08 68.94,-50.12"/>
+<text text-anchor="middle" x="59.07" y="-61.94" font-family="Helvetica,sans-Serif" font-size="10.00">0</text>
+</g>
+<!-- q1 -->
+<g id="node3" class="node">
+<title>q1</title>
+<ellipse fill="none" stroke="black" cx="142" cy="-22.47" rx="18.44" ry="18.44"/>
+<ellipse fill="none" stroke="black" cx="142" cy="-22.47" rx="22.44" ry="22.44"/>
+<text text-anchor="middle" x="142" y="-19.37" font-family="Helvetica,sans-Serif" font-size="12.00">q1</text>
+</g>
+<!-- q0&#45;&gt;q1 -->
+<g id="edge3" class="edge">
+<title>q0&#45;&gt;q1</title>
+<path fill="none" stroke="black" d="M77.63,-22.47C86.83,-22.47 98.4,-22.47 109.12,-22.47"/>
+<polygon fill="black" stroke="black" points="109.44,-25.97 119.44,-22.47 109.44,-18.97 109.44,-25.97"/>
+<text text-anchor="middle" x="98.54" y="-25.47" font-family="Helvetica,sans-Serif" font-size="10.00">1</text>
+</g>
+<!-- q1&#45;&gt;q0 -->
+<g id="edge4" class="edge">
+<title>q1&#45;&gt;q0</title>
+<path fill="none" stroke="black" d="M122.25,-11.62C114.15,-8.16 104.5,-5.65 95.54,-7.47 92.19,-8.15 88.78,-9.15 85.44,-10.32"/>
+<polygon fill="black" stroke="black" points="83.84,-7.19 75.87,-14.19 86.46,-13.69 83.84,-7.19"/>
+<text text-anchor="middle" x="98.54" y="-10.47" font-family="Helvetica,sans-Serif" font-size="10.00">0</text>
+</g>
+<!-- q1&#45;&gt;q1 -->
+<g id="edge5" class="edge">
+<title>q1&#45;&gt;q1</title>
+<path fill="none" stroke="black" d="M134.32,-43.7C133.37,-53.92 135.93,-62.94 142,-62.94 145.89,-62.94 148.34,-59.23 149.35,-53.89"/>
+<polygon fill="black" stroke="black" points="152.85,-53.81 149.69,-43.7 145.86,-53.58 152.85,-53.81"/>
+<text text-anchor="middle" x="142" y="-65.94" font-family="Helvetica,sans-Serif" font-size="10.00">1</text>
+</g>
+</g>
+</svg>
+
+            </div>
+            <p style="font-size:0.8em; color:#999; text-align:center; margin-top:-20px; margin-bottom:30px;">
+                <em>Figura: Diagrama generado automáticamente mediante Graphviz</em>
+            </p>
+
+            <h3>Intuición</h3>
+            <div><p>Imagina que estás en un laberinto gigante y en cada habitación hay varias puertas de colores. Para no perderte, llevas una hoja de papel. En la columna izquierda están los números de las habitaciones y en la parte superior están los colores de las llaves. Si estás en la habitación 5 y usas la llave azul, la tabla te dice directamente: 'Ve a la habitación 12'. No tienes que pensar, solo sigues la instrucción de la celda. Eso es una Tabla de Transición. Es un mapa estático donde todo el comportamiento del sistema está precalculado. La gran ventaja es que no importa qué tan grande sea el laberinto, el tiempo que tardas en mirar la tabla y decidir a dónde ir es siempre el mismo. Para una computadora, esto significa que puede procesar miles de millones de caracteres por segundo porque solo tiene que saltar de una posición de la tabla a otra siguiendo las reglas establecidas.</p></div>
+
+            <h3>Aplicación</h3>
+            <div><p>Las tablas de transición se aplican en el diseño de protocolos de comunicación (como TCP/IP), donde el sistema debe reaccionar de forma específica a diferentes paquetes según su estado actual. También son esenciales en el desarrollo de controladores de dispositivos, interfaces de usuario (máquinas de estado de UI) y, fundamentalmente, en los motores de expresiones regulares que utilizamos en editores de código y herramientas de línea de comandos como 'grep'. Sin estas tablas, el análisis de grandes archivos de log en busca de errores sería increíblemente lento.</p></div>
+        </article>
+        
+        <article class="subtema">
+            <h2>Tablas Hash: Optimización de Búsqueda en Grandes Volúmenes</h2>
+
+            <h3>Historia</h3>
+            <div><p>El concepto de 'Hashing' fue propuesto por primera vez por Hans Peter Luhn de IBM en 1953, en un memorándum interno que buscaba una forma más rápida de organizar y recuperar información química. Sin embargo, fue Gene Amdahl quien popularizó el uso de estas tablas en la arquitectura de computadores. A medida que los volúmenes de datos pasaron de kilobytes a terabytes, las búsquedas secuenciales o binarias se volvieron cuellos de botella críticos. La invención de diversas técnicas de resolución de colisiones, como el encadenamiento (Chaining) y el direccionamiento abierto, permitió que las tablas hash se convirtieran en la estructura de datos preferida para implementar bases de datos de alto rendimiento, sistemas de archivos y cachés de memoria. Hoy, la infraestructura de Internet depende del hashing para la resolución de nombres de dominio (DNS) y el enrutamiento de datos a escala global.</p></div>
+
+            <h3>Descripción Formal</h3>
+            <div><p>Una Tabla Hash es una estructura que mapea un espacio de claves K muy grande a un rango de índices pequeño I = {0, ..., m-1} mediante una función hash h: K → I. </p>
+<p>Formalmente, se busca que h sea una función de dispersión uniforme, minimizando la probabilidad de colisiones P(h(kᵢ) = h(kⱼ)) para kᵢ ≠ kⱼ. </p>
+<p>La organización de grandes volúmenes bajo este modelo implica considerar:
+1. Factor de Carga (α = n/m): Donde n es el número de elementos. Si α &gt; 0.7, el rendimiento suele degradarse, exigiendo un re-hashing.
+2. Resolución de Colisiones: 
+   - Encadenamiento: T[i] es una lista enlazada de elementos.
+   - Direccionamiento Abierto: T[i] busca una celda vacía mediante una secuencia de prueba h(k, i).</p>
+<p>En el contexto de Lenguajes Formales, el hashing se utiliza para la 'Intercalación de Símbolos' (String Interning), donde cada cadena única se almacena una sola vez en una tabla global. Esto transforma comparaciones de cadenas de coste O(length) en comparaciones de punteros de coste O(1). Matemáticamente, esto garantiza que para cualquier par de cadenas s₁, s₂, si hash(s₁) ≠ hash(s₂), entonces s₁ ≠ s₂, lo cual es una propiedad de seguridad fundamental en el procesamiento de grandes volúmenes de datos textuales.</p></div>
+
+            <div class="diagrama-box">
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg style="max-width: 80%; max-height: 350px; height: auto; width: auto;" data-width="700pt" data-height="135pt"
+ viewBox="0.00 0.00 700.06 135.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 131)">
+<title>G</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-131 696.06,-131 696.06,4 -4,4"/>
+<!-- hash_func -->
+<g id="node1" class="node">
+<title>hash_func</title>
+<polygon fill="none" stroke="black" points="322,-92.5 207,-92.5 207,-56.5 322,-56.5 322,-92.5"/>
+<text text-anchor="middle" x="264.5" y="-71.4" font-family="Helvetica,sans-Serif" font-size="12.00">Función Hash h(k)</text>
+</g>
+<!-- table -->
+<g id="node3" class="node">
+<title>table</title>
+<polygon fill="none" stroke="black" points="425,-0.5 425,-126.5 479,-126.5 479,-0.5 425,-0.5"/>
+<text text-anchor="middle" x="452" y="-112.9" font-family="Helvetica,sans-Serif" font-size="12.00">0</text>
+<polyline fill="none" stroke="black" points="425,-105.5 479,-105.5 "/>
+<text text-anchor="middle" x="452" y="-91.9" font-family="Helvetica,sans-Serif" font-size="12.00">1</text>
+<polyline fill="none" stroke="black" points="425,-84.5 479,-84.5 "/>
+<text text-anchor="middle" x="452" y="-70.9" font-family="Helvetica,sans-Serif" font-size="12.00">2</text>
+<polyline fill="none" stroke="black" points="425,-63.5 479,-63.5 "/>
+<text text-anchor="middle" x="452" y="-49.9" font-family="Helvetica,sans-Serif" font-size="12.00">3</text>
+<polyline fill="none" stroke="black" points="425,-42.5 479,-42.5 "/>
+<text text-anchor="middle" x="452" y="-28.9" font-family="Helvetica,sans-Serif" font-size="12.00">4</text>
+<polyline fill="none" stroke="black" points="425,-21.5 479,-21.5 "/>
+<text text-anchor="middle" x="452" y="-7.9" font-family="Helvetica,sans-Serif" font-size="12.00">...</text>
+</g>
+<!-- hash_func&#45;&gt;table -->
+<g id="edge2" class="edge">
+<title>hash_func&#45;&gt;table:f2</title>
+<path fill="none" stroke="black" d="M322.34,-74.5C349.82,-74.5 383.56,-74.5 414.92,-74.5"/>
+<polygon fill="black" stroke="black" points="415,-78 425,-74.5 415,-71 415,-78"/>
+<text text-anchor="middle" x="373.5" y="-78.3" font-family="Times,serif" font-size="14.00">h(&#39;id101&#39;)=2</text>
+</g>
+<!-- keys -->
+<g id="node2" class="node">
+<title>keys</title>
+<text text-anchor="middle" x="85" y="-71.4" font-family="Helvetica,sans-Serif" font-size="12.00">Claves: {id101, id205, id309}</text>
+</g>
+<!-- keys&#45;&gt;hash_func -->
+<g id="edge1" class="edge">
+<title>keys&#45;&gt;hash_func</title>
+<path fill="none" stroke="black" d="M170.07,-74.5C179.02,-74.5 188.04,-74.5 196.75,-74.5"/>
+<polygon fill="black" stroke="black" points="196.82,-78 206.82,-74.5 196.82,-71 196.82,-78"/>
+</g>
+<!-- data -->
+<g id="node4" class="node">
+<title>data</title>
+<ellipse fill="none" stroke="black" cx="604.03" cy="-74.5" rx="88.06" ry="18"/>
+<text text-anchor="middle" x="604.03" y="-71.4" font-family="Helvetica,sans-Serif" font-size="12.00">Valor: Datos de Usuario</text>
+</g>
+<!-- table&#45;&gt;data -->
+<g id="edge3" class="edge">
+<title>table:f2&#45;&gt;data</title>
+<path fill="none" stroke="black" d="M479,-74.5C487.68,-74.5 496.71,-74.5 505.75,-74.5"/>
+<polygon fill="black" stroke="black" points="505.95,-78 515.95,-74.5 505.95,-71 505.95,-78"/>
+</g>
+</g>
+</svg>
+
+            </div>
+            <p style="font-size:0.8em; color:#999; text-align:center; margin-top:-20px; margin-bottom:30px;">
+                <em>Figura: Diagrama generado automáticamente mediante Graphviz</em>
+            </p>
+
+            <h3>Intuición</h3>
+            <div><p>Piensa en un armario de correos con 1000 casilleros. Si tienes millones de cartas, no puedes poner una en cada casillero de forma aleatoria y luego buscar. En su lugar, usas una fórmula mágica (la función hash) que toma el nombre del destinatario y te da un número del 0 al 999. Siempre que llega una carta para 'Juan', la fórmula da el mismo número, digamos el 42. Así, solo tienes que mirar en el casillero 42. El problema surge cuando 'Juan' y 'María' resultan tener el mismo número de casillero (una colisión). Una buena tabla hash organiza el armario de modo que las colisiones sean raras y, si ocurren, haya una regla clara para manejarlas. Esto permite que, aunque el armario esté lleno de información, siempre sepas exactamente a qué rincón ir, evitando tener que revisar todo el mueble.</p></div>
+
+            <h3>Aplicación</h3>
+            <div><p>Se aplica en la implementación de 'Sets' y 'Dictionaries' en lenguajes como Python y JavaScript. En ciberseguridad, se usa para almacenar huellas digitales de archivos (hashes MD5 o SHA) para detectar duplicados o alteraciones en grandes repositorios. En bases de datos NoSQL como Redis o Amazon DynamoDB, la tabla hash es la estructura fundamental que permite recuperar valores asociados a claves en microsegundos, soportando millones de peticiones concurrentes por segundo.</p></div>
+        </article>
+        </body></html>

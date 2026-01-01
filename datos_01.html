@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1 - Acceso a la Información - Estrategias de Búsqueda Avanzada y Navegación Eficiente.</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #f4f4f9; color: #333; margin: 0; padding: 20px; line-height: 1.6; }
+        header { background: #2c3e50; color: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; text-align:center; }
+        h1 { margin: 0; font-size: 1.5rem; }
+
+        .subtema {
+            background: white;
+            padding: 40px;
+            margin-bottom: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        h2 { color: #2980b9; border-bottom: 2px solid #eee; padding-bottom: 10px; margin-top: 0; }
+        h3 { color: #7f8c8d; font-size: 0.9em; text-transform: uppercase; margin-top: 30px; letter-spacing: 1px; border-left: 3px solid #d4af37; padding-left: 10px; }
+
+        .diagrama-box {
+            text-align: center;
+            margin: 30px 0;
+            padding: 20px;
+            background: #fafafa;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            /* Centramos el SVG vertical y horizontalmente */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 150px;
+        }
+
+        /* Estilos Markdown */
+        p { margin-bottom: 1rem; }
+        strong { color: #2c3e50; font-weight: 600; }
+        code { background: #f0f0f0; padding: 2px 5px; border-radius: 3px; font-family: monospace; color: #c0392b; }
+        ul { padding-left: 20px; }
+        li { margin-bottom: 0.5rem; }
+    </style>
+</head>
+<body>
+    <header><h1>1 - Acceso a la Información - Estrategias de Búsqueda Avanzada y Navegación Eficiente.</h1></header>
+    <main>
+
+        <article class="subtema">
+            <h2>Expresiones Regulares en el Filtrado de Información</h2>
+
+            <h3>Historia</h3>
+            <div><p>El concepto de expresiones regulares (regex) surgió en la década de 1950, cuando el matemático Stephen Cole Kleene formalizó la descripción de los lenguajes regulares utilizando su notación algebraica. Originalmente concebidas como una herramienta teórica en el estudio de redes neuronales y álgebras de eventos, las expresiones regulares encontraron su aplicación práctica más potente en la informática a finales de los años 60. Ken Thompson, pionero de UNIX, implementó estas ideas en el editor ed y posteriormente en la herramienta grep, permitiendo a los usuarios buscar patrones complejos de texto de manera eficiente. Con el tiempo, lenguajes como Perl elevaron la potencia de las regex, convirtiéndolas en el estándar de facto para la manipulación de cadenas de texto. Hoy en día, son fundamentales en el acceso a la información, permitiendo que los motores de búsqueda y sistemas de bases de datos identifiquen patrones específicos entre volúmenes masivos de datos no estructurados, facilitando una navegación precisa en la web y en sistemas locales.</p></div>
+
+            <h3>Descripción Formal</h3>
+            <div><p>Formalmente, una expresión regular es una construcción algebraica sobre un alfabeto finito Σ. Se define de forma recursiva: 1. ∅ es una regex que denota el lenguaje vacío. 2. ε (la cadena vacía) es una regex que denota el lenguaje {ε}. 3. Para cada a ∈ Σ, 'a' es una regex que denota el lenguaje {a}. 4. Si r y s son expresiones regulares que denotan los lenguajes L(r) y L(s), entonces (r+s) denota la unión L(r) ∪ L(s), (rs) denota la concatenación L(r)L(s), y (r<em>) denota la clausura de Kleene L(r)</em>. En el contexto de búsqueda avanzada, una expresión regular define un Lenguaje Regular que puede ser reconocido por un Autómata Finito Determinista (DFA). La equivalencia entre expresiones regulares y autómatas finitos se establece mediante el Teorema de Kleene. Para cualquier consulta de búsqueda definida como una regex, existe un autómata M = (Q, Σ, δ, q₀, F) tal que el lenguaje aceptado por M es exactamente el conjunto de cadenas que coinciden con el patrón de búsqueda. El proceso de navegación eficiente implica la transformación de la regex en un NFA (Autómata Finito No Determinista) mediante la construcción de Thompson, y su posterior conversión a un DFA mediante la construcción de subconjuntos para garantizar un tiempo de ejecución lineal O(n) respecto a la longitud del texto de entrada, donde n es la cantidad de caracteres examinados. Esta eficiencia es crítica en sistemas de recuperación de información de alta velocidad.</p></div>
+
+            <div class="diagrama-box">
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg style="max-width: 80%; max-height: 350px; height: auto; width: auto;" data-width="251pt" data-height="82pt"
+ viewBox="0.00 0.00 251.41 81.94" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 77.94)">
+<title>G</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-77.94 247.41,-77.94 247.41,4 -4,4"/>
+<!-- start -->
+<g id="node1" class="node">
+<title>start</title>
+<ellipse fill="black" stroke="black" cx="1.8" cy="-22.47" rx="1.8" ry="1.8"/>
+</g>
+<!-- q0 -->
+<g id="node2" class="node">
+<title>q0</title>
+<ellipse fill="none" stroke="black" cx="59.07" cy="-22.47" rx="18.44" ry="18.44"/>
+<text text-anchor="middle" x="59.07" y="-19.37" font-family="Helvetica,sans-Serif" font-size="12.00">q0</text>
+</g>
+<!-- start&#45;&gt;q0 -->
+<g id="edge1" class="edge">
+<title>start&#45;&gt;q0</title>
+<path fill="none" stroke="black" d="M3.76,-22.47C7.11,-22.47 18.7,-22.47 30.33,-22.47"/>
+<polygon fill="black" stroke="black" points="30.34,-25.97 40.34,-22.47 30.34,-18.97 30.34,-25.97"/>
+</g>
+<!-- q1 -->
+<g id="node3" class="node">
+<title>q1</title>
+<ellipse fill="none" stroke="black" cx="138" cy="-22.47" rx="18.44" ry="18.44"/>
+<text text-anchor="middle" x="138" y="-19.37" font-family="Helvetica,sans-Serif" font-size="12.00">q1</text>
+</g>
+<!-- q0&#45;&gt;q1 -->
+<g id="edge2" class="edge">
+<title>q0&#45;&gt;q1</title>
+<path fill="none" stroke="black" d="M77.91,-22.47C87.2,-22.47 98.77,-22.47 109.2,-22.47"/>
+<polygon fill="black" stroke="black" points="109.52,-25.97 119.52,-22.47 109.52,-18.97 109.52,-25.97"/>
+<text text-anchor="middle" x="98.54" y="-25.47" font-family="Helvetica,sans-Serif" font-size="10.00">1</text>
+</g>
+<!-- q2 -->
+<g id="node4" class="node">
+<title>q2</title>
+<ellipse fill="none" stroke="black" cx="220.94" cy="-22.47" rx="18.44" ry="18.44"/>
+<ellipse fill="none" stroke="black" cx="220.94" cy="-22.47" rx="22.44" ry="22.44"/>
+<text text-anchor="middle" x="220.94" y="-19.37" font-family="Helvetica,sans-Serif" font-size="12.00">q2</text>
+</g>
+<!-- q1&#45;&gt;q2 -->
+<g id="edge3" class="edge">
+<title>q1&#45;&gt;q2</title>
+<path fill="none" stroke="black" d="M156.56,-22.47C165.77,-22.47 177.33,-22.47 188.05,-22.47"/>
+<polygon fill="black" stroke="black" points="188.38,-25.97 198.38,-22.47 188.38,-18.97 188.38,-25.97"/>
+<text text-anchor="middle" x="177.47" y="-25.47" font-family="Helvetica,sans-Serif" font-size="10.00">9</text>
+</g>
+<!-- q2&#45;&gt;q2 -->
+<g id="edge4" class="edge">
+<title>q2&#45;&gt;q2</title>
+<path fill="none" stroke="black" d="M213.26,-43.7C212.31,-53.92 214.87,-62.94 220.94,-62.94 224.83,-62.94 227.28,-59.23 228.28,-53.89"/>
+<polygon fill="black" stroke="black" points="231.79,-53.81 228.62,-43.7 224.79,-53.58 231.79,-53.81"/>
+<text text-anchor="middle" x="220.94" y="-65.94" font-family="Helvetica,sans-Serif" font-size="10.00">[0&#45;9]</text>
+</g>
+</g>
+</svg>
+
+            </div>
+            <p style="font-size:0.8em; color:#999; text-align:center; margin-top:-20px; margin-bottom:30px;">
+                <em>Figura: Diagrama generado automáticamente mediante Graphviz</em>
+            </p>
+
+            <h3>Intuición</h3>
+            <div><p>Imagina que estás en una biblioteca gigante y buscas todos los libros que mencionan una fecha específica del siglo XX. No quieres solo un libro, sino un patrón: '19' seguido de dos números cualesquiera. Las expresiones regulares actúan como un 'molde' o 'plantilla' inteligente. En lugar de buscar cada año individualmente (1900, 1901, etc.), creas una regla que describe la estructura de lo que buscas. Es como decirle al sistema: 'Acepta cualquier cosa que empiece con A, termine con Z y tenga solo números en el medio'. Esta capacidad de abstracción permite que la navegación no sea una simple comparación de palabras, sino una búsqueda de conceptos estructurales. La intuición detrás de esto es el reconocimiento de patrones: el cerebro humano lo hace de forma natural al buscar una cara en una multitud; las regex permiten que las computadoras hagan lo mismo con símbolos de texto, filtrando el ruido informativo para dejar solo la información relevante.</p></div>
+
+            <h3>Aplicación</h3>
+            <div><p>En el mundo real, las expresiones regulares se aplican en la validación de formularios (verificar correos electrónicos o números telefónicos), el 'scraping' web para extraer datos específicos de páginas HTML, y en la configuración de firewalls para detectar patrones de ataque en el tráfico de red. En motores de búsqueda avanzados como Elasticsearch o bases de datos SQL, permiten realizar consultas complejas que van más allá del simple texto. Por ejemplo, un investigador puede usar regex para filtrar miles de documentos legales buscando menciones de leyes específicas que sigan un formato jerárquico determinado. También son esenciales en el desarrollo de compiladores para el análisis léxico, donde se identifican palabras clave, identificadores y operadores dentro del código fuente. Su eficiencia radica en que, una vez compiladas en un autómata finito, la búsqueda consume una cantidad de memoria constante y un tiempo proporcional a la longitud de los datos, lo que permite procesar gigabytes de información en segundos.</p></div>
+        </article>
+        
+        <article class="subtema">
+            <h2>Autómatas Finitos y Crawling de la Red</h2>
+
+            <h3>Historia</h3>
+            <div><p>La navegación eficiente por la World Wide Web requiere el uso de agentes de software conocidos como 'crawlers' o arañas web. La historia de estos sistemas comenzó con WorldWideWeb de Tim Berners-Lee, pero se formalizó con la llegada de 'WebCrawler' en 1994, el primer bot que indexaba contenido completo. Para navegar de manera sistemática sin perderse en bucles infinitos, los ingenieros adoptaron modelos de la teoría de autómatas. El desafío era transformar la estructura de hipervínculos de la web en un grafo de estados donde cada URL representaba un estado y cada clic una transición. La necesidad de gestionar el 'estado' de la navegación (qué páginas han sido visitadas, cuáles están pendientes y cuáles son inaccesibles) llevó a la implementación de autómatas finitos que rigen el comportamiento de estos exploradores, permitiendo una indexación masiva que alimenta a los motores de búsqueda modernos como Google o Bing.</p></div>
+
+            <h3>Descripción Formal</h3>
+            <div><p>Un navegador o crawler puede modelarse como un Autómata Finito Determinista (DFA) que opera sobre un grafo de información distribuido. Definimos el autómata de navegación como M = (Q, Σ, δ, q₀, F), donde: 1. Q es el conjunto de estados, donde cada estado q ∈ Q representa una página web o un recurso único identificado por una URL. 2. Σ es el alfabeto de entrada, que consiste en las acciones de navegación posibles, como 'clic en enlace', 'volver atrás' o 'ingresar consulta'. 3. δ: Q × Σ → Q es la función de transición que mapea una página actual y una acción a una nueva página de destino. 4. q₀ es la página de inicio o 'seed URL'. 5. F es el conjunto de estados finales, que representan el éxito de la búsqueda o la extracción completa de los datos requeridos. Para garantizar una navegación eficiente, el autómata debe evitar la redundancia. Esto se logra mediante la implementación de una 'Tabla de Visitas' que actúa como una función de transición extendida δ*(q, w), asegurando que el crawler no entre en ciclos infinitos (problema del 'spider trap'). La eficiencia se mide en términos de la profundidad del árbol de búsqueda y el número de transiciones necesarias para alcanzar los estados finales F desde q₀.</p></div>
+
+            <div class="diagrama-box">
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg style="max-width: 80%; max-height: 350px; height: auto; width: auto;" data-width="616pt" data-height="163pt"
+ viewBox="0.00 0.00 616.19 162.72" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 158.72)">
+<title>G</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-158.72 612.19,-158.72 612.19,4 -4,4"/>
+<!-- Home -->
+<g id="node1" class="node">
+<title>Home</title>
+<ellipse fill="none" stroke="black" cx="30.16" cy="-48.32" rx="30.33" ry="30.33"/>
+<text text-anchor="middle" x="30.16" y="-45.22" font-family="Helvetica,sans-Serif" font-size="12.00">Home</text>
+</g>
+<!-- Search -->
+<g id="node2" class="node">
+<title>Search</title>
+<ellipse fill="none" stroke="black" cx="195.03" cy="-104.32" rx="43.91" ry="43.91"/>
+<text text-anchor="middle" x="195.03" y="-101.22" font-family="Helvetica,sans-Serif" font-size="12.00">Busqueda</text>
+</g>
+<!-- Home&#45;&gt;Search -->
+<g id="edge1" class="edge">
+<title>Home&#45;&gt;Search</title>
+<path fill="none" stroke="black" d="M59.16,-57.95C82.35,-65.92 115.89,-77.45 143.71,-87.02"/>
+<polygon fill="black" stroke="black" points="142.7,-90.37 153.29,-90.31 144.98,-83.75 142.7,-90.37"/>
+<text text-anchor="middle" x="105.83" y="-85.32" font-family="Helvetica,sans-Serif" font-size="10.00">click_search</text>
+</g>
+<!-- Results -->
+<g id="node3" class="node">
+<title>Results</title>
+<ellipse fill="none" stroke="black" cx="381.14" cy="-107.32" rx="47.3" ry="47.3"/>
+<text text-anchor="middle" x="381.14" y="-104.22" font-family="Helvetica,sans-Serif" font-size="12.00">Resultados</text>
+</g>
+<!-- Search&#45;&gt;Results -->
+<g id="edge2" class="edge">
+<title>Search&#45;&gt;Results</title>
+<path fill="none" stroke="black" d="M239.2,-105.03C264.36,-105.44 296.39,-105.96 323.55,-106.4"/>
+<polygon fill="black" stroke="black" points="323.65,-109.9 333.7,-106.57 323.76,-102.9 323.65,-109.9"/>
+<text text-anchor="middle" x="286.24" y="-108.32" font-family="Helvetica,sans-Serif" font-size="10.00">submit_query</text>
+</g>
+<!-- Results&#45;&gt;Search -->
+<g id="edge5" class="edge">
+<title>Results&#45;&gt;Search</title>
+<path fill="none" stroke="black" d="M335.4,-93.93C328.86,-92.44 322.16,-91.16 315.74,-90.32 289.74,-86.95 282.79,-87.36 256.74,-90.32 253.72,-90.67 250.63,-91.1 247.53,-91.61"/>
+<polygon fill="black" stroke="black" points="246.82,-88.18 237.62,-93.43 248.09,-95.06 246.82,-88.18"/>
+<text text-anchor="middle" x="286.24" y="-93.32" font-family="Helvetica,sans-Serif" font-size="10.00">refine</text>
+</g>
+<!-- Content -->
+<g id="node4" class="node">
+<title>Content</title>
+<ellipse fill="none" stroke="black" cx="559.86" cy="-48.32" rx="44.16" ry="44.16"/>
+<ellipse fill="none" stroke="black" cx="559.86" cy="-48.32" rx="48.15" ry="48.15"/>
+<text text-anchor="middle" x="559.86" y="-45.22" font-family="Helvetica,sans-Serif" font-size="12.00">Contenido</text>
+</g>
+<!-- Results&#45;&gt;Content -->
+<g id="edge3" class="edge">
+<title>Results&#45;&gt;Content</title>
+<path fill="none" stroke="black" d="M426.28,-92.59C449.84,-84.72 479.04,-74.97 504.04,-66.62"/>
+<polygon fill="black" stroke="black" points="505.37,-69.87 513.75,-63.38 503.16,-63.23 505.37,-69.87"/>
+<text text-anchor="middle" x="470.04" y="-87.32" font-family="Helvetica,sans-Serif" font-size="10.00">select_link</text>
+</g>
+<!-- Content&#45;&gt;Home -->
+<g id="edge4" class="edge">
+<title>Content&#45;&gt;Home</title>
+<path fill="none" stroke="black" d="M511.44,-48.32C408.5,-48.32 166.18,-48.32 70.76,-48.32"/>
+<polygon fill="black" stroke="black" points="70.67,-44.82 60.67,-48.32 70.67,-51.82 70.67,-44.82"/>
+<text text-anchor="middle" x="286.24" y="-51.32" font-family="Helvetica,sans-Serif" font-size="10.00">reset</text>
+</g>
+</g>
+</svg>
+
+            </div>
+            <p style="font-size:0.8em; color:#999; text-align:center; margin-top:-20px; margin-bottom:30px;">
+                <em>Figura: Diagrama generado automáticamente mediante Graphviz</em>
+            </p>
+
+            <h3>Intuición</h3>
+            <div><p>Navegar por la web es como caminar por un laberinto donde cada habitación es una página web y cada puerta tiene una etiqueta (un enlace). Un autómata finito es el mapa y la lógica que usas para no caminar en círculos. Cuando haces clic en un botón de 'Buscar', estás activando una transición que te mueve de un estado de 'espera' a un estado de 'resultados'. La navegación eficiente consiste en saber exactamente qué puertas abrir para llegar a la salida (la información deseada) con el menor número de pasos posible. Si el laberinto cambia o es infinito, el autómata necesita reglas estrictas (como un límite de profundidad) para decidir cuándo dejar de moverse. Es el cerebro detrás de la automatización: decide cuándo una búsqueda ha tenido éxito y cuándo debe retroceder para explorar un nuevo camino.</p></div>
+
+            <h3>Aplicación</h3>
+            <div><p>Esta teoría se aplica directamente en el diseño de interfaces de usuario (UI), donde el flujo de pantallas se modela como un autómata para asegurar que el usuario siempre pueda navegar hacia su objetivo. También es vital en el SEO (Search Engine Optimization), donde se analizan los 'logs' de los crawlers para entender cómo los bots de búsqueda atraviesan un sitio web. En la minería de datos, los autómatas permiten extraer información de sitios con paginación compleja o sistemas de navegación basados en menús desplegables. Además, en la verificación de software, se utilizan autómatas para probar todos los estados posibles de una aplicación web, asegurando que no existan enlaces rotos o estados de 'error 404' que atrapen al usuario en una transición no definida hacia un estado final no deseado.</p></div>
+        </article>
+        
+        <article class="subtema">
+            <h2>Gramáticas Libres de Contexto para Consultas Complejas</h2>
+
+            <h3>Historia</h3>
+            <div><p>A medida que los sistemas de información crecieron, las búsquedas simples por palabras clave resultaron insuficientes. En la década de 1970, con la creación del modelo relacional de Edgar F. Codd y el lenguaje SQL, surgió la necesidad de procesar consultas con estructuras jerárquicas y operadores lógicos anidados (AND, OR, NOT). Para interpretar estas consultas, se recurrió a las Gramáticas Libres de Contexto (CFG), desarrolladas originalmente por Noam Chomsky en 1956. Las CFG permitieron definir lenguajes de consulta robustos donde los paréntesis y la precedencia de operadores podían ser analizados matemáticamente. Esto permitió que los usuarios realizaran búsquedas avanzadas del tipo '(A AND B) OR (C AND NOT D)', sentando las bases de la navegación semántica y la recuperación de información estructurada que utilizamos hoy en bibliotecas digitales y bases de datos científicas.</p></div>
+
+            <h3>Descripción Formal</h3>
+            <div><p>Una estrategia de búsqueda avanzada se define mediante una Gramática Libre de Contexto G = (V, Σ, R, S). 1. V es el conjunto de variables no terminales (ej. Consulta, Expresión, Término). 2. Σ es el conjunto de terminales (palabras clave, operadores lógicos, paréntesis). 3. R es el conjunto de reglas de producción que definen la sintaxis de la búsqueda (ej. E → E OR T | T). 4. S es el símbolo inicial. La jerarquía de Chomsky sitúa a estas gramáticas en el Nivel 2, por encima de los lenguajes regulares, porque requieren una pila (memoria temporal) para procesar estructuras anidadas como los paréntesis. El análisis de una consulta avanzada implica la construcción de un árbol de derivación (parse tree). Formalmente, para que una navegación sea eficiente, el motor de búsqueda utiliza algoritmos de análisis sintáctico como el algoritmo de Earley o el de Cocke-Younger-Kasami (CYK) para validar la estructura de la consulta en tiempo polinomial. La gramática asegura que el significado (semántica) de la búsqueda sea unívoco, transformando una cadena de texto en un árbol de ejecución lógica que el motor de búsqueda puede procesar mediante álgebra booleana sobre el índice invertido de documentos.</p></div>
+
+            <div class="diagrama-box">
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg style="max-width: 80%; max-height: 350px; height: auto; width: auto;" data-width="241pt" data-height="188pt"
+ viewBox="0.00 0.00 241.00 188.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 184)">
+<title>G</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-184 237,-184 237,4 -4,4"/>
+<!-- S -->
+<g id="node1" class="node">
+<title>S</title>
+<text text-anchor="middle" x="116.5" y="-158.9" font-family="Helvetica,sans-Serif" font-size="12.00">Consulta</text>
+</g>
+<!-- E1 -->
+<g id="node2" class="node">
+<title>E1</title>
+<text text-anchor="middle" x="35.5" y="-86.9" font-family="Helvetica,sans-Serif" font-size="12.00">Expresion</text>
+</g>
+<!-- S&#45;&gt;E1 -->
+<g id="edge1" class="edge">
+<title>S&#45;&gt;E1</title>
+<path fill="none" stroke="black" d="M96.48,-143.7C86.37,-134.97 73.96,-124.24 62.98,-114.75"/>
+<polygon fill="black" stroke="black" points="65.15,-111.99 55.29,-108.1 60.57,-117.29 65.15,-111.99"/>
+</g>
+<!-- OP -->
+<g id="node3" class="node">
+<title>OP</title>
+<text text-anchor="middle" x="116.5" y="-86.9" font-family="Helvetica,sans-Serif" font-size="12.00">AND</text>
+</g>
+<!-- S&#45;&gt;OP -->
+<g id="edge2" class="edge">
+<title>S&#45;&gt;OP</title>
+<path fill="none" stroke="black" d="M116.5,-143.7C116.5,-135.98 116.5,-126.71 116.5,-118.11"/>
+<polygon fill="black" stroke="black" points="120,-118.1 116.5,-108.1 113,-118.1 120,-118.1"/>
+</g>
+<!-- E2 -->
+<g id="node4" class="node">
+<title>E2</title>
+<text text-anchor="middle" x="197.5" y="-86.9" font-family="Helvetica,sans-Serif" font-size="12.00">Expresion</text>
+</g>
+<!-- S&#45;&gt;E2 -->
+<g id="edge3" class="edge">
+<title>S&#45;&gt;E2</title>
+<path fill="none" stroke="black" d="M136.52,-143.7C146.63,-134.97 159.04,-124.24 170.02,-114.75"/>
+<polygon fill="black" stroke="black" points="172.43,-117.29 177.71,-108.1 167.85,-111.99 172.43,-117.29"/>
+</g>
+<!-- T1 -->
+<g id="node5" class="node">
+<title>T1</title>
+<text text-anchor="middle" x="35.5" y="-14.9" font-family="Helvetica,sans-Serif" font-size="12.00">&#39;Gatos&#39;</text>
+</g>
+<!-- E1&#45;&gt;T1 -->
+<g id="edge4" class="edge">
+<title>E1&#45;&gt;T1</title>
+<path fill="none" stroke="black" d="M35.5,-71.7C35.5,-63.98 35.5,-54.71 35.5,-46.11"/>
+<polygon fill="black" stroke="black" points="39,-46.1 35.5,-36.1 32,-46.1 39,-46.1"/>
+</g>
+<!-- T2 -->
+<g id="node6" class="node">
+<title>T2</title>
+<text text-anchor="middle" x="197.5" y="-14.9" font-family="Helvetica,sans-Serif" font-size="12.00">&#39;Nutricion&#39;</text>
+</g>
+<!-- E2&#45;&gt;T2 -->
+<g id="edge5" class="edge">
+<title>E2&#45;&gt;T2</title>
+<path fill="none" stroke="black" d="M197.5,-71.7C197.5,-63.98 197.5,-54.71 197.5,-46.11"/>
+<polygon fill="black" stroke="black" points="201,-46.1 197.5,-36.1 194,-46.1 201,-46.1"/>
+</g>
+</g>
+</svg>
+
+            </div>
+            <p style="font-size:0.8em; color:#999; text-align:center; margin-top:-20px; margin-bottom:30px;">
+                <em>Figura: Diagrama generado automáticamente mediante Graphviz</em>
+            </p>
+
+            <h3>Intuición</h3>
+            <div><p>Cuando realizas una búsqueda avanzada, estás construyendo una frase con una gramática propia. No es solo una lista de palabras; es una estructura de árbol. Por ejemplo, en la consulta '(Gatos OR Perros) AND Alimentación', los paréntesis le dicen al sistema que primero debe resolver la unión de gatos y perros antes de filtrar por alimentación. Sin una gramática libre de contexto, la computadora no sabría qué parte de la instrucción va primero. Es como el orden de las operaciones en matemáticas. Esta estructura nos permite 'navegar' por la base de datos de manera mucho más específica, creando filtros que pueden ser tan profundos y complejos como necesitemos, permitiendo que la máquina entienda la jerarquía de nuestras necesidades de información.</p></div>
+
+            <h3>Aplicación</h3>
+            <div><p>Las CFG se aplican en el desarrollo de lenguajes de consulta como SQL para bases de datos relacionales, GraphQL para APIs modernas y lenguajes de búsqueda en motores como Lucene o Elasticsearch. También se utilizan en el procesamiento de lenguaje natural (NLP) para entender la estructura de las preguntas que los usuarios hacen a asistentes virtuales. En la navegación web eficiente, los analizadores sintácticos basados en CFG permiten que los navegadores interpreten el código HTML y CSS, que son lenguajes con estructuras anidadas. Además, son fundamentales en la creación de lenguajes específicos de dominio (DSL) que permiten a expertos en áreas como la medicina o el derecho realizar búsquedas técnicas con una precisión que las palabras clave simples nunca podrían alcanzar.</p></div>
+        </article>
+        </body></html>

@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>4 - Estructura de los Datos - Técnicas de Importación y Tratamiento de Archivos Planos.</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #f4f4f9; color: #333; margin: 0; padding: 20px; line-height: 1.6; }
+        header { background: #2c3e50; color: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; text-align:center; }
+        h1 { margin: 0; font-size: 1.5rem; }
+
+        .subtema {
+            background: white;
+            padding: 40px;
+            margin-bottom: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        h2 { color: #2980b9; border-bottom: 2px solid #eee; padding-bottom: 10px; margin-top: 0; }
+        h3 { color: #7f8c8d; font-size: 0.9em; text-transform: uppercase; margin-top: 30px; letter-spacing: 1px; border-left: 3px solid #d4af37; padding-left: 10px; }
+
+        .diagrama-box {
+            text-align: center;
+            margin: 30px 0;
+            padding: 20px;
+            background: #fafafa;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            /* Centramos el SVG vertical y horizontalmente */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 150px;
+        }
+
+        /* Estilos Markdown */
+        p { margin-bottom: 1rem; }
+        strong { color: #2c3e50; font-weight: 600; }
+        code { background: #f0f0f0; padding: 2px 5px; border-radius: 3px; font-family: monospace; color: #c0392b; }
+        ul { padding-left: 20px; }
+        li { margin-bottom: 0.5rem; }
+    </style>
+</head>
+<body>
+    <header><h1>4 - Estructura de los Datos - Técnicas de Importación y Tratamiento de Archivos Planos.</h1></header>
+    <main>
+
+        <article class="subtema">
+            <h2>Autómatas Finitos para el Análisis de Delimitadores en Archivos CSV</h2>
+
+            <h3>Historia</h3>
+            <div><p>La necesidad de intercambiar datos entre sistemas heterogéneos se remonta a los inicios de la computación comercial en los años 60 y 70. Los archivos de valores separados por comas (CSV) surgieron como una solución pragmática antes de la estandarización de las bases de datos relacionales modernas. Durante la era de los mainframes de IBM, la transferencia de registros requería protocolos estrictos. Con la llegada de las microcomputadoras y hojas de cálculo como VisiCalc y Lotus 1-2-3, el formato CSV se consolidó. No fue hasta 2005 que el RFC 4180 intentó formalizar este estándar. Desde la perspectiva de los lenguajes formales, el análisis de estos archivos se fundamentó en la implementación de escáneres léxicos que utilizan Autómatas Finitos Deterministas (DFA) para identificar tokens de datos y separadores, permitiendo una transición eficiente entre estados de lectura de campo y estados de delimitación, optimizando así el uso de memoria en sistemas con recursos limitados.</p></div>
+
+            <h3>Descripción Formal</h3>
+            <div><p>Formalmente, el proceso de importación de un archivo plano delimitado se define mediante un Autómata Finito Determinista (AFD) M = (Q, Σ, δ, q₀, F). Donde: 
+1. Q = {q_inicio, q_campo, q_comilla, q_escape, q_fin_registro} es el conjunto finito de estados.
+2. Σ es el alfabeto que incluye caracteres alfanuméricos, el delimitador (ej. ','), el calificador de texto (ej. '"') y el salto de línea (\n).
+3. δ: Q × Σ → Q es la función de transición. Por ejemplo, δ(q_inicio, '"') = q_comilla indica que al encontrar una comilla se entra en un estado de lectura de texto literal.
+4. q₀ = q_inicio es el estado inicial.
+5. F ⊆ Q es el conjunto de estados de aceptación, típicamente alcanzados al final del archivo (EOF) o al completar un registro válido.</p>
+<p>El lenguaje reconocido L(M) es el conjunto de cadenas que conforman una estructura de registro válida según la gramática regular definida. En términos de procesamiento, el autómata lee secuencialmente la cadena de entrada w ∈ Σ*. Si la configuración final (q_n) ∈ F, el archivo se considera léxicamente correcto. El tratamiento de archivos planos mediante técnicas formales permite el manejo de casos complejos como delimitadores anidados dentro de comillas mediante la definición de transiciones específicas que ignoran el carácter delimitador mientras el autómata se encuentre en el estado 'q_comilla'. La complejidad computacional de este proceso es O(n), donde n es el número total de caracteres en el archivo, lo que garantiza una eficiencia óptima para el procesamiento de Big Data.</p></div>
+
+            <div class="diagrama-box">
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg style="max-width: 80%; max-height: 350px; height: auto; width: auto;" data-width="484pt" data-height="180pt"
+ viewBox="0.00 0.00 484.47 180.27" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 176.27)">
+<title>G</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-176.27 480.47,-176.27 480.47,4 -4,4"/>
+<!-- START -->
+<g id="node1" class="node">
+<title>START</title>
+<ellipse fill="black" stroke="black" cx="1.8" cy="-71.27" rx="1.8" ry="1.8"/>
+</g>
+<!-- q_inicio -->
+<g id="node2" class="node">
+<title>q_inicio</title>
+<ellipse fill="none" stroke="black" cx="76.92" cy="-71.27" rx="36.14" ry="36.14"/>
+<text text-anchor="middle" x="76.92" y="-68.17" font-family="Helvetica,sans-Serif" font-size="12.00">q_inicio</text>
+</g>
+<!-- START&#45;&gt;q_inicio -->
+<g id="edge1" class="edge">
+<title>START&#45;&gt;q_inicio</title>
+<path fill="none" stroke="black" d="M3.62,-71.27C6.64,-71.27 17.61,-71.27 30.13,-71.27"/>
+<polygon fill="black" stroke="black" points="30.38,-74.77 40.38,-71.27 30.38,-67.77 30.38,-74.77"/>
+</g>
+<!-- q_campo -->
+<g id="node3" class="node">
+<title>q_campo</title>
+<ellipse fill="none" stroke="black" cx="317.59" cy="-71.27" rx="40.76" ry="40.76"/>
+<text text-anchor="middle" x="317.59" y="-68.17" font-family="Helvetica,sans-Serif" font-size="12.00">q_campo</text>
+</g>
+<!-- q_inicio&#45;&gt;q_campo -->
+<g id="edge2" class="edge">
+<title>q_inicio&#45;&gt;q_campo</title>
+<path fill="none" stroke="black" d="M97.24,-101.96C110.53,-120.01 129.95,-141.21 153.24,-151.27 187.4,-166.03 202.6,-165.55 236.96,-151.27 256.53,-143.14 273.78,-127.6 287.17,-112.36"/>
+<polygon fill="black" stroke="black" points="290.05,-114.37 293.81,-104.47 284.7,-109.86 290.05,-114.37"/>
+<text text-anchor="middle" x="195.1" y="-164.27" font-family="Helvetica,sans-Serif" font-size="10.00">char</text>
+</g>
+<!-- q_comilla -->
+<g id="node4" class="node">
+<title>q_comilla</title>
+<ellipse fill="none" stroke="black" cx="195.1" cy="-71.27" rx="41.72" ry="41.72"/>
+<text text-anchor="middle" x="195.1" y="-68.17" font-family="Helvetica,sans-Serif" font-size="12.00">q_comilla</text>
+</g>
+<!-- q_inicio&#45;&gt;q_comilla -->
+<g id="edge5" class="edge">
+<title>q_inicio&#45;&gt;q_comilla</title>
+<path fill="none" stroke="black" d="M113.41,-71.27C122.72,-71.27 132.95,-71.27 142.9,-71.27"/>
+<polygon fill="black" stroke="black" points="143.13,-74.77 153.13,-71.27 143.13,-67.77 143.13,-74.77"/>
+<text text-anchor="middle" x="133.24" y="-74.27" font-family="Helvetica,sans-Serif" font-size="10.00">&quot;</text>
+</g>
+<!-- q_campo&#45;&gt;q_inicio -->
+<g id="edge4" class="edge">
+<title>q_campo&#45;&gt;q_inicio</title>
+<path fill="none" stroke="black" d="M288.8,-42.17C274.65,-29.45 256.35,-15.93 236.96,-9.27 201.77,2.81 188.26,3.29 153.24,-9.27 136.87,-15.14 121.51,-26.28 108.99,-37.51"/>
+<polygon fill="black" stroke="black" points="106.47,-35.08 101.58,-44.47 111.26,-40.18 106.47,-35.08"/>
+<text text-anchor="middle" x="195.1" y="-12.27" font-family="Helvetica,sans-Serif" font-size="10.00">,</text>
+</g>
+<!-- q_campo&#45;&gt;q_campo -->
+<g id="edge3" class="edge">
+<title>q_campo&#45;&gt;q_campo</title>
+<path fill="none" stroke="black" d="M306.39,-110.45C306.88,-121.46 310.62,-129.9 317.59,-129.9 322.16,-129.9 325.34,-126.26 327.13,-120.65"/>
+<polygon fill="black" stroke="black" points="330.64,-120.88 328.78,-110.45 323.73,-119.76 330.64,-120.88"/>
+<text text-anchor="middle" x="317.59" y="-132.9" font-family="Helvetica,sans-Serif" font-size="10.00">char</text>
+</g>
+<!-- q_final -->
+<g id="node5" class="node">
+<title>q_final</title>
+<ellipse fill="none" stroke="black" cx="439.84" cy="-71.27" rx="32.74" ry="32.74"/>
+<ellipse fill="none" stroke="black" cx="439.84" cy="-71.27" rx="36.75" ry="36.75"/>
+<text text-anchor="middle" x="439.84" y="-68.17" font-family="Helvetica,sans-Serif" font-size="12.00">q_final</text>
+</g>
+<!-- q_campo&#45;&gt;q_final -->
+<g id="edge8" class="edge">
+<title>q_campo&#45;&gt;q_final</title>
+<path fill="none" stroke="black" d="M358.3,-71.27C369.3,-71.27 381.33,-71.27 392.66,-71.27"/>
+<polygon fill="black" stroke="black" points="392.83,-74.77 402.83,-71.27 392.83,-67.77 392.83,-74.77"/>
+<text text-anchor="middle" x="380.72" y="-74.27" font-family="Helvetica,sans-Serif" font-size="10.00">\n</text>
+</g>
+<!-- q_comilla&#45;&gt;q_campo -->
+<g id="edge7" class="edge">
+<title>q_comilla&#45;&gt;q_campo</title>
+<path fill="none" stroke="black" d="M237.23,-71.27C246.74,-71.27 256.96,-71.27 266.8,-71.27"/>
+<polygon fill="black" stroke="black" points="266.87,-74.77 276.87,-71.27 266.87,-67.77 266.87,-74.77"/>
+<text text-anchor="middle" x="256.96" y="-74.27" font-family="Helvetica,sans-Serif" font-size="10.00">&quot;</text>
+</g>
+<!-- q_comilla&#45;&gt;q_comilla -->
+<g id="edge6" class="edge">
+<title>q_comilla&#45;&gt;q_comilla</title>
+<path fill="none" stroke="black" d="M183.93,-111.84C184.52,-122.8 188.24,-131.13 195.1,-131.13 199.6,-131.13 202.75,-127.54 204.55,-121.98"/>
+<polygon fill="black" stroke="black" points="208.05,-122.28 206.27,-111.84 201.14,-121.11 208.05,-122.28"/>
+<text text-anchor="middle" x="195.1" y="-134.13" font-family="Helvetica,sans-Serif" font-size="10.00">any_except_&quot;</text>
+</g>
+</g>
+</svg>
+
+            </div>
+            <p style="font-size:0.8em; color:#999; text-align:center; margin-top:-20px; margin-bottom:30px;">
+                <em>Figura: Diagrama generado automáticamente mediante Graphviz</em>
+            </p>
+
+            <h3>Intuición</h3>
+            <div><p>Imagina que estás caminando por un pasillo (el archivo de texto) y llevas una libreta. El pasillo tiene puertas y señales. Cuando ves una letra, la escribes en tu libreta; esto es el 'estado de lectura de datos'. De repente, ves una coma: esta es una señal que te indica que debes cerrar la página actual y empezar una nueva; has cambiado al 'estado de delimitador'. Si encuentras una comilla, entras en una zona especial donde las comas no significan 'cambiar de página', sino que simplemente son dibujos en la pared que debes copiar, hasta que encuentres otra comilla que te devuelva al estado normal. Este comportamiento de cambiar de 'modo' o 'estado' basado en lo que ves es exactamente como un autómata procesa un archivo plano para separar la información útil del ruido o los separadores.</p></div>
+
+            <h3>Aplicación</h3>
+            <div><p>Esta técnica se aplica en el desarrollo de drivers ODBC/JDBC y en motores de ingesta de datos como Apache NiFi o Logstash. Cuando una base de datos importa un archivo masivo de millones de filas, no carga todo el archivo en memoria; utiliza un autómata que lee carácter por carácter (streaming). En la industria financiera, se usa para procesar archivos de transacciones bancarias donde la velocidad y la validación estricta son críticas. Si el autómata detecta un carácter inesperado en un estado donde no debería existir (por ejemplo, una letra en un campo definido como numérico), puede activar inmediatamente una rutina de manejo de errores, asegurando la integridad de los datos antes de que lleguen a las tablas finales.</p></div>
+        </article>
+        
+        <article class="subtema">
+            <h2>Gramáticas Regulares y Validación de Archivos de Longitud Fija</h2>
+
+            <h3>Historia</h3>
+            <div><p>Los archivos de longitud fija fueron el estándar de oro en la era de las tarjetas perforadas y los primeros sistemas de almacenamiento en cinta magnética. A diferencia de los archivos delimitados, estos archivos dependen de la posición exacta de cada carácter. Esta técnica fue fundamental para el desarrollo de sistemas de misión crítica en aviación y defensa durante los años 50. La rigidez del formato permitía que el hardware de la época procesara la información mediante desplazamientos físicos (offsets) muy rápidos. En el ámbito de los lenguajes formales, estos archivos representan lenguajes regulares estrictos donde cada 'palabra' o registro tiene una longitud n fija, facilitando la creación de analizadores sintácticos extremadamente veloces que no requieren buscar caracteres especiales de separación, sino simplemente contar posiciones.</p></div>
+
+            <h3>Descripción Formal</h3>
+            <div><p>La estructura de un archivo de longitud fija puede modelarse mediante una Gramática Regular G = (V, Σ, P, S). En este contexto, las reglas de producción P definen de forma precisa la concatenación de subcadenas de longitud predefinida. Si un registro R consta de campos f₁, f₂, ..., fₖ con longitudes L₁, L₂, ..., Lₖ, la gramática genera cadenas cuya longitud total es ∑ Lᵢ.</p>
+<p>Formalmente, para cada campo i, se define un sublenguaje Lᵢ ⊆ Σ^{Lᵢ}. El lenguaje total del archivo es el producto cartesiano de estos sublenguajes: L = L₁ · L₂ · ... · Lₖ. El proceso de tratamiento implica una función de mapeo Ψ: Σⁿ → T₁, T₂, ..., Tₖ, donde cada T es un tipo de dato en el sistema de destino. La validación se realiza mediante expresiones regulares de la forma: ^(.{L₁})(.{L₂})...(.{Lₖ})$. </p>
+<p>Desde el punto de vista de autómatas, esto equivale a un autómata de conteo que transita a través de n estados antes de alcanzar un estado de aceptación o reinicio de registro. No hay ambigüedad gramatical, lo que sitúa a estos archivos en el nivel más bajo (y más eficiente) de la Jerarquía de Chomsky (Tipo 3). La verificación de tipos se integra en el autómata mediante la restricción del alfabeto Σ en cada segmento Lᵢ; por ejemplo, Σ_num = {0, 1, ..., 9} para campos de montos financieros.</p></div>
+
+            <div class="diagrama-box">
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg style="max-width: 80%; max-height: 350px; height: auto; width: auto;" data-width="586pt" data-height="122pt"
+ viewBox="0.00 0.00 585.94 122.25" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 118.25)">
+<title>G</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-118.25 581.94,-118.25 581.94,4 -4,4"/>
+<!-- S0 -->
+<g id="node1" class="node">
+<title>S0</title>
+<ellipse fill="none" stroke="black" cx="19.7" cy="-37.24" rx="19.9" ry="19.9"/>
+<text text-anchor="middle" x="19.7" y="-34.14" font-family="Helvetica,sans-Serif" font-size="12.00">S0</text>
+</g>
+<!-- S1 -->
+<g id="node2" class="node">
+<title>S1</title>
+<ellipse fill="none" stroke="black" cx="143.41" cy="-81.24" rx="32.02" ry="32.02"/>
+<text text-anchor="middle" x="143.41" y="-78.14" font-family="Helvetica,sans-Serif" font-size="12.00">S1 (f1)</text>
+</g>
+<!-- S0&#45;&gt;S1 -->
+<g id="edge1" class="edge">
+<title>S0&#45;&gt;S1</title>
+<path fill="none" stroke="black" d="M38.4,-43.64C55.32,-49.76 81.42,-59.19 103.24,-67.08"/>
+<polygon fill="black" stroke="black" points="102.32,-70.47 112.91,-70.58 104.7,-63.89 102.32,-70.47"/>
+<text text-anchor="middle" x="75.4" y="-65.24" font-family="Helvetica,sans-Serif" font-size="10.00">read(L1)</text>
+</g>
+<!-- S2 -->
+<g id="node3" class="node">
+<title>S2</title>
+<ellipse fill="none" stroke="black" cx="279.43" cy="-82.24" rx="32.02" ry="32.02"/>
+<text text-anchor="middle" x="279.43" y="-79.14" font-family="Helvetica,sans-Serif" font-size="12.00">S2 (f2)</text>
+</g>
+<!-- S1&#45;&gt;S2 -->
+<g id="edge2" class="edge">
+<title>S1&#45;&gt;S2</title>
+<path fill="none" stroke="black" d="M175.49,-81.47C193.8,-81.61 217.18,-81.78 237.04,-81.93"/>
+<polygon fill="black" stroke="black" points="237.02,-85.43 247.05,-82.01 237.08,-78.43 237.02,-85.43"/>
+<text text-anchor="middle" x="211.42" y="-84.24" font-family="Helvetica,sans-Serif" font-size="10.00">read(L2)</text>
+</g>
+<!-- S3 -->
+<g id="node4" class="node">
+<title>S3</title>
+<ellipse fill="none" stroke="black" cx="415.45" cy="-81.24" rx="32.02" ry="32.02"/>
+<text text-anchor="middle" x="415.45" y="-78.14" font-family="Helvetica,sans-Serif" font-size="12.00">S3 (f3)</text>
+</g>
+<!-- S2&#45;&gt;S3 -->
+<g id="edge3" class="edge">
+<title>S2&#45;&gt;S3</title>
+<path fill="none" stroke="black" d="M311.51,-82.01C329.82,-81.87 353.2,-81.7 373.06,-81.55"/>
+<polygon fill="black" stroke="black" points="373.1,-85.05 383.07,-81.48 373.04,-78.05 373.1,-85.05"/>
+<text text-anchor="middle" x="347.44" y="-84.24" font-family="Helvetica,sans-Serif" font-size="10.00">read(L3)</text>
+</g>
+<!-- Sf -->
+<g id="node5" class="node">
+<title>Sf</title>
+<ellipse fill="none" stroke="black" cx="540.7" cy="-37.24" rx="33.46" ry="33.46"/>
+<ellipse fill="none" stroke="black" cx="540.7" cy="-37.24" rx="37.48" ry="37.48"/>
+<text text-anchor="middle" x="540.7" y="-34.14" font-family="Helvetica,sans-Serif" font-size="12.00">S_final</text>
+</g>
+<!-- S3&#45;&gt;Sf -->
+<g id="edge4" class="edge">
+<title>S3&#45;&gt;Sf</title>
+<path fill="none" stroke="black" d="M445.97,-70.7C460.86,-65.39 479.2,-58.84 495.71,-52.95"/>
+<polygon fill="black" stroke="black" points="496.94,-56.23 505.18,-49.57 494.58,-49.63 496.94,-56.23"/>
+<text text-anchor="middle" x="475.46" y="-65.24" font-family="Helvetica,sans-Serif" font-size="10.00">EOL</text>
+</g>
+<!-- Sf&#45;&gt;S0 -->
+<g id="edge5" class="edge">
+<title>Sf&#45;&gt;S0</title>
+<path fill="none" stroke="black" d="M504,-30.13C479.47,-25.86 446.12,-21.24 416.45,-21.24 142.41,-21.24 142.41,-21.24 142.41,-21.24 110.29,-21.24 73.81,-26.79 49.23,-31.35"/>
+<polygon fill="black" stroke="black" points="48.32,-27.96 39.16,-33.29 49.64,-34.83 48.32,-27.96"/>
+<text text-anchor="middle" x="279.43" y="-24.24" font-family="Helvetica,sans-Serif" font-size="10.00">ε</text>
+</g>
+</g>
+</svg>
+
+            </div>
+            <p style="font-size:0.8em; color:#999; text-align:center; margin-top:-20px; margin-bottom:30px;">
+                <em>Figura: Diagrama generado automáticamente mediante Graphviz</em>
+            </p>
+
+            <h3>Intuición</h3>
+            <div><p>Imagina que tienes una caja de madera con ranuras de tamaños específicos para insertar bloques. No importa de qué color sea el bloque, si no mide exactamente lo que la ranura permite, no entrará. Un archivo de longitud fija es igual: el primer nombre debe ocupar exactamente 20 espacios, la edad 3 espacios y la dirección 50. Si el nombre es 'Ana', se deben rellenar los 17 espacios restantes con blancos. El programa que lee esto no busca comas; simplemente dice: 'dame lo que haya de la posición 1 a la 20'. Es una forma muy rígida pero increíblemente rápida de organizar datos, ya que el sistema sabe exactamente dónde empieza y termina cada dato sin tener que leer el contenido para decidirlo.</p></div>
+
+            <h3>Aplicación</h3>
+            <div><p>Se utiliza ampliamente en sistemas legados de banca (Mainframes COBOL) y en protocolos de comunicación de bajo nivel donde el ancho de banda y el procesamiento son costosos. Por ejemplo, los archivos SWIFT para transferencias internacionales o los reportes gubernamentales de impuestos suelen seguir este formato. En el tratamiento de datos moderno, estas técnicas se emplean para leer archivos planos de logs de sensores industriales (IoT) donde cada ráfaga de datos tiene un tamaño constante, permitiendo una ingesta de alta velocidad en bases de datos de series temporales.</p></div>
+        </article>
+        
+        <article class="subtema">
+            <h2>Autómatas de Pila para el Tratamiento de Archivos Planos Jerárquicos (JSON/XML)</h2>
+
+            <h3>Historia</h3>
+            <div><p>A finales de los 90, la necesidad de representar datos con relaciones de jerarquía y anidamiento llevó a la creación de XML, y posteriormente JSON en los 2000. Aunque se consideran 'archivos planos' por ser texto legible, su estructura no es lineal. Esto marcó un hito en la teoría de autómatas aplicada, ya que los DFA no eran suficientes para validar el balanceo de etiquetas o paréntesis. Se requirió la implementación de Autómatas con Pila (Pushdown Automata) derivados de las gramáticas libres de contexto de Noam Chomsky. El procesamiento de estos archivos permitió pasar de simples tablas a estructuras de datos complejas (árboles), facilitando el intercambio de información en la incipiente Web 2.0 y el desarrollo de APIs RESTful.</p></div>
+
+            <h3>Descripción Formal</h3>
+            <div><p>El tratamiento de archivos planos con estructura jerárquica requiere un Autómata con Pila (AP) definido como P = (Q, Σ, Γ, δ, q₀, Z₀, F). Donde:
+1. Γ es el alfabeto de la pila (ej. etiquetas abiertas como '{' o '<tag>').
+2. Z₀ es el símbolo inicial de la pila.
+3. δ: Q × (Σ ∪ {ε}) × Γ → P(Q × Γ*) es la función de transición que incluye operaciones de apilar (push) y desapilar (pop).</p>
+<p>Para un archivo JSON, cuando el autómata encuentra un '{', realiza un 'push' en la pila. Al encontrar un '}', realiza un 'pop'. El archivo es válido si y solo si al finalizar la lectura de la cadena, la pila está vacía (o contiene solo Z₀) y el autómata está en un estado final. Este proceso maneja lenguajes libres de contexto (Tipo 2 en la Jerarquía de Chomsky). </p>
+<p>El tratamiento de estos archivos implica una fase de 'parsing' donde se construye un Árbol de Sintaxis Abstracta (AST). A diferencia de los archivos CSV, la técnica de importación aquí debe gestionar la recursividad. La complejidad es O(n) para el análisis, pero el uso de memoria es proporcional a la profundidad del anidamiento, lo cual es una consideración crítica en el diseño de parsers eficientes para archivos planos de gran escala.</p></div>
+
+            <div class="diagrama-box">
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg style="max-width: 80%; max-height: 350px; height: auto; width: auto;" data-width="396pt" data-height="174pt"
+ viewBox="0.00 0.00 396.07 174.10" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 170.1)">
+<title>G</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-170.1 392.07,-170.1 392.07,4 -4,4"/>
+<!-- q_ready -->
+<g id="node1" class="node">
+<title>q_ready</title>
+<ellipse fill="none" stroke="black" cx="36.94" cy="-44.01" rx="36.87" ry="36.87"/>
+<text text-anchor="middle" x="36.94" y="-40.91" font-family="Helvetica,sans-Serif" font-size="12.00">q_ready</text>
+</g>
+<!-- q_open -->
+<g id="node2" class="node">
+<title>q_open</title>
+<ellipse fill="none" stroke="black" cx="173.96" cy="-44.01" rx="35.18" ry="35.18"/>
+<text text-anchor="middle" x="173.96" y="-40.91" font-family="Helvetica,sans-Serif" font-size="12.00">q_open</text>
+</g>
+<!-- q_ready&#45;&gt;q_open -->
+<g id="edge1" class="edge">
+<title>q_ready&#45;&gt;q_open</title>
+<path fill="none" stroke="black" d="M74.12,-44.01C90.84,-44.01 110.85,-44.01 128.48,-44.01"/>
+<polygon fill="black" stroke="black" points="128.54,-47.51 138.54,-44.01 128.54,-40.51 128.54,-47.51"/>
+<text text-anchor="middle" x="106.37" y="-47.01" font-family="Helvetica,sans-Serif" font-size="10.00">{ , ε / {</text>
+</g>
+<!-- q_open&#45;&gt;q_open -->
+<g id="edge2" class="edge">
+<title>q_open&#45;&gt;q_open</title>
+<path fill="none" stroke="black" d="M169.85,-78.99C169.99,-89.19 171.36,-97.1 173.96,-97.1 175.58,-97.1 176.73,-94.01 177.39,-89.2"/>
+<polygon fill="black" stroke="black" points="180.9,-89.2 178.07,-78.99 173.92,-88.73 180.9,-89.2"/>
+<text text-anchor="middle" x="173.96" y="-100.1" font-family="Helvetica,sans-Serif" font-size="10.00">{ , ε / {</text>
+</g>
+<!-- q_open&#45;&gt;q_open -->
+<g id="edge3" class="edge">
+<title>q_open&#45;&gt;q_open</title>
+<path fill="none" stroke="black" d="M166.1,-78.39C164.64,-97.5 167.26,-115.1 173.96,-115.1 179.46,-115.1 182.21,-103.26 182.21,-88.45"/>
+<polygon fill="black" stroke="black" points="185.7,-88.25 181.81,-78.39 178.71,-88.52 185.7,-88.25"/>
+<text text-anchor="middle" x="173.96" y="-118.1" font-family="Helvetica,sans-Serif" font-size="10.00">key:val , ε / ε</text>
+</g>
+<!-- q_open&#45;&gt;q_open -->
+<g id="edge4" class="edge">
+<title>q_open&#45;&gt;q_open</title>
+<path fill="none" stroke="black" d="M163.32,-77.83C159.07,-105.03 162.62,-133.1 173.96,-133.1 183.88,-133.1 187.84,-111.61 185.82,-88.02"/>
+<polygon fill="black" stroke="black" points="189.27,-87.34 184.59,-77.83 182.32,-88.18 189.27,-87.34"/>
+<text text-anchor="middle" x="173.96" y="-136.1" font-family="Helvetica,sans-Serif" font-size="10.00">} , { / ε</text>
+</g>
+<!-- q_close -->
+<g id="node3" class="node">
+<title>q_close</title>
+<ellipse fill="none" stroke="black" cx="344.06" cy="-44.01" rx="40.03" ry="40.03"/>
+<ellipse fill="none" stroke="black" cx="344.06" cy="-44.01" rx="44.03" ry="44.03"/>
+<text text-anchor="middle" x="344.06" y="-40.91" font-family="Helvetica,sans-Serif" font-size="12.00">q_accept</text>
+</g>
+<!-- q_open&#45;&gt;q_close -->
+<g id="edge5" class="edge">
+<title>q_open&#45;&gt;q_close</title>
+<path fill="none" stroke="black" d="M209.38,-44.01C232.53,-44.01 263.51,-44.01 289.81,-44.01"/>
+<polygon fill="black" stroke="black" points="290.01,-47.51 300.01,-44.01 290.01,-40.51 290.01,-47.51"/>
+<text text-anchor="middle" x="254.55" y="-47.01" font-family="Helvetica,sans-Serif" font-size="10.00">EOF , Z0 / ε</text>
+</g>
+</g>
+</svg>
+
+            </div>
+            <p style="font-size:0.8em; color:#999; text-align:center; margin-top:-20px; margin-bottom:30px;">
+                <em>Figura: Diagrama generado automáticamente mediante Graphviz</em>
+            </p>
+
+            <h3>Intuición</h3>
+            <div><p>Imagina que estás organizando cajas dentro de otras cajas. Para no perderte, cada vez que abres una caja, pones un recordatorio en una pila de notas. Si abres una caja pequeña dentro de una grande, pones otra nota encima. Solo puedes cerrar una caja si coincide con la última nota que pusiste arriba. Si al final te sobran notas o intentas cerrar una caja que no corresponde con tu nota superior, cometiste un error. Así es como funciona un autómata de pila: usa una memoria extra (la pila) para recordar qué etiquetas o llaves ha abierto, permitiendo que los datos tengan niveles de profundidad, algo que una simple lista o un archivo CSV no pueden hacer.</p></div>
+
+            <h3>Aplicación</h3>
+            <div><p>Es la base de todos los analizadores (parsers) de JSON y XML en lenguajes como Python, Java o JavaScript. Se utiliza en la configuración de infraestructuras como código (Terraform, CloudFormation), en el intercambio de mensajes entre microservicios y en el almacenamiento de documentos en bases de datos NoSQL como MongoDB. En el tratamiento de archivos planos, esta técnica permite normalizar datos anidados para convertirlos en formatos relacionales mediante procesos de 'flattening' (aplanamiento), donde el autómata recorre el árbol y genera registros planos para su análisis estadístico.</p></div>
+        </article>
+        </body></html>

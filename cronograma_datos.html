@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cronograma - Gestión y Visualización de Datos</title>
+    <style>
+        /* --- RESET Y VARIABLES --- */
+        :root {
+            --primary-color: #2c3e50;
+            --accent-color: #e74c3c; /* Rojo suave para variar del azul anterior */
+            --secondary-color: #ecf0f1;
+            --text-color: #333;
+            --light-text: #666;
+            --success-color: #27ae60;
+            --warning-color: #f39c12;
+            --purple-color: #8e44ad;
+            --font-main: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            --shadow: 0 4px 6px rgba(0,0,0,0.1);
+            --radius: 8px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-main);
+            background-color: #f4f7f6;
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        /* --- HEADER --- */
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow);
+        }
+
+        header h1 {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        /* Botón con JavaScript para volver atrás */
+        .btn-volver {
+            background-color: var(--accent-color);
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1.2rem;
+            border-radius: var(--radius);
+            font-weight: bold;
+            transition: background 0.3s ease;
+            font-size: 0.9rem;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-volver:hover {
+            background-color: #c0392b;
+        }
+
+        /* --- CONTENEDOR PRINCIPAL --- */
+        main {
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .intro-text {
+            text-align: center;
+            margin-bottom: 3rem;
+            color: var(--light-text);
+            font-size: 1.1rem;
+        }
+
+        /* --- LAYOUT VERTICAL (STACK) --- */
+        .schedule-stack {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        /* --- TARJETAS DE BLOQUES --- */
+        .block-card {
+            background: white;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            border-left: 6px solid var(--accent-color);
+            transition: transform 0.2s ease;
+        }
+
+        .block-card:hover {
+            transform: translateY(-2px);
+        }
+
+        /* Colores específicos para bordes laterales */
+        .block-1 { border-color: var(--accent-color); } /* Rojo */
+        .block-2 { border-color: var(--success-color); } /* Verde */
+        .block-3 { border-color: var(--warning-color); } /* Naranja */
+        .block-4 { border-color: var(--purple-color); } /* Morado */
+
+        .block-header {
+            padding: 1.5rem;
+            background-color: #fff;
+            border-bottom: 1px solid #f0f0f0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .block-header h2 {
+            font-size: 1.4rem;
+            color: var(--primary-color);
+            margin-bottom: 0.2rem;
+        }
+
+        .block-desc {
+            font-size: 0.95rem;
+            color: var(--light-text);
+            font-style: italic;
+        }
+
+        .block-content {
+            padding: 1.5rem;
+        }
+
+        /* --- SEMANAS --- */
+        .week-item {
+            margin-bottom: 2rem;
+        }
+
+        .week-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .week-title {
+            font-weight: 700;
+            color: var(--primary-color);
+            display: block;
+            margin-bottom: 0.8rem;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 0.3rem;
+            width: fit-content;
+        }
+
+        .week-details {
+            list-style-type: none;
+        }
+
+        .week-details li {
+            position: relative;
+            padding-left: 1.2rem;
+            margin-bottom: 0.6rem;
+        }
+
+        .week-details li::before {
+            content: "➜";
+            color: var(--light-text);
+            position: absolute;
+            left: 0;
+            font-size: 0.8rem;
+            top: 4px;
+        }
+
+        /* ESTILOS DE LOS ENLACES */
+        .week-details li a {
+            text-decoration: none;
+            color: #444;
+            border-bottom: 1px dashed #ccc;
+            transition: all 0.2s ease;
+            display: inline-block;
+        }
+
+        .week-details li a:hover {
+            color: var(--accent-color);
+            border-bottom: 1px solid var(--accent-color);
+            background-color: rgba(231, 76, 60, 0.05);
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: var(--light-text);
+            font-size: 0.8rem;
+            margin-top: 2rem;
+            border-top: 1px solid #ddd;
+        }
+
+        /* --- RESPONSIVE --- */
+        @media (max-width: 600px) {
+            header {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+
+            .block-header h2 {
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Gestión y Análisis de Datos</h1>
+        <button onclick="history.back()" class="btn-volver" aria-label="Volver a la página anterior">← Volver</button>
+    </header>
+
+    <main>
+        <div class="intro-text">
+            <p>Ruta de aprendizaje de 13 semanas: Desde la obtención del dato hasta su visualización profesional.</p>
+        </div>
+
+        <div class="schedule-stack">
+
+            <article class="block-card block-1">
+                <div class="block-header">
+                    <h2>Bloque 1: Fundamentos del Dato</h2>
+                    <p class="block-desc">Obtención, formatos y primeros pasos.</p>
+                </div>
+                <div class="block-content">
+                    <div class="week-item">
+                        <span class="week-title">Semana 1: Acceso a la Información</span>
+                        <ul class="week-details">
+                            <li><a href="#">Estrategias de Búsqueda Avanzada y Navegación Eficiente.</a></li>
+                            <li><a href="#">Ecosistemas de Datos Abiertos y Portales Públicos.</a></li>
+                        </ul>
+                    </div>
+                    <div class="week-item">
+                        <span class="week-title">Semana 2: Estructura de los Datos</span>
+                        <ul class="week-details">
+                            <li><a href="#">Formatos de Intercambio de Datos: .csv, .json y .xml.</a></li>
+                            <li><a href="#">Técnicas de Importación y Tratamiento de Archivos Planos.</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </article>
+
+            <article class="block-card block-2">
+                <div class="block-header">
+                    <h2>Bloque 2: Lógica y Procesamiento</h2>
+                    <p class="block-desc">Manipulación, limpieza y funciones avanzadas.</p>
+                </div>
+                <div class="block-content">
+                    <div class="week-item">
+                        <span class="week-title">Semana 3: Entorno de Trabajo Profesional</span>
+                        <ul class="week-details">
+                            <li><a href="#">Interfaz Avanzada y Diseño de Hojas de Cálculo.</a></li>
+                            <li><a href="#">Lógica de Referencias y Formato Condicional Dinámico.</a></li>
+                        </ul>
+                    </div>
+                    <div class="week-item">
+                        <span class="week-title">Semana 4: Lógica de Programación en Celdas</span>
+                        <ul class="week-details">
+                            <li><a href="#">Funciones Lógicas Anidadas y Toma de Decisiones.</a></li>
+                            <li><a href="#">Gestión de Errores y Operadores de Comparación.</a></li>
+                        </ul>
+                    </div>
+                    <div class="week-item">
+                        <span class="week-title">Semana 5: Recuperación de Información</span>
+                        <ul class="week-details">
+                            <li><a href="#">Métodos de Búsqueda y Referencia: De BUSCARV a BUSCARX.</a></li>
+                            <li><a href="#">Validación de Datos y Creación de Formularios de Entrada.</a></li>
+                        </ul>
+                    </div>
+                    <div class="week-item">
+                        <span class="week-title">Semana 6: Análisis Cuantitativo</span>
+                        <ul class="week-details">
+                            <li><a href="#">Funciones Estadísticas y Matemáticas para Ingeniería.</a></li>
+                            <li><a href="#">Calidad del Dato: Funciones de Limpieza y Normalización.</a></li>
+                        </ul>
+                    </div>
+                    <div class="week-item">
+                        <span class="week-title">Semana 7: Organización de Grandes Volúmenes</span>
+                        <ul class="week-details">
+                            <li><a href="#">Herramientas de Organización: Filtros Avanzados y Ordenación.</a></li>
+                            <li><a href="#">Estructuras de Datos: El Objeto "Tabla" y sus Ventajas.</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </article>
+
+            <article class="block-card block-3">
+                <div class="block-header">
+                    <h2>Bloque 3: Inteligencia de Negocios y Visualización</h2>
+                    <p class="block-desc">Modelado de datos, tablas dinámicas y dashboards.</p>
+                </div>
+                <div class="block-content">
+                    <div class="week-item">
+                        <span class="week-title">Semana 8: Arquitectura de Tablas Dinámicas</span>
+                        <ul class="week-details">
+                            <li><a href="#">Fundamentos de Tablas Dinámicas y Análisis Multidimensional.</a></li>
+                            <li><a href="#">Configuración de Campos, Cálculos y Agrupaciones.</a></li>
+                        </ul>
+                    </div>
+                    <div class="week-item">
+                        <span class="week-title">Semana 9: Inteligencia de Datos Interactiva</span>
+                        <ul class="week-details">
+                            <li><a href="#">Segmentación de Datos y Control de Escalas de Tiempo.</a></li>
+                            <li><a href="#">Introducción al Modelado de Datos y Campos Calculados.</a></li>
+                        </ul>
+                    </div>
+                    <div class="week-item">
+                        <span class="week-title">Semana 10: Ingeniería de Visualización</span>
+                        <ul class="week-details">
+                            <li><a href="#">Principios de Diseño Visual y Selección de Gráficos.</a></li>
+                            <li><a href="#">Gráficos Avanzados y Narrativa con Datos (Storytelling).</a></li>
+                        </ul>
+                    </div>
+                    <div class="week-item">
+                        <span class="week-title">Semana 11: Cuadros de Mando (Dashboards)</span>
+                        <ul class="week-details">
+                            <li><a href="#">Diseño de Paneles de Control Interactivos.</a></li>
+                            <li><a href="#">Integración de Componentes y Experiencia de Usuario (UX).</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </article>
+
+            <article class="block-card block-4">
+                <div class="block-header">
+                    <h2>Bloque 4: Comunicación y Entrega</h2>
+                    <p class="block-desc">Reportes profesionales y accesibilidad.</p>
+                </div>
+                <div class="block-content">
+                    <div class="week-item">
+                        <span class="week-title">Semana 12: Ingeniería Documental</span>
+                        <ul class="week-details">
+                            <li><a href="#">Estructura de Documentos Profesionales y Automatización.</a></li>
+                            <li><a href="#">Estándares de Accesibilidad Universal y Normativa WCAG.</a></li>
+                        </ul>
+                    </div>
+                    <div class="week-item">
+                        <span class="week-title">Semana 13: Comunicación de Resultados</span>
+                        <ul class="week-details">
+                            <li><a href="#">Diseño de Presentaciones Técnicas de Alto Impacto.</a></li>
+                            <li><a href="#">Portafolio Final: Integración de Competencias del Curso.</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </article>
+
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Área de Tecnologías de la Información.</p>
+    </footer>
+
+</body>
+</html>

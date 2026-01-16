@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>14 - Planificación del Tiempo II - Análisis Estadístico de Tiempos: Técnica PERT.</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #f4f4f9; color: #333; margin: 0; padding: 20px; line-height: 1.6; position: relative; }
+        header { background: #2c3e50; color: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; text-align:center; }
+        h1 { margin: 0; font-size: 1.5rem; }
+
+        /* Estilo del botón Atrás */
+        .btn-atras {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #7f8c8d;
+            color: white;
+            padding: 8px 15px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            transition: background 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+        .btn-atras:hover { background: #95a5a6; }
+
+        .subtema {
+            background: white;
+            padding: 40px;
+            margin-bottom: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        h2 { color: #2980b9; border-bottom: 2px solid #eee; padding-bottom: 10px; margin-top: 0; }
+        h3 { color: #7f8c8d; font-size: 0.9em; text-transform: uppercase; margin-top: 30px; letter-spacing: 1px; border-left: 3px solid #d4af37; padding-left: 10px; }
+
+        .diagrama-box {
+            text-align: center;
+            margin: 30px 0;
+            padding: 20px;
+            background: #fafafa;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 150px;
+        }
+
+        p { margin-bottom: 1rem; }
+        strong { color: #2c3e50; font-weight: 600; }
+        code { background: #f0f0f0; padding: 2px 5px; border-radius: 3px; font-family: monospace; color: #c0392b; }
+        ul { padding-left: 20px; }
+        li { margin-bottom: 0.5rem; }
+    </style>
+</head>
+<body>
+    <button onclick="window.history.back()" class="btn-atras">Atrás</button>
+    <header><h1>14 - Planificación del Tiempo II - Análisis Estadístico de Tiempos: Técnica PERT.</h1></header>
+    <main>
+
+        <article class="subtema">
+            <h2>Fundamentos de la Distribución Beta y el Tiempo Esperado (Te)</h2>
+
+            <h3>Historia</h3>
+            <div><p>La Program Evaluation and Review Technique (PERT) fue desarrollada a finales de la década de 1950 por la Oficina de Proyectos Especiales de la Marina de los Estados Unidos, en colaboración con la firma consultora Booz Allen Hamilton y Lockheed Corporation. El contexto fue el desarrollo del misil balístico Polaris durante la Guerra Fría. En aquel entonces, los proyectos de defensa enfrentaban una incertidumbre masiva; no existían precedentes para muchas de las tareas de ingeniería requeridas. Los métodos deterministas previos, como el Diagrama de Gantt simple, resultaban insuficientes para gestionar los riesgos de retraso. PERT introdujo un enfoque estocástico pionero, permitiendo a los directores de proyecto modelar la duración de las tareas como variables aleatorias en lugar de valores fijos. Este avance permitió a la Marina reducir el tiempo de desarrollo del proyecto Polaris en casi dos años, estableciendo un estándar global para la gestión de proyectos complejos y de alta incertidumbre que persiste hasta la era del Big Data.</p></div>
+
+            <h3>Descripción Formal</h3>
+            <div><p>La técnica PERT utiliza una distribución de probabilidad Beta simplificada para estimar la duración de una actividad basándose en tres valores: Optimista (O), Más Probable (M) y Pesimista (P). El Tiempo Esperado (Te) se calcula como una media ponderada: Te = (O + 4M + P) / 6. En Excel, si tenemos O en A2, M en B2 y P en C2, la sintaxis es: <code>=(A2 + (4*B2) + C2) / 6</code>. Desde la perspectiva algorítmica, este cálculo se integra en un bucle que recorre el grafo del proyecto (Activity-on-Node). El algoritmo debe primero validar que O &lt;= M &lt;= P para mantener la integridad estadística. A nivel de lógica de datos, se asume que el valor 'Más Probable' tiene un peso cuatro veces superior a los extremos, lo que suaviza el impacto de los outliers. El procedimiento computacional implica: 1. Captura de inputs. 2. Validación de consistencia. 3. Cálculo de Te para cada nodo del grafo. 4. Almacenamiento del resultado en una estructura de matriz o diccionario donde la clave es el ID de la tarea y el valor es su Te, facilitando el posterior cálculo del Early Start (ES) y Early Finish (EF).</p></div>
+
+            <div class="diagrama-box">
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg style="max-width: 80%; max-height: 350px; height: auto; width: auto;" data-width="764pt" data-height="98pt"
+ viewBox="0.00 0.00 764.12 98.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 94)">
+<title>G</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-94 760.12,-94 760.12,4 -4,4"/>
+<!-- Start -->
+<g id="node1" class="node">
+<title>Start</title>
+<ellipse fill="#f9f9f9" stroke="black" cx="31.2" cy="-45" rx="31.4" ry="18"/>
+<text text-anchor="middle" x="31.2" y="-41.3" font-family="Helvetica,sans-Serif" font-size="14.00">Inicio</text>
+</g>
+<!-- Input -->
+<g id="node2" class="node">
+<title>Input</title>
+<polygon fill="#f9f9f9" stroke="black" points="218.39,-63 99.39,-63 99.39,-27 218.39,-27 218.39,-63"/>
+<text text-anchor="middle" x="158.89" y="-41.3" font-family="Helvetica,sans-Serif" font-size="14.00">Entrada: O, M, P</text>
+</g>
+<!-- Start&#45;&gt;Input -->
+<g id="edge1" class="edge">
+<title>Start&#45;&gt;Input</title>
+<path fill="none" stroke="black" d="M62.63,-45C70.74,-45 79.84,-45 89.11,-45"/>
+<polygon fill="black" stroke="black" points="89.21,-48.5 99.21,-45 89.21,-41.5 89.21,-48.5"/>
+</g>
+<!-- Validar -->
+<g id="node3" class="node">
+<title>Validar</title>
+<polygon fill="#f9f9f9" stroke="black" points="359.26,-63 255.53,-45 359.26,-27 462.99,-45 359.26,-63"/>
+<text text-anchor="middle" x="359.26" y="-41.3" font-family="Helvetica,sans-Serif" font-size="14.00">¿O &lt;= M &lt;= P?</text>
+</g>
+<!-- Input&#45;&gt;Validar -->
+<g id="edge2" class="edge">
+<title>Input&#45;&gt;Validar</title>
+<path fill="none" stroke="black" d="M218.61,-45C227.16,-45 236.21,-45 245.41,-45"/>
+<polygon fill="black" stroke="black" points="245.44,-48.5 255.44,-45 245.44,-41.5 245.44,-48.5"/>
+</g>
+<!-- Error -->
+<g id="node4" class="node">
+<title>Error</title>
+<polygon fill="#ffcccc" stroke="black" points="665.12,-90 519.12,-90 519.12,-54 665.12,-54 665.12,-90"/>
+<text text-anchor="middle" x="592.12" y="-68.3" font-family="Helvetica,sans-Serif" font-size="14.00">Error: Datos Inválidos</text>
+</g>
+<!-- Validar&#45;&gt;Error -->
+<g id="edge4" class="edge">
+<title>Validar&#45;&gt;Error</title>
+<path fill="none" stroke="black" d="M421.82,-52.2C448.59,-55.33 480.33,-59.04 509.06,-62.4"/>
+<polygon fill="black" stroke="black" points="508.75,-65.89 519.09,-63.58 509.56,-58.94 508.75,-65.89"/>
+<text text-anchor="middle" x="491.12" y="-63.8" font-family="Times,serif" font-size="14.00">NO</text>
+</g>
+<!-- CalcTe -->
+<g id="node5" class="node">
+<title>CalcTe</title>
+<polygon fill="#f9f9f9" stroke="black" points="665.12,-36 519.12,-36 519.12,0 665.12,0 665.12,-36"/>
+<text text-anchor="middle" x="592.12" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">Te = (O + 4M + P) / 6</text>
+</g>
+<!-- Validar&#45;&gt;CalcTe -->
+<g id="edge3" class="edge">
+<title>Validar&#45;&gt;CalcTe</title>
+<path fill="none" stroke="black" d="M421.82,-37.8C448.59,-34.67 480.33,-30.96 509.06,-27.6"/>
+<polygon fill="black" stroke="black" points="509.56,-31.06 519.09,-26.42 508.75,-24.11 509.56,-31.06"/>
+<text text-anchor="middle" x="491.12" y="-33.8" font-family="Times,serif" font-size="14.00">SÍ</text>
+</g>
+<!-- End -->
+<g id="node6" class="node">
+<title>End</title>
+<ellipse fill="#f9f9f9" stroke="black" cx="729.12" cy="-18" rx="27" ry="18"/>
+<text text-anchor="middle" x="729.12" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">Fin</text>
+</g>
+<!-- CalcTe&#45;&gt;End -->
+<g id="edge5" class="edge">
+<title>CalcTe&#45;&gt;End</title>
+<path fill="none" stroke="black" d="M665.37,-18C674.62,-18 683.76,-18 692.08,-18"/>
+<polygon fill="black" stroke="black" points="692.12,-21.5 702.12,-18 692.12,-14.5 692.12,-21.5"/>
+</g>
+</g>
+</svg>
+
+            </div>
+            <p style="font-size:0.8em; color:#999; text-align:center; margin-top:-20px; margin-bottom:30px;">
+                <em>Figura: Diagrama generado automáticamente mediante Graphviz</em>
+            </p>
+
+            <h3>Intuición</h3>
+            <div><p>Imagina que tienes que ir al trabajo. Si todo sale perfecto (semáforos en verde, sin tráfico), tardas 20 minutos (Optimista). Lo normal es que tardes 30 minutos (Más Probable). Pero si hay un accidente o lluvia intensa, podrías tardar 60 minutos (Pesimista). El error común es planificar solo con los 30 minutos. La lógica PERT dice: 'No ignores los extremos, pero dales su justo peso'. Al sumar el mejor escenario, el peor, y cuatro veces el escenario normal, y luego dividirlo entre seis, obtienes un promedio realista que contempla que las cosas pueden salir mal con más frecuencia de lo que salen excepcionalmente bien. Es una forma de convertir la corazonada de un experto en un número manejable para una computadora, equilibrando el exceso de optimismo típico de los seres humanos con la realidad estadística de los riesgos operativos.</p></div>
+
+            <h3>Aplicación</h3>
+            <div><p>En el entorno de un ingeniero de datos, PERT es vital para la planificación de pipelines de ETL (Extract, Transform, Load) complejos. Por ejemplo, al migrar una base de datos legacy a la nube, la duración de la limpieza de datos es incierta. El ingeniero utiliza PERT para estimar el tiempo de ejecución. Si el escenario optimista es 10 horas, el más probable 15 y el pesimista 40 (debido a posibles errores de codificación de caracteres), el Te ayuda a definir una ventana de mantenimiento realista. Profesionalmente, esto se traduce en Acuerdos de Nivel de Servicio (SLA) más precisos. Un ingeniero que domina PERT puede justificar ante la dirección por qué un proyecto de análisis de datos requiere un buffer de tiempo específico, basándose en la variabilidad técnica inherente al procesamiento de grandes volúmenes de información no estructurada.</p></div>
+        </article>
+        
+        <article class="subtema">
+            <h2>Varianza y Desviación Estándar del Proyecto</h2>
+
+            <h3>Historia</h3>
+            <div><p>A medida que la gestión de proyectos se integró con la estadística industrial tras la Segunda Guerra Mundial, se comprendió que el 'tiempo promedio' no era suficiente para entender el riesgo. La introducción del concepto de varianza en PERT permitió a los analistas cuantificar la dispersión o el grado de incertidumbre de cada tarea. Históricamente, esto evolucionó desde simples estimaciones visuales en tablas de papel hasta complejos motores de simulación Monte Carlo. La capacidad de sumar varianzas a lo largo de una ruta crítica fue un hito en la investigación operativa, ya que permitió pasar de un modelo de 'punto único' a un modelo de 'rango de confianza', transformando la planificación en una disciplina de gestión de riesgos cuantitativa.</p></div>
+
+            <h3>Descripción Formal</h3>
+            <div><p>La varianza de una actividad individual en PERT se define como V = ((P - O) / 6)^2. Esta fórmula asume que la desviación estándar es un sexto del rango total (P-O), basándose en las propiedades de la distribución normal donde casi la totalidad de los datos caen dentro de 6 desviaciones estándar. En Excel, para calcular la varianza de una celda: <code>=((C2-A2)/6)^2</code>. La Desviación Estándar de la tarea es la raíz cuadrada de la varianza: <code>=RAIZ(V)</code>. Un aspecto crítico del algoritmo es que la varianza total de una ruta (especialmente la ruta crítica) es la suma de las varianzas de las actividades que la componen (ΣV_crítica), pero NO la suma de sus desviaciones estándar. Lógicamente, para el cálculo del proyecto: 1. Identificar actividades en la Ruta Crítica. 2. Calcular V para cada una. 3. Sumar V_total = V1 + V2 + ... + Vn. 4. Calcular σ_proyecto = √V_total. Este valor σ es el que determinará la volatilidad del cronograma global.</p></div>
+
+            <div class="diagrama-box">
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg style="max-width: 80%; max-height: 350px; height: auto; width: auto;" data-width="186pt" data-height="404pt"
+ viewBox="0.00 0.00 186.00 404.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 400)">
+<title>G</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-400 182,-400 182,4 -4,4"/>
+<!-- Task -->
+<g id="node1" class="node">
+<title>Task</title>
+<polygon fill="#f9f9f9" stroke="black" points="171.5,-396 6.5,-396 6.5,-360 171.5,-360 171.5,-396"/>
+<text text-anchor="middle" x="89" y="-374.3" font-family="Helvetica,sans-Serif" font-size="14.00">Actividad en Ruta Crítica</text>
+</g>
+<!-- CalcRange -->
+<g id="node2" class="node">
+<title>CalcRange</title>
+<polygon fill="#f9f9f9" stroke="black" points="141,-324 37,-324 37,-288 141,-288 141,-324"/>
+<text text-anchor="middle" x="89" y="-302.3" font-family="Helvetica,sans-Serif" font-size="14.00">Rango = P &#45; O</text>
+</g>
+<!-- Task&#45;&gt;CalcRange -->
+<g id="edge1" class="edge">
+<title>Task&#45;&gt;CalcRange</title>
+<path fill="none" stroke="black" d="M89,-359.7C89,-351.98 89,-342.71 89,-334.11"/>
+<polygon fill="black" stroke="black" points="92.5,-334.1 89,-324.1 85.5,-334.1 92.5,-334.1"/>
+</g>
+<!-- CalcSigma -->
+<g id="node3" class="node">
+<title>CalcSigma</title>
+<polygon fill="#f9f9f9" stroke="black" points="154,-252 24,-252 24,-216 154,-216 154,-252"/>
+<text text-anchor="middle" x="89" y="-230.3" font-family="Helvetica,sans-Serif" font-size="14.00">Sigma = Rango / 6</text>
+</g>
+<!-- CalcRange&#45;&gt;CalcSigma -->
+<g id="edge2" class="edge">
+<title>CalcRange&#45;&gt;CalcSigma</title>
+<path fill="none" stroke="black" d="M89,-287.7C89,-279.98 89,-270.71 89,-262.11"/>
+<polygon fill="black" stroke="black" points="92.5,-262.1 89,-252.1 85.5,-262.1 92.5,-262.1"/>
+</g>
+<!-- CalcVar -->
+<g id="node4" class="node">
+<title>CalcVar</title>
+<polygon fill="#f9f9f9" stroke="black" points="158,-180 20,-180 20,-144 158,-144 158,-180"/>
+<text text-anchor="middle" x="89" y="-158.3" font-family="Helvetica,sans-Serif" font-size="14.00">Varianza = Sigma^2</text>
+</g>
+<!-- CalcSigma&#45;&gt;CalcVar -->
+<g id="edge3" class="edge">
+<title>CalcSigma&#45;&gt;CalcVar</title>
+<path fill="none" stroke="black" d="M89,-215.7C89,-207.98 89,-198.71 89,-190.11"/>
+<polygon fill="black" stroke="black" points="92.5,-190.1 89,-180.1 85.5,-190.1 92.5,-190.1"/>
+</g>
+<!-- SumVar -->
+<g id="node5" class="node">
+<title>SumVar</title>
+<polygon fill="#f9f9f9" stroke="black" points="162,-108 16,-108 16,-72 162,-72 162,-108"/>
+<text text-anchor="middle" x="89" y="-86.3" font-family="Helvetica,sans-Serif" font-size="14.00">Suma Varianzas (ΣV)</text>
+</g>
+<!-- CalcVar&#45;&gt;SumVar -->
+<g id="edge4" class="edge">
+<title>CalcVar&#45;&gt;SumVar</title>
+<path fill="none" stroke="black" d="M89,-143.7C89,-135.98 89,-126.71 89,-118.11"/>
+<polygon fill="black" stroke="black" points="92.5,-118.1 89,-108.1 85.5,-118.1 92.5,-118.1"/>
+</g>
+<!-- TotalSigma -->
+<g id="node6" class="node">
+<title>TotalSigma</title>
+<polygon fill="#f9f9f9" stroke="black" points="178,-36 0,-36 0,0 178,0 178,-36"/>
+<text text-anchor="middle" x="89" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">Sigma Proyecto = sqrt(ΣV)</text>
+</g>
+<!-- SumVar&#45;&gt;TotalSigma -->
+<g id="edge5" class="edge">
+<title>SumVar&#45;&gt;TotalSigma</title>
+<path fill="none" stroke="black" d="M89,-71.7C89,-63.98 89,-54.71 89,-46.11"/>
+<polygon fill="black" stroke="black" points="92.5,-46.1 89,-36.1 85.5,-46.1 92.5,-46.1"/>
+</g>
+</g>
+</svg>
+
+            </div>
+            <p style="font-size:0.8em; color:#999; text-align:center; margin-top:-20px; margin-bottom:30px;">
+                <em>Figura: Diagrama generado automáticamente mediante Graphviz</em>
+            </p>
+
+            <h3>Intuición</h3>
+            <div><p>Si tienes dos tareas que duran 10 días, pero en una el rango de error es de 1 día y en la otra es de 5 días, la segunda es mucho más peligrosa. La varianza es la medida de ese 'peligro' o incertidumbre. En PERT, calculamos qué tan lejos están el mejor y el peor caso. Cuanto más alejados estén, mayor será la varianza y, por tanto, más incierto es nuestro futuro. Al sumar estas incertidumbres a lo largo del proyecto, podemos saber si la fecha final es un compromiso sólido o simplemente un deseo optimista. Es como medir la 'vibración' de un sistema: mucha varianza significa que el proyecto es inestable y cualquier pequeño problema podría desviarnos significativamente del objetivo.</p></div>
+
+            <h3>Aplicación</h3>
+            <div><p>Un gestor de proyectos de analítica avanzada utiliza la varianza para decidir si debe asignar más recursos a una tarea. Si la fase de 'Modelado de Machine Learning' tiene una varianza muy alta debido a la calidad de los datos, el ingeniero sabe que esa es la actividad que puede desmoronar el calendario. En el mundo real, los directores financieros (CFO) utilizan la desviación estándar del proyecto para calcular el 'contingency fund' o fondo de reserva. Si un proyecto tiene una desviación estándar de 5 días, se sabe que para tener una confianza alta se debe presupuestar tiempo y dinero para cubrir esa posible desviación, evitando penalizaciones contractuales por retrasos en la entrega de dashboards críticos.</p></div>
+        </article>
+        
+        <article class="subtema">
+            <h2>Cálculo de Probabilidades y el Valor Z</h2>
+
+            <h3>Historia</h3>
+            <div><p>La integración definitiva de la estadística en la gestión de proyectos ocurrió cuando se aplicó el Teorema del Límite Central a las redes PERT. Este teorema postula que la suma de variables aleatorias independientes (las duraciones de las tareas) tiende a seguir una distribución normal, independientemente de la forma de la distribución original de cada tarea. Esto permitió a los ingenieros de los años 60 y 70 empezar a hablar de 'probabilidades de éxito'. Ya no se decía 'el proyecto terminará el lunes', sino 'hay un 85% de probabilidad de terminar antes del lunes'. Este cambio de paradigma fue fundamental para la contratación gubernamental y aeroespacial, donde las cláusulas de bonificación y penalización se basan en ventanas probabilísticas de entrega.</p></div>
+
+            <h3>Descripción Formal</h3>
+            <div><p>Para determinar la probabilidad de completar un proyecto en un tiempo determinado (Td), se utiliza el valor Z (puntuación estándar). La fórmula es Z = (Td - Te_total) / σ_proyecto. Aquí, Te_total es la duración esperada de la ruta crítica y σ_proyecto es la desviación estándar de dicha ruta. En Excel, una vez calculado Z, la probabilidad se obtiene con la función: <code>=DISTR.NORM.ESTAND.N(Z; VERDADERO)</code>. La lógica algorítmica implica: 1. Sumar los Te de la ruta crítica para obtener Te_total. 2. Obtener σ_proyecto mediante la raíz de la suma de varianzas. 3. Definir la fecha objetivo Td. 4. Calcular Z. 5. Consultar la tabla de distribución normal estándar (o usar la función computacional). Si Z es 0, la probabilidad es del 50%. Si Z es positivo, la probabilidad es &gt; 50%; si es negativo, es &lt; 50%. Esto permite realizar análisis de sensibilidad sobre la viabilidad del plan.</p></div>
+
+            <div class="diagrama-box">
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg style="max-width: 80%; max-height: 350px; height: auto; width: auto;" data-width="997pt" data-height="152pt"
+ viewBox="0.00 0.00 997.18 152.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 148)">
+<title>G</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-148 993.18,-148 993.18,4 -4,4"/>
+<!-- Goal -->
+<g id="node1" class="node">
+<title>Goal</title>
+<polygon fill="#f9f9f9" stroke="black" points="145,-144 0,-144 0,-108 145,-108 145,-144"/>
+<text text-anchor="middle" x="72.5" y="-122.3" font-family="Helvetica,sans-Serif" font-size="14.00">Tiempo Objetivo (Td)</text>
+</g>
+<!-- ZCalc -->
+<g id="node4" class="node">
+<title>ZCalc</title>
+<polygon fill="#f9f9f9" stroke="black" points="376,-90 182,-90 182,-54 376,-54 376,-90"/>
+<text text-anchor="middle" x="279" y="-68.3" font-family="Helvetica,sans-Serif" font-size="14.00">Z = (Td &#45; TeSum) / SigmaProj</text>
+</g>
+<!-- Goal&#45;&gt;ZCalc -->
+<g id="edge1" class="edge">
+<title>Goal&#45;&gt;ZCalc</title>
+<path fill="none" stroke="black" d="M141.88,-107.94C160.47,-103.04 180.74,-97.68 199.83,-92.64"/>
+<polygon fill="black" stroke="black" points="200.91,-95.98 209.68,-90.04 199.12,-89.21 200.91,-95.98"/>
+</g>
+<!-- TeSum -->
+<g id="node2" class="node">
+<title>TeSum</title>
+<polygon fill="#f9f9f9" stroke="black" points="132.5,-90 12.5,-90 12.5,-54 132.5,-54 132.5,-90"/>
+<text text-anchor="middle" x="72.5" y="-68.3" font-family="Helvetica,sans-Serif" font-size="14.00">Suma Te Críticos</text>
+</g>
+<!-- TeSum&#45;&gt;ZCalc -->
+<g id="edge2" class="edge">
+<title>TeSum&#45;&gt;ZCalc</title>
+<path fill="none" stroke="black" d="M132.65,-72C144.96,-72 158.3,-72 171.73,-72"/>
+<polygon fill="black" stroke="black" points="172,-75.5 182,-72 172,-68.5 172,-75.5"/>
+</g>
+<!-- SigmaProj -->
+<g id="node3" class="node">
+<title>SigmaProj</title>
+<polygon fill="#f9f9f9" stroke="black" points="139.5,-36 5.5,-36 5.5,0 139.5,0 139.5,-36"/>
+<text text-anchor="middle" x="72.5" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">Sigma del Proyecto</text>
+</g>
+<!-- SigmaProj&#45;&gt;ZCalc -->
+<g id="edge3" class="edge">
+<title>SigmaProj&#45;&gt;ZCalc</title>
+<path fill="none" stroke="black" d="M139.61,-35.46C158.78,-40.52 179.89,-46.09 199.73,-51.33"/>
+<polygon fill="black" stroke="black" points="199.09,-54.78 209.66,-53.95 200.88,-48.02 199.09,-54.78"/>
+</g>
+<!-- Prob -->
+<g id="node5" class="node">
+<title>Prob</title>
+<polygon fill="#f9f9f9" stroke="black" points="547,-90 413,-90 413,-54 547,-54 547,-90"/>
+<text text-anchor="middle" x="480" y="-68.3" font-family="Helvetica,sans-Serif" font-size="14.00">Probabilidad = N(Z)</text>
+</g>
+<!-- ZCalc&#45;&gt;Prob -->
+<g id="edge4" class="edge">
+<title>ZCalc&#45;&gt;Prob</title>
+<path fill="none" stroke="black" d="M376,-72C385,-72 394.04,-72 402.83,-72"/>
+<polygon fill="black" stroke="black" points="403,-75.5 413,-72 403,-68.5 403,-75.5"/>
+</g>
+<!-- Decision -->
+<g id="node6" class="node">
+<title>Decision</title>
+<polygon fill="#f9f9f9" stroke="black" points="679.59,-90 583.91,-72 679.59,-54 775.28,-72 679.59,-90"/>
+<text text-anchor="middle" x="679.59" y="-68.3" font-family="Helvetica,sans-Serif" font-size="14.00">¿Prob &gt; 90%?</text>
+</g>
+<!-- Prob&#45;&gt;Decision -->
+<g id="edge5" class="edge">
+<title>Prob&#45;&gt;Decision</title>
+<path fill="none" stroke="black" d="M547.07,-72C555.63,-72 564.56,-72 573.55,-72"/>
+<polygon fill="black" stroke="black" points="573.73,-75.5 583.73,-72 573.73,-68.5 573.73,-75.5"/>
+</g>
+<!-- Safe -->
+<g id="node7" class="node">
+<title>Safe</title>
+<polygon fill="#ccffcc" stroke="black" points="955.68,-117 864.68,-117 864.68,-81 955.68,-81 955.68,-117"/>
+<text text-anchor="middle" x="910.18" y="-95.3" font-family="Helvetica,sans-Serif" font-size="14.00">Plan Seguro</text>
+</g>
+<!-- Decision&#45;&gt;Safe -->
+<g id="edge6" class="edge">
+<title>Decision&#45;&gt;Safe</title>
+<path fill="none" stroke="black" d="M738.87,-78.88C774.38,-83.08 819.49,-88.41 854.36,-92.52"/>
+<polygon fill="black" stroke="black" points="854.02,-96.01 864.36,-93.71 854.84,-89.06 854.02,-96.01"/>
+<text text-anchor="middle" x="803.18" y="-90.8" font-family="Times,serif" font-size="14.00">SÍ</text>
+</g>
+<!-- Risk -->
+<g id="node8" class="node">
+<title>Risk</title>
+<polygon fill="#ffffcc" stroke="black" points="989.18,-63 831.18,-63 831.18,-27 989.18,-27 989.18,-63"/>
+<text text-anchor="middle" x="910.18" y="-41.3" font-family="Helvetica,sans-Serif" font-size="14.00">Plan Riesgoso (Ajustar)</text>
+</g>
+<!-- Decision&#45;&gt;Risk -->
+<g id="edge7" class="edge">
+<title>Decision&#45;&gt;Risk</title>
+<path fill="none" stroke="black" d="M738.87,-65.12C763.84,-62.17 793.56,-58.66 821.13,-55.4"/>
+<polygon fill="black" stroke="black" points="821.65,-58.86 831.17,-54.21 820.83,-51.91 821.65,-58.86"/>
+<text text-anchor="middle" x="803.18" y="-61.8" font-family="Times,serif" font-size="14.00">NO</text>
+</g>
+</g>
+</svg>
+
+            </div>
+            <p style="font-size:0.8em; color:#999; text-align:center; margin-top:-20px; margin-bottom:30px;">
+                <em>Figura: Diagrama generado automáticamente mediante Graphviz</em>
+            </p>
+
+            <h3>Intuición</h3>
+            <div><p>El valor Z es como una traducción. Traduce los días de retraso o adelanto a unidades de 'riesgo' (desviaciones estándar). Si el jefe te pregunta: '¿Qué probabilidad hay de entregar en 100 días?', y tu cálculo PERT dice que el promedio es 95 días con una desviación de 2.5 días, tu Z sería 2. Esto significa que estás pidiendo un margen de dos desviaciones estándar. En el lenguaje de la campana de Gauss, eso te da casi un 98% de seguridad. El valor Z te permite decir con propiedad científica qué tan arriesgada es una promesa de entrega. Es la herramienta definitiva para negociar plazos con clientes o superiores, sustituyendo las opiniones por evidencia estadística.</p></div>
+
+            <h3>Aplicación</h3>
+            <div><p>En la implementación de sistemas de Big Data, como un Data Lakehouse, los plazos suelen ser rígidos debido a integraciones con otros sistemas. Un ingeniero utiliza el cálculo de Z para responder a la pregunta: '¿Podemos llegar al Black Friday?'. Si el cálculo arroja una probabilidad del 30%, el ingeniero tiene una base matemática para solicitar más personal o reducir el alcance (scope) del proyecto. Profesionalmente, se utiliza para el 'Escalamiento de Riesgos'. Si la probabilidad de éxito baja de un umbral (ej. 70%), se activan automáticamente planes de mitigación. Es el corazón de la gobernanza de proyectos moderna basada en datos.</p></div>
+        </article>
+        </body></html>

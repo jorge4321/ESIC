@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>20 - Gestión de Costes - La Línea Base de Coste y Cálculo de Desviaciones.</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #f4f4f9; color: #333; margin: 0; padding: 20px; line-height: 1.6; position: relative; }
+        header { background: #2c3e50; color: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; text-align:center; }
+        h1 { margin: 0; font-size: 1.5rem; }
+
+        /* Estilo del botón Atrás */
+        .btn-atras {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #7f8c8d;
+            color: white;
+            padding: 8px 15px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            transition: background 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+        .btn-atras:hover { background: #95a5a6; }
+
+        .subtema {
+            background: white;
+            padding: 40px;
+            margin-bottom: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        h2 { color: #2980b9; border-bottom: 2px solid #eee; padding-bottom: 10px; margin-top: 0; }
+        h3 { color: #7f8c8d; font-size: 0.9em; text-transform: uppercase; margin-top: 30px; letter-spacing: 1px; border-left: 3px solid #d4af37; padding-left: 10px; }
+
+        .diagrama-box {
+            text-align: center;
+            margin: 30px 0;
+            padding: 20px;
+            background: #fafafa;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 150px;
+        }
+
+        p { margin-bottom: 1rem; }
+        strong { color: #2c3e50; font-weight: 600; }
+        code { background: #f0f0f0; padding: 2px 5px; border-radius: 3px; font-family: monospace; color: #c0392b; }
+        ul { padding-left: 20px; }
+        li { margin-bottom: 0.5rem; }
+    </style>
+</head>
+<body>
+    <button onclick="window.history.back()" class="btn-atras">Atrás</button>
+    <header><h1>20 - Gestión de Costes - La Línea Base de Coste y Cálculo de Desviaciones.</h1></header>
+    <main>
+
+        <article class="subtema">
+            <h2>Definición y Construcción de la Línea Base de Coste (S-Curve)</h2>
+
+            <h3>Historia</h3>
+            <div><p>Históricamente, la gestión de costes evolucionó de la contabilidad tradicional por partida doble hacia la gestión de proyectos científica a principios del siglo XX. Con el surgimiento del Método de la Ruta Crítica (CPM) y PERT en los años 50, se hizo evidente que el dinero no se gasta de forma lineal, sino que sigue una distribución vinculada al esfuerzo temporal. La 'Línea Base de Coste' nació como una respuesta a la necesidad de las organizaciones de tener una referencia estática (frozen) para comparar el progreso real. Con la llegada de la era de los datos, esta línea base pasó de ser un simple documento en papel a ser un modelo dinámico alimentado por bases de datos relacionales, permitiendo a los ingenieros modelar no solo el presupuesto total, sino su distribución temporal acumulada, conocida hoy universalmente como la 'Curva en S' debido a su forma característica de inicio lento, aceleración media y cierre asintótico.</p></div>
+
+            <h3>Descripción Formal</h3>
+            <div><p>La Línea Base de Coste es la versión aprobada del presupuesto del proyecto, que incluye la reserva de contingencia pero excluye la reserva de gestión. Matemáticamente, se representa como la suma acumulada del Valor Planificado (PV) en el tiempo: PV_cum(t) = Σ PV_i para todo i hasta el tiempo t. En un entorno de Business Analytics, la lógica algorítmica implica un proceso de 'Cost Aggregation'. El algoritmo recorre la Estructura de Desglose del Trabajo (EDT), suma los costes de los paquetes de trabajo y distribuye dichos costes según el cronograma. En Excel, para construir una línea base a partir de una tabla de gastos, se utilizaría la sintaxis: <code>=SUMIFS(Rango_Costes; Rango_Fechas; "&lt;="&amp;Fecha_Corte)</code>. Este cálculo permite generar la serie de datos para el eje Y de la Curva S. La lógica de programación para una integración de datos requeriría un bucle que itere sobre los periodos contables: <code>for t in timeline: baseline[t] = sum(activity.cost for activity in activities if activity.start &lt;= t)</code>. Es fundamental que la línea base sea inmutable una vez aprobada para garantizar la integridad del análisis de desviaciones posterior.</p></div>
+
+            <div class="diagrama-box">
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg style="max-width: 80%; max-height: 350px; height: auto; width: auto;" data-width="952pt" data-height="98pt"
+ viewBox="0.00 0.00 952.00 98.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 94)">
+<title>G</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-94 948,-94 948,4 -4,4"/>
+<!-- S1 -->
+<g id="node1" class="node">
+<title>S1</title>
+<polygon fill="#f9f9f9" stroke="black" points="164,-90 0,-90 0,-54 164,-54 164,-90"/>
+<text text-anchor="middle" x="82" y="-68.3" font-family="Helvetica,sans-Serif" font-size="14.00">Estimación por Actividad</text>
+</g>
+<!-- S2 -->
+<g id="node2" class="node">
+<title>S2</title>
+<polygon fill="#f9f9f9" stroke="black" points="400,-90 200,-90 200,-54 400,-54 400,-90"/>
+<text text-anchor="middle" x="300" y="-68.3" font-family="Helvetica,sans-Serif" font-size="14.00">Suma de Paquetes de Trabajo</text>
+</g>
+<!-- S1&#45;&gt;S2 -->
+<g id="edge1" class="edge">
+<title>S1&#45;&gt;S2</title>
+<path fill="none" stroke="black" d="M164.04,-72C172.48,-72 181.14,-72 189.82,-72"/>
+<polygon fill="black" stroke="black" points="190,-75.5 200,-72 190,-68.5 190,-75.5"/>
+</g>
+<!-- S3 -->
+<g id="node3" class="node">
+<title>S3</title>
+<polygon fill="#f9f9f9" stroke="black" points="604,-90 436,-90 436,-54 604,-54 604,-90"/>
+<text text-anchor="middle" x="520" y="-68.3" font-family="Helvetica,sans-Serif" font-size="14.00">Reserva de Contingencia</text>
+</g>
+<!-- S2&#45;&gt;S3 -->
+<g id="edge2" class="edge">
+<title>S2&#45;&gt;S3</title>
+<path fill="none" stroke="black" d="M400.11,-72C408.59,-72 417.15,-72 425.58,-72"/>
+<polygon fill="black" stroke="black" points="425.78,-75.5 435.78,-72 425.78,-68.5 425.78,-75.5"/>
+</g>
+<!-- S4 -->
+<g id="node4" class="node">
+<title>S4</title>
+<polygon fill="#f9f9f9" stroke="black" points="783,-90 640,-90 640,-54 783,-54 783,-90"/>
+<text text-anchor="middle" x="711.5" y="-68.3" font-family="Helvetica,sans-Serif" font-size="14.00">Línea Base de Coste</text>
+</g>
+<!-- S3&#45;&gt;S4 -->
+<g id="edge3" class="edge">
+<title>S3&#45;&gt;S4</title>
+<path fill="none" stroke="black" d="M604.12,-72C612.6,-72 621.21,-72 629.67,-72"/>
+<polygon fill="black" stroke="black" points="629.9,-75.5 639.9,-72 629.9,-68.5 629.9,-75.5"/>
+</g>
+<!-- S6 -->
+<g id="node6" class="node">
+<title>S6</title>
+<polygon fill="#f9f9f9" stroke="black" points="944,-63 819,-63 819,-27 944,-27 944,-63"/>
+<text text-anchor="middle" x="881.5" y="-41.3" font-family="Helvetica,sans-Serif" font-size="14.00">Presupuesto Total</text>
+</g>
+<!-- S4&#45;&gt;S6 -->
+<g id="edge4" class="edge">
+<title>S4&#45;&gt;S6</title>
+<path fill="none" stroke="black" d="M783.26,-60.63C791.77,-59.26 800.46,-57.86 808.98,-56.49"/>
+<polygon fill="black" stroke="black" points="809.56,-59.95 818.88,-54.9 808.45,-53.03 809.56,-59.95"/>
+</g>
+<!-- S5 -->
+<g id="node5" class="node">
+<title>S5</title>
+<polygon fill="#f9f9f9" stroke="black" points="780,-36 643,-36 643,0 780,0 780,-36"/>
+<text text-anchor="middle" x="711.5" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">Reserva de Gestión</text>
+</g>
+<!-- S5&#45;&gt;S6 -->
+<g id="edge5" class="edge">
+<title>S5&#45;&gt;S6</title>
+<path fill="none" stroke="black" d="M780.35,-28.9C789.71,-30.41 799.35,-31.96 808.78,-33.47"/>
+<polygon fill="black" stroke="black" points="808.48,-36.97 818.91,-35.1 809.59,-30.06 808.48,-36.97"/>
+</g>
+</g>
+</svg>
+
+            </div>
+            <p style="font-size:0.8em; color:#999; text-align:center; margin-top:-20px; margin-bottom:30px;">
+                <em>Figura: Diagrama generado automáticamente mediante Graphviz</em>
+            </p>
+
+            <h3>Intuición</h3>
+            <div><p>Imagina que estás planeando un viaje por carretera de 10 días con un presupuesto de 1000 euros. No gastarás 100 euros exactamente cada día; quizás el primer día gastes más en combustible y el quinto día más en alojamiento. La línea base es tu 'plan maestro' que dice exactamente cuánto deberías haber gastado en total al final de cada día específico. Si el día 3 tu plan dice que deberías haber gastado 300 euros, ese número es tu punto de referencia. Sin este plan temporal, podrías llegar al día 5 con 500 euros y pensar que vas bien, cuando en realidad las actividades más caras aún no han comenzado. La línea base nos da el contexto temporal necesario para entender si el ritmo de gasto es saludable o si estamos ante un riesgo inminente de quiebra presupuestaria antes de terminar el proyecto.</p></div>
+
+            <h3>Aplicación</h3>
+            <div><p>En la ingeniería de datos, un arquitecto utiliza la línea base para gestionar los costes de consumo de servicios en la nube (AWS/Azure). Al desplegar un nuevo Data Lake, el coste no es constante; hay picos durante la ingesta inicial de datos históricos y valles durante el mantenimiento. Un ingeniero de datos profesional establece una línea base de costes operativos (OPEX) para comparar el gasto real de los buckets de S3 y las instancias de computación contra lo presupuestado. Si el consumo de tokens en una API de Inteligencia Artificial supera la línea base en el segundo mes, el ingeniero puede identificar si se debe a una ineficiencia en el código o a un volumen de datos mayor al esperado, permitiendo tomar decisiones de escalado o refactorización antes de agotar el presupuesto anual.</p></div>
+        </article>
+        
+        <article class="subtema">
+            <h2>Gestión del Valor Ganado (EVM) y Métricas de Desempeño</h2>
+
+            <h3>Historia</h3>
+            <div><p>La Gestión del Valor Ganado (Earned Value Management) tiene su origen en las fábricas de Estados Unidos a finales del siglo XIX, pero fue formalizada por el Departamento de Defensa en 1967 a través de los criterios C/SCSC. El problema que resolvía era crítico: los informes financieros tradicionales solo mostraban lo que se había gastado (AC) frente al presupuesto total, pero no cuánto trabajo real se había completado por ese dinero. Durante la revolución del Big Data en la última década, EVM se ha integrado con herramientas de BI (Business Intelligence), permitiendo la monitorización en tiempo real de proyectos complejos mediante la conexión directa a repositorios de código (GitHub) y sistemas de gestión de tareas (Jira), transformando una métrica administrativa en un indicador de rendimiento técnico automatizado.</p></div>
+
+            <h3>Descripción Formal</h3>
+            <div><p>El EVM se basa en tres métricas fundamentales: 1. Valor Planificado (PV): El coste presupuestado del trabajo programado. 2. Valor Ganado (EV): El valor presupuestado del trabajo realmente realizado (EV = BAC * %físico completado). 3. Coste Actual (AC): El coste real incurrido. La lógica algorítmica para calcular el EV en un entorno de analítica de negocio requiere un mapeo entre el estado de las tareas y su presupuesto asignado. En Excel, si tenemos una columna de 'Estado' y otra de 'Presupuesto', la sintaxis sería: <code>=SUMIFS(Presupuesto_Col; Estado_Col; "Completado")</code>. Si se usa un avance porcentual: <code>=SUMAPRODUCTO(Presupuesto_Rango; Porcentaje_Completado_Rango)</code>. El algoritmo de control de gestión debe validar que el % de completitud sea una métrica objetiva (ej. hitos alcanzados) y no una estimación subjetiva del desarrollador para evitar el 'síndrome del 90% terminado'.</p></div>
+
+            <div class="diagrama-box">
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg style="max-width: 80%; max-height: 350px; height: auto; width: auto;" data-width="430pt" data-height="291pt"
+ viewBox="0.00 0.00 429.50 291.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 287)">
+<title>G</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-287 425.5,-287 425.5,4 -4,4"/>
+<!-- Start -->
+<g id="node1" class="node">
+<title>Start</title>
+<polygon fill="#f9f9f9" stroke="black" points="364.5,-283 228.5,-283 228.5,-247 364.5,-247 364.5,-283"/>
+<text text-anchor="middle" x="296.5" y="-261.3" font-family="Helvetica,sans-Serif" font-size="14.00">Cálculo de Métricas</text>
+</g>
+<!-- CheckEV -->
+<g id="node2" class="node">
+<title>CheckEV</title>
+<polygon fill="#f9f9f9" stroke="black" points="296.5,-210 219.08,-192 296.5,-174 373.92,-192 296.5,-210"/>
+<text text-anchor="middle" x="296.5" y="-188.3" font-family="Helvetica,sans-Serif" font-size="14.00">¿EV &lt; PV?</text>
+</g>
+<!-- Start&#45;&gt;CheckEV -->
+<g id="edge1" class="edge">
+<title>Start&#45;&gt;CheckEV</title>
+<path fill="none" stroke="black" d="M296.5,-246.81C296.5,-238.79 296.5,-229.05 296.5,-220.07"/>
+<polygon fill="black" stroke="black" points="300,-220.03 296.5,-210.03 293,-220.03 300,-220.03"/>
+</g>
+<!-- OverBudget -->
+<g id="node3" class="node">
+<title>OverBudget</title>
+<polygon fill="#f9f9f9" stroke="black" points="164.5,-123 87.08,-105 164.5,-87 241.92,-105 164.5,-123"/>
+<text text-anchor="middle" x="164.5" y="-101.3" font-family="Helvetica,sans-Serif" font-size="14.00">¿EV &lt; AC?</text>
+</g>
+<!-- CheckEV&#45;&gt;OverBudget -->
+<g id="edge3" class="edge">
+<title>CheckEV&#45;&gt;OverBudget</title>
+<path fill="none" stroke="black" d="M277.02,-178.46C254.7,-164.08 217.92,-140.4 192.52,-124.05"/>
+<polygon fill="black" stroke="black" points="194.36,-121.06 184.06,-118.59 190.57,-126.95 194.36,-121.06"/>
+<text text-anchor="middle" x="248.5" y="-144.8" font-family="Times,serif" font-size="14.00">NO</text>
+</g>
+<!-- Slow -->
+<g id="node4" class="node">
+<title>Slow</title>
+<polygon fill="#f9f9f9" stroke="black" points="421.5,-123 259.5,-123 259.5,-87 421.5,-87 421.5,-123"/>
+<text text-anchor="middle" x="340.5" y="-101.3" font-family="Helvetica,sans-Serif" font-size="14.00">Retraso en Cronograma</text>
+</g>
+<!-- CheckEV&#45;&gt;Slow -->
+<g id="edge2" class="edge">
+<title>CheckEV&#45;&gt;Slow</title>
+<path fill="none" stroke="black" d="M304.37,-175.8C310.65,-163.66 319.61,-146.36 327.03,-132.02"/>
+<polygon fill="black" stroke="black" points="330.15,-133.6 331.64,-123.11 323.94,-130.38 330.15,-133.6"/>
+<text text-anchor="middle" x="327" y="-144.8" font-family="Times,serif" font-size="14.00">SÍ</text>
+</g>
+<!-- Inefficient -->
+<g id="node5" class="node">
+<title>Inefficient</title>
+<polygon fill="#f9f9f9" stroke="black" points="165,-36 0,-36 0,0 165,0 165,-36"/>
+<text text-anchor="middle" x="82.5" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">Sobrecoste (Ineficiencia)</text>
+</g>
+<!-- OverBudget&#45;&gt;Inefficient -->
+<g id="edge4" class="edge">
+<title>OverBudget&#45;&gt;Inefficient</title>
+<path fill="none" stroke="black" d="M150.96,-89.96C138.87,-77.44 120.9,-58.8 106.4,-43.77"/>
+<polygon fill="black" stroke="black" points="108.64,-41.06 99.18,-36.29 103.6,-45.92 108.64,-41.06"/>
+<text text-anchor="middle" x="135" y="-57.8" font-family="Times,serif" font-size="14.00">SÍ</text>
+</g>
+<!-- OK -->
+<g id="node6" class="node">
+<title>OK</title>
+<polygon fill="#f9f9f9" stroke="black" points="310,-36 183,-36 183,0 310,0 310,-36"/>
+<text text-anchor="middle" x="246.5" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">Proyecto en Salud</text>
+</g>
+<!-- OverBudget&#45;&gt;OK -->
+<g id="edge5" class="edge">
+<title>OverBudget&#45;&gt;OK</title>
+<path fill="none" stroke="black" d="M178.04,-89.96C190.13,-77.44 208.1,-58.8 222.6,-43.77"/>
+<polygon fill="black" stroke="black" points="225.4,-45.92 229.82,-36.29 220.36,-41.06 225.4,-45.92"/>
+<text text-anchor="middle" x="220.5" y="-57.8" font-family="Times,serif" font-size="14.00">NO</text>
+</g>
+</g>
+</svg>
+
+            </div>
+            <p style="font-size:0.8em; color:#999; text-align:center; margin-top:-20px; margin-bottom:30px;">
+                <em>Figura: Diagrama generado automáticamente mediante Graphviz</em>
+            </p>
+
+            <h3>Intuición</h3>
+            <div><p>Piensa en construir una pared de 100 ladrillos donde cada ladrillo cuesta 1 euro y planeas poner 10 ladrillos al día. Al final del día 5, deberías haber puesto 50 ladrillos (PV = 50€). Si compruebas y solo has puesto 40 ladrillos, pero has gastado 60 euros en materiales y mano de obra, tienes un problema doble. Tu Valor Ganado (EV) es de 40€ (el valor de lo que realmente has construido), pero tu Coste Actual (AC) es de 60€. El EVM te permite ver que no solo vas lento (te faltan 10 ladrillos según el plan), sino que además estás gastando más de lo previsto por cada unidad de avance. Es la diferencia entre 'cuánto he gastado' y 'qué valor he generado con lo que he gastado'.</p></div>
+
+            <h3>Aplicación</h3>
+            <div><p>Un Lead Data Scientist aplica EVM para gestionar el desarrollo de modelos de Machine Learning. Si el presupuesto para la fase de limpieza de datos es de 20.000€ y al llegar a la fecha límite se ha gastado todo el dinero (AC = 20.000€) pero solo se han procesado el 50% de los datasets (EV = 10.000€), las métricas de valor ganado alertan inmediatamente de un sobrecoste y un retraso. Esta aplicación profesional permite al manager renegociar el alcance o asignar recursos más eficientes antes de que el proyecto sea financieramente inviable, utilizando dashboards de Power BI que comparan estas tres líneas de tiempo de forma visual para los stakeholders.</p></div>
+        </article>
+        
+        <article class="subtema">
+            <h2>Análisis de Desviaciones y Pronósticos (Variance & Forecasting)</h2>
+
+            <h3>Historia</h3>
+            <div><p>El análisis de desviaciones pasó de ser una actividad reactiva (forensics) a una predictiva con la introducción de los índices de eficiencia (CPI y SPI) en la década de los 70. Originalmente, los directores de proyecto solo informaban sobre el pasado. Sin embargo, la necesidad de predecir el coste final (Estimate at Completion - EAC) llevó al desarrollo de fórmulas estadísticas que asumen que el rendimiento pasado es un predictor del futuro. Hoy en día, en el campo de la Analítica de Negocio, estos pronósticos se enriquecen con modelos de simulación de Monte Carlo, que ejecutan miles de iteraciones para determinar la probabilidad de terminar el proyecto dentro de ciertos límites de coste, integrando la incertidumbre de los datos de mercado y la volatilidad de los recursos.</p></div>
+
+            <h3>Descripción Formal</h3>
+            <div><p>Las desviaciones se calculan como: Variación de Coste (CV = EV - AC) y Variación de Cronograma (SV = EV - PV). Los índices de eficiencia son: CPI = EV / AC y SPI = EV / PV. Un CPI &lt; 1 indica sobrecoste. Para pronósticos, el EAC se calcula comúnmente como EAC = BAC / CPI (asumiendo que el rendimiento actual continuará). En Excel, la sintaxis para alertar sobre una desviación crítica sería: <code>=IF(EV/AC &lt; 0,9; "CRÍTICO"; "CONTROLADO")</code>. Lógicamente, el algoritmo de forecasting debe manejar diferentes escenarios; por ejemplo, si la desviación fue un evento único, el cálculo cambia a EAC = AC + (BAC - EV). El uso de scripts en Python permite automatizar estas alertas: <code>if (ev / ac) &lt; threshold: send_alert("Presupuesto en riesgo")</code>. La precisión del pronóstico depende de la calidad de los datos capturados en la fase de Valor Ganado.</p></div>
+
+            <div class="diagrama-box">
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg style="max-width: 80%; max-height: 350px; height: auto; width: auto;" data-width="882pt" data-height="83pt"
+ viewBox="0.00 0.00 882.39 83.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 79)">
+<title>G</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-79 878.39,-79 878.39,4 -4,4"/>
+<!-- Input -->
+<g id="node1" class="node">
+<title>Input</title>
+<polygon fill="#f9f9f9" stroke="black" points="162,-40 0,-40 0,-4 162,-4 162,-40"/>
+<text text-anchor="middle" x="81" y="-18.3" font-family="Helvetica,sans-Serif" font-size="14.00">Datos: EV, AC, PV, BAC</text>
+</g>
+<!-- Calc -->
+<g id="node2" class="node">
+<title>Calc</title>
+<polygon fill="#f9f9f9" stroke="black" points="327,-40 199,-40 199,-4 327,-4 327,-40"/>
+<text text-anchor="middle" x="263" y="-18.3" font-family="Helvetica,sans-Serif" font-size="14.00">Calcular CPI y SPI</text>
+</g>
+<!-- Input&#45;&gt;Calc -->
+<g id="edge1" class="edge">
+<title>Input&#45;&gt;Calc</title>
+<path fill="none" stroke="black" d="M162.26,-22C171.09,-22 180.04,-22 188.78,-22"/>
+<polygon fill="black" stroke="black" points="188.91,-25.5 198.91,-22 188.91,-18.5 188.91,-25.5"/>
+</g>
+<!-- Decision -->
+<g id="node3" class="node">
+<title>Decision</title>
+<polygon fill="#f9f9f9" stroke="black" points="435.69,-40 363.81,-22 435.69,-4 507.58,-22 435.69,-40"/>
+<text text-anchor="middle" x="435.69" y="-18.3" font-family="Helvetica,sans-Serif" font-size="14.00">¿CPI &lt; 1?</text>
+</g>
+<!-- Calc&#45;&gt;Decision -->
+<g id="edge2" class="edge">
+<title>Calc&#45;&gt;Decision</title>
+<path fill="none" stroke="black" d="M327.08,-22C335.77,-22 344.8,-22 353.76,-22"/>
+<polygon fill="black" stroke="black" points="353.82,-25.5 363.82,-22 353.82,-18.5 353.82,-25.5"/>
+</g>
+<!-- Forecast -->
+<g id="node4" class="node">
+<title>Forecast</title>
+<polygon fill="#f9f9f9" stroke="black" points="678.39,-75 556.39,-75 556.39,-39 678.39,-39 678.39,-75"/>
+<text text-anchor="middle" x="617.39" y="-53.3" font-family="Helvetica,sans-Serif" font-size="14.00">EAC = BAC / CPI</text>
+</g>
+<!-- Decision&#45;&gt;Forecast -->
+<g id="edge3" class="edge">
+<title>Decision&#45;&gt;Forecast</title>
+<path fill="none" stroke="black" d="M476.57,-29.77C497.02,-33.75 522.53,-38.72 546.14,-43.32"/>
+<polygon fill="black" stroke="black" points="545.64,-46.79 556.12,-45.26 546.98,-39.91 545.64,-46.79"/>
+<text text-anchor="middle" x="531.89" y="-44.8" font-family="Times,serif" font-size="14.00">SÍ</text>
+</g>
+<!-- Report -->
+<g id="node5" class="node">
+<title>Report</title>
+<polygon fill="#f9f9f9" stroke="black" points="874.39,-36 715.39,-36 715.39,0 874.39,0 874.39,-36"/>
+<text text-anchor="middle" x="794.89" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">Informe de Desempeño</text>
+</g>
+<!-- Decision&#45;&gt;Report -->
+<g id="edge4" class="edge">
+<title>Decision&#45;&gt;Report</title>
+<path fill="none" stroke="black" d="M492.08,-18.08C512.31,-16.83 535.37,-15.61 556.39,-15 610.59,-13.42 624.17,-14.3 678.39,-15 687.06,-15.11 696.1,-15.27 705.13,-15.46"/>
+<polygon fill="black" stroke="black" points="705.23,-18.96 715.3,-15.68 705.38,-11.97 705.23,-18.96"/>
+<text text-anchor="middle" x="617.39" y="-18.8" font-family="Times,serif" font-size="14.00">NO</text>
+</g>
+<!-- Forecast&#45;&gt;Report -->
+<g id="edge5" class="edge">
+<title>Forecast&#45;&gt;Report</title>
+<path fill="none" stroke="black" d="M678.79,-43.58C687.29,-41.69 696.17,-39.72 705.06,-37.74"/>
+<polygon fill="black" stroke="black" points="706.09,-41.1 715.09,-35.51 704.57,-34.26 706.09,-41.1"/>
+</g>
+</g>
+</svg>
+
+            </div>
+            <p style="font-size:0.8em; color:#999; text-align:center; margin-top:-20px; margin-bottom:30px;">
+                <em>Figura: Diagrama generado automáticamente mediante Graphviz</em>
+            </p>
+
+            <h3>Intuición</h3>
+            <div><p>Si estás conduciendo hacia una ciudad a 100 km y después de una hora solo has recorrido 40 km gastando la mitad de tu combustible, el análisis de desviaciones te dice dos cosas: vas tarde y te quedarás sin gasolina. Los índices (CPI y SPI) son como el velocímetro y el medidor de consumo. Si tu CPI es 0.8, significa que por cada euro que inviertes, solo obtienes 80 céntimos de valor. El 'Forecasting' es la pregunta que te hace el GPS: 'Basado en cómo estás conduciendo ahora, ¿a qué hora llegarás y cuánto te costará el viaje completo?'. No se trata solo de saber que estás mal ahora, sino de predecir el desastre futuro para corregir el rumbo hoy.</p></div>
+
+            <h3>Aplicación</h3>
+            <div><p>En el despliegue de infraestructura crítica de datos o centros de cómputo, el análisis de desviaciones permite realizar ajustes de 'Change Management'. Si el CPI cae por debajo de 0.85 de forma sostenida durante tres semanas, un ingeniero de gestión de proyectos de datos debe activar un plan de mitigación. Por ejemplo, si el sobrecoste se debe a licencias de software mal calculadas, el pronóstico (EAC) mostrará el impacto total al final del año, permitiendo a la dirección financiera decidir si se cancelan módulos no críticos del proyecto o se solicita una ampliación de capital basada en datos objetivos y no en meras suposiciones.</p></div>
+        </article>
+        </body></html>

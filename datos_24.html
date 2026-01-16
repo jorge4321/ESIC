@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>24 - Gestión de Riesgos II - Seguimiento de Riesgos y Modelos de Fiabilidad en Datos.</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #f4f4f9; color: #333; margin: 0; padding: 20px; line-height: 1.6; position: relative; }
+        header { background: #2c3e50; color: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; text-align:center; }
+        h1 { margin: 0; font-size: 1.5rem; }
+
+        /* Estilo del botón Atrás */
+        .btn-atras {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #7f8c8d;
+            color: white;
+            padding: 8px 15px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            transition: background 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+        .btn-atras:hover { background: #95a5a6; }
+
+        .subtema {
+            background: white;
+            padding: 40px;
+            margin-bottom: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        h2 { color: #2980b9; border-bottom: 2px solid #eee; padding-bottom: 10px; margin-top: 0; }
+        h3 { color: #7f8c8d; font-size: 0.9em; text-transform: uppercase; margin-top: 30px; letter-spacing: 1px; border-left: 3px solid #d4af37; padding-left: 10px; }
+
+        .diagrama-box {
+            text-align: center;
+            margin: 30px 0;
+            padding: 20px;
+            background: #fafafa;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 150px;
+        }
+
+        p { margin-bottom: 1rem; }
+        strong { color: #2c3e50; font-weight: 600; }
+        code { background: #f0f0f0; padding: 2px 5px; border-radius: 3px; font-family: monospace; color: #c0392b; }
+        ul { padding-left: 20px; }
+        li { margin-bottom: 0.5rem; }
+    </style>
+</head>
+<body>
+    <button onclick="window.history.back()" class="btn-atras">Atrás</button>
+    <header><h1>24 - Gestión de Riesgos II - Seguimiento de Riesgos y Modelos de Fiabilidad en Datos.</h1></header>
+    <main>
+
+        <article class="subtema">
+            <h2>Implementación de KRIs (Key Risk Indicators) y Tableros de Control de Salud de Datos</h2>
+
+            <h3>Historia</h3>
+            <div><p>La evolución del seguimiento de riesgos ha pasado de auditorías manuales estáticas a sistemas de monitoreo en tiempo real. En la década de 1990, la gestión de riesgos se basaba principalmente en revisiones retrospectivas trimestrales. Con el auge del Big Data a mediados de 2010, surgió la necesidad de automatizar la detección de desviaciones. Los Key Risk Indicators (KRIs) evolucionaron de los KPIs de negocio para enfocarse específicamente en los puntos de falla potenciales de un sistema. El concepto de 'Observabilidad de Datos' ha transformado el seguimiento de riesgos en un proceso proactivo, integrando alertas que se disparan antes de que el impacto sea crítico, permitiendo a los ingenieros de datos intervenir en canalizaciones de ETL mucho antes de que los reportes lleguen a los tomadores de decisiones, marcando el fin de la era de la gestión reactiva.</p></div>
+
+            <h3>Descripción Formal</h3>
+            <div><p>El seguimiento de riesgos se formaliza mediante el establecimiento de umbrales cuantitativos sobre métricas de calidad y rendimiento. Un KRI efectivo debe ser medible, comparable y predictivo. En Excel, el monitoreo básico se realiza mediante el uso de funciones de agregación y lógica condicional para detectar anomalías. Por ejemplo, para monitorear la desviación de la integridad de datos: <code>=SI(CONTAR.BLANCO(A2:A1000)/CONTARA(A2:A1000) &gt; 0.05; "RIESGO ALTO"; "RIESGO BAJO")</code>. Algorítmicamente, el seguimiento implica una lógica de bucle continuo: 1. Ingesta de telemetría de datos; 2. Comparación contra el Baseline (Línea base); 3. Evaluación de la función de disparo: f(x) = {1 si x &gt; θ, 0 si x ≤ θ}, donde θ es el umbral de tolerancia. En entornos avanzados, se utilizan modelos de Z-Score para identificar outliers: <code>=NORMALIZAR(Valor; PROMEDIO(Rango); DESVEST.P(Rango))</code>. Si el valor absoluto del Z-Score supera 3, el sistema de seguimiento debe registrar un incidente de riesgo en el log de control de calidad, disparando una notificación automática vía API a herramientas como Jira o Slack.</p></div>
+
+            <div class="diagrama-box">
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg style="max-width: 80%; max-height: 350px; height: auto; width: auto;" data-width="257pt" data-height="423pt"
+ viewBox="0.00 0.00 256.50 423.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 419)">
+<title>G</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-419 252.5,-419 252.5,4 -4,4"/>
+<!-- Ingesta de Datos -->
+<g id="node1" class="node">
+<title>Ingesta de Datos</title>
+<polygon fill="#f9f9f9" stroke="black" points="218.5,-415 99.5,-415 99.5,-379 218.5,-379 218.5,-415"/>
+<text text-anchor="middle" x="159" y="-393.3" font-family="Helvetica,sans-Serif" font-size="14.00">Ingesta de Datos</text>
+</g>
+<!-- Calcular KRI -->
+<g id="node2" class="node">
+<title>Calcular KRI</title>
+<polygon fill="#f9f9f9" stroke="black" points="164,-342 72,-342 72,-306 164,-306 164,-342"/>
+<text text-anchor="middle" x="118" y="-320.3" font-family="Helvetica,sans-Serif" font-size="14.00">Calcular KRI</text>
+</g>
+<!-- Ingesta de Datos&#45;&gt;Calcular KRI -->
+<g id="edge1" class="edge">
+<title>Ingesta de Datos&#45;&gt;Calcular KRI</title>
+<path fill="none" stroke="black" d="M149.08,-378.81C144.24,-370.44 138.33,-360.2 132.96,-350.9"/>
+<polygon fill="black" stroke="black" points="135.87,-348.94 127.83,-342.03 129.8,-352.44 135.87,-348.94"/>
+</g>
+<!-- ¿Supera Umbral? -->
+<g id="node3" class="node">
+<title>¿Supera Umbral?</title>
+<polygon fill="#f9f9f9" stroke="black" points="168,-269 44,-269 44,-233 168,-233 168,-269"/>
+<text text-anchor="middle" x="106" y="-247.3" font-family="Helvetica,sans-Serif" font-size="14.00">¿Supera Umbral?</text>
+</g>
+<!-- Calcular KRI&#45;&gt;¿Supera Umbral? -->
+<g id="edge2" class="edge">
+<title>Calcular KRI&#45;&gt;¿Supera Umbral?</title>
+<path fill="none" stroke="black" d="M115.1,-305.81C113.74,-297.79 112.09,-288.05 110.58,-279.07"/>
+<polygon fill="black" stroke="black" points="114,-278.31 108.88,-269.03 107.09,-279.47 114,-278.31"/>
+</g>
+<!-- Disparar Alerta -->
+<g id="node4" class="node">
+<title>Disparar Alerta</title>
+<polygon fill="#f9f9f9" stroke="black" points="125,-182 19,-182 19,-146 125,-146 125,-182"/>
+<text text-anchor="middle" x="72" y="-160.3" font-family="Helvetica,sans-Serif" font-size="14.00">Disparar Alerta</text>
+</g>
+<!-- ¿Supera Umbral?&#45;&gt;Disparar Alerta -->
+<g id="edge3" class="edge">
+<title>¿Supera Umbral?&#45;&gt;Disparar Alerta</title>
+<path fill="none" stroke="black" d="M99.12,-232.8C94.42,-221.05 88.1,-205.24 82.74,-191.84"/>
+<polygon fill="black" stroke="black" points="85.83,-190.16 78.87,-182.18 79.33,-192.76 85.83,-190.16"/>
+<text text-anchor="middle" x="98.5" y="-203.8" font-family="Times,serif" font-size="14.00">SÍ</text>
+</g>
+<!-- Log de Control -->
+<g id="node5" class="node">
+<title>Log de Control</title>
+<polygon fill="#f9f9f9" stroke="black" points="248.5,-182 143.5,-182 143.5,-146 248.5,-146 248.5,-182"/>
+<text text-anchor="middle" x="196" y="-160.3" font-family="Helvetica,sans-Serif" font-size="14.00">Log de Control</text>
+</g>
+<!-- ¿Supera Umbral?&#45;&gt;Log de Control -->
+<g id="edge4" class="edge">
+<title>¿Supera Umbral?&#45;&gt;Log de Control</title>
+<path fill="none" stroke="black" d="M124.21,-232.8C137.51,-220.24 155.71,-203.05 170.46,-189.12"/>
+<polygon fill="black" stroke="black" points="172.95,-191.59 177.81,-182.18 168.14,-186.5 172.95,-191.59"/>
+<text text-anchor="middle" x="167" y="-203.8" font-family="Times,serif" font-size="14.00">NO</text>
+</g>
+<!-- Plan de Mitigación -->
+<g id="node6" class="node">
+<title>Plan de Mitigación</title>
+<polygon fill="#f9f9f9" stroke="black" points="136,-109 8,-109 8,-73 136,-73 136,-109"/>
+<text text-anchor="middle" x="72" y="-87.3" font-family="Helvetica,sans-Serif" font-size="14.00">Plan de Mitigación</text>
+</g>
+<!-- Disparar Alerta&#45;&gt;Plan de Mitigación -->
+<g id="edge5" class="edge">
+<title>Disparar Alerta&#45;&gt;Plan de Mitigación</title>
+<path fill="none" stroke="black" d="M72,-145.81C72,-137.79 72,-128.05 72,-119.07"/>
+<polygon fill="black" stroke="black" points="75.5,-119.03 72,-109.03 68.5,-119.03 75.5,-119.03"/>
+</g>
+<!-- Log de Control&#45;&gt;Ingesta de Datos -->
+<g id="edge6" class="edge">
+<title>Log de Control&#45;&gt;Ingesta de Datos</title>
+<path fill="none" stroke="black" d="M194.48,-182.2C191.52,-213.97 184.26,-283.9 173,-342 171.3,-350.79 169,-360.27 166.76,-368.8"/>
+<polygon fill="black" stroke="black" points="163.33,-368.05 164.09,-378.62 170.09,-369.88 163.33,-368.05"/>
+</g>
+<!-- Revisión Post&#45;Acción -->
+<g id="node7" class="node">
+<title>Revisión Post&#45;Acción</title>
+<polygon fill="#f9f9f9" stroke="black" points="144,-36 0,-36 0,0 144,0 144,-36"/>
+<text text-anchor="middle" x="72" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">Revisión Post&#45;Acción</text>
+</g>
+<!-- Plan de Mitigación&#45;&gt;Revisión Post&#45;Acción -->
+<g id="edge7" class="edge">
+<title>Plan de Mitigación&#45;&gt;Revisión Post&#45;Acción</title>
+<path fill="none" stroke="black" d="M72,-72.81C72,-64.79 72,-55.05 72,-46.07"/>
+<polygon fill="black" stroke="black" points="75.5,-46.03 72,-36.03 68.5,-46.03 75.5,-46.03"/>
+</g>
+</g>
+</svg>
+
+            </div>
+            <p style="font-size:0.8em; color:#999; text-align:center; margin-top:-20px; margin-bottom:30px;">
+                <em>Figura: Diagrama generado automáticamente mediante Graphviz</em>
+            </p>
+
+            <h3>Intuición</h3>
+            <div><p>Imagina que eres el piloto de un avión comercial. No esperas a que el avión toque el suelo para saber si algo va mal; miras los diales que te indican la presión del aceite, la temperatura de los motores y el nivel de combustible. En la gestión de datos, los KRIs son esos diales. No nos dicen qué tan rápido vamos (eso es un KPI), nos dicen qué tan cerca estamos de un fallo catastrófico. El seguimiento de riesgos consiste en mirar constantemente estos diales para detectar tendencias. Si la temperatura del motor sube un grado cada minuto, aunque esté en rango 'verde', la tendencia indica que eventualmente habrá un incendio. El seguimiento no busca solo el error actual, sino la trayectoria hacia el error futuro, permitiendo correcciones de rumbo mínimas que evitan desastres mayores.</p></div>
+
+            <h3>Aplicación</h3>
+            <div><p>En el sector bancario, los ingenieros de datos utilizan KRIs para monitorear la latencia de las transacciones de fraude. Si el tiempo de procesamiento de un modelo de Machine Learning sube de 200ms a 500ms, el riesgo de que una transacción fraudulenta sea aprobada antes del bloqueo aumenta exponencialmente. Otro caso real es el monitoreo de 'Data Drift' (desviación de datos). Un ingeniero configura un seguimiento de riesgo que compara la distribución estadística de los datos de entrada semanales contra los datos de entrenamiento del modelo. Si la prueba de Kolmogorov-Smirnov indica una desviación significativa, el sistema marca un riesgo de degradación del modelo, obligando a un re-entrenamiento antes de que las predicciones erróneas afecten los ingresos de la compañía.</p></div>
+        </article>
+        
+        <article class="subtema">
+            <h2>Modelos de Fiabilidad: Análisis de MTBF y MTTR en Infraestructuras de Datos</h2>
+
+            <h3>Historia</h3>
+            <div><p>La ingeniería de fiabilidad tiene sus raíces en la Segunda Guerra Mundial, donde se necesitaba predecir la falla de componentes electrónicos en radares. Con la transición a la computación en la nube, estos conceptos se adaptaron a los sistemas de información. El MTBF (Mean Time Between Failures) y el MTTR (Mean Time To Repair) se convirtieron en el estándar de oro para medir la resiliencia de los sistemas distribuidos. En el contexto de datos, esto pasó de aplicarse a hardware físico (discos duros) a aplicarse a servicios lógicos y flujos de datos. La adopción de la metodología SRE (Site Reliability Engineering) por Google a principios de los 2000 formalizó estos modelos, permitiendo a los gestores de proyectos de datos cuantificar exactamente cuánta 'confianza' se puede depositar en un pipeline antes de que falle inevitablemente.</p></div>
+
+            <h3>Descripción Formal</h3>
+            <div><p>La fiabilidad R(t) se define matemáticamente como la probabilidad de que un sistema realice su función requerida bajo condiciones establecidas durante un tiempo (t). Un modelo común es la distribución exponencial: R(t) = e^(-λt), donde λ es la tasa de fallas (1/MTBF). El MTBF se calcula como: <code>Sumatoria(Tiempo de funcionamiento) / Número de fallas</code>. En Excel, si tenemos una columna de tiempos de inicio de falla y otra de resolución, el MTTR se obtiene como: <code>=PROMEDIO(Rango_Tiempo_Resolucion - Rango_Tiempo_Inicio_Falla)</code>. La disponibilidad (A) se calcula como: <code>A = MTBF / (MTBF + MTTR)</code>. Un algoritmo de seguimiento de fiabilidad debe: 1. Registrar timestamp de caída; 2. Registrar timestamp de recuperación; 3. Calcular deltas; 4. Actualizar métricas acumuladas. En un entorno de datos, esto implica que si el pipeline de procesamiento de ventas falla 3 veces en un mes con un tiempo de recuperación total de 6 horas, la disponibilidad se ve seriamente afectada, impactando los SLAs (Service Level Agreements) firmados con el negocio.</p></div>
+
+            <div class="diagrama-box">
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg style="max-width: 80%; max-height: 350px; height: auto; width: auto;" data-width="1511pt" data-height="98pt"
+ viewBox="0.00 0.00 1511.00 98.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 94)">
+<title>G</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-94 1507,-94 1507,4 -4,4"/>
+<!-- Falla de Sistema -->
+<g id="node1" class="node">
+<title>Falla de Sistema</title>
+<polygon fill="#f9f9f9" stroke="black" points="118,-63 0,-63 0,-27 118,-27 118,-63"/>
+<text text-anchor="middle" x="59" y="-41.3" font-family="Helvetica,sans-Serif" font-size="14.00">Falla de Sistema</text>
+</g>
+<!-- Detección (Incidente) -->
+<g id="node2" class="node">
+<title>Detección (Incidente)</title>
+<polygon fill="#f9f9f9" stroke="black" points="299,-63 155,-63 155,-27 299,-27 299,-63"/>
+<text text-anchor="middle" x="227" y="-41.3" font-family="Helvetica,sans-Serif" font-size="14.00">Detección (Incidente)</text>
+</g>
+<!-- Falla de Sistema&#45;&gt;Detección (Incidente) -->
+<g id="edge1" class="edge">
+<title>Falla de Sistema&#45;&gt;Detección (Incidente)</title>
+<path fill="none" stroke="black" d="M118.06,-45C126.69,-45 135.71,-45 144.71,-45"/>
+<polygon fill="black" stroke="black" points="144.83,-48.5 154.83,-45 144.83,-41.5 144.83,-48.5"/>
+</g>
+<!-- Cálculo MTTR -->
+<g id="node3" class="node">
+<title>Cálculo MTTR</title>
+<polygon fill="#f9f9f9" stroke="black" points="440,-63 336,-63 336,-27 440,-27 440,-63"/>
+<text text-anchor="middle" x="388" y="-41.3" font-family="Helvetica,sans-Serif" font-size="14.00">Cálculo MTTR</text>
+</g>
+<!-- Detección (Incidente)&#45;&gt;Cálculo MTTR -->
+<g id="edge2" class="edge">
+<title>Detección (Incidente)&#45;&gt;Cálculo MTTR</title>
+<path fill="none" stroke="black" d="M299.13,-45C308.04,-45 317.1,-45 325.84,-45"/>
+<polygon fill="black" stroke="black" points="325.94,-48.5 335.94,-45 325.94,-41.5 325.94,-48.5"/>
+</g>
+<!-- Recuperación de Servicio -->
+<g id="node4" class="node">
+<title>Recuperación de Servicio</title>
+<polygon fill="#f9f9f9" stroke="black" points="647,-63 477,-63 477,-27 647,-27 647,-63"/>
+<text text-anchor="middle" x="562" y="-41.3" font-family="Helvetica,sans-Serif" font-size="14.00">Recuperación de Servicio</text>
+</g>
+<!-- Cálculo MTTR&#45;&gt;Recuperación de Servicio -->
+<g id="edge3" class="edge">
+<title>Cálculo MTTR&#45;&gt;Recuperación de Servicio</title>
+<path fill="none" stroke="black" d="M440.14,-45C448.56,-45 457.51,-45 466.59,-45"/>
+<polygon fill="black" stroke="black" points="466.88,-48.5 476.88,-45 466.88,-41.5 466.88,-48.5"/>
+</g>
+<!-- Tiempo de Operación -->
+<g id="node5" class="node">
+<title>Tiempo de Operación</title>
+<polygon fill="#f9f9f9" stroke="black" points="832,-63 684,-63 684,-27 832,-27 832,-63"/>
+<text text-anchor="middle" x="758" y="-41.3" font-family="Helvetica,sans-Serif" font-size="14.00">Tiempo de Operación</text>
+</g>
+<!-- Recuperación de Servicio&#45;&gt;Tiempo de Operación -->
+<g id="edge4" class="edge">
+<title>Recuperación de Servicio&#45;&gt;Tiempo de Operación</title>
+<path fill="none" stroke="black" d="M647.24,-45C655.99,-45 664.88,-45 673.61,-45"/>
+<polygon fill="black" stroke="black" points="673.78,-48.5 683.78,-45 673.78,-41.5 673.78,-48.5"/>
+</g>
+<!-- Cálculo MTBF -->
+<g id="node6" class="node">
+<title>Cálculo MTBF</title>
+<polygon fill="#f9f9f9" stroke="black" points="972,-63 869,-63 869,-27 972,-27 972,-63"/>
+<text text-anchor="middle" x="920.5" y="-41.3" font-family="Helvetica,sans-Serif" font-size="14.00">Cálculo MTBF</text>
+</g>
+<!-- Tiempo de Operación&#45;&gt;Cálculo MTBF -->
+<g id="edge5" class="edge">
+<title>Tiempo de Operación&#45;&gt;Cálculo MTBF</title>
+<path fill="none" stroke="black" d="M832.2,-45C841.12,-45 850.15,-45 858.85,-45"/>
+<polygon fill="black" stroke="black" points="858.89,-48.5 868.89,-45 858.89,-41.5 858.89,-48.5"/>
+</g>
+<!-- Actualizar Disponibilidad -->
+<g id="node7" class="node">
+<title>Actualizar Disponibilidad</title>
+<polygon fill="#f9f9f9" stroke="black" points="1173,-63 1009,-63 1009,-27 1173,-27 1173,-63"/>
+<text text-anchor="middle" x="1091" y="-41.3" font-family="Helvetica,sans-Serif" font-size="14.00">Actualizar Disponibilidad</text>
+</g>
+<!-- Cálculo MTBF&#45;&gt;Actualizar Disponibilidad -->
+<g id="edge6" class="edge">
+<title>Cálculo MTBF&#45;&gt;Actualizar Disponibilidad</title>
+<path fill="none" stroke="black" d="M972.06,-45C980.6,-45 989.69,-45 998.9,-45"/>
+<polygon fill="black" stroke="black" points="998.91,-48.5 1008.91,-45 998.91,-41.5 998.91,-48.5"/>
+</g>
+<!-- ¿Cumple SLA? -->
+<g id="node8" class="node">
+<title>¿Cumple SLA?</title>
+<polygon fill="#f9f9f9" stroke="black" points="1319,-63 1210,-63 1210,-27 1319,-27 1319,-63"/>
+<text text-anchor="middle" x="1264.5" y="-41.3" font-family="Helvetica,sans-Serif" font-size="14.00">¿Cumple SLA?</text>
+</g>
+<!-- Actualizar Disponibilidad&#45;&gt;¿Cumple SLA? -->
+<g id="edge7" class="edge">
+<title>Actualizar Disponibilidad&#45;&gt;¿Cumple SLA?</title>
+<path fill="none" stroke="black" d="M1173.23,-45C1182.19,-45 1191.22,-45 1199.92,-45"/>
+<polygon fill="black" stroke="black" points="1199.96,-48.5 1209.96,-45 1199.96,-41.5 1199.96,-48.5"/>
+</g>
+<!-- Operación Normal -->
+<g id="node9" class="node">
+<title>Operación Normal</title>
+<polygon fill="#f9f9f9" stroke="black" points="1503,-90 1375,-90 1375,-54 1503,-54 1503,-90"/>
+<text text-anchor="middle" x="1439" y="-68.3" font-family="Helvetica,sans-Serif" font-size="14.00">Operación Normal</text>
+</g>
+<!-- ¿Cumple SLA?&#45;&gt;Operación Normal -->
+<g id="edge8" class="edge">
+<title>¿Cumple SLA?&#45;&gt;Operación Normal</title>
+<path fill="none" stroke="black" d="M1319.13,-53.39C1333.58,-55.66 1349.45,-58.14 1364.76,-60.54"/>
+<polygon fill="black" stroke="black" points="1364.3,-64.01 1374.72,-62.1 1365.38,-57.09 1364.3,-64.01"/>
+<text text-anchor="middle" x="1347" y="-62.8" font-family="Times,serif" font-size="14.00">SÍ</text>
+</g>
+<!-- Acción Correctiva -->
+<g id="node10" class="node">
+<title>Acción Correctiva</title>
+<polygon fill="#f9f9f9" stroke="black" points="1500,-36 1378,-36 1378,0 1500,0 1500,-36"/>
+<text text-anchor="middle" x="1439" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">Acción Correctiva</text>
+</g>
+<!-- ¿Cumple SLA?&#45;&gt;Acción Correctiva -->
+<g id="edge9" class="edge">
+<title>¿Cumple SLA?&#45;&gt;Acción Correctiva</title>
+<path fill="none" stroke="black" d="M1319.13,-36.61C1334.53,-34.19 1351.56,-31.53 1367.79,-28.99"/>
+<polygon fill="black" stroke="black" points="1368.44,-32.43 1377.78,-27.43 1367.36,-25.51 1368.44,-32.43"/>
+<text text-anchor="middle" x="1347" y="-36.8" font-family="Times,serif" font-size="14.00">NO</text>
+</g>
+</g>
+</svg>
+
+            </div>
+            <p style="font-size:0.8em; color:#999; text-align:center; margin-top:-20px; margin-bottom:30px;">
+                <em>Figura: Diagrama generado automáticamente mediante Graphviz</em>
+            </p>
+
+            <h3>Intuición</h3>
+            <div><p>La fiabilidad no es la ausencia de fallos, sino la gestión de la frecuencia y la velocidad de recuperación. Imagina una bombilla. El MTBF es cuánto tiempo dura encendida en promedio antes de fundirse. El MTTR es cuánto tardas en encontrar una escalera, comprar una bombilla nueva y cambiarla. Para un analista de datos, la fiabilidad significa saber que el dashboard estará disponible cuando el CEO lo abra a las 8:00 AM. Si el sistema falla mucho (bajo MTBF) o tardamos mucho en arreglarlo (alto MTTR), la confianza en los datos se pierde. El modelo de fiabilidad nos ayuda a decidir dónde invertir dinero: ¿compramos mejores bombillas (mejorar MTBF) o tenemos siempre una escalera y repuestos a mano (mejorar MTTR)?</p></div>
+
+            <h3>Aplicación</h3>
+            <div><p>Un Ingeniero de Datos en una plataforma de e-commerce utiliza modelos de fiabilidad para justificar la inversión en redundancia. Al calcular que el MTBF de su base de datos principal es de 500 horas y el MTTR es de 4 horas, puede demostrar que el sistema estará caído un 0.8% del tiempo, lo que equivale a pérdidas millonarias durante el Black Friday. Aplicando este modelo, decide implementar un sistema de 'failover' automático. En la práctica profesional, estos modelos permiten establecer presupuestos de error (Error Budgets): si la fiabilidad es alta, podemos permitirnos arriesgar más con nuevas funcionalidades; si es baja, debemos congelar cambios y centrarnos exclusivamente en la estabilidad de los datos.</p></div>
+        </article>
+        
+        <article class="subtema">
+            <h2>Modelado Predictivo de Riesgos mediante Simulación de Monte Carlo</h2>
+
+            <h3>Historia</h3>
+            <div><p>La simulación de Monte Carlo fue inventada por Stanislaw Ulam y John von Neumann en la década de 1940 mientras trabajaban en el Proyecto Manhattan. Buscaban resolver problemas de difusión de neutrones que eran demasiado complejos para el análisis matemático convencional. Su nombre proviene del Casino de Monte Carlo en Mónaco, debido a la naturaleza aleatoria del método. En la gestión de proyectos de datos moderna, se ha convertido en la herramienta definitiva para el seguimiento de riesgos presupuestarios y de cronograma. En lugar de dar una fecha única de entrega de un proyecto de analítica, que casi siempre es errónea, Monte Carlo permite a los gerentes modelar miles de escenarios posibles para entender la probabilidad de éxito frente a diversos riesgos e incertidumbres.</p></div>
+
+            <h3>Descripción Formal</h3>
+            <div><p>La simulación de Monte Carlo consiste en ejecutar un modelo matemático repetidamente (típicamente &gt;10,000 iteraciones) utilizando variables aleatorias de entrada que siguen distribuciones de probabilidad específicas (Normal, Lognormal, PERT, etc.). En Excel, se utiliza la función <code>=ALEATORIO()</code> para generar una probabilidad entre 0 y 1, que luego se introduce en una función de distribución inversa. Por ejemplo, para modelar el riesgo de costo de almacenamiento de un Data Lake: <code>=INV.NORM(ALEATORIO(); Media_Costo; Desv_Estandar)</code>. El algoritmo sigue estos pasos: 1. Definir el modelo determinístico (ej: Costo = Volumen * Precio); 2. Identificar variables con incertidumbre; 3. Asignar distribuciones de probabilidad; 4. Ejecutar iteraciones; 5. Analizar el histograma de resultados. La salida no es un número, sino una distribución de probabilidad que nos dice, por ejemplo, que existe un 95% de confianza (P95) de que el costo no superará X cantidad, permitiendo una provisión de riesgos basada en datos científicos.</p></div>
+
+            <div class="diagrama-box">
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg style="max-width: 80%; max-height: 350px; height: auto; width: auto;" data-width="293pt" data-height="569pt"
+ viewBox="0.00 0.00 293.00 569.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 565)">
+<title>G</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-565 289,-565 289,4 -4,4"/>
+<!-- Definir Variables de Entrada -->
+<g id="node1" class="node">
+<title>Definir Variables de Entrada</title>
+<polygon fill="#f9f9f9" stroke="black" points="281.5,-561 96.5,-561 96.5,-525 281.5,-525 281.5,-561"/>
+<text text-anchor="middle" x="189" y="-539.3" font-family="Helvetica,sans-Serif" font-size="14.00">Definir Variables de Entrada</text>
+</g>
+<!-- Asignar Distribuciones (Prob) -->
+<g id="node2" class="node">
+<title>Asignar Distribuciones (Prob)</title>
+<polygon fill="#f9f9f9" stroke="black" points="285,-488 93,-488 93,-452 285,-452 285,-488"/>
+<text text-anchor="middle" x="189" y="-466.3" font-family="Helvetica,sans-Serif" font-size="14.00">Asignar Distribuciones (Prob)</text>
+</g>
+<!-- Definir Variables de Entrada&#45;&gt;Asignar Distribuciones (Prob) -->
+<g id="edge1" class="edge">
+<title>Definir Variables de Entrada&#45;&gt;Asignar Distribuciones (Prob)</title>
+<path fill="none" stroke="black" d="M189,-524.81C189,-516.79 189,-507.05 189,-498.07"/>
+<polygon fill="black" stroke="black" points="192.5,-498.03 189,-488.03 185.5,-498.03 192.5,-498.03"/>
+</g>
+<!-- Generar Valores Aleatorios -->
+<g id="node3" class="node">
+<title>Generar Valores Aleatorios</title>
+<polygon fill="#f9f9f9" stroke="black" points="278.5,-415 99.5,-415 99.5,-379 278.5,-379 278.5,-415"/>
+<text text-anchor="middle" x="189" y="-393.3" font-family="Helvetica,sans-Serif" font-size="14.00">Generar Valores Aleatorios</text>
+</g>
+<!-- Asignar Distribuciones (Prob)&#45;&gt;Generar Valores Aleatorios -->
+<g id="edge2" class="edge">
+<title>Asignar Distribuciones (Prob)&#45;&gt;Generar Valores Aleatorios</title>
+<path fill="none" stroke="black" d="M189,-451.81C189,-443.79 189,-434.05 189,-425.07"/>
+<polygon fill="black" stroke="black" points="192.5,-425.03 189,-415.03 185.5,-425.03 192.5,-425.03"/>
+</g>
+<!-- Ejecutar Modelo (Iteración i) -->
+<g id="node4" class="node">
+<title>Ejecutar Modelo (Iteración i)</title>
+<polygon fill="#f9f9f9" stroke="black" points="186,-342 0,-342 0,-306 186,-306 186,-342"/>
+<text text-anchor="middle" x="93" y="-320.3" font-family="Helvetica,sans-Serif" font-size="14.00">Ejecutar Modelo (Iteración i)</text>
+</g>
+<!-- Generar Valores Aleatorios&#45;&gt;Ejecutar Modelo (Iteración i) -->
+<g id="edge3" class="edge">
+<title>Generar Valores Aleatorios&#45;&gt;Ejecutar Modelo (Iteración i)</title>
+<path fill="none" stroke="black" d="M165.76,-378.81C153.26,-369.57 137.68,-358.04 124.14,-348.03"/>
+<polygon fill="black" stroke="black" points="126.15,-345.16 116.02,-342.03 121.98,-350.79 126.15,-345.16"/>
+</g>
+<!-- ¿N Iteraciones alcanzadas? -->
+<g id="node5" class="node">
+<title>¿N Iteraciones alcanzadas?</title>
+<polygon fill="#f9f9f9" stroke="black" points="249,-269 65,-269 65,-233 249,-233 249,-269"/>
+<text text-anchor="middle" x="157" y="-247.3" font-family="Helvetica,sans-Serif" font-size="14.00">¿N Iteraciones alcanzadas?</text>
+</g>
+<!-- Ejecutar Modelo (Iteración i)&#45;&gt;¿N Iteraciones alcanzadas? -->
+<g id="edge4" class="edge">
+<title>Ejecutar Modelo (Iteración i)&#45;&gt;¿N Iteraciones alcanzadas?</title>
+<path fill="none" stroke="black" d="M108.49,-305.81C116.43,-297 126.24,-286.13 134.95,-276.46"/>
+<polygon fill="black" stroke="black" points="137.55,-278.8 141.65,-269.03 132.35,-274.11 137.55,-278.8"/>
+</g>
+<!-- ¿N Iteraciones alcanzadas?&#45;&gt;Generar Valores Aleatorios -->
+<g id="edge5" class="edge">
+<title>¿N Iteraciones alcanzadas?&#45;&gt;Generar Valores Aleatorios</title>
+<path fill="none" stroke="black" d="M173.47,-269.46C181.66,-279.36 190.71,-292.45 195,-306 201.48,-326.47 199.3,-350.82 195.87,-369.03"/>
+<polygon fill="black" stroke="black" points="192.42,-368.46 193.77,-378.97 199.27,-369.91 192.42,-368.46"/>
+<text text-anchor="middle" x="209" y="-320.3" font-family="Times,serif" font-size="14.00">NO</text>
+</g>
+<!-- Analizar Distribución de Salida -->
+<g id="node6" class="node">
+<title>Analizar Distribución de Salida</title>
+<polygon fill="#f9f9f9" stroke="black" points="257,-182 57,-182 57,-146 257,-146 257,-182"/>
+<text text-anchor="middle" x="157" y="-160.3" font-family="Helvetica,sans-Serif" font-size="14.00">Analizar Distribución de Salida</text>
+</g>
+<!-- ¿N Iteraciones alcanzadas?&#45;&gt;Analizar Distribución de Salida -->
+<g id="edge6" class="edge">
+<title>¿N Iteraciones alcanzadas?&#45;&gt;Analizar Distribución de Salida</title>
+<path fill="none" stroke="black" d="M157,-232.8C157,-221.16 157,-205.55 157,-192.24"/>
+<polygon fill="black" stroke="black" points="160.5,-192.18 157,-182.18 153.5,-192.18 160.5,-192.18"/>
+<text text-anchor="middle" x="163.5" y="-203.8" font-family="Times,serif" font-size="14.00">SÍ</text>
+</g>
+<!-- Calcular Probabilidad de Riesgo (P95) -->
+<g id="node7" class="node">
+<title>Calcular Probabilidad de Riesgo (P95)</title>
+<polygon fill="#f9f9f9" stroke="black" points="280,-109 34,-109 34,-73 280,-73 280,-109"/>
+<text text-anchor="middle" x="157" y="-87.3" font-family="Helvetica,sans-Serif" font-size="14.00">Calcular Probabilidad de Riesgo (P95)</text>
+</g>
+<!-- Analizar Distribución de Salida&#45;&gt;Calcular Probabilidad de Riesgo (P95) -->
+<g id="edge7" class="edge">
+<title>Analizar Distribución de Salida&#45;&gt;Calcular Probabilidad de Riesgo (P95)</title>
+<path fill="none" stroke="black" d="M157,-145.81C157,-137.79 157,-128.05 157,-119.07"/>
+<polygon fill="black" stroke="black" points="160.5,-119.03 157,-109.03 153.5,-119.03 160.5,-119.03"/>
+</g>
+<!-- Toma de Decisión Informada -->
+<g id="node8" class="node">
+<title>Toma de Decisión Informada</title>
+<polygon fill="#f9f9f9" stroke="black" points="252,-36 62,-36 62,0 252,0 252,-36"/>
+<text text-anchor="middle" x="157" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">Toma de Decisión Informada</text>
+</g>
+<!-- Calcular Probabilidad de Riesgo (P95)&#45;&gt;Toma de Decisión Informada -->
+<g id="edge8" class="edge">
+<title>Calcular Probabilidad de Riesgo (P95)&#45;&gt;Toma de Decisión Informada</title>
+<path fill="none" stroke="black" d="M157,-72.81C157,-64.79 157,-55.05 157,-46.07"/>
+<polygon fill="black" stroke="black" points="160.5,-46.03 157,-36.03 153.5,-46.03 160.5,-46.03"/>
+</g>
+</g>
+</svg>
+
+            </div>
+            <p style="font-size:0.8em; color:#999; text-align:center; margin-top:-20px; margin-bottom:30px;">
+                <em>Figura: Diagrama generado automáticamente mediante Graphviz</em>
+            </p>
+
+            <h3>Intuición</h3>
+            <div><p>Si te pregunto cuánto tardas en llegar al trabajo, podrías decir '30 minutos'. Pero sabes que si llueve tardas 45, y si no hay tráfico tardas 20. Monte Carlo es como si revivieras el viaje de mañana 10,000 veces en un simulador, cambiando el clima, el tráfico y los semáforos aleatoriamente en cada intento. Al final, verías que en 8,000 de esos viajes llegaste en menos de 35 minutos. Esto te da una seguridad mucho mayor que una simple suposición. En los datos, nos ayuda a responder: '¿Cuál es el riesgo real de que este proyecto de IA se pase de presupuesto?' al considerar que los salarios, el costo de cómputo y el tiempo de limpieza de datos son variables que nunca son fijas.</p></div>
+
+            <h3>Aplicación</h3>
+            <div><p>Un Consultor de Datos utiliza Monte Carlo para evaluar el riesgo financiero de una migración a la nube. Considera variables aleatorias como la tasa de transferencia de datos, el tiempo de desarrollo de los ingenieros y el costo variable de las consultas SQL. Al ejecutar la simulación, descubre que aunque el costo 'esperado' es de $50,000, hay un 15% de probabilidad de que suba a $120,000 si ciertos riesgos se materializan simultáneamente. Con esta información, el profesional no solo presenta un presupuesto, sino una estrategia de mitigación de riesgos y una reserva de contingencia calculada con precisión matemática, lo cual es fundamental en licitaciones de alto nivel.</p></div>
+        </article>
+        </body></html>

@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>23 - Gestión de Riesgos II - Estrategias de Respuesta, Contingencia y Mitigación.</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #f4f4f9; color: #333; margin: 0; padding: 20px; line-height: 1.6; position: relative; }
+        header { background: #2c3e50; color: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; text-align:center; }
+        h1 { margin: 0; font-size: 1.5rem; }
+
+        /* Estilo del botón Atrás */
+        .btn-atras {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #7f8c8d;
+            color: white;
+            padding: 8px 15px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            transition: background 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+        .btn-atras:hover { background: #95a5a6; }
+
+        .subtema {
+            background: white;
+            padding: 40px;
+            margin-bottom: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        h2 { color: #2980b9; border-bottom: 2px solid #eee; padding-bottom: 10px; margin-top: 0; }
+        h3 { color: #7f8c8d; font-size: 0.9em; text-transform: uppercase; margin-top: 30px; letter-spacing: 1px; border-left: 3px solid #d4af37; padding-left: 10px; }
+
+        .diagrama-box {
+            text-align: center;
+            margin: 30px 0;
+            padding: 20px;
+            background: #fafafa;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 150px;
+        }
+
+        p { margin-bottom: 1rem; }
+        strong { color: #2c3e50; font-weight: 600; }
+        code { background: #f0f0f0; padding: 2px 5px; border-radius: 3px; font-family: monospace; color: #c0392b; }
+        ul { padding-left: 20px; }
+        li { margin-bottom: 0.5rem; }
+    </style>
+</head>
+<body>
+    <button onclick="window.history.back()" class="btn-atras">Atrás</button>
+    <header><h1>23 - Gestión de Riesgos II - Estrategias de Respuesta, Contingencia y Mitigación.</h1></header>
+    <main>
+
+        <article class="subtema">
+            <h2>Estrategias de Mitigación y Reducción del Impacto mediante Analítica Predictiva</h2>
+
+            <h3>Historia</h3>
+            <div><p>La mitigación de riesgos ha evolucionado desde una práctica puramente reactiva en la ingeniería civil del siglo XIX hacia un enfoque proactivo basado en datos tras la carrera espacial de los años 60. Con el auge de la NASA, se formalizaron técnicas como el FMEA (Análisis de Modo y Efecto de Fallas). En el contexto de los datos, la mitigación dejó de ser una simple lista de chequeo para convertirse en un proceso dinámico de 'data-driven decision making'. Durante la década de los 2000, con el crecimiento de los centros de datos masivos, la mitigación se integró en los sistemas de monitoreo en tiempo real, donde algoritmos de detección de anomalías permiten intervenir antes de que el riesgo se materialice, transformando la prevención en una ciencia exacta apoyada por el aprendizaje automático y el análisis estadístico avanzado.</p></div>
+
+            <h3>Descripción Formal</h3>
+            <div><p>La mitigación implica ejecutar acciones para reducir la probabilidad o el impacto de un riesgo. Matemáticamente, se busca minimizar el Valor Monetario Esperado (VME) definido como VME = P(x) * I(x), donde P es la probabilidad y I el impacto. En Excel, podemos evaluar la efectividad de la mitigación mediante funciones de decisión. Ejemplo: '=SI(Y(Probabilidad_Posterior &lt; 0.2; Impacto_Reducido &lt; 10000); "Mitigación Exitosa"; "Revisar Plan")'. Lógicamente, un algoritmo de mitigación sigue una estructura de control 'While': MIENTRAS (Riesgo_Actual &gt; Umbral_Aceptable) HACER: { Ejecutar_Accion_Preventiva(); Recalcular_Probabilidad(); }. Si aplicamos una regresión logística para predecir fallos en un pipeline de datos, la mitigación técnica se traduce en optimizar el hiperparámetro de 'threshold' para minimizar falsos negativos. En Excel, se utiliza '=BUSCARV(Valor_Riesgo; Tabla_Acciones; 2; VERDADERO)' para asignar dinámicamente recursos de mitigación basados en la severidad calculada en una matriz de riesgos 5x5. La lógica algorítmica se centra en la reducción del gradiente del riesgo, aplicando ajustes iterativos en los controles de seguridad y calidad de los datos.</p></div>
+
+            <div class="diagrama-box">
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg style="max-width: 80%; max-height: 350px; height: auto; width: auto;" data-width="531pt" data-height="378pt"
+ viewBox="0.00 0.00 531.26 378.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 374)">
+<title>G</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-374 527.26,-374 527.26,4 -4,4"/>
+<!-- start -->
+<g id="node1" class="node">
+<title>start</title>
+<polygon fill="#f9f9f9" stroke="black" points="393,-370 216,-370 216,-334 393,-334 393,-370"/>
+<text text-anchor="middle" x="304.5" y="-348.3" font-family="Helvetica,sans-Serif" font-size="14.00">Inicio Monitoreo de Riesgo</text>
+</g>
+<!-- detect -->
+<g id="node2" class="node">
+<title>detect</title>
+<polygon fill="#f9f9f9" stroke="black" points="304.5,-297 85.98,-279 304.5,-261 523.02,-279 304.5,-297"/>
+<text text-anchor="middle" x="304.5" y="-275.3" font-family="Helvetica,sans-Serif" font-size="14.00">Detección de Anomalía (P &gt; Umbral)</text>
+</g>
+<!-- start&#45;&gt;detect -->
+<g id="edge1" class="edge">
+<title>start&#45;&gt;detect</title>
+<path fill="none" stroke="black" d="M304.5,-333.81C304.5,-325.79 304.5,-316.05 304.5,-307.07"/>
+<polygon fill="black" stroke="black" points="308,-307.03 304.5,-297.03 301,-307.03 308,-307.03"/>
+</g>
+<!-- mitigate -->
+<g id="node3" class="node">
+<title>mitigate</title>
+<polygon fill="#f9f9f9" stroke="black" points="292,-210 111,-210 111,-174 292,-174 292,-210"/>
+<text text-anchor="middle" x="201.5" y="-188.3" font-family="Helvetica,sans-Serif" font-size="14.00">Ejecutar Plan de Mitigación</text>
+</g>
+<!-- detect&#45;&gt;mitigate -->
+<g id="edge2" class="edge">
+<title>detect&#45;&gt;mitigate</title>
+<path fill="none" stroke="black" d="M285.61,-262.41C270.1,-249.61 247.88,-231.27 230.17,-216.66"/>
+<polygon fill="black" stroke="black" points="232.34,-213.91 222.4,-210.25 227.88,-219.31 232.34,-213.91"/>
+<text text-anchor="middle" x="265" y="-231.8" font-family="Times,serif" font-size="14.00">SÍ</text>
+</g>
+<!-- success -->
+<g id="node5" class="node">
+<title>success</title>
+<polygon fill="#f9f9f9" stroke="black" points="418.5,-36 276.5,-36 276.5,0 418.5,0 418.5,-36"/>
+<text text-anchor="middle" x="347.5" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">Continuar Operación</text>
+</g>
+<!-- detect&#45;&gt;success -->
+<g id="edge3" class="edge">
+<title>detect&#45;&gt;success</title>
+<path fill="none" stroke="black" d="M316.77,-261.95C336.51,-235 374.51,-178.18 388.5,-123 392.43,-107.49 392.79,-102.41 388.5,-87 384.28,-71.82 375.66,-56.65 367.41,-44.5"/>
+<polygon fill="black" stroke="black" points="370.17,-42.35 361.53,-36.22 364.47,-46.4 370.17,-42.35"/>
+<text text-anchor="middle" x="392.5" y="-144.8" font-family="Times,serif" font-size="14.00">NO</text>
+</g>
+<!-- check -->
+<g id="node4" class="node">
+<title>check</title>
+<polygon fill="#f9f9f9" stroke="black" points="201.5,-123 23.37,-105 201.5,-87 379.63,-105 201.5,-123"/>
+<text text-anchor="middle" x="201.5" y="-101.3" font-family="Helvetica,sans-Serif" font-size="14.00">¿Riesgo Residual Aceptable?</text>
+</g>
+<!-- mitigate&#45;&gt;check -->
+<g id="edge4" class="edge">
+<title>mitigate&#45;&gt;check</title>
+<path fill="none" stroke="black" d="M201.5,-173.8C201.5,-162.16 201.5,-146.55 201.5,-133.24"/>
+<polygon fill="black" stroke="black" points="205,-133.18 201.5,-123.18 198,-133.18 205,-133.18"/>
+</g>
+<!-- check&#45;&gt;success -->
+<g id="edge5" class="edge">
+<title>check&#45;&gt;success</title>
+<path fill="none" stroke="black" d="M226.6,-89.39C249.35,-76.14 283.22,-56.42 309.33,-41.22"/>
+<polygon fill="black" stroke="black" points="311.33,-44.11 318.21,-36.05 307.81,-38.06 311.33,-44.11"/>
+<text text-anchor="middle" x="289" y="-57.8" font-family="Times,serif" font-size="14.00">SÍ</text>
+</g>
+<!-- adjust -->
+<g id="node6" class="node">
+<title>adjust</title>
+<polygon fill="#f9f9f9" stroke="black" points="197,-36 0,-36 0,0 197,0 197,-36"/>
+<text text-anchor="middle" x="98.5" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">Ajustar Controles y Reintentar</text>
+</g>
+<!-- check&#45;&gt;adjust -->
+<g id="edge6" class="edge">
+<title>check&#45;&gt;adjust</title>
+<path fill="none" stroke="black" d="M183.09,-88.8C167.53,-75.97 144.99,-57.37 127.09,-42.59"/>
+<polygon fill="black" stroke="black" points="129.17,-39.78 119.23,-36.11 124.72,-45.17 129.17,-39.78"/>
+<text text-anchor="middle" x="165.5" y="-57.8" font-family="Times,serif" font-size="14.00">NO</text>
+</g>
+<!-- adjust&#45;&gt;mitigate -->
+<g id="edge7" class="edge">
+<title>adjust&#45;&gt;mitigate</title>
+<path fill="none" stroke="black" d="M67.62,-36.1C35.3,-56.25 -7.87,-91.06 14.5,-123 34.52,-151.59 67.86,-168.2 100.9,-177.84"/>
+<polygon fill="black" stroke="black" points="100.09,-181.25 110.65,-180.49 101.92,-174.49 100.09,-181.25"/>
+</g>
+</g>
+</svg>
+
+            </div>
+            <p style="font-size:0.8em; color:#999; text-align:center; margin-top:-20px; margin-bottom:30px;">
+                <em>Figura: Diagrama generado automáticamente mediante Graphviz</em>
+            </p>
+
+            <h3>Intuición</h3>
+            <div><p>Imagina que eres el capitán de un barco y los radares indican una tormenta. Mitigar no es evitar la tormenta (eso sería eliminar el riesgo), sino reforzar el casco y preparar los botes salvavidas. En el mundo de los datos, la mitigación es como poner 'cinturones de seguridad' a tus procesos. Si sabes que una fuente de datos puede fallar, creas un sistema que limpie los datos automáticamente o reduzca la carga de trabajo para que el sistema no colapse. Es el arte de 'suavizar el golpe' antes de que ocurra, asegurando que si algo sale mal, las consecuencias sean manejables y no catastróficas para la organización.</p></div>
+
+            <h3>Aplicación</h3>
+            <div><p>Un ingeniero de datos aplica mitigación al diseñar procesos ETL (Extraer, Transformar, Cargar). Si existe el riesgo de que la API de origen cambie su esquema, la mitigación consiste en implementar una capa de validación de esquemas (Pydantic o Great Expectations). En el entorno financiero, los analistas mitigan el riesgo de fraude mediante el 'throttling' de transacciones: si un patrón sospechoso es detectado por un modelo de bosque aleatorio (Random Forest), el sistema no bloquea la cuenta, sino que reduce el límite diario de gasto mientras se verifica la identidad, mitigando el impacto económico sin destruir la experiencia del usuario.</p></div>
+        </article>
+        
+        <article class="subtema">
+            <h2>Planes de Contingencia y Gestión de Reservas de Gestión</h2>
+
+            <h3>Historia</h3>
+            <div><p>El concepto de contingencia nace de la necesidad militar de tener un 'Plan B'. En la gestión de proyectos de software de los años 70 y 80, se observó que la mayoría de los proyectos excedían su presupuesto por falta de reservas para 'lo desconocido'. Esto llevó al Project Management Institute (PMI) a distinguir entre Reservas de Contingencia (para riesgos identificados) y Reservas de Gestión (para riesgos imprevistos). Con la llegada del Big Data, la contingencia se ha automatizado mediante la infraestructura como código (IaC), permitiendo que los sistemas 'contingentes' se activen en milisegundos mediante balanceadores de carga y despliegues en múltiples nubes (Multi-cloud), una evolución drástica desde los planes en papel de hace tres décadas.</p></div>
+
+            <h3>Descripción Formal</h3>
+            <div><p>El Plan de Contingencia se activa cuando un disparador (trigger) se cumple. El cálculo de la Reserva de Contingencia se basa en la suma de los VME de los riesgos identificados: Reserva = Σ(Pi * Ii). En Excel, para calcular el presupuesto total incluyendo la reserva, se usa: '=SUMA(Presupuesto_Base; SUMAPRODUCTO(Rango_Probabilidades; Rango_Impactos))'. La lógica algorítmica para un disparador de contingencia es: IF (Métrica_Rendimiento &lt; Punto_Crítico) THEN: { Trigger_Contingency_Protocol(); Allocate_Reserve_Funds(); }. Por ejemplo, si el tiempo de respuesta de una base de datos supera los 500ms (Punto Crítico), se activa automáticamente un servidor espejo. En términos de gestión, la Reserva de Gestión no forma parte de la línea base del costo y requiere aprobación de la alta gerencia, a diferencia de la de contingencia que es gestionada por el líder del proyecto. La sintaxis de Excel para monitorear el agotamiento de reservas es: '=SI(Gasto_Actual &gt; (Presupuesto_Base + Reserva_Contingencia); "ALERTA: Uso de Reserva de Gestión"; "Dentro de Línea Base")'.</p></div>
+
+            <div class="diagrama-box">
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg style="max-width: 80%; max-height: 350px; height: auto; width: auto;" data-width="1146pt" data-height="98pt"
+ viewBox="0.00 0.00 1146.25 98.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 94)">
+<title>G</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-94 1142.25,-94 1142.25,4 -4,4"/>
+<!-- trigger -->
+<g id="node1" class="node">
+<title>trigger</title>
+<polygon fill="#f9f9f9" stroke="black" points="169.12,-63 -0.13,-45 169.12,-27 338.37,-45 169.12,-63"/>
+<text text-anchor="middle" x="169.12" y="-41.3" font-family="Helvetica,sans-Serif" font-size="14.00">Evento Disparador (Trigger)</text>
+</g>
+<!-- plan_a -->
+<g id="node2" class="node">
+<title>plan_a</title>
+<polygon fill="#f9f9f9" stroke="black" points="642.75,-90 463.75,-90 463.75,-54 642.75,-54 642.75,-90"/>
+<text text-anchor="middle" x="553.25" y="-68.3" font-family="Helvetica,sans-Serif" font-size="14.00">Operación Normal (Plan A)</text>
+</g>
+<!-- trigger&#45;&gt;plan_a -->
+<g id="edge1" class="edge">
+<title>trigger&#45;&gt;plan_a</title>
+<path fill="none" stroke="black" d="M271.27,-52.15C327.58,-56.13 397.38,-61.06 453.33,-65.01"/>
+<polygon fill="black" stroke="black" points="453.38,-68.52 463.61,-65.74 453.88,-61.54 453.38,-68.52"/>
+<text text-anchor="middle" x="385.25" y="-64.8" font-family="Times,serif" font-size="14.00">No Ocurre</text>
+</g>
+<!-- plan_b -->
+<g id="node3" class="node">
+<title>plan_b</title>
+<polygon fill="#f9f9f9" stroke="black" points="674.25,-36 432.25,-36 432.25,0 674.25,0 674.25,-36"/>
+<text text-anchor="middle" x="553.25" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">Activar Plan de Contingencia (Plan B)</text>
+</g>
+<!-- trigger&#45;&gt;plan_b -->
+<g id="edge2" class="edge">
+<title>trigger&#45;&gt;plan_b</title>
+<path fill="none" stroke="black" d="M271.27,-37.85C317.51,-34.59 372.84,-30.68 422.13,-27.19"/>
+<polygon fill="black" stroke="black" points="422.5,-30.68 432.22,-26.48 422,-23.69 422.5,-30.68"/>
+<text text-anchor="middle" x="385.25" y="-34.8" font-family="Times,serif" font-size="14.00">Ocurre</text>
+</g>
+<!-- reserve -->
+<g id="node4" class="node">
+<title>reserve</title>
+<polygon fill="#f9f9f9" stroke="black" points="941.25,-36 711.25,-36 711.25,0 941.25,0 941.25,-36"/>
+<text text-anchor="middle" x="826.25" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">Consumir Reserva de Contingencia</text>
+</g>
+<!-- plan_b&#45;&gt;reserve -->
+<g id="edge3" class="edge">
+<title>plan_b&#45;&gt;reserve</title>
+<path fill="none" stroke="black" d="M674.3,-18C683.05,-18 691.89,-18 700.66,-18"/>
+<polygon fill="black" stroke="black" points="700.93,-21.5 710.93,-18 700.93,-14.5 700.93,-21.5"/>
+</g>
+<!-- notify -->
+<g id="node5" class="node">
+<title>notify</title>
+<polygon fill="#f9f9f9" stroke="black" points="1138.25,-36 978.25,-36 978.25,0 1138.25,0 1138.25,-36"/>
+<text text-anchor="middle" x="1058.25" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">Notificar a Stakeholders</text>
+</g>
+<!-- reserve&#45;&gt;notify -->
+<g id="edge4" class="edge">
+<title>reserve&#45;&gt;notify</title>
+<path fill="none" stroke="black" d="M941.58,-18C950.49,-18 959.41,-18 968.12,-18"/>
+<polygon fill="black" stroke="black" points="968.24,-21.5 978.24,-18 968.24,-14.5 968.24,-21.5"/>
+</g>
+</g>
+</svg>
+
+            </div>
+            <p style="font-size:0.8em; color:#999; text-align:center; margin-top:-20px; margin-bottom:30px;">
+                <em>Figura: Diagrama generado automáticamente mediante Graphviz</em>
+            </p>
+
+            <h3>Intuición</h3>
+            <div><p>La contingencia es tu 'rueda de repuesto'. No la usas para conducir normalmente, pero está ahí para un momento específico: cuando el neumático principal se pincha. La reserva de contingencia es el dinero que guardas en un sobre etiquetado 'Para reparaciones del coche', mientras que la reserva de gestión es el fondo de emergencia general que tienes en el banco para cosas que ni siquiera imaginas que pueden pasar, como que se rompa el techo de la casa. En datos, la contingencia es el servidor de respaldo que solo se enciende si el principal explota.</p></div>
+
+            <h3>Aplicación</h3>
+            <div><p>En el despliegue de un modelo de Machine Learning en producción, un plan de contingencia es el 'Model Fallback'. Si el modelo avanzado (Deep Learning) falla o tiene una latencia excesiva, el sistema cambia automáticamente a un modelo heurístico simple o a la media histórica (Backup). Profesionalmente, los ingenieros utilizan reservas de contingencia de tiempo (buffers) en los diagramas de Gantt, calculados mediante el método de la Ruta Crítica (CPM), para absorber retrasos en la limpieza de datos sin afectar la fecha de entrega final del proyecto de analítica.</p></div>
+        </article>
+        
+        <article class="subtema">
+            <h2>Transferencia de Riesgos y Aceptación Pasiva vs. Activa</h2>
+
+            <h3>Historia</h3>
+            <div><p>La transferencia de riesgos se remonta a los contratos marítimos de Babilonia, pero en la era digital se ha transformado en el modelo de Responsabilidad Compartida de la nube. Al migrar a servicios como AWS, Azure o Google Cloud, las empresas transfieren el riesgo de infraestructura (hardware, energía) al proveedor. Por otro lado, la aceptación de riesgos fue formalizada por la teoría de la utilidad en la economía del siglo XX. Hoy en día, las organizaciones de datos deben decidir qué riesgos aceptar (como un pequeño sesgo en un modelo no crítico) y cuáles transferir (como la ciberseguridad mediante pólizas de seguro cibernético), equilibrando el costo de la transferencia con la capacidad de absorción de la empresa.</p></div>
+
+            <h3>Descripción Formal</h3>
+            <div><p>La transferencia consiste en trasladar el impacto negativo a un tercero. El costo de transferencia (prima) debe ser menor que el VME del riesgo: Costo_Transfer &lt; (P * I). En Excel, la decisión se modela como: '=SI(Costo_Seguro &lt; (Probabilidad * Impacto_Financiero); "Transferir (Seguro/Outsourcing)"; "Asumir/Mitigar")'. La aceptación puede ser Pasiva (no hacer nada, actuar si ocurre) o Activa (establecer una reserva de contingencia). Un algoritmo de decisión para esto utiliza árboles de decisión: IF (Impacto == 'Catastrófico' AND Capacidad_Interna == 'Baja') THEN: { Transfer_Risk(); } ELSE IF (Impacto == 'Bajo') THEN: { Accept_Risk_Passively(); }. En contratos de Service Level Agreement (SLA), la transferencia se cuantifica mediante penalizaciones financieras automáticas si la disponibilidad del servicio cae por debajo del 99.9%, lo cual se programa en contratos inteligentes (Smart Contracts) o scripts de auditoría que comparan '=CONTAR.SI(Rango_Status; "Down") / Total_Horas'.</p></div>
+
+            <div class="diagrama-box">
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg style="max-width: 80%; max-height: 350px; height: auto; width: auto;" data-width="680pt" data-height="291pt"
+ viewBox="0.00 0.00 679.74 291.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 287)">
+<title>G</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-287 675.74,-287 675.74,4 -4,4"/>
+<!-- eval -->
+<g id="node1" class="node">
+<title>eval</title>
+<polygon fill="#f9f9f9" stroke="black" points="238.95,-283 91.95,-283 91.95,-247 238.95,-247 238.95,-283"/>
+<text text-anchor="middle" x="165.45" y="-261.3" font-family="Helvetica,sans-Serif" font-size="14.00">Evaluación de Riesgo</text>
+</g>
+<!-- crit -->
+<g id="node2" class="node">
+<title>crit</title>
+<polygon fill="#f9f9f9" stroke="black" points="165.45,-210 0.05,-192 165.45,-174 330.84,-192 165.45,-210"/>
+<text text-anchor="middle" x="165.45" y="-188.3" font-family="Helvetica,sans-Serif" font-size="14.00">¿Es Crítico e Inmanejable?</text>
+</g>
+<!-- eval&#45;&gt;crit -->
+<g id="edge1" class="edge">
+<title>eval&#45;&gt;crit</title>
+<path fill="none" stroke="black" d="M165.45,-246.81C165.45,-238.79 165.45,-229.05 165.45,-220.07"/>
+<polygon fill="black" stroke="black" points="168.95,-220.03 165.45,-210.03 161.95,-220.03 168.95,-220.03"/>
+</g>
+<!-- trans -->
+<g id="node3" class="node">
+<title>trans</title>
+<polygon fill="#f9f9f9" stroke="black" points="251.45,-123 43.45,-123 43.45,-87 251.45,-87 251.45,-123"/>
+<text text-anchor="middle" x="147.45" y="-101.3" font-family="Helvetica,sans-Serif" font-size="14.00">Transferir (Seguro/Outsourcing)</text>
+</g>
+<!-- crit&#45;&gt;trans -->
+<g id="edge2" class="edge">
+<title>crit&#45;&gt;trans</title>
+<path fill="none" stroke="black" d="M161.89,-174.21C159.42,-162.52 156.07,-146.69 153.21,-133.22"/>
+<polygon fill="black" stroke="black" points="156.55,-132.11 151.06,-123.05 149.71,-133.56 156.55,-132.11"/>
+<text text-anchor="middle" x="164.95" y="-144.8" font-family="Times,serif" font-size="14.00">SÍ</text>
+</g>
+<!-- cost -->
+<g id="node4" class="node">
+<title>cost</title>
+<polygon fill="#f9f9f9" stroke="black" points="470.45,-123 269.36,-105 470.45,-87 671.54,-105 470.45,-123"/>
+<text text-anchor="middle" x="470.45" y="-101.3" font-family="Helvetica,sans-Serif" font-size="14.00">¿Costo de Respuesta &gt; Impacto?</text>
+</g>
+<!-- crit&#45;&gt;cost -->
+<g id="edge3" class="edge">
+<title>crit&#45;&gt;cost</title>
+<path fill="none" stroke="black" d="M209.47,-178.73C263.51,-163.67 355.22,-138.11 414.28,-121.65"/>
+<polygon fill="black" stroke="black" points="415.5,-124.95 424.19,-118.89 413.62,-118.2 415.5,-124.95"/>
+<text text-anchor="middle" x="346.45" y="-144.8" font-family="Times,serif" font-size="14.00">NO</text>
+</g>
+<!-- accept -->
+<g id="node5" class="node">
+<title>accept</title>
+<polygon fill="#f9f9f9" stroke="black" points="475.95,-36 272.95,-36 272.95,0 475.95,0 475.95,-36"/>
+<text text-anchor="middle" x="374.45" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">Aceptar Riesgo (Pasiva/Activa)</text>
+</g>
+<!-- cost&#45;&gt;accept -->
+<g id="edge4" class="edge">
+<title>cost&#45;&gt;accept</title>
+<path fill="none" stroke="black" d="M452.84,-88.41C438.51,-75.72 418.05,-57.6 401.62,-43.06"/>
+<polygon fill="black" stroke="black" points="403.73,-40.25 393.93,-36.25 399.09,-45.5 403.73,-40.25"/>
+<text text-anchor="middle" x="434.95" y="-57.8" font-family="Times,serif" font-size="14.00">SÍ</text>
+</g>
+<!-- mit -->
+<g id="node6" class="node">
+<title>mit</title>
+<polygon fill="#f9f9f9" stroke="black" points="636.45,-36 494.45,-36 494.45,0 636.45,0 636.45,-36"/>
+<text text-anchor="middle" x="565.45" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">Mitigar Internamente</text>
+</g>
+<!-- cost&#45;&gt;mit -->
+<g id="edge5" class="edge">
+<title>cost&#45;&gt;mit</title>
+<path fill="none" stroke="black" d="M487.87,-88.41C502.05,-75.72 522.3,-57.6 538.56,-43.06"/>
+<polygon fill="black" stroke="black" points="541.05,-45.52 546.17,-36.25 536.39,-40.31 541.05,-45.52"/>
+<text text-anchor="middle" x="534.45" y="-57.8" font-family="Times,serif" font-size="14.00">NO</text>
+</g>
+</g>
+</svg>
+
+            </div>
+            <p style="font-size:0.8em; color:#999; text-align:center; margin-top:-20px; margin-bottom:30px;">
+                <em>Figura: Diagrama generado automáticamente mediante Graphviz</em>
+            </p>
+
+            <h3>Intuición</h3>
+            <div><p>Transferir el riesgo es como contratar un seguro para tu móvil: si se rompe, alguien más paga la reparación a cambio de una cuota mensual. La aceptación, en cambio, es decir: 'Sé que la pantalla se puede rayar, pero no me importa lo suficiente como para pagar un seguro o ponerle una funda'. Si el riesgo es pequeño, lo aceptas pasivamente (no haces nada). Si es grande pero no puedes evitarlo, lo aceptas activamente guardando algo de dinero para cuando pase. Es una decisión de balance costo-beneficio constante.</p></div>
+
+            <h3>Aplicación</h3>
+            <div><p>Un Director de Datos (CDO) decide transferir el riesgo de almacenamiento de datos sensibles a un proveedor de nube con certificaciones de cumplimiento (como GDPR o SOC2), transfiriendo la responsabilidad técnica de la seguridad física. Por otro lado, un equipo de analítica puede aceptar el riesgo de que los datos de redes sociales tengan ruido (aceptación pasiva) porque el costo de limpiar cada tweet es mayor que el beneficio marginal de la precisión del modelo de sentimiento, siempre y cuando el impacto en el negocio sea mínimo.</p></div>
+        </article>
+        </body></html>

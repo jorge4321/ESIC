@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>26 - Seguimiento y Cierre - Informes de Control, Lecciones Aprendidas y Cierre Formal.</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #f4f4f9; color: #333; margin: 0; padding: 20px; line-height: 1.6; position: relative; }
+        header { background: #2c3e50; color: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; text-align:center; }
+        h1 { margin: 0; font-size: 1.5rem; }
+
+        /* Estilo del botón Atrás */
+        .btn-atras {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #7f8c8d;
+            color: white;
+            padding: 8px 15px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            transition: background 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+        .btn-atras:hover { background: #95a5a6; }
+
+        .subtema {
+            background: white;
+            padding: 40px;
+            margin-bottom: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        h2 { color: #2980b9; border-bottom: 2px solid #eee; padding-bottom: 10px; margin-top: 0; }
+        h3 { color: #7f8c8d; font-size: 0.9em; text-transform: uppercase; margin-top: 30px; letter-spacing: 1px; border-left: 3px solid #d4af37; padding-left: 10px; }
+
+        .diagrama-box {
+            text-align: center;
+            margin: 30px 0;
+            padding: 20px;
+            background: #fafafa;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 150px;
+        }
+
+        p { margin-bottom: 1rem; }
+        strong { color: #2c3e50; font-weight: 600; }
+        code { background: #f0f0f0; padding: 2px 5px; border-radius: 3px; font-family: monospace; color: #c0392b; }
+        ul { padding-left: 20px; }
+        li { margin-bottom: 0.5rem; }
+    </style>
+</head>
+<body>
+    <button onclick="window.history.back()" class="btn-atras">Atrás</button>
+    <header><h1>26 - Seguimiento y Cierre - Informes de Control, Lecciones Aprendidas y Cierre Formal.</h1></header>
+    <main>
+
+        <article class="subtema">
+            <h2>Informes de Control y Dashboards de Desempeño</h2>
+
+            <h3>Historia</h3>
+            <div><p>Históricamente, el seguimiento de proyectos dependía de reportes estáticos en papel generados al final de ciclos mensuales. Con la revolución del Business Intelligence (BI) en la década de los 90, la necesidad de visibilidad en tiempo real transformó estos informes en cuadros de mando dinámicos. En el ámbito de los datos, la evolución pasó de simples hojas de cálculo a plataformas integradas como Tableau o Power BI. Originalmente, el control se centraba en el cumplimiento de hitos temporales (Diagramas de Gantt); sin embargo, con la llegada del Big Data y la analítica avanzada, el control se ha desplazado hacia la salud del dato, la deriva del modelo (model drift) y el consumo de recursos computacionales. Hoy, un informe de control no solo dice qué se hizo, sino cómo están funcionando los activos de datos entregados en relación con los objetivos de negocio predefinidos.</p></div>
+
+            <h3>Descripción Formal</h3>
+            <div><p>El control formal se basa en la cuantificación de desviaciones. En Excel, la función clave para monitorear el cumplimiento de KPIs frente a objetivos es <code>=SI.ERROR((B2-C2)/C2; 0)</code>, donde B2 es el valor actual y C2 el presupuesto o meta. Para una gestión avanzada, se utiliza la lógica de semaforización mediante formato condicional basado en reglas lógicas. Algorítmicamente, el control de un proyecto de datos implica el cálculo del 'Earned Value Management' (EVM). La lógica sigue un flujo: 1. Definir Valor Planificado (PV). 2. Calcular Valor Ganado (EV) basado en el % de completitud de tareas de ingeniería de datos. 3. Determinar el Costo Real (AC). El Índice de Desempeño del Cronograma (SPI) se define como <code>SPI = EV / PV</code>. Si <code>SPI &lt; 1</code>, el proyecto está retrasado. En Python, esto se implementa con estructuras condicionales: <code>if current_progress &lt; target_progress: alert('Delay detected')</code>. También se incluyen métricas de calidad de datos, como el porcentaje de valores nulos permitidos, validado mediante reglas de negocio (Data Quality Rules) que ejecutan scripts de validación sobre el Data Warehouse antes de cerrar cada fase.</p></div>
+
+            <div class="diagrama-box">
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg style="max-width: 80%; max-height: 350px; height: auto; width: auto;" data-width="384pt" data-height="277pt"
+ viewBox="0.00 0.00 384.00 277.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 273)">
+<title>G</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-273 380,-273 380,4 -4,4"/>
+<!-- start -->
+<g id="node1" class="node">
+<title>start</title>
+<polygon fill="#f9f9f9" stroke="black" points="230.5,-269 102.5,-269 102.5,-233 230.5,-233 230.5,-269"/>
+<text text-anchor="middle" x="166.5" y="-247.3" font-family="Helvetica,sans-Serif" font-size="14.00">Inicio Seguimiento</text>
+</g>
+<!-- kpi_check -->
+<g id="node2" class="node">
+<title>kpi_check</title>
+<polygon fill="#f9f9f9" stroke="black" points="166.5,-196 4.96,-178 166.5,-160 328.04,-178 166.5,-196"/>
+<text text-anchor="middle" x="166.5" y="-174.3" font-family="Helvetica,sans-Serif" font-size="14.00">Cálculo de KPI (EV vs PV)</text>
+</g>
+<!-- start&#45;&gt;kpi_check -->
+<g id="edge1" class="edge">
+<title>start&#45;&gt;kpi_check</title>
+<path fill="none" stroke="black" d="M166.5,-232.81C166.5,-224.79 166.5,-215.05 166.5,-206.07"/>
+<polygon fill="black" stroke="black" points="170,-206.03 166.5,-196.03 163,-206.03 170,-206.03"/>
+</g>
+<!-- status_ok -->
+<g id="node3" class="node">
+<title>status_ok</title>
+<polygon fill="#f9f9f9" stroke="black" points="137,-109 0,-109 0,-73 137,-73 137,-109"/>
+<text text-anchor="middle" x="68.5" y="-87.3" font-family="Helvetica,sans-Serif" font-size="14.00">Continuar Ejecución</text>
+</g>
+<!-- kpi_check&#45;&gt;status_ok -->
+<g id="edge2" class="edge">
+<title>kpi_check&#45;&gt;status_ok</title>
+<path fill="none" stroke="black" d="M148.98,-161.8C134.31,-149.08 113.12,-130.7 96.16,-115.99"/>
+<polygon fill="black" stroke="black" points="98.07,-113.02 88.23,-109.11 93.49,-118.31 98.07,-113.02"/>
+<text text-anchor="middle" x="149" y="-130.8" font-family="Times,serif" font-size="14.00">SPI &gt;= 1</text>
+</g>
+<!-- alert -->
+<g id="node4" class="node">
+<title>alert</title>
+<polygon fill="#f9f9f9" stroke="black" points="376,-109 155,-109 155,-73 376,-73 376,-109"/>
+<text text-anchor="middle" x="265.5" y="-87.3" font-family="Helvetica,sans-Serif" font-size="14.00">Generar Alerta / Acción Correctiva</text>
+</g>
+<!-- kpi_check&#45;&gt;alert -->
+<g id="edge3" class="edge">
+<title>kpi_check&#45;&gt;alert</title>
+<path fill="none" stroke="black" d="M184.2,-161.8C199.02,-149.08 220.42,-130.7 237.55,-115.99"/>
+<polygon fill="black" stroke="black" points="240.26,-118.28 245.57,-109.11 235.7,-112.97 240.26,-118.28"/>
+<text text-anchor="middle" x="243" y="-130.8" font-family="Times,serif" font-size="14.00">SPI &lt; 1</text>
+</g>
+<!-- dashboard -->
+<g id="node5" class="node">
+<title>dashboard</title>
+<polygon fill="#f9f9f9" stroke="black" points="272.5,-36 60.5,-36 60.5,0 272.5,0 272.5,-36"/>
+<text text-anchor="middle" x="166.5" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">Actualizar Dashboard de Control</text>
+</g>
+<!-- status_ok&#45;&gt;dashboard -->
+<g id="edge4" class="edge">
+<title>status_ok&#45;&gt;dashboard</title>
+<path fill="none" stroke="black" d="M92.22,-72.81C104.98,-63.57 120.89,-52.04 134.71,-42.03"/>
+<polygon fill="black" stroke="black" points="136.95,-44.73 143,-36.03 132.84,-39.06 136.95,-44.73"/>
+</g>
+<!-- alert&#45;&gt;dashboard -->
+<g id="edge5" class="edge">
+<title>alert&#45;&gt;dashboard</title>
+<path fill="none" stroke="black" d="M241.79,-72.99C228.9,-63.75 212.78,-52.19 198.77,-42.14"/>
+<polygon fill="black" stroke="black" points="200.53,-39.1 190.36,-36.11 196.45,-44.79 200.53,-39.1"/>
+</g>
+</g>
+</svg>
+
+            </div>
+            <p style="font-size:0.8em; color:#999; text-align:center; margin-top:-20px; margin-bottom:30px;">
+                <em>Figura: Diagrama generado automáticamente mediante Graphviz</em>
+            </p>
+
+            <h3>Intuición</h3>
+            <div><p>Imagina que estás conduciendo un coche hacia un destino lejano. Los informes de control son el tablero de instrumentos. No necesitas saber cada detalle mecánico del motor en todo momento, pero sí necesitas saber la velocidad, cuánta gasolina queda y si el motor se está sobrecalentando. En un proyecto de datos, el 'combustible' es el presupuesto y el tiempo de los ingenieros, y la 'velocidad' es el ritmo al que se limpian y procesan los datasets. Sin estos informes, podrías pensar que vas por buen camino solo porque el coche se mueve, cuando en realidad podrías estar desviándote de la ruta o quedándote sin recursos antes de llegar. La intuición aquí es la visibilidad: convertir datos abstractos de progreso en señales visuales claras que permitan tomar decisiones correctivas antes de que el error sea costoso.</p></div>
+
+            <h3>Aplicación</h3>
+            <div></div>
+        </article>
+        
+        <article class="subtema">
+            <h2>Gestión y Capitalización de Lecciones Aprendidas</h2>
+
+            <h3>Historia</h3>
+            <div><p>El concepto de 'Lessons Learned' tiene sus raíces en las revisiones después de la acción (AAR) del ejército estadounidense y fue adoptado por la ingeniería aeroespacial tras incidentes críticos. En el mundo de los datos, su importancia creció exponencialmente con el auge de las metodologías Agile y Scrum. Durante los años 2000, las empresas se dieron cuenta de que el conocimiento técnico residía en las personas y no en los procesos; cuando un arquitecto de datos se iba, se llevaba consigo la solución a errores recurrentes. Esto impulsó la creación de repositorios de conocimiento (Knowledge Management). En la actualidad, las lecciones aprendidas en proyectos de IA no solo cubren fallos de código, sino también sesgos éticos detectados y problemas de interpretabilidad de modelos que no se previeron en el diseño inicial.</p></div>
+
+            <h3>Descripción Formal</h3>
+            <div><p>La capitalización del conocimiento requiere un enfoque estructurado de categorización. En Excel, se suelen utilizar tablas dinámicas para analizar la frecuencia de problemas mediante funciones como <code>=CONTAR.SI.CONJUNTO(Rango_Categoría; "Técnico"; Rango_Impacto; "Alto")</code>. El proceso algorítmico sigue una estructura de 'Captura -&gt; Validación -&gt; Almacenamiento -&gt; Recuperación'. Se utiliza lógica booleana para filtrar el repositorio de lecciones durante el inicio de nuevos proyectos. Por ejemplo, un sistema de recomendación de lecciones podría usar una búsqueda por palabras clave: <code>if keyword in project_scope: display(historical_lesson)</code>. Técnicamente, esto se formaliza en un 'Documento de Lecciones Aprendidas' que debe incluir: 1. El evento o problema. 2. La causa raíz (usando la técnica de los 5 Porqués). 3. La acción correctiva tomada. 4. La recomendación futura. En el entorno de ingeniería, esto se traduce en actualizar el manual de buenas prácticas de codificación o los templates de Terraform para evitar errores de infraestructura repetidos.</p></div>
+
+            <div class="diagrama-box">
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg style="max-width: 80%; max-height: 350px; height: auto; width: auto;" data-width="919pt" data-height="44pt"
+ viewBox="0.00 0.00 919.00 44.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 40)">
+<title>G</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-40 915,-40 915,4 -4,4"/>
+<!-- event -->
+<g id="node1" class="node">
+<title>event</title>
+<polygon fill="#f9f9f9" stroke="black" points="128,-36 0,-36 0,0 128,0 128,-36"/>
+<text text-anchor="middle" x="64" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">Evento / Problema</text>
+</g>
+<!-- analysis -->
+<g id="node2" class="node">
+<title>analysis</title>
+<polygon fill="#f9f9f9" stroke="black" points="301,-36 164,-36 164,0 301,0 301,-36"/>
+<text text-anchor="middle" x="232.5" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">Análisis Causa Raíz</text>
+</g>
+<!-- event&#45;&gt;analysis -->
+<g id="edge1" class="edge">
+<title>event&#45;&gt;analysis</title>
+<path fill="none" stroke="black" d="M128.42,-18C136.65,-18 145.16,-18 153.59,-18"/>
+<polygon fill="black" stroke="black" points="153.82,-21.5 163.82,-18 153.82,-14.5 153.82,-21.5"/>
+</g>
+<!-- solution -->
+<g id="node3" class="node">
+<title>solution</title>
+<polygon fill="#f9f9f9" stroke="black" points="460,-36 337,-36 337,0 460,0 460,-36"/>
+<text text-anchor="middle" x="398.5" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">Solución Aplicada</text>
+</g>
+<!-- analysis&#45;&gt;solution -->
+<g id="edge2" class="edge">
+<title>analysis&#45;&gt;solution</title>
+<path fill="none" stroke="black" d="M301.15,-18C309.56,-18 318.17,-18 326.62,-18"/>
+<polygon fill="black" stroke="black" points="326.83,-21.5 336.83,-18 326.83,-14.5 326.83,-21.5"/>
+</g>
+<!-- store -->
+<g id="node4" class="node">
+<title>store</title>
+<polygon fill="#f9f9f9" stroke="black" points="687,-36 496,-36 496,0 687,0 687,-36"/>
+<text text-anchor="middle" x="591.5" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">Repositorio de Conocimiento</text>
+</g>
+<!-- solution&#45;&gt;store -->
+<g id="edge3" class="edge">
+<title>solution&#45;&gt;store</title>
+<path fill="none" stroke="black" d="M460.2,-18C468.36,-18 476.92,-18 485.58,-18"/>
+<polygon fill="black" stroke="black" points="485.78,-21.5 495.78,-18 485.78,-14.5 485.78,-21.5"/>
+</g>
+<!-- reuse -->
+<g id="node5" class="node">
+<title>reuse</title>
+<polygon fill="#f9f9f9" stroke="black" points="911,-36 723,-36 723,0 911,0 911,-36"/>
+<text text-anchor="middle" x="817" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">Consulta en Nuevo Proyecto</text>
+</g>
+<!-- store&#45;&gt;reuse -->
+<g id="edge4" class="edge">
+<title>store&#45;&gt;reuse</title>
+<path fill="none" stroke="black" d="M687.28,-18C695.66,-18 704.16,-18 712.6,-18"/>
+<polygon fill="black" stroke="black" points="712.85,-21.5 722.85,-18 712.85,-14.5 712.85,-21.5"/>
+</g>
+</g>
+</svg>
+
+            </div>
+            <p style="font-size:0.8em; color:#999; text-align:center; margin-top:-20px; margin-bottom:30px;">
+                <em>Figura: Diagrama generado automáticamente mediante Graphviz</em>
+            </p>
+
+            <h3>Intuición</h3>
+            <div><p>Las lecciones aprendidas son como un diario personal pero para una empresa. Si alguna vez cocinaste algo y se quemó porque pusiste el fuego muy alto, la próxima vez recordarás bajar la temperatura. En los proyectos de datos, es lo mismo: si un modelo de machine learning falló porque los datos de entrenamiento estaban desactualizados, documentar esa 'quemadura' evita que el próximo equipo cometa el mismo error. No se trata de buscar culpables, sino de construir un cerebro colectivo. La intuición es transformar la experiencia individual en sabiduría organizacional para que la empresa sea cada vez más inteligente y eficiente.</p></div>
+
+            <h3>Aplicación</h3>
+            <div></div>
+        </article>
+        
+        <article class="subtema">
+            <h2>Cierre Formal y Entrega de Activos de Datos</h2>
+
+            <h3>Historia</h3>
+            <div><p>El cierre formal era tradicionalmente una firma de aceptación de un producto físico. En la ingeniería de software y datos de las últimas décadas, este proceso se ha vuelto más complejo debido a la naturaleza intangible de los activos. Con la llegada de normativas como el RGPD en 2018, el cierre formal de un proyecto de datos ahora exige no solo la entrega del código, sino también la certificación de que los datos personales han sido tratados, anonimizados o eliminados según el acuerdo. El cierre ha evolucionado de un 'apretón de manos' a un protocolo riguroso de transferencia de propiedad intelectual, documentación de metadatos y acuerdos de nivel de servicio (SLA) para el mantenimiento del modelo o pipeline entregado.</p></div>
+
+            <h3>Descripción Formal</h3>
+            <div><p>El cierre formal implica una validación binaria de entregables. En Excel, se utiliza una matriz de trazabilidad de requisitos donde cada ítem se valida con una función lógica: <code>=Y(Estado="Entregado"; Aceptación_Cliente="SÍ")</code>. Si todos los valores de la columna son VERDADERO, el proyecto puede proceder al cierre. Algorítmicamente, el cierre de un activo de datos (como una base de datos) requiere un 'Checksum' para asegurar la integridad de los datos transferidos. El algoritmo MD5 o SHA-256 se utiliza para comparar el archivo en el entorno de desarrollo y en el de producción: <code>if hash_origin == hash_dest: finalize_transfer() else: reject_transfer()</code>. Además, el cierre incluye la liberación de recursos (de-provisioning) en la nube para evitar costos innecesarios, lo cual se programa mediante scripts de 'Cleanup' que ejecutan comandos como <code>terraform destroy</code> sobre recursos específicos que ya no son productivos.</p></div>
+
+            <div class="diagrama-box">
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg style="max-width: 80%; max-height: 350px; height: auto; width: auto;" data-width="317pt" data-height="364pt"
+ viewBox="0.00 0.00 316.84 364.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 360)">
+<title>G</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-360 312.84,-360 312.84,4 -4,4"/>
+<!-- verify -->
+<g id="node1" class="node">
+<title>verify</title>
+<polygon fill="#f9f9f9" stroke="black" points="244.42,-356 64.42,-356 64.42,-320 244.42,-320 244.42,-356"/>
+<text text-anchor="middle" x="154.42" y="-334.3" font-family="Helvetica,sans-Serif" font-size="14.00">Verificación de Entregables</text>
+</g>
+<!-- approval -->
+<g id="node2" class="node">
+<title>approval</title>
+<polygon fill="#f9f9f9" stroke="black" points="154.42,-269 0.08,-251 154.42,-233 308.76,-251 154.42,-269"/>
+<text text-anchor="middle" x="154.42" y="-247.3" font-family="Helvetica,sans-Serif" font-size="14.00">¿Aprobación del Cliente?</text>
+</g>
+<!-- verify&#45;&gt;approval -->
+<g id="edge1" class="edge">
+<title>verify&#45;&gt;approval</title>
+<path fill="none" stroke="black" d="M153.25,-319.92C152.91,-314.22 152.59,-307.84 152.42,-302 152.21,-294.65 152.36,-286.69 152.65,-279.33"/>
+<polygon fill="black" stroke="black" points="156.15,-279.28 153.15,-269.12 149.16,-278.94 156.15,-279.28"/>
+</g>
+<!-- approval&#45;&gt;verify -->
+<g id="edge3" class="edge">
+<title>approval&#45;&gt;verify</title>
+<path fill="none" stroke="black" d="M154.42,-269.18C154.42,-280.81 154.42,-296.42 154.42,-309.73"/>
+<polygon fill="black" stroke="black" points="150.92,-309.8 154.42,-319.8 157.92,-309.8 150.92,-309.8"/>
+<text text-anchor="middle" x="190.92" y="-290.8" font-family="Times,serif" font-size="14.00">NO (Ajustes)</text>
+</g>
+<!-- handover -->
+<g id="node4" class="node">
+<title>handover</title>
+<polygon fill="#f9f9f9" stroke="black" points="236.42,-182 72.42,-182 72.42,-146 236.42,-146 236.42,-182"/>
+<text text-anchor="middle" x="154.42" y="-160.3" font-family="Helvetica,sans-Serif" font-size="14.00">Transferencia de Activos</text>
+</g>
+<!-- approval&#45;&gt;handover -->
+<g id="edge2" class="edge">
+<title>approval&#45;&gt;handover</title>
+<path fill="none" stroke="black" d="M154.42,-232.8C154.42,-221.16 154.42,-205.55 154.42,-192.24"/>
+<polygon fill="black" stroke="black" points="157.92,-192.18 154.42,-182.18 150.92,-192.18 157.92,-192.18"/>
+<text text-anchor="middle" x="160.92" y="-203.8" font-family="Times,serif" font-size="14.00">SÍ</text>
+</g>
+<!-- cleanup -->
+<g id="node3" class="node">
+<title>cleanup</title>
+<polygon fill="#f9f9f9" stroke="black" points="271.42,-109 37.42,-109 37.42,-73 271.42,-73 271.42,-109"/>
+<text text-anchor="middle" x="154.42" y="-87.3" font-family="Helvetica,sans-Serif" font-size="14.00">Liberación de Recursos (Cloud/Dev)</text>
+</g>
+<!-- sign_off -->
+<g id="node5" class="node">
+<title>sign_off</title>
+<polygon fill="#f9f9f9" stroke="black" points="249.92,-36 58.92,-36 58.92,0 249.92,0 249.92,-36"/>
+<text text-anchor="middle" x="154.42" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">Cierre Administrativo y Firma</text>
+</g>
+<!-- cleanup&#45;&gt;sign_off -->
+<g id="edge5" class="edge">
+<title>cleanup&#45;&gt;sign_off</title>
+<path fill="none" stroke="black" d="M154.42,-72.81C154.42,-64.79 154.42,-55.05 154.42,-46.07"/>
+<polygon fill="black" stroke="black" points="157.92,-46.03 154.42,-36.03 150.92,-46.03 157.92,-46.03"/>
+</g>
+<!-- handover&#45;&gt;cleanup -->
+<g id="edge4" class="edge">
+<title>handover&#45;&gt;cleanup</title>
+<path fill="none" stroke="black" d="M154.42,-145.81C154.42,-137.79 154.42,-128.05 154.42,-119.07"/>
+<polygon fill="black" stroke="black" points="157.92,-119.03 154.42,-109.03 150.92,-119.03 157.92,-119.03"/>
+</g>
+</g>
+</svg>
+
+            </div>
+            <p style="font-size:0.8em; color:#999; text-align:center; margin-top:-20px; margin-bottom:30px;">
+                <em>Figura: Diagrama generado automáticamente mediante Graphviz</em>
+            </p>
+
+            <h3>Intuición</h3>
+            <div><p>El cierre formal es como la entrega de llaves al comprar una casa. No basta con que la casa esté construida; necesitas los planos, las garantías de los electrodomésticos y la seguridad de que no hay deudas pendientes. En un proyecto de datos, 'las llaves' incluyen el código fuente, la documentación técnica, los diccionarios de datos y el acceso a los servidores. Es el momento en que el equipo que construyó la solución se retira y el equipo de operaciones toma el control. Es vital porque asegura que el cliente está satisfecho y que el equipo de desarrollo ha cumplido legal y técnicamente con sus obligaciones.</p></div>
+
+            <h3>Aplicación</h3>
+            <div></div>
+        </article>
+        </body></html>

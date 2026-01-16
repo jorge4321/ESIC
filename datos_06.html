@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>6 - Metodologías Modernas - DevOps y MLOps: Integración y Despliegue en Proyectos de Software.</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #f4f4f9; color: #333; margin: 0; padding: 20px; line-height: 1.6; position: relative; }
+        header { background: #2c3e50; color: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; text-align:center; }
+        h1 { margin: 0; font-size: 1.5rem; }
+
+        /* Estilo del botón Atrás */
+        .btn-atras {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #7f8c8d;
+            color: white;
+            padding: 8px 15px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            transition: background 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+        .btn-atras:hover { background: #95a5a6; }
+
+        .subtema {
+            background: white;
+            padding: 40px;
+            margin-bottom: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        h2 { color: #2980b9; border-bottom: 2px solid #eee; padding-bottom: 10px; margin-top: 0; }
+        h3 { color: #7f8c8d; font-size: 0.9em; text-transform: uppercase; margin-top: 30px; letter-spacing: 1px; border-left: 3px solid #d4af37; padding-left: 10px; }
+
+        .diagrama-box {
+            text-align: center;
+            margin: 30px 0;
+            padding: 20px;
+            background: #fafafa;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 150px;
+        }
+
+        p { margin-bottom: 1rem; }
+        strong { color: #2c3e50; font-weight: 600; }
+        code { background: #f0f0f0; padding: 2px 5px; border-radius: 3px; font-family: monospace; color: #c0392b; }
+        ul { padding-left: 20px; }
+        li { margin-bottom: 0.5rem; }
+    </style>
+</head>
+<body>
+    <button onclick="window.history.back()" class="btn-atras">Atrás</button>
+    <header><h1>6 - Metodologías Modernas - DevOps y MLOps: Integración y Despliegue en Proyectos de Software.</h1></header>
+    <main>
+
+        <article class="subtema">
+            <h2>Fundamentos de DevOps: Integración y Despliegue Continuo (CI/CD)</h2>
+
+            <h3>Historia</h3>
+            <div><p>El concepto de DevOps surgió a finales de la década de 2000, impulsado por la necesidad de romper los silos entre los equipos de desarrollo (Dev) y operaciones (Ops). Históricamente, el desarrollo de software seguía el modelo 'Waterfall', donde las fases estaban aisladas, provocando retrasos masivos y errores en el despliegue. En 2009, Patrick Debois acuñó el término durante las conferencias 'DevOpsDays' en Bélgica. La evolución se aceleró con la adopción de la nube y la micro-segmentación de servicios. Antes, el despliegue de una nueva versión podía tardar meses; hoy, gracias a la automatización de pruebas y la integración continua, empresas como Amazon o Netflix realizan miles de despliegues diarios. Esta metodología no es solo tecnológica, sino cultural, priorizando la comunicación, la automatización y el feedback constante para mejorar la calidad del producto final en ciclos de vida extremadamente cortos y eficientes.</p></div>
+
+            <h3>Descripción Formal</h3>
+            <div><p>DevOps se basa en los pilares de Integración Continua (CI) y Despliegue Continuo (CD). La CI implica que cada cambio en el código se integra automáticamente en un repositorio compartido, activando pruebas automáticas. El CD extiende esto al automatizar el lanzamiento del código probado a entornos de producción. En el análisis de datos, podemos simular el control de calidad en Excel mediante funciones de validación lógica. Por ejemplo, para verificar si un lote de datos importado cumple con los umbrales de integridad, usaríamos: <code>=SI(Y(A2&lt;&gt;""; ESNUMERO(B2); B2&gt;0); "PASSED"; "FAILED")</code>. En términos de algoritmos de automatización, el flujo lógico sigue una estructura condicional estricta: 
+1. Evento: 'git push'.
+2. Acción: Trigger Pipeline.
+3. Proceso: Build Artifact -&gt; Run Unit Tests.
+4. Lógica: IF (Test_Results == ALL_PASS) THEN Deploy_to_Staging ELSE Notify_Developer. 
+Este proceso garantiza que el software siempre esté en un estado desplegable, minimizando el riesgo humano en la fase de 'release' y asegurando que la infraestructura se trate como código (IaC).</p></div>
+
+            <div class="diagrama-box">
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg style="max-width: 80%; max-height: 350px; height: auto; width: auto;" data-width="744pt" data-height="98pt"
+ viewBox="0.00 0.00 743.61 98.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 94)">
+<title>G</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-94 739.61,-94 739.61,4 -4,4"/>
+<!-- commit -->
+<g id="node1" class="node">
+<title>commit</title>
+<polygon fill="#f9f9f9" stroke="black" points="101,-63 0,-63 0,-27 101,-27 101,-63"/>
+<text text-anchor="middle" x="50.5" y="-41.3" font-family="Helvetica,sans-Serif" font-size="14.00">Code Commit</text>
+</g>
+<!-- build -->
+<g id="node2" class="node">
+<title>build</title>
+<polygon fill="#f9f9f9" stroke="black" points="254,-63 138,-63 138,-27 254,-27 254,-63"/>
+<text text-anchor="middle" x="196" y="-41.3" font-family="Helvetica,sans-Serif" font-size="14.00">Automated Build</text>
+</g>
+<!-- commit&#45;&gt;build -->
+<g id="edge1" class="edge">
+<title>commit&#45;&gt;build</title>
+<path fill="none" stroke="black" d="M101.29,-45C109.87,-45 118.93,-45 127.88,-45"/>
+<polygon fill="black" stroke="black" points="127.92,-48.5 137.92,-45 127.92,-41.5 127.92,-48.5"/>
+</g>
+<!-- test -->
+<g id="node3" class="node">
+<title>test</title>
+<polygon fill="#f9f9f9" stroke="black" points="367,-63 291,-63 291,-27 367,-27 367,-63"/>
+<text text-anchor="middle" x="329" y="-41.3" font-family="Helvetica,sans-Serif" font-size="14.00">Unit Tests</text>
+</g>
+<!-- build&#45;&gt;test -->
+<g id="edge2" class="edge">
+<title>build&#45;&gt;test</title>
+<path fill="none" stroke="black" d="M254.08,-45C262.9,-45 271.93,-45 280.51,-45"/>
+<polygon fill="black" stroke="black" points="280.72,-48.5 290.72,-45 280.72,-41.5 280.72,-48.5"/>
+</g>
+<!-- check -->
+<g id="node4" class="node">
+<title>check</title>
+<polygon fill="#f9f9f9" stroke="black" points="485.8,-63 404.19,-45 485.8,-27 567.42,-45 485.8,-63"/>
+<text text-anchor="middle" x="485.8" y="-41.3" font-family="Helvetica,sans-Serif" font-size="14.00">Tests Pass?</text>
+</g>
+<!-- test&#45;&gt;check -->
+<g id="edge3" class="edge">
+<title>test&#45;&gt;check</title>
+<path fill="none" stroke="black" d="M367.08,-45C375.36,-45 384.49,-45 393.89,-45"/>
+<polygon fill="black" stroke="black" points="394.18,-48.5 404.18,-45 394.18,-41.5 394.18,-48.5"/>
+</g>
+<!-- deploy -->
+<g id="node5" class="node">
+<title>deploy</title>
+<polygon fill="#f9f9f9" stroke="black" points="735.61,-90 629.61,-90 629.61,-54 735.61,-54 735.61,-90"/>
+<text text-anchor="middle" x="682.61" y="-68.3" font-family="Helvetica,sans-Serif" font-size="14.00">Deploy to Prod</text>
+</g>
+<!-- check&#45;&gt;deploy -->
+<g id="edge4" class="edge">
+<title>check&#45;&gt;deploy</title>
+<path fill="none" stroke="black" d="M536.47,-51.88C561.66,-55.37 592.5,-59.65 619.27,-63.36"/>
+<polygon fill="black" stroke="black" points="618.93,-66.85 629.31,-64.75 619.89,-59.91 618.93,-66.85"/>
+<text text-anchor="middle" x="598.61" y="-64.8" font-family="Times,serif" font-size="14.00">YES</text>
+</g>
+<!-- notify -->
+<g id="node6" class="node">
+<title>notify</title>
+<polygon fill="#f9f9f9" stroke="black" points="725.61,-36 639.61,-36 639.61,0 725.61,0 725.61,-36"/>
+<text text-anchor="middle" x="682.61" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">Notify Devs</text>
+</g>
+<!-- check&#45;&gt;notify -->
+<g id="edge5" class="edge">
+<title>check&#45;&gt;notify</title>
+<path fill="none" stroke="black" d="M536.47,-38.12C564.78,-34.19 600.24,-29.28 629.02,-25.29"/>
+<polygon fill="black" stroke="black" points="629.88,-28.7 639.3,-23.86 628.91,-21.77 629.88,-28.7"/>
+<text text-anchor="middle" x="598.61" y="-33.8" font-family="Times,serif" font-size="14.00">NO</text>
+</g>
+</g>
+</svg>
+
+            </div>
+            <p style="font-size:0.8em; color:#999; text-align:center; margin-top:-20px; margin-bottom:30px;">
+                <em>Figura: Diagrama generado automáticamente mediante Graphviz</em>
+            </p>
+
+            <h3>Intuición</h3>
+            <div><p>Imagina que estás escribiendo un libro colaborativo con cien personas. En el método antiguo, cada uno escribiría su capítulo por separado y, al final del año, intentarían pegarlos todos con cinta adhesiva, dándose cuenta de que los personajes cambian de nombre y la trama no tiene sentido. DevOps es como tener un sistema donde, cada vez que alguien escribe una frase, un editor automático comprueba instantáneamente si el nombre del personaje es correcto y si la gramática fluye con lo anterior. Si hay un error, te avisa en el segundo; si está bien, la frase se añade a la versión 'lista para imprimir'. Es la eliminación de la incertidumbre: en lugar de un gran lanzamiento estresante, el software evoluciona de forma fluida y natural, como un organismo vivo que se adapta constantemente.</p></div>
+
+            <h3>Aplicación</h3>
+            <div><p>En el entorno profesional de un ingeniero de datos, CI/CD se aplica al despliegue de ETLs (Extract, Transform, Load). Por ejemplo, cuando se modifica un script de Python que limpia datos de clientes, el pipeline de CI ejecuta tests sintácticos y de calidad de datos antes de subir el script a un entorno de nube como Azure o AWS. Si el script falla al calcular un KPI crítico, el despliegue se detiene automáticamente. Esto previene que datos erróneos lleguen a los dashboards de la directiva, manteniendo la 'única fuente de verdad' de la empresa íntegra y confiable.</p></div>
+        </article>
+        
+        <article class="subtema">
+            <h2>MLOps: El Ciclo de Vida del Aprendizaje Automático</h2>
+
+            <h3>Historia</h3>
+            <div><p>MLOps nace como una extensión de DevOps específica para los desafíos del Machine Learning. A mediados de 2015, Google publicó un artículo fundamental titulado 'Hidden Technical Debt in Machine Learning Systems', señalando que el código de ML es solo una pequeña fracción del ecosistema total. A diferencia del software tradicional, que es determinista (código + datos = resultado), el ML es probabilístico y depende fuertemente de la naturaleza cambiante de los datos. El concepto evolucionó para estandarizar cómo se entrenan, registran, despliegan y supervisan los modelos en producción. Antes, los científicos de datos entregaban un modelo en un archivo estático que los ingenieros de software no sabían cómo implementar. MLOps crea un puente para que el ciclo de vida del modelo sea reproducible, escalable y gestionable, integrando la gestión de datos (DataOps) con la gestión de modelos.</p></div>
+
+            <h3>Descripción Formal</h3>
+            <div><p>MLOps introduce el concepto de Entrenamiento Continuo (CT). Mientras que en DevOps desplegamos código, en MLOps desplegamos un pipeline que puede generar nuevos modelos automáticamente. Un algoritmo típico de decisión para re-entrenamiento sería: 
+1. Capturar métricas en tiempo real.
+2. Calcular métricas de error (MAE o RMSE).
+3. Lógica de umbral: IF (Current_RMSE &gt; Baseline_RMSE * 1.1) THEN Trigger_Retraining_Pipeline.
+En Excel, para monitorizar la precisión de un modelo frente a un objetivo, podríamos usar: <code>=SI(ABS(A2-B2)/A2 &gt; 0.15; "RE-TRAIN"; "STABLE")</code>, donde A2 es el valor real y B2 es la predicción. Técnicamente, esto implica el uso de 'Model Registries' (como MLflow) para versionar no solo el código, sino también los hiperparámetros y el dataset específico utilizado (Data Versioning), permitiendo la trazabilidad completa del experimento y la capacidad de realizar 'rollbacks' si un nuevo modelo rinde peor que el anterior en producción.</p></div>
+
+            <div class="diagrama-box">
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg style="max-width: 80%; max-height: 350px; height: auto; width: auto;" data-width="280pt" data-height="423pt"
+ viewBox="0.00 0.00 280.18 423.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 419)">
+<title>G</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-419 276.18,-419 276.18,4 -4,4"/>
+<!-- data -->
+<g id="node1" class="node">
+<title>data</title>
+<polygon fill="#f9f9f9" stroke="black" points="203,-415 84,-415 84,-379 203,-379 203,-415"/>
+<text text-anchor="middle" x="143.5" y="-393.3" font-family="Helvetica,sans-Serif" font-size="14.00">Ingesta de Datos</text>
+</g>
+<!-- train -->
+<g id="node2" class="node">
+<title>train</title>
+<polygon fill="#f9f9f9" stroke="black" points="220.5,-342 66.5,-342 66.5,-306 220.5,-306 220.5,-342"/>
+<text text-anchor="middle" x="143.5" y="-320.3" font-family="Helvetica,sans-Serif" font-size="14.00">Entrenamiento Modelo</text>
+</g>
+<!-- data&#45;&gt;train -->
+<g id="edge1" class="edge">
+<title>data&#45;&gt;train</title>
+<path fill="none" stroke="black" d="M143.5,-378.81C143.5,-370.79 143.5,-361.05 143.5,-352.07"/>
+<polygon fill="black" stroke="black" points="147,-352.03 143.5,-342.03 140,-352.03 147,-352.03"/>
+</g>
+<!-- eval -->
+<g id="node3" class="node">
+<title>eval</title>
+<polygon fill="#f9f9f9" stroke="black" points="212.5,-269 74.5,-269 74.5,-233 212.5,-233 212.5,-269"/>
+<text text-anchor="middle" x="143.5" y="-247.3" font-family="Helvetica,sans-Serif" font-size="14.00">Evaluación Métricas</text>
+</g>
+<!-- train&#45;&gt;eval -->
+<g id="edge2" class="edge">
+<title>train&#45;&gt;eval</title>
+<path fill="none" stroke="black" d="M143.5,-305.81C143.5,-297.79 143.5,-288.05 143.5,-279.07"/>
+<polygon fill="black" stroke="black" points="147,-279.03 143.5,-269.03 140,-279.03 147,-279.03"/>
+</g>
+<!-- valid -->
+<g id="node4" class="node">
+<title>valid</title>
+<polygon fill="#f9f9f9" stroke="black" points="143.5,-196 14.64,-178 143.5,-160 272.36,-178 143.5,-196"/>
+<text text-anchor="middle" x="143.5" y="-174.3" font-family="Helvetica,sans-Serif" font-size="14.00">¿Supera Threshold?</text>
+</g>
+<!-- eval&#45;&gt;valid -->
+<g id="edge3" class="edge">
+<title>eval&#45;&gt;valid</title>
+<path fill="none" stroke="black" d="M143.5,-232.81C143.5,-224.79 143.5,-215.05 143.5,-206.07"/>
+<polygon fill="black" stroke="black" points="147,-206.03 143.5,-196.03 140,-206.03 147,-206.03"/>
+</g>
+<!-- reg -->
+<g id="node5" class="node">
+<title>reg</title>
+<polygon fill="#f9f9f9" stroke="black" points="107,-109 0,-109 0,-73 107,-73 107,-109"/>
+<text text-anchor="middle" x="53.5" y="-87.3" font-family="Helvetica,sans-Serif" font-size="14.00">Model Registry</text>
+</g>
+<!-- valid&#45;&gt;reg -->
+<g id="edge4" class="edge">
+<title>valid&#45;&gt;reg</title>
+<path fill="none" stroke="black" d="M127.41,-161.8C113.94,-149.08 94.48,-130.7 78.91,-115.99"/>
+<polygon fill="black" stroke="black" points="81.29,-113.43 71.62,-109.11 76.48,-118.52 81.29,-113.43"/>
+<text text-anchor="middle" x="111" y="-130.8" font-family="Times,serif" font-size="14.00">SI</text>
+</g>
+<!-- alert -->
+<g id="node7" class="node">
+<title>alert</title>
+<polygon fill="#f9f9f9" stroke="black" points="224,-109 125,-109 125,-73 224,-73 224,-109"/>
+<text text-anchor="middle" x="174.5" y="-87.3" font-family="Helvetica,sans-Serif" font-size="14.00">Alert Scientist</text>
+</g>
+<!-- valid&#45;&gt;alert -->
+<g id="edge6" class="edge">
+<title>valid&#45;&gt;alert</title>
+<path fill="none" stroke="black" d="M149.48,-160.61C153.81,-148.73 159.76,-132.41 164.77,-118.67"/>
+<polygon fill="black" stroke="black" points="168.08,-119.81 168.22,-109.21 161.51,-117.41 168.08,-119.81"/>
+<text text-anchor="middle" x="170.5" y="-130.8" font-family="Times,serif" font-size="14.00">NO</text>
+</g>
+<!-- deploy -->
+<g id="node6" class="node">
+<title>deploy</title>
+<polygon fill="#f9f9f9" stroke="black" points="95,-36 12,-36 12,0 95,0 95,-36"/>
+<text text-anchor="middle" x="53.5" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">Deploy API</text>
+</g>
+<!-- reg&#45;&gt;deploy -->
+<g id="edge5" class="edge">
+<title>reg&#45;&gt;deploy</title>
+<path fill="none" stroke="black" d="M53.5,-72.81C53.5,-64.79 53.5,-55.05 53.5,-46.07"/>
+<polygon fill="black" stroke="black" points="57,-46.03 53.5,-36.03 50,-46.03 57,-46.03"/>
+</g>
+</g>
+</svg>
+
+            </div>
+            <p style="font-size:0.8em; color:#999; text-align:center; margin-top:-20px; margin-bottom:30px;">
+                <em>Figura: Diagrama generado automáticamente mediante Graphviz</em>
+            </p>
+
+            <h3>Intuición</h3>
+            <div><p>Si DevOps es como construir una fábrica de coches automatizada, MLOps es como construir una fábrica que además debe ajustar sus máquinas cada vez que el acero cambia de dureza. Un modelo de Machine Learning es como un atleta: no basta con entrenarlo una vez y mandarlo a las Olimpiadas para siempre. El atleta envejece, el terreno cambia y la competencia mejora. MLOps es el equipo de entrenadores, nutricionistas y analistas que monitorizan al atleta 24/7, detectando cuándo está perdiendo forma y sometiéndolo a un nuevo régimen de entrenamiento automáticamente para que siempre esté en su nivel óptimo de rendimiento sin intervención manual constante.</p></div>
+
+            <h3>Aplicación</h3>
+            <div><p>Un ingeniero en una plataforma de streaming utiliza MLOps para el sistema de recomendación. Si los gustos de los usuarios cambian súbitamente (por ejemplo, por una tendencia viral), el sistema detecta que la precisión de las recomendaciones actuales ha bajado. Automáticamente, el pipeline de MLOps toma los datos de las últimas 24 horas, re-entrena el modelo, valida que la nueva versión es superior a la anterior mediante un test A/B y despliega el nuevo modelo sin que el usuario final note ninguna interrupción, solo mejores recomendaciones.</p></div>
+        </article>
+        
+        <article class="subtema">
+            <h2>Monitorización y Detección de Data Drift</h2>
+
+            <h3>Historia</h3>
+            <div><p>La monitorización es la fase final y a la vez inicial del ciclo de retroalimentación en metodologías modernas. Históricamente, se monitorizaba la infraestructura (¿Está el servidor encendido? ¿Cuánta RAM usa?). Sin embargo, con el auge del Big Data y el ML, se descubrió que un sistema podía estar 'sano' técnicamente pero entregando resultados desastrosos porque los datos de entrada habían cambiado. El término 'Data Drift' (deriva de datos) se popularizó para describir este fenómeno. Durante la pandemia de 2020, casi todos los modelos de predicción de demanda fallaron porque el comportamiento humano cambió drásticamente en días. Esto impulsó la creación de herramientas de observabilidad de datos que comparan distribuciones estadísticas en tiempo real para alertar cuando el mundo real ya no se parece a los datos con los que se entrenó el sistema.</p></div>
+
+            <h3>Descripción Formal</h3>
+            <div><p>El Data Drift se cuantifica comparando la distribución de probabilidad de los datos de entrenamiento (P) con los de producción (Q). Estadísticamente, se utilizan pruebas como Kolmogorov-Smirnov (K-S) o la divergencia de Kullback-Leibler. En Excel, una forma rudimentaria pero efectiva de detectar cambios en la tendencia es comparar promedios móviles: <code>=PROMEDIO(A2:A50) - PROMEDIO(A51:A100)</code>. Si la diferencia absoluta supera un umbral de desviación estándar, hay drift. El algoritmo lógico de un monitor de drift sería:
+1. Input: Lote de datos actual.
+2. Calcular: <code>Dist_Stat = Test_KS(Training_Data, Current_Data)</code>.
+3. Lógica: IF (Dist_Stat &gt; Alpha_Critical) THEN Flag_Drift_Alert ELSE Log_Normal_Status.
+Esto es vital porque el rendimiento del software basado en datos es silencioso cuando falla: el código no lanza una excepción (error), simplemente da una respuesta equivocada basándose en una realidad que ya no existe.</p></div>
+
+            <div class="diagrama-box">
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg style="max-width: 80%; max-height: 350px; height: auto; width: auto;" data-width="290pt" data-height="350pt"
+ viewBox="0.00 0.00 290.37 350.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 346)">
+<title>G</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-346 286.37,-346 286.37,4 -4,4"/>
+<!-- input -->
+<g id="node1" class="node">
+<title>input</title>
+<polygon fill="#f9f9f9" stroke="black" points="212.37,-342 63.37,-342 63.37,-306 212.37,-306 212.37,-342"/>
+<text text-anchor="middle" x="137.87" y="-320.3" font-family="Helvetica,sans-Serif" font-size="14.00">Entrada Datos Reales</text>
+</g>
+<!-- stats -->
+<g id="node2" class="node">
+<title>stats</title>
+<polygon fill="#f9f9f9" stroke="black" points="205.87,-269 69.87,-269 69.87,-233 205.87,-233 205.87,-269"/>
+<text text-anchor="middle" x="137.87" y="-247.3" font-family="Helvetica,sans-Serif" font-size="14.00">Cálculo Distribución</text>
+</g>
+<!-- input&#45;&gt;stats -->
+<g id="edge1" class="edge">
+<title>input&#45;&gt;stats</title>
+<path fill="none" stroke="black" d="M137.87,-305.81C137.87,-297.79 137.87,-288.05 137.87,-279.07"/>
+<polygon fill="black" stroke="black" points="141.37,-279.03 137.87,-269.03 134.37,-279.03 141.37,-279.03"/>
+</g>
+<!-- comp -->
+<g id="node3" class="node">
+<title>comp</title>
+<polygon fill="#f9f9f9" stroke="black" points="216.87,-196 58.87,-196 58.87,-160 216.87,-160 216.87,-196"/>
+<text text-anchor="middle" x="137.87" y="-174.3" font-family="Helvetica,sans-Serif" font-size="14.00">Comparar con Baseline</text>
+</g>
+<!-- stats&#45;&gt;comp -->
+<g id="edge2" class="edge">
+<title>stats&#45;&gt;comp</title>
+<path fill="none" stroke="black" d="M137.87,-232.81C137.87,-224.79 137.87,-215.05 137.87,-206.07"/>
+<polygon fill="black" stroke="black" points="141.37,-206.03 137.87,-196.03 134.37,-206.03 141.37,-206.03"/>
+</g>
+<!-- drift -->
+<g id="node4" class="node">
+<title>drift</title>
+<polygon fill="#f9f9f9" stroke="black" points="137.87,-123 0.13,-105 137.87,-87 275.62,-105 137.87,-123"/>
+<text text-anchor="middle" x="137.87" y="-101.3" font-family="Helvetica,sans-Serif" font-size="14.00">¿Hay Drift Detectado?</text>
+</g>
+<!-- comp&#45;&gt;drift -->
+<g id="edge3" class="edge">
+<title>comp&#45;&gt;drift</title>
+<path fill="none" stroke="black" d="M137.87,-159.81C137.87,-151.79 137.87,-142.05 137.87,-133.07"/>
+<polygon fill="black" stroke="black" points="141.37,-133.03 137.87,-123.03 134.37,-133.03 141.37,-133.03"/>
+</g>
+<!-- log -->
+<g id="node5" class="node">
+<title>log</title>
+<polygon fill="#f9f9f9" stroke="black" points="119.37,-36 14.37,-36 14.37,0 119.37,0 119.37,-36"/>
+<text text-anchor="middle" x="66.87" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">Log Status OK</text>
+</g>
+<!-- drift&#45;&gt;log -->
+<g id="edge5" class="edge">
+<title>drift&#45;&gt;log</title>
+<path fill="none" stroke="black" d="M124.85,-88.41C114.54,-76.07 99.94,-58.59 87.97,-44.26"/>
+<polygon fill="black" stroke="black" points="90.38,-41.68 81.28,-36.25 85,-46.16 90.38,-41.68"/>
+<text text-anchor="middle" x="116.87" y="-57.8" font-family="Times,serif" font-size="14.00">NO</text>
+</g>
+<!-- trigger -->
+<g id="node6" class="node">
+<title>trigger</title>
+<polygon fill="#f9f9f9" stroke="black" points="282.37,-36 137.37,-36 137.37,0 282.37,0 282.37,-36"/>
+<text text-anchor="middle" x="209.87" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">Trigger Retrain / Alert</text>
+</g>
+<!-- drift&#45;&gt;trigger -->
+<g id="edge4" class="edge">
+<title>drift&#45;&gt;trigger</title>
+<path fill="none" stroke="black" d="M151.08,-88.41C161.53,-76.07 176.34,-58.59 188.48,-44.26"/>
+<polygon fill="black" stroke="black" points="191.47,-46.14 195.27,-36.25 186.13,-41.61 191.47,-46.14"/>
+<text text-anchor="middle" x="184.37" y="-57.8" font-family="Times,serif" font-size="14.00">SI</text>
+</g>
+</g>
+</svg>
+
+            </div>
+            <p style="font-size:0.8em; color:#999; text-align:center; margin-top:-20px; margin-bottom:30px;">
+                <em>Figura: Diagrama generado automáticamente mediante Graphviz</em>
+            </p>
+
+            <h3>Intuición</h3>
+            <div><p>Imagina que tienes un GPS programado con los mapas de tu ciudad de hace 10 años. El GPS funciona perfectamente (no se apaga, calcula rutas rápido), pero te intenta mandar por calles que ahora son peatonales o edificios que ya no existen. El GPS 'cree' que lo está haciendo bien, pero sus datos están obsoletos. La monitorización de Data Drift es como tener un sistema que mira por la ventana y compara lo que ve con el mapa. En cuanto ve que una calle ha cambiado de sentido, hace sonar una alarma para decirte: 'Oye, el mapa ya no coincide con la realidad, necesitamos actualizarlo'. Es la diferencia entre saber que el motor gira y saber que el coche realmente va hacia donde quieres.</p></div>
+
+            <h3>Aplicación</h3>
+            <div><p>En el sector bancario, los modelos de detección de fraude deben ser monitorizados constantemente. Los estafadores cambian sus tácticas cada semana. Si el modelo fue entrenado para detectar fraudes con tarjetas físicas, pero ahora el fraude es mayoritariamente mediante pagos móviles por NFC, las características de los datos de entrada cambiarán (Drift). Un sistema de monitorización detectará que el campo 'tipo_de_transacción' tiene una distribución distinta a la habitual y alertará a los ingenieros para que ajusten el modelo antes de que las pérdidas económicas sean significativas.</p></div>
+        </article>
+        </body></html>

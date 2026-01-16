@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>22 - Gestión de Riesgos I - Análisis Cuantitativo de Riesgos y Modelos de Simulación.</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #f4f4f9; color: #333; margin: 0; padding: 20px; line-height: 1.6; position: relative; }
+        header { background: #2c3e50; color: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; text-align:center; }
+        h1 { margin: 0; font-size: 1.5rem; }
+
+        /* Estilo del botón Atrás */
+        .btn-atras {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #7f8c8d;
+            color: white;
+            padding: 8px 15px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            transition: background 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+        .btn-atras:hover { background: #95a5a6; }
+
+        .subtema {
+            background: white;
+            padding: 40px;
+            margin-bottom: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        h2 { color: #2980b9; border-bottom: 2px solid #eee; padding-bottom: 10px; margin-top: 0; }
+        h3 { color: #7f8c8d; font-size: 0.9em; text-transform: uppercase; margin-top: 30px; letter-spacing: 1px; border-left: 3px solid #d4af37; padding-left: 10px; }
+
+        .diagrama-box {
+            text-align: center;
+            margin: 30px 0;
+            padding: 20px;
+            background: #fafafa;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 150px;
+        }
+
+        p { margin-bottom: 1rem; }
+        strong { color: #2c3e50; font-weight: 600; }
+        code { background: #f0f0f0; padding: 2px 5px; border-radius: 3px; font-family: monospace; color: #c0392b; }
+        ul { padding-left: 20px; }
+        li { margin-bottom: 0.5rem; }
+    </style>
+</head>
+<body>
+    <button onclick="window.history.back()" class="btn-atras">Atrás</button>
+    <header><h1>22 - Gestión de Riesgos I - Análisis Cuantitativo de Riesgos y Modelos de Simulación.</h1></header>
+    <main>
+
+        <article class="subtema">
+            <h2>Simulación de Monte Carlo y Distribuciones de Probabilidad</h2>
+
+            <h3>Historia</h3>
+            <div><p>La simulación de Monte Carlo tiene sus raíces en el Proyecto Manhattan durante la década de 1940. Stanislaw Ulam, un matemático que trabajaba en la bomba de hidrógeno, concibió la idea mientras jugaba al solitario durante una enfermedad; se preguntó cuál era la probabilidad de ganar y se dio cuenta de que era más fácil simular miles de partidas que calcular la combinatoria exacta. Junto a John von Neumann, desarrolló el algoritmo para computadoras primitivas como la ENIAC. El nombre proviene del Casino de Monte Carlo en Mónaco, un guiño al azar intrínseco del método. Con la llegada de la computación comercial en los años 80 y 90, esta técnica pasó de laboratorios nucleares a Wall Street y a la gestión de proyectos complejos, permitiendo a los analistas modelar la incertidumbre no como un valor único, sino como un espectro de resultados posibles basados en distribuciones estadísticas.</p></div>
+
+            <h3>Descripción Formal</h3>
+            <div><p>El Análisis Cuantitativo de Riesgos mediante Monte Carlo utiliza el muestreo aleatorio repetido para obtener resultados numéricos. En la gestión de proyectos, se aplica sobre el cronograma y el presupuesto. El proceso matemático implica definir variables de entrada (costos, duraciones) como distribuciones de probabilidad (Triangular, PERT, Normal). </p>
+<p>En Excel, la lógica básica para una iteración de costo con distribución normal es: <code>=DISTR.NORM.INV(ALEATORIO(); media; desviacion_estandar)</code>. Si deseamos una distribución triangular (mínimo, más probable, máximo), se suele recurrir a complementos como @RISK o Crystal Ball, o mediante lógica de IF anidados: <code>=SI(ALEATORIO()&lt;((moda-min)/(max-min)); min+RAIZ(ALEATORIO()*(max-min)*(moda-min)); max-RAIZ((1-ALEATORIO())*(max-min)*(max-moda)))</code>. </p>
+<p>El algoritmo sigue estos pasos: 1. Definir el modelo matemático (ej: Costo Total = Suma de Partidas). 2. Asignar distribuciones a las variables inciertas. 3. Ejecutar N iteraciones (mínimo 1,000). 4. Recopilar resultados para generar un histograma y una curva S (frecuencia acumulada). El estadístico clave es el valor P50 (mediana) frente al P90 (valor con 90% de confianza), permitiendo determinar la reserva de contingencia necesaria para cubrir riesgos cuantificables.</p></div>
+
+            <div class="diagrama-box">
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg style="max-width: 80%; max-height: 350px; height: auto; width: auto;" data-width="377pt" data-height="583pt"
+ viewBox="0.00 0.00 376.50 583.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 579)">
+<title>G</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-579 372.5,-579 372.5,4 -4,4"/>
+<!-- start -->
+<g id="node1" class="node">
+<title>start</title>
+<ellipse fill="#e1f5fe" stroke="black" cx="255.5" cy="-557" rx="89.08" ry="18"/>
+<text text-anchor="middle" x="255.5" y="-553.3" font-family="Helvetica,sans-Serif" font-size="14.00">Inicio de Simulación</text>
+</g>
+<!-- inputs -->
+<g id="node2" class="node">
+<title>inputs</title>
+<polygon fill="#f9f9f9" stroke="black" points="368.5,-502 142.5,-502 142.5,-466 368.5,-466 368.5,-502"/>
+<text text-anchor="middle" x="255.5" y="-480.3" font-family="Helvetica,sans-Serif" font-size="14.00">Definir Variables (Min, Moda, Max)</text>
+</g>
+<!-- start&#45;&gt;inputs -->
+<g id="edge1" class="edge">
+<title>start&#45;&gt;inputs</title>
+<path fill="none" stroke="black" d="M255.5,-538.81C255.5,-530.79 255.5,-521.05 255.5,-512.07"/>
+<polygon fill="black" stroke="black" points="259,-512.03 255.5,-502.03 252,-512.03 259,-512.03"/>
+</g>
+<!-- rand_gen -->
+<g id="node3" class="node">
+<title>rand_gen</title>
+<polygon fill="#f9f9f9" stroke="black" points="364.5,-429 146.5,-429 146.5,-393 364.5,-393 364.5,-429"/>
+<text text-anchor="middle" x="255.5" y="-407.3" font-family="Helvetica,sans-Serif" font-size="14.00">Generar Número Aleatorio (0 a 1)</text>
+</g>
+<!-- inputs&#45;&gt;rand_gen -->
+<g id="edge2" class="edge">
+<title>inputs&#45;&gt;rand_gen</title>
+<path fill="none" stroke="black" d="M255.5,-465.81C255.5,-457.79 255.5,-448.05 255.5,-439.07"/>
+<polygon fill="black" stroke="black" points="259,-439.03 255.5,-429.03 252,-439.03 259,-439.03"/>
+</g>
+<!-- dist_calc -->
+<g id="node4" class="node">
+<title>dist_calc</title>
+<polygon fill="#f9f9f9" stroke="black" points="290.5,-356 60.5,-356 60.5,-320 290.5,-320 290.5,-356"/>
+<text text-anchor="middle" x="175.5" y="-334.3" font-family="Helvetica,sans-Serif" font-size="14.00">Transformar a Valor de Distribución</text>
+</g>
+<!-- rand_gen&#45;&gt;dist_calc -->
+<g id="edge3" class="edge">
+<title>rand_gen&#45;&gt;dist_calc</title>
+<path fill="none" stroke="black" d="M236.13,-392.81C226.01,-383.83 213.46,-372.69 202.41,-362.89"/>
+<polygon fill="black" stroke="black" points="204.49,-360.05 194.69,-356.03 199.84,-365.28 204.49,-360.05"/>
+</g>
+<!-- agg_res -->
+<g id="node5" class="node">
+<title>agg_res</title>
+<polygon fill="#f9f9f9" stroke="black" points="299,-269 0,-269 0,-233 299,-233 299,-269"/>
+<text text-anchor="middle" x="149.5" y="-247.3" font-family="Helvetica,sans-Serif" font-size="14.00">Calcular Resultado del Modelo (Costo/Tiempo)</text>
+</g>
+<!-- dist_calc&#45;&gt;agg_res -->
+<g id="edge4" class="edge">
+<title>dist_calc&#45;&gt;agg_res</title>
+<path fill="none" stroke="black" d="M170.24,-319.8C166.64,-308.05 161.81,-292.24 157.71,-278.84"/>
+<polygon fill="black" stroke="black" points="161.03,-277.71 154.75,-269.18 154.33,-279.76 161.03,-277.71"/>
+</g>
+<!-- check_n -->
+<g id="node6" class="node">
+<title>check_n</title>
+<polygon fill="#f9f9f9" stroke="black" points="238.5,-196 124.55,-178 238.5,-160 352.45,-178 238.5,-196"/>
+<text text-anchor="middle" x="238.5" y="-174.3" font-family="Helvetica,sans-Serif" font-size="14.00">¿Iteraciones = N?</text>
+</g>
+<!-- agg_res&#45;&gt;check_n -->
+<g id="edge5" class="edge">
+<title>agg_res&#45;&gt;check_n</title>
+<path fill="none" stroke="black" d="M171.04,-232.81C183.57,-222.82 199.44,-210.16 212.63,-199.63"/>
+<polygon fill="black" stroke="black" points="214.82,-202.37 220.45,-193.4 210.45,-196.9 214.82,-202.37"/>
+</g>
+<!-- check_n&#45;&gt;rand_gen -->
+<g id="edge6" class="edge">
+<title>check_n&#45;&gt;rand_gen</title>
+<path fill="none" stroke="black" d="M265.19,-192.03C280.64,-201.16 298.71,-214.95 307.5,-233 331.49,-282.25 320.21,-305.28 299.5,-356 295.2,-366.52 288.13,-376.59 280.9,-385.13"/>
+<polygon fill="black" stroke="black" points="278.09,-383.03 274.01,-392.81 283.29,-387.71 278.09,-383.03"/>
+<text text-anchor="middle" x="331.5" y="-290.8" font-family="Times,serif" font-size="14.00">NO</text>
+</g>
+<!-- output -->
+<g id="node7" class="node">
+<title>output</title>
+<polygon fill="#fff9c4" stroke="black" points="340,-109 137,-109 137,-73 340,-73 340,-109"/>
+<text text-anchor="middle" x="238.5" y="-87.3" font-family="Helvetica,sans-Serif" font-size="14.00">Generar Histograma y Curva S</text>
+</g>
+<!-- check_n&#45;&gt;output -->
+<g id="edge7" class="edge">
+<title>check_n&#45;&gt;output</title>
+<path fill="none" stroke="black" d="M238.5,-159.8C238.5,-148.16 238.5,-132.55 238.5,-119.24"/>
+<polygon fill="black" stroke="black" points="242,-119.18 238.5,-109.18 235,-119.18 242,-119.18"/>
+<text text-anchor="middle" x="245" y="-130.8" font-family="Times,serif" font-size="14.00">SÍ</text>
+</g>
+<!-- end -->
+<g id="node8" class="node">
+<title>end</title>
+<ellipse fill="#e1f5fe" stroke="black" cx="238.5" cy="-18" rx="120.78" ry="18"/>
+<text text-anchor="middle" x="238.5" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">Fin: Análisis de Probabilidad</text>
+</g>
+<!-- output&#45;&gt;end -->
+<g id="edge8" class="edge">
+<title>output&#45;&gt;end</title>
+<path fill="none" stroke="black" d="M238.5,-72.81C238.5,-64.79 238.5,-55.05 238.5,-46.07"/>
+<polygon fill="black" stroke="black" points="242,-46.03 238.5,-36.03 235,-46.03 242,-46.03"/>
+</g>
+</g>
+</svg>
+
+            </div>
+            <p style="font-size:0.8em; color:#999; text-align:center; margin-top:-20px; margin-bottom:30px;">
+                <em>Figura: Diagrama generado automáticamente mediante Graphviz</em>
+            </p>
+
+            <h3>Intuición</h3>
+            <div><p>Imagina que estás planeando un viaje por carretera. Si alguien te pregunta cuánto tiempo tardarás, podrías decir '5 horas'. Pero en la vida real, hay tráfico, clima o pinchazos. La simulación de Monte Carlo es como si pudieras vivir ese mismo viaje 10,000 veces en universos paralelos antes de salir de casa. En algunos universos tardas 4 horas porque todo está despejado, en otros 8 porque hubo un accidente. Al final, miras los 10,000 viajes y dices: 'En el 90% de los casos, llegué en menos de 6 horas'. Esto te da una seguridad mucho mayor que una simple estimación puntual. No predice el futuro exacto, pero te dice qué tan probable es que ocurra un desastre o un éxito, permitiéndote decidir cuánto dinero o tiempo extra debes guardar en el bolsillo 'por si acaso'.</p></div>
+
+            <h3>Aplicación</h3>
+            <div></div>
+        </article>
+        
+        <article class="subtema">
+            <h2>Análisis de Sensibilidad y Diagramas de Tornado</h2>
+
+            <h3>Historia</h3>
+            <div><p>El análisis de sensibilidad ha evolucionado paralelamente a la investigación operativa y la optimización económica de mediados del siglo XX. Originalmente, los ingenieros realizaban pruebas de 'cambio de una variable a la vez' (OAT) para entender cómo fallaban las estructuras. Con la masificación de las hojas de cálculo en los años 80, la capacidad de recalcular modelos instantáneamente permitió que el análisis de sensibilidad se convirtiera en un estándar de la gestión financiera. El 'Diagrama de Tornado' recibió su nombre por su apariencia visual: las barras horizontales se ordenan de mayor a menor impacto de arriba hacia abajo, creando una silueta similar a un embudo o tornado. Esta herramienta se popularizó en la gestión de proyectos bajo el estándar del PMBOK como el método principal para comunicar rápidamente a los interesados cuáles son los factores críticos que pueden hundir o salvar un proyecto.</p></div>
+
+            <h3>Descripción Formal</h3>
+            <div><p>El análisis de sensibilidad cuantifica cómo la incertidumbre en cada elemento del proyecto afecta al objetivo final, manteniendo las demás variables constantes. El método más común es calcular el coeficiente de correlación de Pearson o los valores extremos para cada entrada. </p>
+<p>En Excel, se utiliza la función 'Tabla de Datos' (Análisis de Hipótesis) para automatizar este proceso. Si el Objetivo (Costo Total) está en la celda <code>C10</code> y depende de un Riesgo (Precio Acero) en <code>B5</code>, la tabla de datos permite variar <code>B5</code> en un rango y observar el impacto en <code>C10</code>. Lógicamente, el algoritmo para un Diagrama de Tornado implica: 1. Establecer valores base para todas las variables. 2. Variar una variable $X_i$ a su valor mínimo y máximo (manteniendo el resto en su base). 3. Registrar el cambio en la variable de salida $Y$. 4. Calcular el diferencial $\Delta Y = |Y_{max} - Y_{min}|$. 5. Ordenar las variables de mayor a menor $\Delta Y$. La sintaxis en lenguajes de datos como Python con Pandas sería: <code>df['impacto'] = df['max_outcome'] - df['min_outcome']</code> seguido de <code>df.sort_values(by='impacto', ascending=False)</code>.</p></div>
+
+            <div class="diagrama-box">
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg style="max-width: 80%; max-height: 350px; height: auto; width: auto;" data-width="1144pt" data-height="46pt"
+ viewBox="0.00 0.00 1144.00 46.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 42)">
+<title>G</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-42 1140,-42 1140,4 -4,4"/>
+<!-- vars -->
+<g id="node1" class="node">
+<title>vars</title>
+<polygon fill="#f9f9f9" stroke="black" points="142,-38 0,-38 0,0 142,0 142,-38"/>
+<text text-anchor="middle" x="71" y="-22.8" font-family="Helvetica,sans-Serif" font-size="14.00">Variables de Entrada</text>
+<text text-anchor="middle" x="71" y="-7.8" font-family="Helvetica,sans-Serif" font-size="14.00">(A, B, C, D)</text>
+</g>
+<!-- baseline -->
+<g id="node2" class="node">
+<title>baseline</title>
+<polygon fill="#f9f9f9" stroke="black" points="313,-37 178,-37 178,-1 313,-1 313,-37"/>
+<text text-anchor="middle" x="245.5" y="-15.3" font-family="Helvetica,sans-Serif" font-size="14.00">Calcular Valor Base</text>
+</g>
+<!-- vars&#45;&gt;baseline -->
+<g id="edge1" class="edge">
+<title>vars&#45;&gt;baseline</title>
+<path fill="none" stroke="black" d="M142.16,-19C150.52,-19 159.08,-19 167.53,-19"/>
+<polygon fill="black" stroke="black" points="167.75,-22.5 177.75,-19 167.75,-15.5 167.75,-22.5"/>
+</g>
+<!-- loop -->
+<g id="node3" class="node">
+<title>loop</title>
+<polygon fill="#f9f9f9" stroke="black" points="533,-38 349,-38 349,0 533,0 533,-38"/>
+<text text-anchor="middle" x="441" y="-22.8" font-family="Helvetica,sans-Serif" font-size="14.00">Variar Xi (Min/Max)</text>
+<text text-anchor="middle" x="441" y="-7.8" font-family="Helvetica,sans-Serif" font-size="14.00">Mantener Otros Constantes</text>
+</g>
+<!-- baseline&#45;&gt;loop -->
+<g id="edge2" class="edge">
+<title>baseline&#45;&gt;loop</title>
+<path fill="none" stroke="black" d="M313.09,-19C321.34,-19 329.92,-19 338.54,-19"/>
+<polygon fill="black" stroke="black" points="338.68,-22.5 348.68,-19 338.68,-15.5 338.68,-22.5"/>
+</g>
+<!-- calc_diff -->
+<g id="node4" class="node">
+<title>calc_diff</title>
+<polygon fill="#f9f9f9" stroke="black" points="750,-37 569,-37 569,-1 750,-1 750,-37"/>
+<text text-anchor="middle" x="659.5" y="-15.3" font-family="Helvetica,sans-Serif" font-size="14.00">Calcular Rango de Impacto</text>
+</g>
+<!-- loop&#45;&gt;calc_diff -->
+<g id="edge3" class="edge">
+<title>loop&#45;&gt;calc_diff</title>
+<path fill="none" stroke="black" d="M533.19,-19C541.57,-19 550.09,-19 558.54,-19"/>
+<polygon fill="black" stroke="black" points="558.8,-22.5 568.8,-19 558.8,-15.5 558.8,-22.5"/>
+</g>
+<!-- sort -->
+<g id="node5" class="node">
+<title>sort</title>
+<polygon fill="#f9f9f9" stroke="black" points="936,-37 786,-37 786,-1 936,-1 936,-37"/>
+<text text-anchor="middle" x="861" y="-15.3" font-family="Helvetica,sans-Serif" font-size="14.00">Ordenar por Magnitud</text>
+</g>
+<!-- calc_diff&#45;&gt;sort -->
+<g id="edge4" class="edge">
+<title>calc_diff&#45;&gt;sort</title>
+<path fill="none" stroke="black" d="M750.04,-19C758.58,-19 767.22,-19 775.71,-19"/>
+<polygon fill="black" stroke="black" points="775.98,-22.5 785.98,-19 775.98,-15.5 775.98,-22.5"/>
+</g>
+<!-- tornado -->
+<g id="node6" class="node">
+<title>tornado</title>
+<polygon fill="#c8e6c9" stroke="black" points="1136,-37 972,-37 972,-1 1136,-1 1136,-37"/>
+<text text-anchor="middle" x="1054" y="-15.3" font-family="Helvetica,sans-Serif" font-size="14.00">Visualizar Tornado Chart</text>
+</g>
+<!-- sort&#45;&gt;tornado -->
+<g id="edge5" class="edge">
+<title>sort&#45;&gt;tornado</title>
+<path fill="none" stroke="black" d="M936.12,-19C944.56,-19 953.24,-19 961.87,-19"/>
+<polygon fill="black" stroke="black" points="961.96,-22.5 971.96,-19 961.96,-15.5 961.96,-22.5"/>
+</g>
+</g>
+</svg>
+
+            </div>
+            <p style="font-size:0.8em; color:#999; text-align:center; margin-top:-20px; margin-bottom:30px;">
+                <em>Figura: Diagrama generado automáticamente mediante Graphviz</em>
+            </p>
+
+            <h3>Intuición</h3>
+            <div><p>Si estás cocinando un pastel y algo sale mal, quieres saber qué ingrediente fue el responsable. ¿Fue un exceso de sal, la temperatura del horno o el tiempo de batido? El análisis de sensibilidad es como probar el pastel cambiando solo una cosa a la vez. Si cambias un poco la sal y el sabor casi no varía, la sal no es un riesgo crítico. Pero si cambias 2 grados la temperatura del horno y el pastel se quema, entonces el horno es tu variable crítica. El Diagrama de Tornado te muestra esto visualmente: arriba pone el 'Horno' porque tiene el impacto más grande, y abajo pone la 'Sal' porque apenas afecta el resultado. Ayuda al gestor de datos a decir: 'No perdamos tiempo controlando la sal, enfoquémonos obsesivamente en el termómetro del horno'.</p></div>
+
+            <h3>Aplicación</h3>
+            <div></div>
+        </article>
+        
+        <article class="subtema">
+            <h2>Árboles de Decisión y Valor Monetario Esperado (VME)</h2>
+
+            <h3>Historia</h3>
+            <div><p>La teoría de la decisión moderna surge del trabajo pionero de Blaise Pascal en el siglo XVII sobre los juegos de azar, pero fue formalizada para los negocios en el siglo XX por economistas como John von Neumann y Oskar Morgenstern en su obra 'Theory of Games and Economic Behavior' (1944). El concepto del Valor Monetario Esperado (VME) se convirtió en el pilar del análisis de riesgos cuantitativo al permitir a los gerentes convertir la incertidumbre en una cifra comparable: el valor promedio ponderado. Durante la Guerra Fría, la corporación RAND perfeccionó estos modelos para la toma de decisiones estratégicas militares. Hoy, es la herramienta fundamental en la evaluación de inversiones (Capex) y en la resolución de litigios legales, donde se debe decidir si aceptar un acuerdo o ir a juicio basándose en probabilidades de éxito.</p></div>
+
+            <h3>Descripción Formal</h3>
+            <div><p>El Valor Monetario Esperado (VME) es una magnitud estadística que calcula el promedio de los resultados cuando el futuro incluye escenarios que pueden o no ocurrir. La fórmula matemática es: $VME = \sum (Probabilidad_i \times Impacto_i)$. </p>
+<p>En un árbol de decisión, se utilizan nodos de decisión (cuadrados) y nodos de probabilidad (círculos). La técnica de cálculo es el 'Back-folding' o inducción hacia atrás, empezando desde los resultados finales hacia la decisión inicial. </p>
+<p>En Excel, esto se resuelve con la función <code>=SUMAPRODUCTO(rango_probabilidades; rango_impactos)</code>. Por ejemplo, si un proyecto tiene un 60% de probabilidad de ganar $100,000 y un 40% de perder $50,000, el cálculo sería: <code>=(0.6 * 100000) + (0.4 * -50000)</code>, resultando en un VME de $40,000. Lógicamente, el algoritmo de un árbol de decisión busca maximizar el VME en nodos de beneficio o minimizarlo en nodos de costo: <code>Decision = MAX(VME_opcion_A; VME_opcion_B)</code>. Para modelos complejos, se utilizan algoritmos recursivos que recorren las ramas del árbol evaluando cada nodo de incertidumbre.</p></div>
+
+            <div class="diagrama-box">
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg style="max-width: 80%; max-height: 350px; height: auto; width: auto;" data-width="841pt" data-height="251pt"
+ viewBox="0.00 0.00 840.89 251.44" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 247.44)">
+<title>G</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-247.44 836.89,-247.44 836.89,4 -4,4"/>
+<!-- dec_node -->
+<g id="node1" class="node">
+<title>dec_node</title>
+<polygon fill="#bbdefb" stroke="black" points="133,-133 0,-133 0,0 133,0 133,-133"/>
+<text text-anchor="middle" x="66.5" y="-62.8" font-family="Helvetica,sans-Serif" font-size="14.00">Decisión: ¿Invertir?</text>
+</g>
+<!-- prob_node -->
+<g id="node2" class="node">
+<title>prob_node</title>
+<ellipse fill="#e1f5fe" stroke="black" cx="299.94" cy="-163.5" rx="79.89" ry="79.89"/>
+<text text-anchor="middle" x="299.94" y="-159.8" font-family="Helvetica,sans-Serif" font-size="14.00">Evento de Riesgo</text>
+</g>
+<!-- dec_node&#45;&gt;prob_node -->
+<g id="edge1" class="edge">
+<title>dec_node&#45;&gt;prob_node</title>
+<path fill="none" stroke="black" d="M133.2,-94.04C159.03,-104.86 188.96,-117.41 216.23,-128.83"/>
+<polygon fill="black" stroke="black" points="215.18,-132.19 225.75,-132.83 217.88,-125.73 215.18,-132.19"/>
+<text text-anchor="middle" x="176.5" y="-125.3" font-family="Times,serif" font-size="14.00">Invertir</text>
+</g>
+<!-- no_invest -->
+<g id="node5" class="node">
+<title>no_invest</title>
+<polygon fill="#f9f9f9" stroke="black" points="350.44,-65.5 249.44,-65.5 249.44,-29.5 350.44,-29.5 350.44,-65.5"/>
+<text text-anchor="middle" x="299.94" y="-43.8" font-family="Helvetica,sans-Serif" font-size="14.00">No Invertir: $0</text>
+</g>
+<!-- dec_node&#45;&gt;no_invest -->
+<g id="edge2" class="edge">
+<title>dec_node&#45;&gt;no_invest</title>
+<path fill="none" stroke="black" d="M133.2,-61.11C166.49,-58.37 206.6,-55.08 239.03,-52.42"/>
+<polygon fill="black" stroke="black" points="239.59,-55.88 249.27,-51.58 239.02,-48.91 239.59,-55.88"/>
+<text text-anchor="middle" x="176.5" y="-63.3" font-family="Times,serif" font-size="14.00">Rechazar</text>
+</g>
+<!-- outcome_a -->
+<g id="node3" class="node">
+<title>outcome_a</title>
+<polygon fill="#f9f9f9" stroke="black" points="556.89,-205.5 416.89,-205.5 416.89,-169.5 556.89,-169.5 556.89,-205.5"/>
+<text text-anchor="middle" x="486.89" y="-183.8" font-family="Helvetica,sans-Serif" font-size="14.00">Éxito (60%): +$200k</text>
+</g>
+<!-- prob_node&#45;&gt;outcome_a -->
+<g id="edge3" class="edge">
+<title>prob_node&#45;&gt;outcome_a</title>
+<path fill="none" stroke="black" d="M379.38,-173.68C388.39,-174.85 397.58,-176.04 406.61,-177.21"/>
+<polygon fill="black" stroke="black" points="406.34,-180.71 416.7,-178.52 407.24,-173.76 406.34,-180.71"/>
+</g>
+<!-- outcome_b -->
+<g id="node4" class="node">
+<title>outcome_b</title>
+<polygon fill="#f9f9f9" stroke="black" points="550.89,-151.5 422.89,-151.5 422.89,-115.5 550.89,-115.5 550.89,-151.5"/>
+<text text-anchor="middle" x="486.89" y="-129.8" font-family="Helvetica,sans-Serif" font-size="14.00">Fallo (40%): &#45;$50k</text>
+</g>
+<!-- prob_node&#45;&gt;outcome_b -->
+<g id="edge4" class="edge">
+<title>prob_node&#45;&gt;outcome_b</title>
+<path fill="none" stroke="black" d="M379.11,-150.82C390.28,-149.01 401.73,-147.15 412.8,-145.35"/>
+<polygon fill="black" stroke="black" points="413.53,-148.78 422.84,-143.73 412.41,-141.87 413.53,-148.78"/>
+</g>
+<!-- result -->
+<g id="node6" class="node">
+<title>result</title>
+<polygon fill="#fff9c4" stroke="black" points="826.89,-177.5 593.89,-177.5 593.89,-141.5 832.89,-141.5 832.89,-171.5 826.89,-177.5"/>
+<polyline fill="none" stroke="black" points="826.89,-177.5 826.89,-171.5 "/>
+<polyline fill="none" stroke="black" points="832.89,-171.5 826.89,-171.5 "/>
+<text text-anchor="middle" x="713.39" y="-155.8" font-family="Helvetica,sans-Serif" font-size="14.00">VME = (0.6*200) + (0.4*&#45;50) = $100k</text>
+</g>
+<!-- outcome_a&#45;&gt;result -->
+<g id="edge5" class="edge">
+<title>outcome_a&#45;&gt;result</title>
+<path fill="none" stroke="black" d="M557.08,-178.87C565.68,-177.8 574.69,-176.67 583.85,-175.53"/>
+<polygon fill="black" stroke="black" points="584.34,-179 593.83,-174.29 583.47,-172.05 584.34,-179"/>
+</g>
+<!-- outcome_b&#45;&gt;result -->
+<g id="edge6" class="edge">
+<title>outcome_b&#45;&gt;result</title>
+<path fill="none" stroke="black" d="M551.02,-140.81C561.25,-142 572.15,-143.26 583.28,-144.55"/>
+<polygon fill="black" stroke="black" points="583.22,-148.06 593.56,-145.74 584.02,-141.11 583.22,-148.06"/>
+</g>
+</g>
+</svg>
+
+            </div>
+            <p style="font-size:0.8em; color:#999; text-align:center; margin-top:-20px; margin-bottom:30px;">
+                <em>Figura: Diagrama generado automáticamente mediante Graphviz</em>
+            </p>
+
+            <h3>Intuición</h3>
+            <div><p>Imagina que te ofrecen dos apuestas. En la primera, tienes un 50% de probabilidad de ganar $10. En la segunda, tienes un 10% de ganar $100. ¿Cuál es mejor? El VME te dice que la segunda es mejor porque, en promedio, ganarías $10 por intento frente a los $5 de la primera. El árbol de decisión es un mapa visual que dibuja estas opciones. Los nodos de decisión son como cruces de caminos donde tú eliges, y los nodos de probabilidad son como lanzamientos de dados donde el destino decide. Al final del mapa, pones los premios o castigos económicos. Al 'hacer las cuentas' hacia atrás, el árbol te susurra cuál es el camino que, aunque tiene riesgos, estadísticamente te dejará más dinero en el bolsillo a largo plazo.</p></div>
+
+            <h3>Aplicación</h3>
+            <div></div>
+        </article>
+        </body></html>

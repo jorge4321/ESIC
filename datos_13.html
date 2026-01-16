@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>13 - Planificación del Tiempo II - Estimación de Recursos y Duración: Modelos Paramétricos.</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #f4f4f9; color: #333; margin: 0; padding: 20px; line-height: 1.6; position: relative; }
+        header { background: #2c3e50; color: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; text-align:center; }
+        h1 { margin: 0; font-size: 1.5rem; }
+
+        /* Estilo del botón Atrás */
+        .btn-atras {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #7f8c8d;
+            color: white;
+            padding: 8px 15px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            transition: background 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+        .btn-atras:hover { background: #95a5a6; }
+
+        .subtema {
+            background: white;
+            padding: 40px;
+            margin-bottom: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        h2 { color: #2980b9; border-bottom: 2px solid #eee; padding-bottom: 10px; margin-top: 0; }
+        h3 { color: #7f8c8d; font-size: 0.9em; text-transform: uppercase; margin-top: 30px; letter-spacing: 1px; border-left: 3px solid #d4af37; padding-left: 10px; }
+
+        .diagrama-box {
+            text-align: center;
+            margin: 30px 0;
+            padding: 20px;
+            background: #fafafa;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 150px;
+        }
+
+        p { margin-bottom: 1rem; }
+        strong { color: #2c3e50; font-weight: 600; }
+        code { background: #f0f0f0; padding: 2px 5px; border-radius: 3px; font-family: monospace; color: #c0392b; }
+        ul { padding-left: 20px; }
+        li { margin-bottom: 0.5rem; }
+    </style>
+</head>
+<body>
+    <button onclick="window.history.back()" class="btn-atras">Atrás</button>
+    <header><h1>13 - Planificación del Tiempo II - Estimación de Recursos y Duración: Modelos Paramétricos.</h1></header>
+    <main>
+
+        <article class="subtema">
+            <h2>Fundamentos de la Estimación Paramétrica y Regresión Lineal</h2>
+
+            <h3>Historia</h3>
+            <div><p>La estimación paramétrica surgió formalmente en la década de 1950, impulsada por la industria aeroespacial y de defensa en Estados Unidos (especialmente por la RAND Corporation). Durante la Guerra Fría, la necesidad de predecir costes y tiempos para proyectos de ingeniería de escala sin precedentes llevó a los analistas a buscar una relación matemática entre las características físicas de un sistema y su esfuerzo de desarrollo. Con el auge de la computación en los años 80, estas técnicas se trasladaron al desarrollo de software y análisis de datos. Lo que comenzó como simples reglas de tres evolucionó hacia modelos econométricos complejos. Hoy, en la era del Big Data, la estimación paramétrica no es solo una fórmula estática, sino un proceso dinámico que se nutre de repositorios históricos masivos para reducir la incertidumbre en el Project Management moderno, permitiendo que un 'Data Scientist' actúe como un arquitecto de tiempos.</p></div>
+
+            <h3>Descripción Formal</h3>
+            <div><p>La estimación paramétrica utiliza una relación estadística entre datos históricos y otras variables (parámetros) para calcular una estimación de parámetros de actividad como coste, presupuesto y duración. El modelo más común es la Regresión Lineal Simple: Y = a + bX, donde 'Y' es la duración estimada, 'a' es el tiempo base, 'b' es el coeficiente de productividad y 'X' es la cantidad de unidades de trabajo (ej. número de tablas a procesar). En Excel, esto se implementa mediante la función '=PRONOSTICO.LINEAL(x; conocida_y; conocida_x)' o para obtener los coeficientes estadísticos detallados: '=ESTIMACION.LINEAL(B2:B10; A2:A10; VERDADERO; VERDADERO)'. Lógicamente, el algoritmo de mínimos cuadrados busca minimizar la suma de las diferencias al cuadrado entre los valores observados y los predichos. En un entorno de datos, si determinamos que la limpieza de un dataset de 1GB toma 4 horas, un modelo paramétrico ajustará este valor mediante un factor de complejidad (C) calculado como Duración = (Cantidad_Datos / Ratio_Base) * Factor_Ajuste. La validez del modelo depende de la correlación de Pearson (r), donde un valor cercano a 1 indica una relación fuerte y confiable para la planificación.</p></div>
+
+            <div class="diagrama-box">
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg style="max-width: 80%; max-height: 350px; height: auto; width: auto;" data-width="564pt" data-height="423pt"
+ viewBox="0.00 0.00 564.00 423.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 419)">
+<title>G</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-419 560,-419 560,4 -4,4"/>
+<!-- start -->
+<g id="node1" class="node">
+<title>start</title>
+<polygon fill="#f9f9f9" stroke="black" points="490.5,-415 254.5,-415 254.5,-379 490.5,-379 490.5,-415"/>
+<text text-anchor="middle" x="372.5" y="-393.3" font-family="Helvetica,sans-Serif" font-size="14.00">Inicio: Definir Variable X (Parámetro)</text>
+</g>
+<!-- collect -->
+<g id="node2" class="node">
+<title>collect</title>
+<polygon fill="#f9f9f9" stroke="black" points="479.5,-342 265.5,-342 265.5,-306 479.5,-306 479.5,-342"/>
+<text text-anchor="middle" x="372.5" y="-320.3" font-family="Helvetica,sans-Serif" font-size="14.00">Recopilar Datos Históricos (X, Y)</text>
+</g>
+<!-- start&#45;&gt;collect -->
+<g id="edge1" class="edge">
+<title>start&#45;&gt;collect</title>
+<path fill="none" stroke="black" d="M372.5,-378.81C372.5,-370.79 372.5,-361.05 372.5,-352.07"/>
+<polygon fill="black" stroke="black" points="376,-352.03 372.5,-342.03 369,-352.03 376,-352.03"/>
+</g>
+<!-- calc_corr -->
+<g id="node3" class="node">
+<title>calc_corr</title>
+<polygon fill="#f9f9f9" stroke="black" points="486,-269 259,-269 259,-233 486,-233 486,-269"/>
+<text text-anchor="middle" x="372.5" y="-247.3" font-family="Helvetica,sans-Serif" font-size="14.00">Calcular Coeficiente Correlación (r)</text>
+</g>
+<!-- collect&#45;&gt;calc_corr -->
+<g id="edge2" class="edge">
+<title>collect&#45;&gt;calc_corr</title>
+<path fill="none" stroke="black" d="M372.5,-305.81C372.5,-297.79 372.5,-288.05 372.5,-279.07"/>
+<polygon fill="black" stroke="black" points="376,-279.03 372.5,-269.03 369,-279.03 376,-279.03"/>
+</g>
+<!-- check_r -->
+<g id="node4" class="node">
+<title>check_r</title>
+<polygon fill="#f9f9f9" stroke="black" points="372.5,-196 307.48,-178 372.5,-160 437.52,-178 372.5,-196"/>
+<text text-anchor="middle" x="372.5" y="-174.3" font-family="Helvetica,sans-Serif" font-size="14.00">¿r &gt; 0.7?</text>
+</g>
+<!-- calc_corr&#45;&gt;check_r -->
+<g id="edge3" class="edge">
+<title>calc_corr&#45;&gt;check_r</title>
+<path fill="none" stroke="black" d="M372.5,-232.81C372.5,-224.79 372.5,-215.05 372.5,-206.07"/>
+<polygon fill="black" stroke="black" points="376,-206.03 372.5,-196.03 369,-206.03 376,-206.03"/>
+</g>
+<!-- model -->
+<g id="node5" class="node">
+<title>model</title>
+<polygon fill="#f9f9f9" stroke="black" points="315,-109 0,-109 0,-73 315,-73 315,-109"/>
+<text text-anchor="middle" x="157.5" y="-87.3" font-family="Helvetica,sans-Serif" font-size="14.00">Aplicar Y = a + bX (Excel: ESTIMACION.LINEAL)</text>
+</g>
+<!-- check_r&#45;&gt;model -->
+<g id="edge4" class="edge">
+<title>check_r&#45;&gt;model</title>
+<path fill="none" stroke="black" d="M346.99,-166.92C313.49,-153.67 253.82,-130.08 210.37,-112.9"/>
+<polygon fill="black" stroke="black" points="211.39,-109.54 200.81,-109.12 208.82,-116.05 211.39,-109.54"/>
+<text text-anchor="middle" x="284.5" y="-130.8" font-family="Times,serif" font-size="14.00">Sí</text>
+</g>
+<!-- reject -->
+<g id="node6" class="node">
+<title>reject</title>
+<polygon fill="#f9f9f9" stroke="black" points="556,-109 333,-109 333,-73 556,-73 556,-109"/>
+<text text-anchor="middle" x="444.5" y="-87.3" font-family="Helvetica,sans-Serif" font-size="14.00">Descartar Parámetro / Buscar otro</text>
+</g>
+<!-- check_r&#45;&gt;reject -->
+<g id="edge5" class="edge">
+<title>check_r&#45;&gt;reject</title>
+<path fill="none" stroke="black" d="M384.39,-162.96C394.9,-150.55 410.5,-132.14 423.17,-117.19"/>
+<polygon fill="black" stroke="black" points="426.06,-119.18 429.85,-109.29 420.72,-114.66 426.06,-119.18"/>
+<text text-anchor="middle" x="421" y="-130.8" font-family="Times,serif" font-size="14.00">No</text>
+</g>
+<!-- end -->
+<g id="node7" class="node">
+<title>end</title>
+<polygon fill="#f9f9f9" stroke="black" points="250,-36 65,-36 65,0 250,0 250,-36"/>
+<text text-anchor="middle" x="157.5" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">Generar Duración Estimada</text>
+</g>
+<!-- model&#45;&gt;end -->
+<g id="edge6" class="edge">
+<title>model&#45;&gt;end</title>
+<path fill="none" stroke="black" d="M157.5,-72.81C157.5,-64.79 157.5,-55.05 157.5,-46.07"/>
+<polygon fill="black" stroke="black" points="161,-46.03 157.5,-36.03 154,-46.03 161,-46.03"/>
+</g>
+</g>
+</svg>
+
+            </div>
+            <p style="font-size:0.8em; color:#999; text-align:center; margin-top:-20px; margin-bottom:30px;">
+                <em>Figura: Diagrama generado automáticamente mediante Graphviz</em>
+            </p>
+
+            <h3>Intuición</h3>
+            <div><p>Imagina que quieres estimar cuánto tardarás en pintar una casa. En lugar de adivinar, mides cuántos metros cuadrados pintas en una hora basándote en las últimas diez casas que pintaste. Si tu promedio es de 10 m²/h, y la nueva casa tiene 200 m², la lógica paramétrica te dice que tardarás 20 horas. Es el paso de la 'opinión experta' a la 'evidencia estadística'. En el mundo de los datos, el 'metro cuadrado' puede ser una 'query de SQL compleja' o un 'endpoint de API'. La clave es identificar la unidad de medida correcta que realmente dicta el esfuerzo. Si el parámetro elegido (ej. número de archivos) no tiene una relación real con el tiempo dedicado, el modelo fallará. Por eso, la intuición aquí es buscar la variable que 'mueve la aguja' del cronograma.</p></div>
+
+            <h3>Aplicación</h3>
+            <div><p>Un ingeniero de datos debe planificar la migración de 500 procesos ETL a la nube. Utilizando estimación paramétrica, analiza los últimos 50 procesos migrados y descubre que el tiempo depende del número de transformaciones lógicas (T) y el volumen de datos (V). Aplica un modelo donde Tiempos = (T * 0.5h) + (V * 0.1h). Este enfoque permite presentar al comité de dirección un cronograma basado en datos reales, no en deseos, permitiendo además calcular el 'margen de error' estadístico. Es vital en licitaciones públicas o contratos de Service Level Agreement (SLA).</p></div>
+        </article>
+        
+        <article class="subtema">
+            <h2>Modelos COCOMO y Análisis de Puntos de Función</h2>
+
+            <h3>Historia</h3>
+            <div><p>En 1979, Allan Albrecht de IBM introdujo el concepto de 'Puntos de Función' para medir el tamaño del software independientemente del lenguaje de programación. Posteriormente, en 1981, Barry Boehm publicó el modelo COCOMO (Constructive Cost Model), que se convirtió en el estándar de oro para la estimación paramétrica en proyectos tecnológicos. COCOMO nació tras analizar 63 proyectos en TRW Inc., observando que el esfuerzo no era lineal sino exponencial respecto al tamaño. Con la evolución hacia COCOMO II en los años 90, el modelo se adaptó a procesos iterativos y arquitecturas orientadas a objetos. Estos modelos transformaron la gestión de proyectos de una disciplina artesanal a una ingeniería rigurosa, permitiendo a las organizaciones predecir con precisión matemática cuántos meses-hombre se requerirían para sistemas complejos de gestión de bases de datos.</p></div>
+
+            <h3>Descripción Formal</h3>
+            <div><p>El Análisis de Puntos de Función (FPA) cuantifica la funcionalidad entregada al usuario basándose en cinco componentes: Entradas Externas (EI), Salidas Externas (EO), Consultas Externas (EQ), Archivos Lógicos Internos (ILF) y Archivos de Interfaz Externa (EIF). La fórmula es: Puntos_No_Ajustados = Σ (Componente * Peso). COCOMO utiliza la fórmula básica: Esfuerzo (E) = a * (KLOC)^b, donde KLOC son miles de líneas de código y 'a' y 'b' son constantes basadas en la complejidad del proyecto (Orgánico, Semidesprendido o Empotrado). En una hoja de cálculo, esto se gestiona mediante tablas de búsqueda: '=BUSCARV(Complejidad; Tabla_Constantes; 2; FALSO) * POTENCIA(Lineas_Codigo; BUSCARV(Complejidad; Tabla_Constantes; 3; FALSO))'. El modelo también incluye 'Cost Drivers' o multiplicadores de esfuerzo (EM) para ajustar la estimación según la experiencia del equipo o las restricciones de hardware, resultando en E_ajustado = E * Π(EM).</p></div>
+
+            <div class="diagrama-box">
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg style="max-width: 80%; max-height: 350px; height: auto; width: auto;" data-width="1600pt" data-height="44pt"
+ viewBox="0.00 0.00 1600.00 44.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 40)">
+<title>G</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-40 1596,-40 1596,4 -4,4"/>
+<!-- count -->
+<g id="node1" class="node">
+<title>count</title>
+<polygon fill="#f9f9f9" stroke="black" points="260,-36 0,-36 0,0 260,0 260,-36"/>
+<text text-anchor="middle" x="130" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">Contar Elementos (EI, EO, EQ, ILF, EIF)</text>
+</g>
+<!-- weight -->
+<g id="node2" class="node">
+<title>weight</title>
+<polygon fill="#f9f9f9" stroke="black" points="537,-36 296,-36 296,0 537,0 537,-36"/>
+<text text-anchor="middle" x="416.5" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">Multiplicar por Pesos de Complejidad</text>
+</g>
+<!-- count&#45;&gt;weight -->
+<g id="edge1" class="edge">
+<title>count&#45;&gt;weight</title>
+<path fill="none" stroke="black" d="M260.35,-18C268.7,-18 277.1,-18 285.46,-18"/>
+<polygon fill="black" stroke="black" points="285.61,-21.5 295.61,-18 285.61,-14.5 285.61,-21.5"/>
+</g>
+<!-- total_fp -->
+<g id="node3" class="node">
+<title>total_fp</title>
+<polygon fill="#f9f9f9" stroke="black" points="742,-36 573,-36 573,0 742,0 742,-36"/>
+<text text-anchor="middle" x="657.5" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">Suma Puntos de Función</text>
+</g>
+<!-- weight&#45;&gt;total_fp -->
+<g id="edge2" class="edge">
+<title>weight&#45;&gt;total_fp</title>
+<path fill="none" stroke="black" d="M537,-18C545.63,-18 554.26,-18 562.71,-18"/>
+<polygon fill="black" stroke="black" points="562.91,-21.5 572.91,-18 562.91,-14.5 562.91,-21.5"/>
+</g>
+<!-- cocomo -->
+<g id="node4" class="node">
+<title>cocomo</title>
+<polygon fill="#f9f9f9" stroke="black" points="1025,-36 778,-36 778,0 1025,0 1025,-36"/>
+<text text-anchor="middle" x="901.5" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">Aplicar Fórmula COCOMO (E=a*S^b)</text>
+</g>
+<!-- total_fp&#45;&gt;cocomo -->
+<g id="edge3" class="edge">
+<title>total_fp&#45;&gt;cocomo</title>
+<path fill="none" stroke="black" d="M742.12,-18C750.47,-18 759.08,-18 767.77,-18"/>
+<polygon fill="black" stroke="black" points="768,-21.5 778,-18 768,-14.5 768,-21.5"/>
+</g>
+<!-- adj -->
+<g id="node5" class="node">
+<title>adj</title>
+<polygon fill="#f9f9f9" stroke="black" points="1347,-36 1061,-36 1061,0 1347,0 1347,-36"/>
+<text text-anchor="middle" x="1204" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">Ajustar por Multiplicadores (Equipo, Entorno)</text>
+</g>
+<!-- cocomo&#45;&gt;adj -->
+<g id="edge4" class="edge">
+<title>cocomo&#45;&gt;adj</title>
+<path fill="none" stroke="black" d="M1025.16,-18C1033.56,-18 1042.07,-18 1050.6,-18"/>
+<polygon fill="black" stroke="black" points="1050.61,-21.5 1060.61,-18 1050.61,-14.5 1050.61,-21.5"/>
+</g>
+<!-- result -->
+<g id="node6" class="node">
+<title>result</title>
+<polygon fill="#f9f9f9" stroke="black" points="1592,-36 1383,-36 1383,0 1592,0 1592,-36"/>
+<text text-anchor="middle" x="1487.5" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">Esfuerzo Final (Meses/Hombre)</text>
+</g>
+<!-- adj&#45;&gt;result -->
+<g id="edge5" class="edge">
+<title>adj&#45;&gt;result</title>
+<path fill="none" stroke="black" d="M1347.4,-18C1355.83,-18 1364.26,-18 1372.56,-18"/>
+<polygon fill="black" stroke="black" points="1372.61,-21.5 1382.61,-18 1372.61,-14.5 1372.61,-21.5"/>
+</g>
+</g>
+</svg>
+
+            </div>
+            <p style="font-size:0.8em; color:#999; text-align:center; margin-top:-20px; margin-bottom:30px;">
+                <em>Figura: Diagrama generado automáticamente mediante Graphviz</em>
+            </p>
+
+            <h3>Intuición</h3>
+            <div><p>Si los Puntos de Función son como los metros útiles de un plano arquitectónico, COCOMO es el cálculo de cuánto material y cuántos obreros necesitas para construirlo. No es lo mismo construir una casa de 100m² en un terreno llano (Proyecto Orgánico) que un búnker de 100m² bajo el mar (Proyecto Empotrado). COCOMO nos enseña que el esfuerzo crece más rápido que el tamaño del proyecto debido a la 'entropía de la comunicación': a más líneas de código o funciones, más tiempo se gasta en que todo encaje correctamente. Para un estudiante de datos, esto significa que duplicar el número de dashboards no solo duplica el trabajo, sino que lo aumenta exponencialmente debido a la complejidad de la integración de datos.</p></div>
+
+            <h3>Aplicación</h3>
+            <div><p>En el desarrollo de una plataforma de Analytics avanzada, un Product Owner utiliza Puntos de Función para estimar el tamaño del backlog. Al identificar 10 entradas de datos y 5 salidas de reportes complejos, asigna pesos de complejidad. Luego, aplica COCOMO II para determinar que, dada la alta cohesión del equipo, el proyecto de 20,000 líneas de código estimado tomará 8 meses con 4 ingenieros. Esto evita el 'Síndrome de Brook' (añadir más gente a un proyecto retrasado lo retrasa más).</p></div>
+        </article>
+        
+        <article class="subtema">
+            <h2>Curvas de Aprendizaje y Factores de Ajuste Exponencial</h2>
+
+            <h3>Historia</h3>
+            <div><p>El concepto de Curva de Aprendizaje fue articulado por primera vez por T.P. Wright en 1936 tras observar la fabricación de aviones. Wright descubrió que por cada duplicación de la producción total acumulada, el tiempo de trabajo por unidad disminuía en un porcentaje constante (típicamente entre el 10% y el 20%). En la gestión de proyectos de datos, este concepto fue adoptado cuando se notó que la configuración del primer servidor o la limpieza del primer lote de datos siempre es significativamente más lenta que la del décimo. Con la llegada de las metodologías Agile, la curva de aprendizaje se integró en el concepto de 'Velocidad del Equipo', reconociendo que la productividad no es una línea plana, sino una curva ascendente que se estabiliza con el tiempo y la repetición.</p></div>
+
+            <h3>Descripción Formal</h3>
+            <div><p>La ley de Wright se expresa matemáticamente como Tn = T1 * n^b, donde 'Tn' es el tiempo para producir la unidad n-ésima, 'T1' es el tiempo de la primera unidad, 'n' es el número de la unidad y 'b' es el índice de aprendizaje (logaritmo de la tasa de aprendizaje / log 2). Si la tasa de aprendizaje es del 80%, b = log(0.8)/log(2) ≈ -0.322. En Excel, el tiempo para la unidad 100 sería: '=A1 * POTENCIA(100; LOG(0,8; 2))', donde A1 es el tiempo de la unidad 1. Para un gestor de proyectos, esto implica que el coste marginal es decreciente. Es fundamental no confundir esto con una mejora infinita; los modelos paramétricos suelen incluir un 'límite de asíntota' donde la automatización o la fatiga humana impiden que el tiempo baje de un umbral mínimo. El cálculo de la duración total del proyecto requiere la integración (suma) de estos tiempos individuales para todas las unidades n previstas.</p></div>
+
+            <div class="diagrama-box">
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg style="max-width: 80%; max-height: 350px; height: auto; width: auto;" data-width="365pt" data-height="423pt"
+ viewBox="0.00 0.00 364.63 423.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 419)">
+<title>G</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-419 360.63,-419 360.63,4 -4,4"/>
+<!-- task -->
+<g id="node1" class="node">
+<title>task</title>
+<polygon fill="#f9f9f9" stroke="black" points="271.82,-415 84.82,-415 84.82,-379 271.82,-379 271.82,-415"/>
+<text text-anchor="middle" x="178.32" y="-393.3" font-family="Helvetica,sans-Serif" font-size="14.00">Tarea Repetitiva Identificada</text>
+</g>
+<!-- time_1 -->
+<g id="node2" class="node">
+<title>time_1</title>
+<polygon fill="#f9f9f9" stroke="black" points="271.82,-342 84.82,-342 84.82,-306 271.82,-306 271.82,-342"/>
+<text text-anchor="middle" x="178.32" y="-320.3" font-family="Helvetica,sans-Serif" font-size="14.00">Medir Tiempo Unidad 1 (T1)</text>
+</g>
+<!-- task&#45;&gt;time_1 -->
+<g id="edge1" class="edge">
+<title>task&#45;&gt;time_1</title>
+<path fill="none" stroke="black" d="M178.32,-378.81C178.32,-370.79 178.32,-361.05 178.32,-352.07"/>
+<polygon fill="black" stroke="black" points="181.82,-352.03 178.32,-342.03 174.82,-352.03 181.82,-352.03"/>
+</g>
+<!-- rate -->
+<g id="node3" class="node">
+<title>rate</title>
+<polygon fill="#f9f9f9" stroke="black" points="295.82,-269 60.82,-269 60.82,-233 295.82,-233 295.82,-269"/>
+<text text-anchor="middle" x="178.32" y="-247.3" font-family="Helvetica,sans-Serif" font-size="14.00">Determinar Tasa de Aprendizaje (%)</text>
+</g>
+<!-- time_1&#45;&gt;rate -->
+<g id="edge2" class="edge">
+<title>time_1&#45;&gt;rate</title>
+<path fill="none" stroke="black" d="M178.32,-305.81C178.32,-297.79 178.32,-288.05 178.32,-279.07"/>
+<polygon fill="black" stroke="black" points="181.82,-279.03 178.32,-269.03 174.82,-279.03 181.82,-279.03"/>
+</g>
+<!-- n_units -->
+<g id="node4" class="node">
+<title>n_units</title>
+<polygon fill="#f9f9f9" stroke="black" points="178.32,-196 0.18,-178 178.32,-160 356.45,-178 178.32,-196"/>
+<text text-anchor="middle" x="178.32" y="-174.3" font-family="Helvetica,sans-Serif" font-size="14.00">¿Es la unidad N significativa?</text>
+</g>
+<!-- rate&#45;&gt;n_units -->
+<g id="edge3" class="edge">
+<title>rate&#45;&gt;n_units</title>
+<path fill="none" stroke="black" d="M178.32,-232.81C178.32,-224.79 178.32,-215.05 178.32,-206.07"/>
+<polygon fill="black" stroke="black" points="181.82,-206.03 178.32,-196.03 174.82,-206.03 181.82,-206.03"/>
+</g>
+<!-- calc -->
+<g id="node5" class="node">
+<title>calc</title>
+<polygon fill="#f9f9f9" stroke="black" points="195.82,-109 52.82,-109 52.82,-73 195.82,-73 195.82,-109"/>
+<text text-anchor="middle" x="124.32" y="-87.3" font-family="Helvetica,sans-Serif" font-size="14.00">Aplicar Tn = T1 * n^b</text>
+</g>
+<!-- n_units&#45;&gt;calc -->
+<g id="edge4" class="edge">
+<title>n_units&#45;&gt;calc</title>
+<path fill="none" stroke="black" d="M168.16,-161.01C160.44,-148.86 149.66,-131.9 140.73,-117.83"/>
+<polygon fill="black" stroke="black" points="143.49,-115.65 135.17,-109.08 137.58,-119.4 143.49,-115.65"/>
+<text text-anchor="middle" x="161.32" y="-130.8" font-family="Times,serif" font-size="14.00">Sí</text>
+</g>
+<!-- sum -->
+<g id="node6" class="node">
+<title>sum</title>
+<polygon fill="#f9f9f9" stroke="black" points="271.82,-36 84.82,-36 84.82,0 271.82,0 271.82,-36"/>
+<text text-anchor="middle" x="178.32" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">Calcular Tiempo Acumulado</text>
+</g>
+<!-- n_units&#45;&gt;sum -->
+<g id="edge5" class="edge">
+<title>n_units&#45;&gt;sum</title>
+<path fill="none" stroke="black" d="M187.18,-160.84C197.25,-140.43 211.44,-104.21 204.32,-73 202.16,-63.57 198.14,-53.86 193.9,-45.32"/>
+<polygon fill="black" stroke="black" points="196.87,-43.46 189.09,-36.26 190.68,-46.74 196.87,-43.46"/>
+<text text-anchor="middle" x="214.82" y="-87.3" font-family="Times,serif" font-size="14.00">No</text>
+</g>
+<!-- calc&#45;&gt;sum -->
+<g id="edge6" class="edge">
+<title>calc&#45;&gt;sum</title>
+<path fill="none" stroke="black" d="M137.39,-72.81C143.95,-64.18 152.04,-53.56 159.28,-44.03"/>
+<polygon fill="black" stroke="black" points="162.1,-46.11 165.36,-36.03 156.53,-41.87 162.1,-46.11"/>
+</g>
+</g>
+</svg>
+
+            </div>
+            <p style="font-size:0.8em; color:#999; text-align:center; margin-top:-20px; margin-bottom:30px;">
+                <em>Figura: Diagrama generado automáticamente mediante Graphviz</em>
+            </p>
+
+            <h3>Intuición</h3>
+            <div><p>La primera vez que usas una herramienta nueva (como Power BI o un nuevo lenguaje de programación), tardas horas en hacer algo simple. La segunda vez tardas la mitad. La centésima vez, lo haces casi sin pensar. La Curva de Aprendizaje cuantifica matemáticamente este fenómeno de 'maestría por repetición'. Para un planificador, ignorar esto es un error grave: si planificas todo el proyecto con la lentitud del primer día, el presupuesto será excesivo; si lo haces con la rapidez del experto, no cumplirás los plazos iniciales. Es el factor que explica por qué los equipos estables son mucho más rentables que los equipos que cambian de personal constantemente.</p></div>
+
+            <h3>Aplicación</h3>
+            <div><p>Un consultor de analítica es contratado para migrar 1,000 reportes de un sistema legacy a una nueva arquitectura. El primer reporte toma 16 horas. Si se asume una curva de aprendizaje del 90%, el reporte número 10 solo tomará unas 10.5 horas. El consultor utiliza este modelo paramétrico para proponer un cronograma donde las fases finales son mucho más rápidas que las iniciales, optimizando la asignación de recursos y permitiendo una reducción de costes agresiva frente a competidores que asumen un tiempo lineal constante.</p></div>
+        </article>
+        </body></html>

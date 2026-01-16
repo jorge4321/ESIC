@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3 - Iniciación y Selección - La Solicitud de Propuesta (RFP) y Fases de Pre-inicio.</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #f4f4f9; color: #333; margin: 0; padding: 20px; line-height: 1.6; position: relative; }
+        header { background: #2c3e50; color: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; text-align:center; }
+        h1 { margin: 0; font-size: 1.5rem; }
+
+        /* Estilo del botón Atrás */
+        .btn-atras {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #7f8c8d;
+            color: white;
+            padding: 8px 15px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            transition: background 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+        .btn-atras:hover { background: #95a5a6; }
+
+        .subtema {
+            background: white;
+            padding: 40px;
+            margin-bottom: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        h2 { color: #2980b9; border-bottom: 2px solid #eee; padding-bottom: 10px; margin-top: 0; }
+        h3 { color: #7f8c8d; font-size: 0.9em; text-transform: uppercase; margin-top: 30px; letter-spacing: 1px; border-left: 3px solid #d4af37; padding-left: 10px; }
+
+        .diagrama-box {
+            text-align: center;
+            margin: 30px 0;
+            padding: 20px;
+            background: #fafafa;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 150px;
+        }
+
+        p { margin-bottom: 1rem; }
+        strong { color: #2c3e50; font-weight: 600; }
+        code { background: #f0f0f0; padding: 2px 5px; border-radius: 3px; font-family: monospace; color: #c0392b; }
+        ul { padding-left: 20px; }
+        li { margin-bottom: 0.5rem; }
+    </style>
+</head>
+<body>
+    <button onclick="window.history.back()" class="btn-atras">Atrás</button>
+    <header><h1>3 - Iniciación y Selección - La Solicitud de Propuesta (RFP) y Fases de Pre-inicio.</h1></header>
+    <main>
+
+        <article class="subtema">
+            <h2>Elaboración Estructural de la Solicitud de Propuesta (RFP) para Proyectos Data-Driven</h2>
+
+            <h3>Historia</h3>
+            <div><p>Históricamente, la adquisición de tecnología y servicios se realizaba mediante acuerdos informales o especificaciones técnicas rígidas enviadas por correo postal. En las décadas de 1970 y 1980, con el auge de los sistemas mainframe, las organizaciones necesitaban un método estandarizado para comparar capacidades complejas. Así nació el Request for Proposal (RFP). Con la explosión del Big Data a partir de 2010, el RFP evolucionó de ser un documento puramente legal y financiero a un artefacto técnico crítico. Hoy en día, un RFP para analítica de negocio no solo pregunta por el precio, sino por la soberanía del dato, la latencia de procesamiento y la compatibilidad con ecosistemas Cloud (AWS, Azure, GCP). La transición hacia metodologías Agile también ha forzado que los RFP sean más modulares, permitiendo a los proveedores proponer soluciones iterativas en lugar de arquitecturas monolíticas que solían quedar obsoletas antes de su implementación final.</p></div>
+
+            <h3>Descripción Formal</h3>
+            <div><p>Un RFP es un documento formal que describe los objetivos, requerimientos técnicos y criterios de evaluación de un proyecto. En el ámbito de datos, debe incluir la arquitectura de referencia, fuentes de datos (ERD), y requerimientos no funcionales (escalabilidad, seguridad). El proceso de selección suele automatizarse mediante un modelo de puntuación ponderada. </p>
+<p>Lógica de Algoritmo de Selección: 
+1. Definir conjunto de criterios C = {c1, c2, ..., cn}.
+2. Asignar pesos W = {w1, w2, ..., wn} tales que la suma de W = 1.
+3. Evaluar proveedores P con una matriz de puntuación S, donde s_{i,j} es la nota del proveedor i en el criterio j.
+4. Calcular Score Final (SF_i) = Σ (s_{i,j} * w_j).</p>
+<p>Sintaxis en Excel para consolidación de requerimientos:
+Para validar si un proveedor cumple con todos los requisitos obligatorios antes de puntuar, usamos: 
+<code>=SI(CONTAR.SI(Rango_Requisitos; "NO")&gt;0; "Descalificado"; "Apto para Evaluación")</code>. 
+Para buscar la puntuación técnica específica de un proveedor en una base de datos maestra: 
+<code>=BUSCARX(ID_Proveedor; Tabla_Proveedores[ID]; Tabla_Proveedores[Score_Tecnico]; "No encontrado"; 0)</code>. Esta función permite asegurar que la integridad referencial se mantiene al cruzar datos de diferentes departamentos (IT, Compras, Legal).</p></div>
+
+            <div class="diagrama-box">
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg style="max-width: 80%; max-height: 350px; height: auto; width: auto;" data-width="525pt" data-height="350pt"
+ viewBox="0.00 0.00 524.57 350.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 346)">
+<title>G</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-346 520.57,-346 520.57,4 -4,4"/>
+<!-- Start -->
+<g id="node1" class="node">
+<title>Start</title>
+<ellipse fill="#f9f9f9" stroke="black" cx="258.28" cy="-324" rx="155.17" ry="18"/>
+<text text-anchor="middle" x="258.28" y="-320.3" font-family="Helvetica,sans-Serif" font-size="14.00">Identificación de Necesidad de Datos</text>
+</g>
+<!-- Draft -->
+<g id="node2" class="node">
+<title>Draft</title>
+<polygon fill="#f9f9f9" stroke="black" points="386.28,-269 130.28,-269 130.28,-233 386.28,-233 386.28,-269"/>
+<text text-anchor="middle" x="258.28" y="-247.3" font-family="Helvetica,sans-Serif" font-size="14.00">Redacción de Requerimientos Técnicos</text>
+</g>
+<!-- Start&#45;&gt;Draft -->
+<g id="edge1" class="edge">
+<title>Start&#45;&gt;Draft</title>
+<path fill="none" stroke="black" d="M258.28,-305.81C258.28,-297.79 258.28,-288.05 258.28,-279.07"/>
+<polygon fill="black" stroke="black" points="261.78,-279.03 258.28,-269.03 254.78,-279.03 261.78,-279.03"/>
+</g>
+<!-- Check -->
+<g id="node3" class="node">
+<title>Check</title>
+<polygon fill="#f9f9f9" stroke="black" points="258.28,-196 0.22,-178 258.28,-160 516.35,-178 258.28,-196"/>
+<text text-anchor="middle" x="258.28" y="-174.3" font-family="Helvetica,sans-Serif" font-size="14.00">¿Requiere Procesamiento en Tiempo Real?</text>
+</g>
+<!-- Draft&#45;&gt;Check -->
+<g id="edge2" class="edge">
+<title>Draft&#45;&gt;Check</title>
+<path fill="none" stroke="black" d="M258.28,-232.81C258.28,-224.79 258.28,-215.05 258.28,-206.07"/>
+<polygon fill="black" stroke="black" points="261.78,-206.03 258.28,-196.03 254.78,-206.03 261.78,-206.03"/>
+</g>
+<!-- HighSpec -->
+<g id="node4" class="node">
+<title>HighSpec</title>
+<polygon fill="#f9f9f9" stroke="black" points="249.78,-109 34.78,-109 34.78,-73 249.78,-73 249.78,-109"/>
+<text text-anchor="middle" x="142.28" y="-87.3" font-family="Helvetica,sans-Serif" font-size="14.00">Especificar SLA de Baja Latencia</text>
+</g>
+<!-- Check&#45;&gt;HighSpec -->
+<g id="edge3" class="edge">
+<title>Check&#45;&gt;HighSpec</title>
+<path fill="none" stroke="black" d="M237.01,-161.41C219.38,-148.49 194.07,-129.94 174.04,-115.27"/>
+<polygon fill="black" stroke="black" points="175.95,-112.33 165.82,-109.25 171.82,-117.98 175.95,-112.33"/>
+<text text-anchor="middle" x="213.78" y="-130.8" font-family="Times,serif" font-size="14.00">SÍ</text>
+</g>
+<!-- StdSpec -->
+<g id="node5" class="node">
+<title>StdSpec</title>
+<polygon fill="#f9f9f9" stroke="black" points="482.78,-109 267.78,-109 267.78,-73 482.78,-73 482.78,-109"/>
+<text text-anchor="middle" x="375.28" y="-87.3" font-family="Helvetica,sans-Serif" font-size="14.00">Especificar Procesamiento Batch</text>
+</g>
+<!-- Check&#45;&gt;StdSpec -->
+<g id="edge4" class="edge">
+<title>Check&#45;&gt;StdSpec</title>
+<path fill="none" stroke="black" d="M279.74,-161.41C297.52,-148.49 323.05,-129.94 343.25,-115.27"/>
+<polygon fill="black" stroke="black" points="345.51,-117.96 351.54,-109.25 341.4,-112.29 345.51,-117.96"/>
+<text text-anchor="middle" x="333.28" y="-130.8" font-family="Times,serif" font-size="14.00">NO</text>
+</g>
+<!-- RFP_Final -->
+<g id="node6" class="node">
+<title>RFP_Final</title>
+<polygon fill="#f9f9f9" stroke="black" points="325.78,-36 190.78,-36 190.78,0 325.78,0 325.78,-36"/>
+<text text-anchor="middle" x="258.28" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">Publicación de RFP</text>
+</g>
+<!-- HighSpec&#45;&gt;RFP_Final -->
+<g id="edge5" class="edge">
+<title>HighSpec&#45;&gt;RFP_Final</title>
+<path fill="none" stroke="black" d="M170.07,-72.99C185.45,-63.58 204.77,-51.76 221.4,-41.57"/>
+<polygon fill="black" stroke="black" points="223.62,-44.32 230.32,-36.11 219.97,-38.35 223.62,-44.32"/>
+</g>
+<!-- StdSpec&#45;&gt;RFP_Final -->
+<g id="edge6" class="edge">
+<title>StdSpec&#45;&gt;RFP_Final</title>
+<path fill="none" stroke="black" d="M347.26,-72.99C331.74,-63.58 312.26,-51.76 295.48,-41.57"/>
+<polygon fill="black" stroke="black" points="296.85,-38.31 286.48,-36.11 293.22,-44.29 296.85,-38.31"/>
+</g>
+</g>
+</svg>
+
+            </div>
+            <p style="font-size:0.8em; color:#999; text-align:center; margin-top:-20px; margin-bottom:30px;">
+                <em>Figura: Diagrama generado automáticamente mediante Graphviz</em>
+            </p>
+
+            <h3>Intuición</h3>
+            <div><p>Imagina que quieres construir una casa inteligente. No vas a la ferretería y compras 'un poco de todo'. Primero, dibujas planos, decides cuántas luces quieres controlar y cuánto estás dispuesto a pagar por la eficiencia energética. El RFP es ese plano detallado que entregas a varios constructores. En el mundo de los datos, el 'plano' incluye qué datos tenemos, qué preguntas queremos que la inteligencia artificial responda y qué tan rápido necesitamos los resultados. No es solo pedir un presupuesto; es definir las reglas del juego para que, cuando compares a dos proveedores, no compares 'peras con manzanas'. Si un proveedor ofrece una base de datos ultrarrápida pero carísima y otro una lenta pero barata, el RFP te ayuda a decidir qué es más importante para tu negocio en ese momento preciso.</p></div>
+
+            <h3>Aplicación</h3>
+            <div><p>En el sector bancario, cuando una entidad decide migrar su sistema de detección de fraudes a una arquitectura de Machine Learning en tiempo real, emite un RFP. El ingeniero de datos actúa como consultor técnico validando que el proveedor pueda manejar flujos de 10,000 transacciones por segundo. Un caso real implica evaluar la capacidad de integración vía API; si el proveedor no cumple con el estándar de seguridad OAuth2 especificado en el RFP, queda descartado automáticamente, ahorrando meses de integración fallida.</p></div>
+        </article>
+        
+        <article class="subtema">
+            <h2>Evaluación Cuantitativa de Proveedores y Scoring de Datos</h2>
+
+            <h3>Historia</h3>
+            <div><p>La evaluación de proveedores pasó de ser un juicio subjetivo de los directivos a una disciplina basada en la investigación operativa. Tras la Segunda Guerra Mundial, el desarrollo de la Programación Lineal permitió a las empresas optimizar sus cadenas de suministro. En los años 90, el Balanced Scorecard de Kaplan y Norton influyó en cómo se medía el rendimiento externo. Con la llegada de la analítica avanzada, la evaluación ya no es estática; las empresas ahora utilizan simulaciones de Monte Carlo para predecir el riesgo de incumplimiento de un proveedor de datos. La evolución actual integra el 'Data Quality Scoring', donde se evalúa al proveedor no solo por su solidez financiera, sino por la precisión y completitud histórica de los datasets que proporciona, utilizando técnicas de auditoría algorítmica.</p></div>
+
+            <h3>Descripción Formal</h3>
+            <div><p>La evaluación cuantitativa se basa en la construcción de un Índice de Desempeño del Proveedor (VPI). Este proceso requiere normalizar escalas de diferentes unidades (ej: precio en euros vs. tiempo de respuesta en milisegundos).</p>
+<p>Lógica de Normalización (Min-Max):
+Para un criterio de beneficio (ej: precisión): z = (x - min) / (max - min).
+Para un criterio de costo (ej: precio): z = (max - x) / (max - min).</p>
+<p>Sintaxis en Excel para el cálculo del Scoring Ponderado:
+Supongamos que los pesos están en el rango <code>B1:B5</code> y las notas del proveedor en <code>C1:C5</code>. La fórmula matricial es: 
+<code>=SUMAPRODUCTO(B1:B5; C1:C5)</code>. 
+Si queremos penalizar a proveedores que no alcancen un mínimo en un área crítica (ej: Ciberseguridad), usamos: 
+<code>=SI(C3&lt;80; SUMAPRODUCTO(B1:B5; C1:C5)*0,5; SUMAPRODUCTO(B1:B5; C1:C5))</code>. Aquí, multiplicamos por 0.5 como factor de penalización si la nota en el criterio 3 (C3) es inferior a 80/100. Esto asegura que un excelente precio no compense una seguridad deficiente.</p></div>
+
+            <div class="diagrama-box">
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg style="max-width: 80%; max-height: 350px; height: auto; width: auto;" data-width="971pt" data-height="44pt"
+ viewBox="0.00 0.00 971.00 44.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 40)">
+<title>G</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-40 967,-40 967,4 -4,4"/>
+<!-- Collect -->
+<g id="node1" class="node">
+<title>Collect</title>
+<polygon fill="#f9f9f9" stroke="black" points="181,-36 0,-36 0,0 181,0 181,-36"/>
+<text text-anchor="middle" x="90.5" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">Recolección de Propuestas</text>
+</g>
+<!-- Normalize -->
+<g id="node2" class="node">
+<title>Normalize</title>
+<polygon fill="#f9f9f9" stroke="black" points="390,-36 217,-36 217,0 390,0 390,-36"/>
+<text text-anchor="middle" x="303.5" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">Normalización de Escalas</text>
+</g>
+<!-- Collect&#45;&gt;Normalize -->
+<g id="edge1" class="edge">
+<title>Collect&#45;&gt;Normalize</title>
+<path fill="none" stroke="black" d="M181.29,-18C189.66,-18 198.17,-18 206.6,-18"/>
+<polygon fill="black" stroke="black" points="206.82,-21.5 216.82,-18 206.82,-14.5 206.82,-21.5"/>
+</g>
+<!-- Weight -->
+<g id="node3" class="node">
+<title>Weight</title>
+<polygon fill="#f9f9f9" stroke="black" points="590,-36 426,-36 426,0 590,0 590,-36"/>
+<text text-anchor="middle" x="508" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">Aplicación de Pesos (W)</text>
+</g>
+<!-- Normalize&#45;&gt;Weight -->
+<g id="edge2" class="edge">
+<title>Normalize&#45;&gt;Weight</title>
+<path fill="none" stroke="black" d="M390.08,-18C398.62,-18 407.31,-18 415.89,-18"/>
+<polygon fill="black" stroke="black" points="415.92,-21.5 425.91,-18 415.91,-14.5 415.92,-21.5"/>
+</g>
+<!-- Sum -->
+<g id="node4" class="node">
+<title>Sum</title>
+<polygon fill="#f9f9f9" stroke="black" points="770,-36 626,-36 626,0 770,0 770,-36"/>
+<text text-anchor="middle" x="698" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">Suma Ponderada (Σ)</text>
+</g>
+<!-- Weight&#45;&gt;Sum -->
+<g id="edge3" class="edge">
+<title>Weight&#45;&gt;Sum</title>
+<path fill="none" stroke="black" d="M590.09,-18C598.57,-18 607.19,-18 615.67,-18"/>
+<polygon fill="black" stroke="black" points="615.93,-21.5 625.93,-18 615.93,-14.5 615.93,-21.5"/>
+</g>
+<!-- Rank -->
+<g id="node5" class="node">
+<title>Rank</title>
+<polygon fill="#f9f9f9" stroke="black" points="963,-36 806,-36 806,0 963,0 963,-36"/>
+<text text-anchor="middle" x="884.5" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">Ranking de Candidatos</text>
+</g>
+<!-- Sum&#45;&gt;Rank -->
+<g id="edge4" class="edge">
+<title>Sum&#45;&gt;Rank</title>
+<path fill="none" stroke="black" d="M770.07,-18C778.46,-18 787.1,-18 795.68,-18"/>
+<polygon fill="black" stroke="black" points="795.72,-21.5 805.72,-18 795.72,-14.5 795.72,-21.5"/>
+</g>
+</g>
+</svg>
+
+            </div>
+            <p style="font-size:0.8em; color:#999; text-align:center; margin-top:-20px; margin-bottom:30px;">
+                <em>Figura: Diagrama generado automáticamente mediante Graphviz</em>
+            </p>
+
+            <h3>Intuición</h3>
+            <div><p>Imagina que estás eligiendo un coche. Tienes el precio, el consumo de combustible, la seguridad y la potencia. No puedes sumar 'euros' con 'litros/100km'. Lo que haces es darles una nota del 1 al 10 a cada cosa y decidir qué te importa más. El scoring de proveedores de datos es exactamente eso, pero con esteroides. Le damos una importancia (peso) a la seguridad, otra al precio y otra a la facilidad de uso. Al final, el sistema nos da un número único que nos dice quién es el mejor candidato según nuestras propias prioridades, eliminando los favoritismos o las corazonadas del proceso de selección.</p></div>
+
+            <h3>Aplicación</h3>
+            <div><p>Un Ingeniero de Datos en una empresa de Retail utiliza scoring para elegir un proveedor de servicios de Cloud Data Warehouse. Compara a Snowflake, BigQuery y Redshift. Los criterios incluyen el costo por consulta (query cost), la capacidad de auto-escalado y la facilidad de integración con sus herramientas actuales de BI (como Tableau). Al aplicar un modelo de scoring, el ingeniero puede justificar ante la dirección por qué se elige una opción que quizás es un 10% más cara pero reduce el tiempo de mantenimiento en un 40%.</p></div>
+        </article>
+        
+        <article class="subtema">
+            <h2>Análisis de Viabilidad y Pre-inicio: El Business Case Basado en ROI</h2>
+
+            <h3>Historia</h3>
+            <div><p>El concepto de Retorno de Inversión (ROI) tiene sus raíces en el análisis financiero de principios del siglo XX, popularizado por la empresa DuPont. Sin embargo, aplicarlo a proyectos de datos ha sido un reto histórico. En los años 2000, muchos proyectos de Data Warehousing fracasaron porque se consideraban 'centros de costo' sin un beneficio claro. La disciplina evolucionó hacia el Business Case de Pre-inicio, donde se exige demostrar el valor económico antes de gastar un solo euro. Con el auge del 'Data Mesh' y la monetización de datos, el análisis de viabilidad ahora incluye no solo el ahorro de costos (eficiencia), sino también la generación de nuevos ingresos (valor estratégico). La transición de 'IT como soporte' a 'Data como activo' ha transformado el pre-inicio en la fase más crítica del ciclo de vida del proyecto.</p></div>
+
+            <h3>Descripción Formal</h3>
+            <div><p>El Business Case debe demostrar la viabilidad financiera mediante el Valor Presente Neto (VPN) y la Tasa Interna de Retorno (TIR). En proyectos de datos, los beneficios suelen ser ahorros por automatización o reducción de churn (pérdida de clientes).</p>
+<p>Fórmula del VPN:
+VPN = Σ [R_t / (1 + i)^t] - C_0
+Donde R_t es el flujo de caja neto en el tiempo t, i es la tasa de descuento y C_0 es la inversión inicial.</p>
+<p>Sintaxis en Excel para análisis financiero de pre-inicio:
+Para calcular el VPN de un proyecto a 3 años con una tasa del 10%: 
+<code>=VNA(0,10; Flujo_Año1; Flujo_Año2; Flujo_Año3) - Inversion_Inicial</code>. 
+Para determinar la TIR y ver si supera el coste de capital: 
+<code>=TIR(Rango_Flujos_Caja)</code>. 
+Si el proyecto de datos busca reducir el error de predicción, se usa la lógica de impacto: 
+<code>Impacto_Financiero = (Error_Antiguo - Error_Nuevo) * Costo_Por_Error</code>. Esta métrica es fundamental para el 'Go/No-Go' de la fase de pre-inicio.</p></div>
+
+            <div class="diagrama-box">
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg style="max-width: 80%; max-height: 350px; height: auto; width: auto;" data-width="410pt" data-height="277pt"
+ viewBox="0.00 0.00 409.50 277.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 273)">
+<title>G</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-273 405.5,-273 405.5,4 -4,4"/>
+<!-- Idea -->
+<g id="node1" class="node">
+<title>Idea</title>
+<polygon fill="#f9f9f9" stroke="black" points="303.5,-269 91.5,-269 91.5,-233 303.5,-233 303.5,-269"/>
+<text text-anchor="middle" x="197.5" y="-247.3" font-family="Helvetica,sans-Serif" font-size="14.00">Propuesta de Proyecto de Datos</text>
+</g>
+<!-- Estim -->
+<g id="node2" class="node">
+<title>Estim</title>
+<polygon fill="#f9f9f9" stroke="black" points="309.5,-196 85.5,-196 85.5,-160 309.5,-160 309.5,-196"/>
+<text text-anchor="middle" x="197.5" y="-174.3" font-family="Helvetica,sans-Serif" font-size="14.00">Estimación de Costos y Beneficios</text>
+</g>
+<!-- Idea&#45;&gt;Estim -->
+<g id="edge1" class="edge">
+<title>Idea&#45;&gt;Estim</title>
+<path fill="none" stroke="black" d="M197.5,-232.81C197.5,-224.79 197.5,-215.05 197.5,-206.07"/>
+<polygon fill="black" stroke="black" points="201,-206.03 197.5,-196.03 194,-206.03 201,-206.03"/>
+</g>
+<!-- ROI_Calc -->
+<g id="node3" class="node">
+<title>ROI_Calc</title>
+<polygon fill="#f9f9f9" stroke="black" points="197.5,-123 35.96,-105 197.5,-87 359.04,-105 197.5,-123"/>
+<text text-anchor="middle" x="197.5" y="-101.3" font-family="Helvetica,sans-Serif" font-size="14.00">¿VPN &gt; 0 y TIR &gt; WACC?</text>
+</g>
+<!-- Estim&#45;&gt;ROI_Calc -->
+<g id="edge2" class="edge">
+<title>Estim&#45;&gt;ROI_Calc</title>
+<path fill="none" stroke="black" d="M197.5,-159.81C197.5,-151.79 197.5,-142.05 197.5,-133.07"/>
+<polygon fill="black" stroke="black" points="201,-133.03 197.5,-123.03 194,-133.03 201,-133.03"/>
+</g>
+<!-- Reject -->
+<g id="node4" class="node">
+<title>Reject</title>
+<polygon fill="#ffcccc" stroke="black" points="185,-36 0,-36 0,0 185,0 185,-36"/>
+<text text-anchor="middle" x="92.5" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">Rechazar Proyecto / Pivotar</text>
+</g>
+<!-- ROI_Calc&#45;&gt;Reject -->
+<g id="edge3" class="edge">
+<title>ROI_Calc&#45;&gt;Reject</title>
+<path fill="none" stroke="black" d="M178.73,-88.8C162.87,-75.97 139.89,-57.37 121.65,-42.59"/>
+<polygon fill="black" stroke="black" points="123.61,-39.68 113.64,-36.11 119.21,-45.12 123.61,-39.68"/>
+<text text-anchor="middle" x="161.5" y="-57.8" font-family="Times,serif" font-size="14.00">NO</text>
+</g>
+<!-- Approve -->
+<g id="node5" class="node">
+<title>Approve</title>
+<polygon fill="#ccffcc" stroke="black" points="401.5,-36 203.5,-36 203.5,0 401.5,0 401.5,-36"/>
+<text text-anchor="middle" x="302.5" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">Aprobación de Project Charter</text>
+</g>
+<!-- ROI_Calc&#45;&gt;Approve -->
+<g id="edge4" class="edge">
+<title>ROI_Calc&#45;&gt;Approve</title>
+<path fill="none" stroke="black" d="M216.27,-88.8C232.13,-75.97 255.11,-57.37 273.35,-42.59"/>
+<polygon fill="black" stroke="black" points="275.79,-45.12 281.36,-36.11 271.39,-39.68 275.79,-45.12"/>
+<text text-anchor="middle" x="263" y="-57.8" font-family="Times,serif" font-size="14.00">SÍ</text>
+</g>
+</g>
+</svg>
+
+            </div>
+            <p style="font-size:0.8em; color:#999; text-align:center; margin-top:-20px; margin-bottom:30px;">
+                <em>Figura: Diagrama generado automáticamente mediante Graphviz</em>
+            </p>
+
+            <h3>Intuición</h3>
+            <div><p>Antes de empezar cualquier viaje, te preguntas: ¿Vale la pena el esfuerzo por lo que voy a encontrar allí? El Business Case es esa pregunta aplicada a los datos. No hacemos proyectos de IA porque 'están de moda', sino porque calculamos que nos ahorrarán dinero o nos harán ganar más. Es como invertir en un sistema de riego automático para un campo: cuesta dinero hoy, pero ahorrarás en agua y tendrás mejores cosechas mañana. En la fase de pre-inicio, tratamos de predecir cuánta 'cosecha extra' nos darán los datos para decidir si compramos el sistema de riego o no.</p></div>
+
+            <h3>Aplicación</h3>
+            <div><p>Un Director de Datos (CDO) en una empresa de logística propone un proyecto de optimización de rutas usando grafos. En la fase de pre-inicio, el equipo analiza los datos históricos y estima que una mejora del 5% en la eficiencia de las rutas ahorraría 2 millones de euros anuales en combustible. Si el desarrollo cuesta 500,000 euros, el ROI es evidente. El Business Case formaliza esta estimación y permite que el comité de inversiones apruebe el inicio del proyecto basándose en datos, no en suposiciones.</p></div>
+        </article>
+        </body></html>

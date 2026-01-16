@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2 - Fundamentos de Gestión - Ciclo de Vida del Proyecto y Modelos de Organización.</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #f4f4f9; color: #333; margin: 0; padding: 20px; line-height: 1.6; position: relative; }
+        header { background: #2c3e50; color: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; text-align:center; }
+        h1 { margin: 0; font-size: 1.5rem; }
+
+        /* Estilo del botón Atrás */
+        .btn-atras {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #7f8c8d;
+            color: white;
+            padding: 8px 15px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            transition: background 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+        .btn-atras:hover { background: #95a5a6; }
+
+        .subtema {
+            background: white;
+            padding: 40px;
+            margin-bottom: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        h2 { color: #2980b9; border-bottom: 2px solid #eee; padding-bottom: 10px; margin-top: 0; }
+        h3 { color: #7f8c8d; font-size: 0.9em; text-transform: uppercase; margin-top: 30px; letter-spacing: 1px; border-left: 3px solid #d4af37; padding-left: 10px; }
+
+        .diagrama-box {
+            text-align: center;
+            margin: 30px 0;
+            padding: 20px;
+            background: #fafafa;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 150px;
+        }
+
+        p { margin-bottom: 1rem; }
+        strong { color: #2c3e50; font-weight: 600; }
+        code { background: #f0f0f0; padding: 2px 5px; border-radius: 3px; font-family: monospace; color: #c0392b; }
+        ul { padding-left: 20px; }
+        li { margin-bottom: 0.5rem; }
+    </style>
+</head>
+<body>
+    <button onclick="window.history.back()" class="btn-atras">Atrás</button>
+    <header><h1>2 - Fundamentos de Gestión - Ciclo de Vida del Proyecto y Modelos de Organización.</h1></header>
+    <main>
+
+        <article class="subtema">
+            <h2>Ciclos de Vida en Proyectos de Datos: De Cascada a CRISP-DM y Agile</h2>
+
+            <h3>Historia</h3>
+            <div><p>La gestión de proyectos de datos ha evolucionado drásticamente desde los años 70. Inicialmente, se utilizaba el modelo en Cascada (Waterfall), heredado de la ingeniería civil, donde cada fase debía terminar antes de empezar la siguiente. Sin embargo, la naturaleza exploratoria de los datos demostró que este modelo era rígido. En 1996, un consorcio de empresas (NCR, SPSS, Daimler-Benz) creó CRISP-DM (Cross-Industry Standard Process for Data Mining), introduciendo la iteración. Posteriormente, la llegada del Manifiesto Agile en 2001 y marcos como Scrum transformaron la gestión en ciclos cortos (Sprints). Hoy, la disciplina evoluciona hacia MLOps, que integra el desarrollo y las operaciones de modelos de aprendizaje automático en un flujo continuo, reconociendo que un proyecto de datos nunca 'termina', sino que se mantiene y monitoriza constantemente frente al 'data drift' o degradación de los datos.</p></div>
+
+            <h3>Descripción Formal</h3>
+            <div><p>Técnicamente, el ciclo de vida se define por fases críticas: Entendimiento del Negocio, Adquisición de Datos, Modelado y Despliegue. En la fase de preparación, el ingeniero de datos aplica lógica de limpieza. Por ejemplo, en Excel, la validación de integridad se realiza mediante funciones de búsqueda y lógica condicional: <code>=SI(ESERROR(BUSCARX(A2; 'Maestro'!A:A; 'Maestro'!B:B)); "No Encontrado"; "Validado")</code>. Algorítmicamente, el flujo sigue una lógica recursiva: 
+1. Definir Variable Objetivo (Y) y Predictores (X).
+2. Si la calidad del dato (Completeness) es &lt; 80%, ejecutar imputación (Media/Mediana).
+3. Entrenar Modelo M.
+4. Evaluar M: SI Error &lt; Umbral ENTONCES Desplegar SINO Volver a Preparación de Datos. 
+Este proceso requiere una gestión de dependencias estricta, donde el 'Path' crítico no es solo temporal, sino de calidad. La transición de 'Data Prep' a 'Modeling' consume el 70% del tiempo del proyecto, requiriendo algoritmos de limpieza como el manejo de outliers (Z-Score &gt; 3).</p></div>
+
+            <div class="diagrama-box">
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg style="max-width: 80%; max-height: 350px; height: auto; width: auto;" data-width="494pt" data-height="350pt"
+ viewBox="0.00 0.00 494.22 350.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 346)">
+<title>G</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-346 490.22,-346 490.22,4 -4,4"/>
+<!-- Start -->
+<g id="node1" class="node">
+<title>Start</title>
+<polygon fill="#f9f9f9" stroke="black" points="364.22,-342 185.22,-342 185.22,-306 364.22,-306 364.22,-342"/>
+<text text-anchor="middle" x="274.72" y="-320.3" font-family="Helvetica,sans-Serif" font-size="14.00">Entendimiento del Negocio</text>
+</g>
+<!-- Data -->
+<g id="node2" class="node">
+<title>Data</title>
+<polygon fill="#f9f9f9" stroke="black" points="348.22,-269 201.22,-269 201.22,-233 348.22,-233 348.22,-269"/>
+<text text-anchor="middle" x="274.72" y="-247.3" font-family="Helvetica,sans-Serif" font-size="14.00">Preparación de Datos</text>
+</g>
+<!-- Start&#45;&gt;Data -->
+<g id="edge1" class="edge">
+<title>Start&#45;&gt;Data</title>
+<path fill="none" stroke="black" d="M274.72,-305.81C274.72,-297.79 274.72,-288.05 274.72,-279.07"/>
+<polygon fill="black" stroke="black" points="278.22,-279.03 274.72,-269.03 271.22,-279.03 278.22,-279.03"/>
+</g>
+<!-- Model -->
+<g id="node3" class="node">
+<title>Model</title>
+<polygon fill="#f9f9f9" stroke="black" points="347.22,-196 202.22,-196 202.22,-160 347.22,-160 347.22,-196"/>
+<text text-anchor="middle" x="274.72" y="-174.3" font-family="Helvetica,sans-Serif" font-size="14.00">Modelado / Algoritmo</text>
+</g>
+<!-- Data&#45;&gt;Model -->
+<g id="edge2" class="edge">
+<title>Data&#45;&gt;Model</title>
+<path fill="none" stroke="black" d="M274.72,-232.81C274.72,-224.79 274.72,-215.05 274.72,-206.07"/>
+<polygon fill="black" stroke="black" points="278.22,-206.03 274.72,-196.03 271.22,-206.03 278.22,-206.03"/>
+</g>
+<!-- Eval -->
+<g id="node4" class="node">
+<title>Eval</title>
+<polygon fill="#f9f9f9" stroke="black" points="173.72,-123 -0.22,-105 173.72,-87 347.66,-105 173.72,-123"/>
+<text text-anchor="middle" x="173.72" y="-101.3" font-family="Helvetica,sans-Serif" font-size="14.00">¿Cumple KPls de Precisión?</text>
+</g>
+<!-- Model&#45;&gt;Eval -->
+<g id="edge3" class="edge">
+<title>Model&#45;&gt;Eval</title>
+<path fill="none" stroke="black" d="M250.53,-159.99C236.38,-150.05 218.41,-137.42 203.41,-126.87"/>
+<polygon fill="black" stroke="black" points="205.17,-123.83 194.97,-120.94 201.14,-129.55 205.17,-123.83"/>
+</g>
+<!-- Deploy -->
+<g id="node5" class="node">
+<title>Deploy</title>
+<polygon fill="#f9f9f9" stroke="black" points="247.22,-36 80.22,-36 80.22,0 247.22,0 247.22,-36"/>
+<text text-anchor="middle" x="163.72" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">Despliegue a Producción</text>
+</g>
+<!-- Eval&#45;&gt;Deploy -->
+<g id="edge4" class="edge">
+<title>Eval&#45;&gt;Deploy</title>
+<path fill="none" stroke="black" d="M171.7,-86.8C170.33,-75.16 168.49,-59.55 166.93,-46.24"/>
+<polygon fill="black" stroke="black" points="170.39,-45.7 165.74,-36.18 163.43,-46.52 170.39,-45.7"/>
+<text text-anchor="middle" x="176.22" y="-57.8" font-family="Times,serif" font-size="14.00">SI</text>
+</g>
+<!-- Fix -->
+<g id="node6" class="node">
+<title>Fix</title>
+<polygon fill="#f9f9f9" stroke="black" points="486.22,-36 265.22,-36 265.22,0 486.22,0 486.22,-36"/>
+<text text-anchor="middle" x="375.72" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">Limpieza / Ingeniería de Variables</text>
+</g>
+<!-- Eval&#45;&gt;Fix -->
+<g id="edge5" class="edge">
+<title>Eval&#45;&gt;Fix</title>
+<path fill="none" stroke="black" d="M206.18,-90.34C238.32,-76.82 288.01,-55.91 325.3,-40.22"/>
+<polygon fill="black" stroke="black" points="327.12,-43.25 334.98,-36.15 324.4,-36.8 327.12,-43.25"/>
+<text text-anchor="middle" x="297.72" y="-57.8" font-family="Times,serif" font-size="14.00">NO</text>
+</g>
+<!-- Fix&#45;&gt;Model -->
+<g id="edge6" class="edge">
+<title>Fix&#45;&gt;Model</title>
+<path fill="none" stroke="black" d="M376.55,-36.36C376.76,-58.33 374.24,-96.52 356.72,-123 348.24,-135.82 335.55,-146.31 322.68,-154.52"/>
+<polygon fill="black" stroke="black" points="320.58,-151.7 313.79,-159.84 324.17,-157.71 320.58,-151.7"/>
+</g>
+</g>
+</svg>
+
+            </div>
+            <p style="font-size:0.8em; color:#999; text-align:center; margin-top:-20px; margin-bottom:30px;">
+                <em>Figura: Diagrama generado automáticamente mediante Graphviz</em>
+            </p>
+
+            <h3>Intuición</h3>
+            <div><p>Imagina que estás construyendo un restaurante. El modelo tradicional (Cascada) sería diseñar todo el menú, construir el local y abrir solo al final, arriesgándote a que a nadie le guste la comida. En un proyecto de datos, trabajamos con 'ingredientes' que cambian (los datos). El ciclo de vida moderno es como abrir un 'Pop-up Store': preparas un plato básico (MVP), ves si a los clientes les gusta (análisis de resultados), y ajustas la receta en tiempo real. La 'iteración' es el corazón del proceso; no se trata de hacerlo bien a la primera, sino de fallar rápido y barato para encontrar el patrón correcto. El ciclo de vida asegura que no perdamos de vista el objetivo de negocio mientras nos sumergimos en la complejidad técnica de los algoritmos.</p></div>
+
+            <h3>Aplicación</h3>
+            <div><p>Un Ingeniero de Datos en una empresa de Retail aplica esto al predecir el stock. No lanza un modelo global el primer día. Primero, usa un ciclo CRISP-DM para una sola categoría (ej. Electrónica). Si el error medio absoluto (MAE) es aceptable, escala el proceso. Utiliza herramientas de orquestación como Apache Airflow para automatizar las fases del ciclo de vida, asegurando que si la ingesta de datos de ventas falla a las 3:00 AM, el modelo no intente entrenarse con datos nulos, protegiendo la integridad de la decisión de negocio.</p></div>
+        </article>
+        
+        <article class="subtema">
+            <h2>Modelos de Organización: Centralizado vs. Federado (Hub-and-Spoke)</h2>
+
+            <h3>Historia</h3>
+            <div><p>Las organizaciones comenzaron con estructuras centralizadas en los años 80, donde un solo departamento de 'Sistemas' manejaba todo. Con la explosión del Big Data en 2010, surgió el modelo descentralizado, donde cada unidad de negocio (Marketing, Finanzas) contrataba sus propios analistas, provocando 'silos de datos' y métricas contradictorias (ej. Marketing calculaba el 'Churn' de forma distinta a Finanzas). Para solucionar esto, las empresas líderes como Google o Amazon adoptaron el modelo 'Hub-and-Spoke' o Federado. En este esquema, existe un Centro de Excelencia (CoE) que dicta las normas y herramientas, mientras que equipos especializados operan dentro de las áreas de negocio, equilibrando la estandarización técnica con la agilidad operativa.</p></div>
+
+            <h3>Descripción Formal</h3>
+            <div><p>En el diseño organizacional para datos, el modelo se mide por el nivel de autonomía vs. control. En un modelo federado, el 'Hub' gestiona el Data Warehouse central y la gobernanza. En Excel, esto se visualiza mediante el uso de 'Power Query' para conectar múltiples fuentes descentralizadas a una única 'Verdad': <code>=CuboMiembro("Conexión"; "[Medidas].[Ventas_Totales]")</code>. 
+Lógica de asignación de recursos:
+- IF Complejidad_Técnica &gt; Alta AND Impacto_Cross_Dpt = TRUE THEN Asignar a Equipo Central.
+- IF Requerimiento = Específico_Área THEN Asignar a Analista Embebido.
+La eficiencia del modelo se calcula mediante el ratio de 'Reusabilidad de Activos de Datos': (Activos compartidos / Total activos creados). Un modelo óptimo tiende a un ratio &gt; 0.6.</p></div>
+
+            <div class="diagrama-box">
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg style="max-width: 80%; max-height: 350px; height: auto; width: auto;" data-width="483pt" data-height="201pt"
+ viewBox="0.00 0.00 483.00 201.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 197)">
+<title>G</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-197 479,-197 479,4 -4,4"/>
+<!-- Hub -->
+<g id="node1" class="node">
+<title>Hub</title>
+<polygon fill="#e1f5fe" stroke="black" points="186,-114 0,-114 0,-76 186,-76 186,-114"/>
+<text text-anchor="middle" x="93" y="-98.8" font-family="Helvetica,sans-Serif" font-size="14.00">Centro de Excelencia (HUB)</text>
+<text text-anchor="middle" x="93" y="-83.8" font-family="Helvetica,sans-Serif" font-size="14.00">Estandarización y Gobierno</text>
+</g>
+<!-- Spoke1 -->
+<g id="node2" class="node">
+<title>Spoke1</title>
+<polygon fill="#f9f9f9" stroke="black" points="469,-185 337,-185 337,-147 469,-147 469,-185"/>
+<text text-anchor="middle" x="403" y="-169.8" font-family="Helvetica,sans-Serif" font-size="14.00">Unidad: Marketing</text>
+<text text-anchor="middle" x="403" y="-154.8" font-family="Helvetica,sans-Serif" font-size="14.00">(Analítica Aplicada)</text>
+</g>
+<!-- Hub&#45;&gt;Spoke1 -->
+<g id="edge1" class="edge">
+<title>Hub&#45;&gt;Spoke1</title>
+<path fill="none" stroke="black" d="M114.78,-114.31C135.55,-132.19 169.33,-157.54 204,-168 243.26,-179.84 288.92,-180.21 326.5,-177.23"/>
+<polygon fill="black" stroke="black" points="327.22,-180.68 336.87,-176.31 326.6,-173.71 327.22,-180.68"/>
+<text text-anchor="middle" x="258.5" y="-181.8" font-family="Times,serif" font-size="14.00">Guías/Herramientas</text>
+</g>
+<!-- Spoke2 -->
+<g id="node3" class="node">
+<title>Spoke2</title>
+<polygon fill="#f9f9f9" stroke="black" points="469,-119 337,-119 337,-81 469,-81 469,-119"/>
+<text text-anchor="middle" x="403" y="-103.8" font-family="Helvetica,sans-Serif" font-size="14.00">Unidad: Finanzas</text>
+<text text-anchor="middle" x="403" y="-88.8" font-family="Helvetica,sans-Serif" font-size="14.00">(Analítica Aplicada)</text>
+</g>
+<!-- Hub&#45;&gt;Spoke2 -->
+<g id="edge2" class="edge">
+<title>Hub&#45;&gt;Spoke2</title>
+<path fill="none" stroke="black" d="M186.41,-96.5C231.1,-97.23 284.07,-98.09 326.33,-98.77"/>
+<polygon fill="black" stroke="black" points="326.49,-102.27 336.55,-98.94 326.61,-95.28 326.49,-102.27"/>
+<text text-anchor="middle" x="258.5" y="-101.8" font-family="Times,serif" font-size="14.00">Guías/Herramientas</text>
+</g>
+<!-- Spoke3 -->
+<g id="node4" class="node">
+<title>Spoke3</title>
+<polygon fill="#f9f9f9" stroke="black" points="475,-38 331,-38 331,0 475,0 475,-38"/>
+<text text-anchor="middle" x="403" y="-22.8" font-family="Helvetica,sans-Serif" font-size="14.00">Unidad: Operaciones</text>
+<text text-anchor="middle" x="403" y="-7.8" font-family="Helvetica,sans-Serif" font-size="14.00">(Analítica Aplicada)</text>
+</g>
+<!-- Hub&#45;&gt;Spoke3 -->
+<g id="edge3" class="edge">
+<title>Hub&#45;&gt;Spoke3</title>
+<path fill="none" stroke="black" d="M139.42,-75.95C159.02,-68.29 182.37,-59.89 204,-54 241.87,-43.69 284.66,-35.68 320.76,-29.95"/>
+<polygon fill="black" stroke="black" points="321.41,-33.39 330.75,-28.39 320.33,-26.47 321.41,-33.39"/>
+<text text-anchor="middle" x="258.5" y="-57.8" font-family="Times,serif" font-size="14.00">Guías/Herramientas</text>
+</g>
+<!-- Spoke1&#45;&gt;Hub -->
+<g id="edge4" class="edge">
+<title>Spoke1&#45;&gt;Hub</title>
+<path fill="none" stroke="black" d="M336.8,-150.97C293.09,-140.89 234.88,-127.48 186.41,-116.3"/>
+<polygon fill="black" stroke="black" points="187.07,-112.86 176.54,-114.03 185.5,-119.68 187.07,-112.86"/>
+<text text-anchor="middle" x="258.5" y="-148.8" font-family="Times,serif" font-size="14.00">Feedback/Datos</text>
+</g>
+<!-- Spoke2&#45;&gt;Hub -->
+<g id="edge5" class="edge">
+<title>Spoke2&#45;&gt;Hub</title>
+<path fill="none" stroke="black" d="M336.75,-81.14C328.81,-79.44 320.76,-77.99 313,-77 264.94,-70.89 252.29,-73.08 204,-77 201.47,-77.21 198.91,-77.44 196.33,-77.69"/>
+<polygon fill="black" stroke="black" points="195.86,-74.22 186.29,-78.78 196.61,-81.18 195.86,-74.22"/>
+<text text-anchor="middle" x="258.5" y="-80.8" font-family="Times,serif" font-size="14.00">Feedback/Datos</text>
+</g>
+<!-- Spoke3&#45;&gt;Hub -->
+<g id="edge6" class="edge">
+<title>Spoke3&#45;&gt;Hub</title>
+<path fill="none" stroke="black" d="M330.62,-4.53C292.16,0.33 244.44,1.55 204,-12 170.81,-23.12 139.63,-48.64 119,-68.47"/>
+<polygon fill="black" stroke="black" points="116.28,-66.23 111.63,-75.75 121.2,-71.21 116.28,-66.23"/>
+<text text-anchor="middle" x="258.5" y="-15.8" font-family="Times,serif" font-size="14.00">Feedback/Datos</text>
+</g>
+</g>
+</svg>
+
+            </div>
+            <p style="font-size:0.8em; color:#999; text-align:center; margin-top:-20px; margin-bottom:30px;">
+                <em>Figura: Diagrama generado automáticamente mediante Graphviz</em>
+            </p>
+
+            <h3>Intuición</h3>
+            <div><p>Imagina un país. El modelo centralizado es como un gobierno que decide hasta el color de las aceras en cada pueblo; es ordenado pero muy lento. El modelo descentralizado es como si cada pueblo tuviera su propia moneda y leyes; hay mucha acción, pero es un caos para viajar entre ellos. El modelo Hub-and-Spoke es como una federación: el gobierno central pone las reglas de tráfico y la moneda (infraestructura y gobernanza), pero cada pueblo decide qué cultivos plantar (estrategia de datos local). Esto permite que los analistas hablen el idioma del negocio sin romper las reglas globales de seguridad y calidad del dato.</p></div>
+
+            <h3>Aplicación</h3>
+            <div><p>En un banco multinacional, el departamento de Riesgos tiene sus propios científicos de datos (Spoke) que entienden la regulación bancaria, pero utilizan la plataforma de datos en la nube (AWS/Azure) configurada por el equipo de Plataforma de Datos central (Hub). Esto evita que Riesgos gaste tiempo configurando servidores y asegura que sus modelos sigan los estándares de seguridad de la institución, permitiendo que un modelo de fraude se despliegue en semanas en lugar de meses.</p></div>
+        </article>
+        
+        <article class="subtema">
+            <h2>Gobernanza y Gestión de Recursos en el Ciclo de Datos</h2>
+
+            <h3>Historia</h3>
+            <div><p>La Gobernanza de Datos (Data Governance) pasó de ser una función burocrática de cumplimiento legal a un activo estratégico. En el pasado, los datos se almacenaban sin control hasta que se llenaban los discos duros. Con la llegada de normativas como el GDPR en Europa (2018) y la Ley de IA de la UE, la gestión de recursos de datos se volvió crítica. Se pasó de gestionar 'servidores' a gestionar 'linaje de datos' y 'diccionarios de datos'. La historia de la gobernanza es la historia de pasar del caos del 'Data Swamp' (pantano de datos) al orden del 'Data Lakehouse', donde cada bit de información tiene un propietario (Owner), un nivel de calidad y un ciclo de vida de eliminación definido.</p></div>
+
+            <h3>Descripción Formal</h3>
+            <div><p>La gestión de recursos implica el control de la capacidad computacional y la calidad del activo. Se utilizan KPIs como el DQ Score (Data Quality Score). 
+Sintaxis de control de calidad en Excel para identificar registros duplicados (recurso desperdiciado): <code>=SI(CONTAR.SI($A$2:A2; A2)&gt;1; "Duplicado"; "Único")</code>. 
+Lógica de Algoritmo de Purga:
+- For each data_asset in storage:
+  - IF last_access_date &gt; 2 years AND is_regulatory = FALSE THEN archive_to_cold_storage()
+  - ELSE IF null_rate &gt; 0.4 THEN trigger_data_steward_alert()
+  - ELSE keep_online().
+La gobernanza formaliza el 'Data Catalog', un inventario técnico donde se mapea el linaje (origen -&gt; transformación -&gt; destino), asegurando que los recursos de cómputo se asignen a los datos que realmente generan valor predictivo o descriptivo.</p></div>
+
+            <div class="diagrama-box">
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg style="max-width: 80%; max-height: 350px; height: auto; width: auto;" data-width="457pt" data-height="277pt"
+ viewBox="0.00 0.00 457.07 277.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 273)">
+<title>G</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-273 453.07,-273 453.07,4 -4,4"/>
+<!-- Input -->
+<g id="node1" class="node">
+<title>Input</title>
+<polygon fill="#f9f9f9" stroke="black" points="352,-269 184,-269 184,-233 352,-233 352,-269"/>
+<text text-anchor="middle" x="268" y="-247.3" font-family="Helvetica,sans-Serif" font-size="14.00">Ingesta de Nuevos Datos</text>
+</g>
+<!-- Check -->
+<g id="node2" class="node">
+<title>Check</title>
+<polygon fill="#f9f9f9" stroke="black" points="268,-196 86.85,-178 268,-160 449.15,-178 268,-196"/>
+<text text-anchor="middle" x="268" y="-174.3" font-family="Helvetica,sans-Serif" font-size="14.00">¿Pasa Validación de Calidad?</text>
+</g>
+<!-- Input&#45;&gt;Check -->
+<g id="edge1" class="edge">
+<title>Input&#45;&gt;Check</title>
+<path fill="none" stroke="black" d="M268,-232.81C268,-224.79 268,-215.05 268,-206.07"/>
+<polygon fill="black" stroke="black" points="271.5,-206.03 268,-196.03 264.5,-206.03 271.5,-206.03"/>
+</g>
+<!-- Catalog -->
+<g id="node3" class="node">
+<title>Catalog</title>
+<polygon fill="#f9f9f9" stroke="black" points="195.5,-109 22.5,-109 22.5,-73 195.5,-73 195.5,-109"/>
+<text text-anchor="middle" x="109" y="-87.3" font-family="Helvetica,sans-Serif" font-size="14.00">Catalogación y Metadatos</text>
+</g>
+<!-- Check&#45;&gt;Catalog -->
+<g id="edge2" class="edge">
+<title>Check&#45;&gt;Catalog</title>
+<path fill="none" stroke="black" d="M241.03,-162.58C216.08,-149.25 178.65,-129.24 150.01,-113.92"/>
+<polygon fill="black" stroke="black" points="151.51,-110.76 141.04,-109.13 148.21,-116.93 151.51,-110.76"/>
+<text text-anchor="middle" x="205.5" y="-130.8" font-family="Times,serif" font-size="14.00">SI</text>
+</g>
+<!-- Reject -->
+<g id="node4" class="node">
+<title>Reject</title>
+<polygon fill="#f9f9f9" stroke="black" points="428.5,-109 213.5,-109 213.5,-73 428.5,-73 428.5,-109"/>
+<text text-anchor="middle" x="321" y="-87.3" font-family="Helvetica,sans-Serif" font-size="14.00">Rechazo y Alerta a Data Steward</text>
+</g>
+<!-- Check&#45;&gt;Reject -->
+<g id="edge3" class="edge">
+<title>Check&#45;&gt;Reject</title>
+<path fill="none" stroke="black" d="M278.22,-160.61C285.77,-148.5 296.2,-131.77 304.87,-117.87"/>
+<polygon fill="black" stroke="black" points="307.95,-119.55 310.27,-109.21 302.01,-115.85 307.95,-119.55"/>
+<text text-anchor="middle" x="307" y="-130.8" font-family="Times,serif" font-size="14.00">NO</text>
+</g>
+<!-- Storage -->
+<g id="node5" class="node">
+<title>Storage</title>
+<polygon fill="#f9f9f9" stroke="black" points="218,-36 0,-36 0,0 218,0 218,-36"/>
+<text text-anchor="middle" x="109" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">Almacenamiento Seguro (GDPR)</text>
+</g>
+<!-- Catalog&#45;&gt;Storage -->
+<g id="edge4" class="edge">
+<title>Catalog&#45;&gt;Storage</title>
+<path fill="none" stroke="black" d="M109,-72.81C109,-64.79 109,-55.05 109,-46.07"/>
+<polygon fill="black" stroke="black" points="112.5,-46.03 109,-36.03 105.5,-46.03 112.5,-46.03"/>
+</g>
+</g>
+</svg>
+
+            </div>
+            <p style="font-size:0.8em; color:#999; text-align:center; margin-top:-20px; margin-bottom:30px;">
+                <em>Figura: Diagrama generado automáticamente mediante Graphviz</em>
+            </p>
+
+            <h3>Intuición</h3>
+            <div><p>La gobernanza de datos es como la gestión del agua en una ciudad. No basta con tener mucha agua; necesitas que sea potable (calidad), que sepa a dónde va cada tubería (linaje), que no se desperdicie (gestión de recursos) y que nadie la envenene (seguridad). Sin gobernanza, un proyecto de datos es un conjunto de hojas de cálculo que nadie entiende y en las que nadie confía. La gestión de recursos asegura que no gastemos dinero en almacenar 'basura' y que los analistas encuentren la información rápidamente, como si tuvieran una biblioteca perfectamente etiquetada en lugar de una montaña de papeles.</p></div>
+
+            <h3>Aplicación</h3>
+            <div><p>Un Data Manager en una aseguradora utiliza la gobernanza para asegurar que los datos de salud de los clientes estén cifrados y solo sean accesibles por el personal autorizado. Implementa un proceso de 'Data Lineage' para que, si un informe de ventas muestra un número erróneo, pueda rastrear hacia atrás exactamente qué base de datos falló y quién es el responsable de arreglarla, ahorrando cientos de horas de búsqueda manual y evitando multas regulatorias millonarias.</p></div>
+        </article>
+        </body></html>

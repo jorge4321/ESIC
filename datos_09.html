@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>9 - Definición del Alcance - Requerimientos, Objetivos y Línea Base del Alcance.</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #f4f4f9; color: #333; margin: 0; padding: 20px; line-height: 1.6; position: relative; }
+        header { background: #2c3e50; color: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; text-align:center; }
+        h1 { margin: 0; font-size: 1.5rem; }
+
+        /* Estilo del botón Atrás */
+        .btn-atras {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #7f8c8d;
+            color: white;
+            padding: 8px 15px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            transition: background 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+        .btn-atras:hover { background: #95a5a6; }
+
+        .subtema {
+            background: white;
+            padding: 40px;
+            margin-bottom: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        h2 { color: #2980b9; border-bottom: 2px solid #eee; padding-bottom: 10px; margin-top: 0; }
+        h3 { color: #7f8c8d; font-size: 0.9em; text-transform: uppercase; margin-top: 30px; letter-spacing: 1px; border-left: 3px solid #d4af37; padding-left: 10px; }
+
+        .diagrama-box {
+            text-align: center;
+            margin: 30px 0;
+            padding: 20px;
+            background: #fafafa;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 150px;
+        }
+
+        p { margin-bottom: 1rem; }
+        strong { color: #2c3e50; font-weight: 600; }
+        code { background: #f0f0f0; padding: 2px 5px; border-radius: 3px; font-family: monospace; color: #c0392b; }
+        ul { padding-left: 20px; }
+        li { margin-bottom: 0.5rem; }
+    </style>
+</head>
+<body>
+    <button onclick="window.history.back()" class="btn-atras">Atrás</button>
+    <header><h1>9 - Definición del Alcance - Requerimientos, Objetivos y Línea Base del Alcance.</h1></header>
+    <main>
+
+        <article class="subtema">
+            <h2>Gestión y Recopilación de Requerimientos de Datos</h2>
+
+            <h3>Historia</h3>
+            <div><p>Históricamente, la gestión de requerimientos nació en la ingeniería civil y de sistemas de defensa en la década de 1950. En el ámbito de los datos, la evolución fue reactiva: inicialmente los analistas recibían peticiones de informes simples (Reporting). Con la explosión del Big Data en la década de 2010, los requerimientos pasaron de ser 'listas de deseos' a especificaciones técnicas complejas que integran calidad, latencia y gobernanza. Antes, un requerimiento era 'quiero vender más'; hoy, en el Grado de Datos, se traduce en 'necesitamos un modelo de propensión de compra con una precisión del 85% y una latencia inferior a 200ms'. Esta sofisticación obligó a adoptar metodologías como BABOK (Business Analysis Body of Knowledge) adaptadas al ciclo de vida del dato, donde el requerimiento funcional se separa estrictamente del no funcional (infraestructura y seguridad), permitiendo que la arquitectura de datos soporte el crecimiento escalable del negocio sin generar deuda técnica masiva.</p></div>
+
+            <h3>Descripción Formal</h3>
+            <div><p>La recopilación de requerimientos implica la identificación de las necesidades de los stakeholders y su traducción a especificaciones técnicas. En analítica, esto se operacionaliza mediante matrices de trazabilidad. Lógica Algorítmica: Supongamos un proceso de validación donde un requerimiento 'R1' solo es viable si existe la fuente de datos 'S1' y el presupuesto 'B1'. El pseudocódigo sería: IF (Source_Exists(S1) AND Budget_Available(B1)) THEN Status = 'Validado' ELSE Status = 'Pendiente'. En Excel, para gestionar una lista de requerimientos y verificar su prioridad frente a la disponibilidad de datos, usaríamos una lógica de búsqueda avanzada. Sintaxis: <code>=SI(Y(BUSCARX(A2; 'Inventario_Datos'!A:A; 'Inventario_Datos'!B:B)="Disponible"; C2="Alta"); "Prioridad Crítica"; "Revisar Viabilidad")</code>. Esta fórmula utiliza BUSCARX para verificar en una hoja externa de inventario si el dato existe y, mediante la función lógica Y, valida si la prioridad asignada es Alta para clasificar el requerimiento. La formalización requiere documentar el 'Diccionario de Datos del Requerimiento', definiendo tipos de datos (int, float, string), nulos permitidos y reglas de integridad referencial. Un error común es omitir la 'Regla de Negocio', que es la lógica matemática que transforma el dato bruto en información útil (ej: Margen = (Ventas - Costos) / Ventas). Sin esta definición formal, el alcance del proyecto queda sujeto a interpretaciones ambiguas que derivan en fallos de implementación.</p></div>
+
+            <div class="diagrama-box">
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg style="max-width: 80%; max-height: 350px; height: auto; width: auto;" data-width="430pt" data-height="437pt"
+ viewBox="0.00 0.00 430.26 437.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 433)">
+<title>G</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-433 426.26,-433 426.26,4 -4,4"/>
+<!-- Start -->
+<g id="node1" class="node">
+<title>Start</title>
+<polygon fill="#f9f9f9" stroke="black" points="341.76,-429 162.76,-429 162.76,-393 341.76,-393 341.76,-429"/>
+<text text-anchor="middle" x="252.26" y="-407.3" font-family="Helvetica,sans-Serif" font-size="14.00">Inicio: Solicitud de Negocio</text>
+</g>
+<!-- Req_Gather -->
+<g id="node2" class="node">
+<title>Req_Gather</title>
+<polygon fill="#f9f9f9" stroke="black" points="358.26,-356 146.26,-356 146.26,-320 358.26,-320 358.26,-356"/>
+<text text-anchor="middle" x="252.26" y="-334.3" font-family="Helvetica,sans-Serif" font-size="14.00">Recopilación de Requerimientos</text>
+</g>
+<!-- Start&#45;&gt;Req_Gather -->
+<g id="edge1" class="edge">
+<title>Start&#45;&gt;Req_Gather</title>
+<path fill="none" stroke="black" d="M252.26,-392.81C252.26,-384.79 252.26,-375.05 252.26,-366.07"/>
+<polygon fill="black" stroke="black" points="255.76,-366.03 252.26,-356.03 248.76,-366.03 255.76,-366.03"/>
+</g>
+<!-- Is_Data_Available -->
+<g id="node3" class="node">
+<title>Is_Data_Available</title>
+<polygon fill="#f9f9f9" stroke="black" points="252.26,-283 122.55,-265 252.26,-247 381.96,-265 252.26,-283"/>
+<text text-anchor="middle" x="252.26" y="-261.3" font-family="Helvetica,sans-Serif" font-size="14.00">¿Datos Disponibles?</text>
+</g>
+<!-- Req_Gather&#45;&gt;Is_Data_Available -->
+<g id="edge2" class="edge">
+<title>Req_Gather&#45;&gt;Is_Data_Available</title>
+<path fill="none" stroke="black" d="M252.26,-319.81C252.26,-311.79 252.26,-302.05 252.26,-293.07"/>
+<polygon fill="black" stroke="black" points="255.76,-293.03 252.26,-283.03 248.76,-293.03 255.76,-293.03"/>
+</g>
+<!-- Is_Budget_OK -->
+<g id="node4" class="node">
+<title>Is_Budget_OK</title>
+<polygon fill="#f9f9f9" stroke="black" points="156.26,-196 0.24,-178 156.26,-160 312.27,-178 156.26,-196"/>
+<text text-anchor="middle" x="156.26" y="-174.3" font-family="Helvetica,sans-Serif" font-size="14.00">¿Presupuesto Aprobado?</text>
+</g>
+<!-- Is_Data_Available&#45;&gt;Is_Budget_OK -->
+<g id="edge3" class="edge">
+<title>Is_Data_Available&#45;&gt;Is_Budget_OK</title>
+<path fill="none" stroke="black" d="M235.53,-249.19C220.58,-235.95 198.44,-216.35 181.36,-201.23"/>
+<polygon fill="black" stroke="black" points="183.24,-198.22 173.43,-194.21 178.6,-203.46 183.24,-198.22"/>
+<text text-anchor="middle" x="216.76" y="-217.8" font-family="Times,serif" font-size="14.00">SI</text>
+</g>
+<!-- Reject -->
+<g id="node6" class="node">
+<title>Reject</title>
+<polygon fill="#f9f9f9" stroke="black" points="422.26,-109 274.26,-109 274.26,-73 422.26,-73 422.26,-109"/>
+<text text-anchor="middle" x="348.26" y="-87.3" font-family="Helvetica,sans-Serif" font-size="14.00">Rechazar o Postergar</text>
+</g>
+<!-- Is_Data_Available&#45;&gt;Reject -->
+<g id="edge4" class="edge">
+<title>Is_Data_Available&#45;&gt;Reject</title>
+<path fill="none" stroke="black" d="M271.78,-249.67C287.41,-237.18 308.73,-217.71 321.26,-196 335.04,-172.12 341.91,-141.14 345.25,-119.23"/>
+<polygon fill="black" stroke="black" points="348.72,-119.65 346.62,-109.27 341.79,-118.7 348.72,-119.65"/>
+<text text-anchor="middle" x="346.26" y="-174.3" font-family="Times,serif" font-size="14.00">NO</text>
+</g>
+<!-- Doc_Specs -->
+<g id="node5" class="node">
+<title>Doc_Specs</title>
+<polygon fill="#f9f9f9" stroke="black" points="255.76,-109 2.76,-109 2.76,-73 255.76,-73 255.76,-109"/>
+<text text-anchor="middle" x="129.26" y="-87.3" font-family="Helvetica,sans-Serif" font-size="14.00">Documentar Especificaciones Técnicas</text>
+</g>
+<!-- Is_Budget_OK&#45;&gt;Doc_Specs -->
+<g id="edge5" class="edge">
+<title>Is_Budget_OK&#45;&gt;Doc_Specs</title>
+<path fill="none" stroke="black" d="M150.92,-160.21C147.17,-148.41 142.08,-132.38 137.78,-118.82"/>
+<polygon fill="black" stroke="black" points="141.04,-117.52 134.67,-109.05 134.36,-119.64 141.04,-117.52"/>
+<text text-anchor="middle" x="151.76" y="-130.8" font-family="Times,serif" font-size="14.00">SI</text>
+</g>
+<!-- Is_Budget_OK&#45;&gt;Reject -->
+<g id="edge6" class="edge">
+<title>Is_Budget_OK&#45;&gt;Reject</title>
+<path fill="none" stroke="black" d="M187.1,-163.34C217.66,-149.82 264.89,-128.91 300.33,-113.22"/>
+<polygon fill="black" stroke="black" points="301.8,-116.39 309.53,-109.15 298.97,-109.99 301.8,-116.39"/>
+<text text-anchor="middle" x="274.26" y="-130.8" font-family="Times,serif" font-size="14.00">NO</text>
+</g>
+<!-- Baseline -->
+<g id="node7" class="node">
+<title>Baseline</title>
+<polygon fill="#f9f9f9" stroke="black" points="208.26,-36 50.26,-36 50.26,0 208.26,0 208.26,-36"/>
+<text text-anchor="middle" x="129.26" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">Línea Base del Alcance</text>
+</g>
+<!-- Doc_Specs&#45;&gt;Baseline -->
+<g id="edge7" class="edge">
+<title>Doc_Specs&#45;&gt;Baseline</title>
+<path fill="none" stroke="black" d="M129.26,-72.81C129.26,-64.79 129.26,-55.05 129.26,-46.07"/>
+<polygon fill="black" stroke="black" points="132.76,-46.03 129.26,-36.03 125.76,-46.03 132.76,-46.03"/>
+</g>
+</g>
+</svg>
+
+            </div>
+            <p style="font-size:0.8em; color:#999; text-align:center; margin-top:-20px; margin-bottom:30px;">
+                <em>Figura: Diagrama generado automáticamente mediante Graphviz</em>
+            </p>
+
+            <h3>Intuición</h3>
+            <div><p>Imagina que eres un chef que debe preparar una cena para 100 personas. Antes de encender los fogones, necesitas saber: ¿hay alérgicos al gluten? ¿cuántos son vegetarianos? ¿cuál es el presupuesto por plato? En un proyecto de datos, los requerimientos son esa lista de ingredientes y restricciones. No puedes construir un modelo de Inteligencia Artificial si no sabes si el cliente tiene los datos históricos limpios o si solo tiene tickets de papel. Recopilar requerimientos es el acto de 'escuchar' al negocio para 'traducir' sus sueños en instrucciones que una máquina pueda ejecutar. Si no definimos bien el alcance desde el inicio, terminaremos construyendo un puente donde el cliente solo necesitaba un bote. Es el puente entre el lenguaje humano (ambiguo) y el lenguaje de datos (binario y exacto). Sin requerimientos claros, el analista trabaja a ciegas, lo que suele resultar en retrabajo constante y frustración de los directivos.</p></div>
+
+            <h3>Aplicación</h3>
+            <div><p>En el sector bancario, un ingeniero de datos utiliza la gestión de requerimientos para implementar un sistema de detección de fraudes. El requerimiento de negocio es 'Reducir el fraude en transacciones online'. El requerimiento técnico especifica que se deben analizar variables como: geolocalización, IP del dispositivo, monto de la transacción y comportamiento histórico en los últimos 10 minutos. El ingeniero debe asegurar que la base de datos pueda entregar estos campos en milisegundos. Otro caso es en el Retail, donde para un sistema de recomendación, el requerimiento define que los productos mostrados deben tener stock disponible en la tienda física más cercana al usuario. Aquí, la aplicación práctica de los requerimientos guía la creación de 'JOINS' complejos entre tablas de inventario en tiempo real y perfiles de usuario, asegurando que el alcance del proyecto cumpla con la promesa de valor al cliente final.</p></div>
+        </article>
+        
+        <article class="subtema">
+            <h2>Definición de Objetivos y Criterios de Aceptación</h2>
+
+            <h3>Historia</h3>
+            <div><p>El concepto de objetivos ha evolucionado desde la Administración por Objetivos (APO) de Peter Drucker en 1954 hasta los actuales OKRs (Objectives and Key Results) utilizados por Google y Amazon. En la ciencia de datos, esto se volvió crítico con el auge del aprendizaje automático. Durante mucho tiempo, los proyectos de datos fallaban porque los objetivos eran puramente técnicos (ej: 'maximizar el Accuracy'). Sin embargo, se descubrió que un modelo con 99% de precisión podía ser inútil si no cumplía con los criterios de aceptación del negocio (ej: 'debe ser explicable para los reguladores'). Los Criterios de Aceptación surgieron como una salvaguarda contractual y técnica para definir exactamente qué constituye el 'éxito' de una entrega, evitando que los proyectos se alarguen indefinidamente en una búsqueda de perfección que no añade valor marginal.</p></div>
+
+            <h3>Descripción Formal</h3>
+            <div><p>Los objetivos deben cumplir la metodología SMART (Specific, Measurable, Achievable, Relevant, Time-bound). En analítica, esto implica definir KPIs técnicos medibles. Lógica Algorítmica: Un criterio de aceptación puede definirse como una función booleana: <code>Acceptance = (Model_Error &lt; Threshold) AND (Execution_Time &lt; Max_Time)</code>. Si el resultado es FALSE, el entregable no cumple el alcance. En Excel, para evaluar si un conjunto de pruebas de datos cumple con los criterios de aceptación de calidad (ej: menos del 1% de nulos), se utilizaría: <code>=SI(CONTAR.BLANCO(A2:A1000)/CONTARA(A2:A1000) &lt; 0,01; "Aceptado"; "Rechazado")</code>. Esta sintaxis calcula la proporción de celdas vacías frente al total de datos y la compara con el umbral del 1%. Además, los objetivos se vinculan a 'Métricas de Negocio' (como el ROI o la reducción de Churn) y 'Métricas de Datos' (como el F1-Score, RMSE o Mean Absolute Error). Los criterios de aceptación formalizan el 'Definition of Done' (DoD) en entornos Ágiles, asegurando que el equipo de datos no solo procese información, sino que resuelva problemas específicos bajo restricciones de calidad predefinidas.</p></div>
+
+            <div class="diagrama-box">
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg style="max-width: 80%; max-height: 350px; height: auto; width: auto;" data-width="1179pt" data-height="106pt"
+ viewBox="0.00 0.00 1179.04 106.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 102)">
+<title>G</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-102 1175.04,-102 1175.04,4 -4,4"/>
+<!-- Obj -->
+<g id="node1" class="node">
+<title>Obj</title>
+<polygon fill="#f9f9f9" stroke="black" points="161,-39 0,-39 0,-3 161,-3 161,-39"/>
+<text text-anchor="middle" x="80.5" y="-17.3" font-family="Helvetica,sans-Serif" font-size="14.00">Definir Objetivo SMART</text>
+</g>
+<!-- Criteria -->
+<g id="node2" class="node">
+<title>Criteria</title>
+<polygon fill="#f9f9f9" stroke="black" points="421,-39 198,-39 198,-3 421,-3 421,-39"/>
+<text text-anchor="middle" x="309.5" y="-17.3" font-family="Helvetica,sans-Serif" font-size="14.00">Establecer Criterios de Aceptación</text>
+</g>
+<!-- Obj&#45;&gt;Criteria -->
+<g id="edge1" class="edge">
+<title>Obj&#45;&gt;Criteria</title>
+<path fill="none" stroke="black" d="M161.21,-21C169.84,-21 178.76,-21 187.74,-21"/>
+<polygon fill="black" stroke="black" points="187.9,-24.5 197.9,-21 187.9,-17.5 187.9,-24.5"/>
+</g>
+<!-- Test -->
+<g id="node3" class="node">
+<title>Test</title>
+<polygon fill="#f9f9f9" stroke="black" points="642,-39 458,-39 458,-3 642,-3 642,-39"/>
+<text text-anchor="middle" x="550" y="-17.3" font-family="Helvetica,sans-Serif" font-size="14.00">Pruebas de Validación (QA)</text>
+</g>
+<!-- Criteria&#45;&gt;Test -->
+<g id="edge2" class="edge">
+<title>Criteria&#45;&gt;Test</title>
+<path fill="none" stroke="black" d="M421.02,-21C429.87,-21 438.78,-21 447.56,-21"/>
+<polygon fill="black" stroke="black" points="447.79,-24.5 457.79,-21 447.79,-17.5 447.79,-24.5"/>
+</g>
+<!-- Eval -->
+<g id="node4" class="node">
+<title>Eval</title>
+<polygon fill="#f9f9f9" stroke="black" points="809.52,-73 678.98,-55 809.52,-37 940.06,-55 809.52,-73"/>
+<text text-anchor="middle" x="809.52" y="-51.3" font-family="Helvetica,sans-Serif" font-size="14.00">¿Cumple Umbrales?</text>
+</g>
+<!-- Test&#45;&gt;Eval -->
+<g id="edge3" class="edge">
+<title>Test&#45;&gt;Eval</title>
+<path fill="none" stroke="black" d="M642.15,-33.03C671.54,-36.91 703.78,-41.17 731.99,-44.9"/>
+<polygon fill="black" stroke="black" points="731.82,-48.4 742.19,-46.24 732.74,-41.46 731.82,-48.4"/>
+</g>
+<!-- Success -->
+<g id="node5" class="node">
+<title>Success</title>
+<polygon fill="#f9f9f9" stroke="black" points="1166.04,-98 1001.04,-98 1001.04,-62 1166.04,-62 1166.04,-98"/>
+<text text-anchor="middle" x="1083.54" y="-76.3" font-family="Helvetica,sans-Serif" font-size="14.00">Hito Alcanzado / Entrega</text>
+</g>
+<!-- Eval&#45;&gt;Success -->
+<g id="edge4" class="edge">
+<title>Eval&#45;&gt;Success</title>
+<path fill="none" stroke="black" d="M888.47,-62.16C920.34,-65.09 957.45,-68.5 990.63,-71.55"/>
+<polygon fill="black" stroke="black" points="990.51,-75.06 1000.79,-72.49 991.15,-68.09 990.51,-75.06"/>
+<text text-anchor="middle" x="968.04" y="-72.8" font-family="Times,serif" font-size="14.00">SI</text>
+</g>
+<!-- Fix -->
+<g id="node6" class="node">
+<title>Fix</title>
+<polygon fill="#f9f9f9" stroke="black" points="1171.04,-36 996.04,-36 996.04,0 1171.04,0 1171.04,-36"/>
+<text text-anchor="middle" x="1083.54" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">Ajuste de Modelo/Proceso</text>
+</g>
+<!-- Eval&#45;&gt;Fix -->
+<g id="edge5" class="edge">
+<title>Eval&#45;&gt;Fix</title>
+<path fill="none" stroke="black" d="M876.02,-46.09C908.93,-41.61 949.45,-36.1 985.85,-31.15"/>
+<polygon fill="black" stroke="black" points="986.57,-34.59 996,-29.77 985.62,-27.65 986.57,-34.59"/>
+<text text-anchor="middle" x="968.04" y="-37.8" font-family="Times,serif" font-size="14.00">NO</text>
+</g>
+<!-- Fix&#45;&gt;Test -->
+<g id="edge6" class="edge">
+<title>Fix&#45;&gt;Test</title>
+<path fill="none" stroke="black" d="M995.77,-18.49C901.64,-19.02 751.54,-19.87 652.13,-20.43"/>
+<polygon fill="black" stroke="black" points="652.05,-16.93 642.07,-20.49 652.09,-23.93 652.05,-16.93"/>
+</g>
+</g>
+</svg>
+
+            </div>
+            <p style="font-size:0.8em; color:#999; text-align:center; margin-top:-20px; margin-bottom:30px;">
+                <em>Figura: Diagrama generado automáticamente mediante Graphviz</em>
+            </p>
+
+            <h3>Intuición</h3>
+            <div><p>Definir objetivos y criterios de aceptación es como poner las reglas del juego antes de empezar a jugar. Si dices 'quiero correr rápido', no es un objetivo. Si dices 'quiero correr 5 kilómetros en menos de 25 minutos el próximo domingo', tienes un objetivo SMART. En los datos, el criterio de aceptación es el contrato: 'Aceptaré este dashboard si los datos se actualizan cada mañana a las 8:00 AM y si el margen de error en el reporte de ventas es cero'. Sin estos criterios, el desarrollador cree que ha terminado, mientras que el usuario siente que le falta mucho. Es la herramienta principal para gestionar las expectativas de los jefes y clientes, permitiendo decir 'No' a cambios de última hora que no estaban en el contrato original de éxito.</p></div>
+
+            <h3>Aplicación</h3>
+            <div><p>En una empresa de logística, el objetivo de un proyecto de analítica podría ser 'Optimizar las rutas de entrega para reducir el consumo de combustible en un 12% en seis meses'. Los criterios de aceptación incluirían: 1) El algoritmo debe ejecutarse en menos de 5 minutos. 2) Las rutas deben respetar las ventanas horarias de los clientes. 3) El sistema debe integrarse con el GPS actual de los camiones. Si el ingeniero de datos entrega un modelo que ahorra un 20% de combustible pero tarda 2 horas en calcular la ruta, el proyecto fallará bajo los criterios de aceptación, ya que los camiones no pueden esperar tanto tiempo para salir del almacén.</p></div>
+        </article>
+        
+        <article class="subtema">
+            <h2>La Línea Base del Alcance y la EDT (WBS)</h2>
+
+            <h3>Historia</h3>
+            <div><p>La Estructura de Desglose del Trabajo (EDT) o WBS (Work Breakdown Structure) fue desarrollada por el Departamento de Defensa de los EE. UU. y la NASA para el proyecto del misil Polaris en 1957. Posteriormente fue adoptada por el PMI (Project Management Institute). En la gestión de proyectos de datos, la EDT es fundamental para romper la 'caja negra' de la analítica. Históricamente, los proyectos de software se dividían por módulos de código; hoy, en analítica de negocio, se dividen por fases del pipeline de datos: Ingestión, Procesamiento, Modelado y Visualización. La Línea Base del Alcance es el conjunto de la EDT, el Diccionario de la EDT y el Enunciado del Alcance. Es el 'punto de no retorno' que permite medir si el proyecto está sufriendo 'Scope Creep' (corrupción del alcance).</p></div>
+
+            <h3>Descripción Formal</h3>
+            <div><p>La Línea Base del Alcance es el marco de referencia aprobado. La EDT es una descomposición jerárquica orientada a entregables. Lógica de Algoritmo: La construcción de una EDT sigue un enfoque recursivo de 'arriba hacia abajo' (Top-Down). Algoritmo: <code>Function BreakDown(Deliverable): IF Deliverable.IsSmallEnough() THEN Return WorkPackage ELSE Return Map(BreakDown, Deliverable.SubComponents)</code>. En términos de gestión en Excel, se utiliza para el seguimiento de la completitud del alcance mediante funciones de agregación. Ejemplo: <code>=PROMEDIO.SI(Rango_Fase; "Ingestión"; Rango_Porcentaje_Completado)</code>. Si tenemos una EDT donde la fase de 'Limpieza de Datos' tiene 5 tareas, esta fórmula nos da el avance real de ese componente de la línea base. El Diccionario de la EDT detalla cada paquete de trabajo, incluyendo responsables, recursos necesarios y estimaciones de tiempo. Un aspecto técnico clave es la 'Regla del 100%', que establece que la suma del trabajo de los elementos 'hijos' debe ser exactamente igual al trabajo del elemento 'padre', sin omitir nada ni añadir trabajo extra fuera del alcance.</p></div>
+
+            <div class="diagrama-box">
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg style="max-width: 80%; max-height: 350px; height: auto; width: auto;" data-width="627pt" data-height="260pt"
+ viewBox="0.00 0.00 627.00 260.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 256)">
+<title>G</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-256 623,-256 623,4 -4,4"/>
+<!-- WBS_Root -->
+<g id="node1" class="node">
+<title>WBS_Root</title>
+<polygon fill="#e1f5fe" stroke="black" points="200,-131 0,-131 0,-95 200,-95 200,-131"/>
+<text text-anchor="middle" x="100" y="-109.3" font-family="Helvetica,sans-Serif" font-size="14.00">Proyecto: Analítica de Clientes</text>
+</g>
+<!-- Phase1 -->
+<g id="node2" class="node">
+<title>Phase1</title>
+<polygon fill="#f9f9f9" stroke="black" points="390,-198 246,-198 246,-162 390,-162 390,-198"/>
+<text text-anchor="middle" x="318" y="-176.3" font-family="Helvetica,sans-Serif" font-size="14.00">1. Ingestión de Datos</text>
+</g>
+<!-- WBS_Root&#45;&gt;Phase1 -->
+<g id="edge1" class="edge">
+<title>WBS_Root&#45;&gt;Phase1</title>
+<path fill="none" stroke="black" d="M159.17,-131.04C186.9,-139.64 220.24,-149.99 249.12,-158.94"/>
+<polygon fill="black" stroke="black" points="248.14,-162.31 258.73,-161.92 250.21,-155.62 248.14,-162.31"/>
+</g>
+<!-- Phase2 -->
+<g id="node3" class="node">
+<title>Phase2</title>
+<polygon fill="#f9f9f9" stroke="black" points="400,-131 236,-131 236,-95 400,-95 400,-131"/>
+<text text-anchor="middle" x="318" y="-109.3" font-family="Helvetica,sans-Serif" font-size="14.00">2. Transformación (ETL)</text>
+</g>
+<!-- WBS_Root&#45;&gt;Phase2 -->
+<g id="edge2" class="edge">
+<title>WBS_Root&#45;&gt;Phase2</title>
+<path fill="none" stroke="black" d="M200.15,-113C208.66,-113 217.25,-113 225.7,-113"/>
+<polygon fill="black" stroke="black" points="225.93,-116.5 235.93,-113 225.93,-109.5 225.93,-116.5"/>
+</g>
+<!-- Phase3 -->
+<g id="node4" class="node">
+<title>Phase3</title>
+<polygon fill="#f9f9f9" stroke="black" points="386,-50 250,-50 250,-14 386,-14 386,-50"/>
+<text text-anchor="middle" x="318" y="-28.3" font-family="Helvetica,sans-Serif" font-size="14.00">3. Visualización (BI)</text>
+</g>
+<!-- WBS_Root&#45;&gt;Phase3 -->
+<g id="edge3" class="edge">
+<title>WBS_Root&#45;&gt;Phase3</title>
+<path fill="none" stroke="black" d="M149.21,-94.92C181.82,-82.69 225.07,-66.47 259.48,-53.57"/>
+<polygon fill="black" stroke="black" points="260.81,-56.81 268.94,-50.02 258.35,-50.26 260.81,-56.81"/>
+</g>
+<!-- P1_T1 -->
+<g id="node5" class="node">
+<title>P1_T1</title>
+<polygon fill="#f9f9f9" stroke="black" points="605.5,-252 449.5,-252 449.5,-216 605.5,-216 605.5,-252"/>
+<text text-anchor="middle" x="527.5" y="-230.3" font-family="Helvetica,sans-Serif" font-size="14.00">1.1 Conexión API CRM</text>
+</g>
+<!-- Phase1&#45;&gt;P1_T1 -->
+<g id="edge4" class="edge">
+<title>Phase1&#45;&gt;P1_T1</title>
+<path fill="none" stroke="black" d="M388.38,-198.06C407.33,-202.99 428,-208.37 447.45,-213.43"/>
+<polygon fill="black" stroke="black" points="446.62,-216.83 457.18,-215.96 448.39,-210.05 446.62,-216.83"/>
+</g>
+<!-- P1_T2 -->
+<g id="node6" class="node">
+<title>P1_T2</title>
+<polygon fill="#f9f9f9" stroke="black" points="611,-198 444,-198 444,-162 611,-162 611,-198"/>
+<text text-anchor="middle" x="527.5" y="-176.3" font-family="Helvetica,sans-Serif" font-size="14.00">1.2 Extracción Logs Web</text>
+</g>
+<!-- Phase1&#45;&gt;P1_T2 -->
+<g id="edge5" class="edge">
+<title>Phase1&#45;&gt;P1_T2</title>
+<path fill="none" stroke="black" d="M390.12,-180C404.13,-180 419.03,-180 433.63,-180"/>
+<polygon fill="black" stroke="black" points="433.68,-183.5 443.68,-180 433.68,-176.5 433.68,-183.5"/>
+</g>
+<!-- P2_T1 -->
+<g id="node7" class="node">
+<title>P2_T1</title>
+<polygon fill="#f9f9f9" stroke="black" points="619,-144 436,-144 436,-108 619,-108 619,-144"/>
+<text text-anchor="middle" x="527.5" y="-122.3" font-family="Helvetica,sans-Serif" font-size="14.00">2.1 Limpieza de Duplicados</text>
+</g>
+<!-- Phase2&#45;&gt;P2_T1 -->
+<g id="edge6" class="edge">
+<title>Phase2&#45;&gt;P2_T1</title>
+<path fill="none" stroke="black" d="M400.12,-118.08C408.53,-118.61 417.16,-119.15 425.75,-119.69"/>
+<polygon fill="black" stroke="black" points="425.62,-123.19 435.82,-120.32 426.05,-116.2 425.62,-123.19"/>
+</g>
+<!-- P2_T2 -->
+<g id="node8" class="node">
+<title>P2_T2</title>
+<polygon fill="#f9f9f9" stroke="black" points="595,-90 460,-90 460,-54 595,-54 595,-90"/>
+<text text-anchor="middle" x="527.5" y="-68.3" font-family="Helvetica,sans-Serif" font-size="14.00">2.2 Cálculo de KPIs</text>
+</g>
+<!-- Phase2&#45;&gt;P2_T2 -->
+<g id="edge7" class="edge">
+<title>Phase2&#45;&gt;P2_T2</title>
+<path fill="none" stroke="black" d="M400.12,-96.97C416.5,-93.74 433.67,-90.34 449.88,-87.14"/>
+<polygon fill="black" stroke="black" points="450.71,-90.54 459.84,-85.17 449.35,-83.68 450.71,-90.54"/>
+</g>
+<!-- P3_T1 -->
+<g id="node9" class="node">
+<title>P3_T1</title>
+<polygon fill="#f9f9f9" stroke="black" points="612.5,-36 442.5,-36 442.5,0 612.5,0 612.5,-36"/>
+<text text-anchor="middle" x="527.5" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">3.1 Diseño de Dashboard</text>
+</g>
+<!-- Phase3&#45;&gt;P3_T1 -->
+<g id="edge8" class="edge">
+<title>Phase3&#45;&gt;P3_T1</title>
+<path fill="none" stroke="black" d="M386.08,-27.47C400.75,-26.48 416.54,-25.42 432.05,-24.37"/>
+<polygon fill="black" stroke="black" points="432.44,-27.85 442.18,-23.69 431.97,-20.87 432.44,-27.85"/>
+</g>
+</g>
+</svg>
+
+            </div>
+            <p style="font-size:0.8em; color:#999; text-align:center; margin-top:-20px; margin-bottom:30px;">
+                <em>Figura: Diagrama generado automáticamente mediante Graphviz</em>
+            </p>
+
+            <h3>Intuición</h3>
+            <div><p>La EDT es como un mapa desglosado de un viaje. El objetivo es 'Llegar a la cima de la montaña'. La EDT divide ese objetivo en: 1) Comprar equipo, 2) Entrenar físicamente, 3) Viajar a la base, 4) Escalar. Cada una de esas partes se divide en tareas más pequeñas. La 'Línea Base' es la foto del mapa que todos firmaron antes de salir. Si a mitad del camino alguien quiere pasar a visitar una playa que no estaba en el mapa, eso es un cambio de alcance. La EDT te permite ver exactamente qué parte del proyecto se está retrasando y por qué, evitando que el proyecto de datos se convierta en una masa amorfa de tareas sin fin.</p></div>
+
+            <h3>Aplicación</h3>
+            <div><p>Un Consultor de Datos que implementa un Data Lakehouse utilizará la EDT para organizar el trabajo: Nivel 1: Implementación Lakehouse. Nivel 2: Configuración de infraestructura Cloud, Capa Bronze (Raw), Capa Silver (Cleaned), Capa Gold (Business Ready). Nivel 3 (Paquetes de trabajo): Configuración de permisos IAM, Scripts de Spark para limpieza de nulos, Diseño de esquemas en estrella para Power BI. La Línea Base permite al Project Manager comparar el progreso real contra el plan original. Si la fase de 'Capa Silver' toma el doble de tiempo debido a la mala calidad de los datos fuente, la Línea Base sirve para documentar este desvío y solicitar ajustes en el cronograma o presupuesto ante el comité de dirección.</p></div>
+        </article>
+        </body></html>

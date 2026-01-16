@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>25 - Seguimiento y Control - El Proceso de Control de Cambios y Acciones Correctivas.</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #f4f4f9; color: #333; margin: 0; padding: 20px; line-height: 1.6; position: relative; }
+        header { background: #2c3e50; color: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; text-align:center; }
+        h1 { margin: 0; font-size: 1.5rem; }
+
+        /* Estilo del botón Atrás */
+        .btn-atras {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #7f8c8d;
+            color: white;
+            padding: 8px 15px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            transition: background 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+        .btn-atras:hover { background: #95a5a6; }
+
+        .subtema {
+            background: white;
+            padding: 40px;
+            margin-bottom: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        h2 { color: #2980b9; border-bottom: 2px solid #eee; padding-bottom: 10px; margin-top: 0; }
+        h3 { color: #7f8c8d; font-size: 0.9em; text-transform: uppercase; margin-top: 30px; letter-spacing: 1px; border-left: 3px solid #d4af37; padding-left: 10px; }
+
+        .diagrama-box {
+            text-align: center;
+            margin: 30px 0;
+            padding: 20px;
+            background: #fafafa;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 150px;
+        }
+
+        p { margin-bottom: 1rem; }
+        strong { color: #2c3e50; font-weight: 600; }
+        code { background: #f0f0f0; padding: 2px 5px; border-radius: 3px; font-family: monospace; color: #c0392b; }
+        ul { padding-left: 20px; }
+        li { margin-bottom: 0.5rem; }
+    </style>
+</head>
+<body>
+    <button onclick="window.history.back()" class="btn-atras">Atrás</button>
+    <header><h1>25 - Seguimiento y Control - El Proceso de Control de Cambios y Acciones Correctivas.</h1></header>
+    <main>
+
+        <article class="subtema">
+            <h2>Gestión de la Configuración y Control Integrado de Cambios</h2>
+
+            <h3>Historia</h3>
+            <div><p>Históricamente, el control de cambios nació en la ingeniería de sistemas complejos durante la Guerra Fría, donde pequeños errores en los planos de misiles o aeronaves resultaban en fallos catastróficos. Con la evolución de la informática en los años 70 y 80, este concepto se trasladó al software mediante el control de versiones. En el ámbito de los datos, la evolución ha sido drástica: pasamos de bitácoras manuales a sistemas de Data Version Control (DVC) y Git. Antiguamente, un cambio en la estructura de una base de datos podía corromper años de registros sin dejar rastro. Hoy, la gestión de la configuración aplicada a la analítica asegura que cada transformación de datos sea rastreable, reversible y aprobada, permitiendo que la 'única fuente de verdad' no se vea comprometida por modificaciones ad-hoc o actualizaciones de ETL no documentadas.</p></div>
+
+            <h3>Descripción Formal</h3>
+            <div><p>El Control Integrado de Cambios es el proceso de revisar todas las solicitudes de cambio, aprobarlas y gestionar los cambios en los entregables. En analítica de datos, esto implica validar el impacto en el esquema (schema drift). Un algoritmo de control básico sigue esta lógica: 1. Captura de solicitud (Input), 2. Evaluación de Impacto (Cálculo de varianza), 3. Decisión (Booleana). </p>
+<p>En Excel, para monitorear si un cambio en el presupuesto proyectado excede un umbral permitido, usaríamos: 
+<code>=SI(ABS((B2-C2)/C2) &gt; 0.05; "REVISIÓN CCB"; "APROBADO AUTOMÁTICAMENTE")</code> 
+Donde B2 es el nuevo valor propuesto y C2 el valor base (Baseline).</p>
+<p>Desde la perspectiva algorítmica, se implementan funciones de 'hash' para verificar la integridad de los datasets antes y después de un cambio. Si <code>Hash(Data_Pre) != Hash(Data_Post)</code> y no hay una entrada aprobada en la tabla de cambios, se dispara una excepción de gobernanza. El proceso formal requiere actualizar la línea base (Baseline) solo tras la aprobación del Comité de Control de Cambios (CCB).</p></div>
+
+            <div class="diagrama-box">
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg style="max-width: 80%; max-height: 350px; height: auto; width: auto;" data-width="388pt" data-height="350pt"
+ viewBox="0.00 0.00 388.00 350.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 346)">
+<title>G</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-346 384,-346 384,4 -4,4"/>
+<!-- start -->
+<g id="node1" class="node">
+<title>start</title>
+<polygon fill="#f9f9f9" stroke="black" points="295,-342 158,-342 158,-306 295,-306 295,-342"/>
+<text text-anchor="middle" x="226.5" y="-320.3" font-family="Helvetica,sans-Serif" font-size="14.00">Solicitud de Cambio</text>
+</g>
+<!-- impact -->
+<g id="node2" class="node">
+<title>impact</title>
+<polygon fill="#f9f9f9" stroke="black" points="362,-269 91,-269 91,-233 362,-233 362,-269"/>
+<text text-anchor="middle" x="226.5" y="-247.3" font-family="Helvetica,sans-Serif" font-size="14.00">Análisis de Impacto (Costo/Tiempo/Datos)</text>
+</g>
+<!-- start&#45;&gt;impact -->
+<g id="edge1" class="edge">
+<title>start&#45;&gt;impact</title>
+<path fill="none" stroke="black" d="M226.5,-305.81C226.5,-297.79 226.5,-288.05 226.5,-279.07"/>
+<polygon fill="black" stroke="black" points="230,-279.03 226.5,-269.03 223,-279.03 230,-279.03"/>
+</g>
+<!-- ccb -->
+<g id="node3" class="node">
+<title>ccb</title>
+<polygon fill="#f9f9f9" stroke="black" points="226.5,-196 73,-178 226.5,-160 380,-178 226.5,-196"/>
+<text text-anchor="middle" x="226.5" y="-174.3" font-family="Helvetica,sans-Serif" font-size="14.00">Comité de Control (CCB)</text>
+</g>
+<!-- impact&#45;&gt;ccb -->
+<g id="edge2" class="edge">
+<title>impact&#45;&gt;ccb</title>
+<path fill="none" stroke="black" d="M226.5,-232.81C226.5,-224.79 226.5,-215.05 226.5,-206.07"/>
+<polygon fill="black" stroke="black" points="230,-206.03 226.5,-196.03 223,-206.03 230,-206.03"/>
+</g>
+<!-- approve -->
+<g id="node4" class="node">
+<title>approve</title>
+<polygon fill="#f9f9f9" stroke="black" points="189,-109 0,-109 0,-73 189,-73 189,-109"/>
+<text text-anchor="middle" x="94.5" y="-87.3" font-family="Helvetica,sans-Serif" font-size="14.00">Actualizar Línea Base y Plan</text>
+</g>
+<!-- ccb&#45;&gt;approve -->
+<g id="edge3" class="edge">
+<title>ccb&#45;&gt;approve</title>
+<path fill="none" stroke="black" d="M204.11,-162.58C183.76,-149.48 153.4,-129.93 129.79,-114.72"/>
+<polygon fill="black" stroke="black" points="131.41,-111.6 121.1,-109.13 127.62,-117.49 131.41,-111.6"/>
+<text text-anchor="middle" x="175" y="-130.8" font-family="Times,serif" font-size="14.00">SI</text>
+</g>
+<!-- reject -->
+<g id="node5" class="node">
+<title>reject</title>
+<polygon fill="#f9f9f9" stroke="black" points="336,-109 207,-109 207,-73 336,-73 336,-109"/>
+<text text-anchor="middle" x="271.5" y="-87.3" font-family="Helvetica,sans-Serif" font-size="14.00">Notificar y Archivar</text>
+</g>
+<!-- ccb&#45;&gt;reject -->
+<g id="edge4" class="edge">
+<title>ccb&#45;&gt;reject</title>
+<path fill="none" stroke="black" d="M235.18,-160.61C241.53,-148.62 250.27,-132.09 257.59,-118.27"/>
+<polygon fill="black" stroke="black" points="260.8,-119.69 262.39,-109.21 254.61,-116.41 260.8,-119.69"/>
+<text text-anchor="middle" x="261.5" y="-130.8" font-family="Times,serif" font-size="14.00">NO</text>
+</g>
+<!-- implement -->
+<g id="node6" class="node">
+<title>implement</title>
+<polygon fill="#f9f9f9" stroke="black" points="166.5,-36 22.5,-36 22.5,0 166.5,0 166.5,-36"/>
+<text text-anchor="middle" x="94.5" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">Implementar Cambio</text>
+</g>
+<!-- approve&#45;&gt;implement -->
+<g id="edge5" class="edge">
+<title>approve&#45;&gt;implement</title>
+<path fill="none" stroke="black" d="M94.5,-72.81C94.5,-64.79 94.5,-55.05 94.5,-46.07"/>
+<polygon fill="black" stroke="black" points="98,-46.03 94.5,-36.03 91,-46.03 98,-46.03"/>
+</g>
+</g>
+</svg>
+
+            </div>
+            <p style="font-size:0.8em; color:#999; text-align:center; margin-top:-20px; margin-bottom:30px;">
+                <em>Figura: Diagrama generado automáticamente mediante Graphviz</em>
+            </p>
+
+            <h3>Intuición</h3>
+            <div><p>Imagina que estás construyendo un rascacielos de piezas de Lego siguiendo un manual. Si de repente decides cambiar las piezas de la base por unas de otro color o forma sin avisar a los que están construyendo el piso 50, todo el edificio podría colapsar o verse terrible. El Control de Cambios es como tener un supervisor que, antes de dejarte poner esa pieza diferente, analiza si el peso afectará la estructura superior. En proyectos de datos, esto evita que un cambio 'pequeño' en un campo de la base de datos rompa todos los tableros de visualización que los directivos usan para tomar decisiones.</p></div>
+
+            <h3>Aplicación</h3>
+            <div><p>En el entorno profesional de un ingeniero de datos, este proceso se aplica al modificar una canalización de ETL (Extract, Transform, Load). Por ejemplo, si un proveedor de datos cambia el formato de fecha de 'DD/MM/YYYY' a 'YYYY-MM-DD', el ingeniero no debe cambiar el código directamente en producción. Debe abrir un 'Change Request', evaluar cuántos informes dependen de esa fecha, probar el cambio en un entorno de 'Staging' y, tras la aprobación, desplegarlo. Esto garantiza que la transición no detenga la operación del negocio.</p></div>
+        </article>
+        
+        <article class="subtema">
+            <h2>Identificación de Desviaciones y Análisis de Causa Raíz (RCA)</h2>
+
+            <h3>Historia</h3>
+            <div><p>El Análisis de Causa Raíz tiene sus raíces en la metodología de Manufactura Esbelta (Lean Manufacturing) de Toyota, específicamente con la técnica de los '5 Porqués' desarrollada por Sakichi Toyoda. Durante la revolución industrial, el enfoque era reactivo: si algo se rompía, se arreglaba. Con el auge de la ciencia de datos, el seguimiento y control evolucionó hacia el Análisis de Varianzas y el Control Estadístico de Procesos (SPC). En los años 90, con la llegada de Six Sigma, el análisis de desviaciones se volvió estrictamente matemático. Hoy en día, los analistas de negocio utilizan algoritmos de detección de anomalías basados en Machine Learning para identificar desviaciones en tiempo real que antes eran invisibles al ojo humano.</p></div>
+
+            <h3>Descripción Formal</h3>
+            <div><p>La identificación de desviaciones se basa en medir la distancia entre el desempeño real y la línea base planificada. La métrica reina es la Variación del Cronograma (SV) y la Variación del Costo (CV). </p>
+<p>En un entorno de datos, utilizamos el Error Porcentual Absoluto Medio (MAPE) para identificar desviaciones en modelos predictivos. En Excel, podemos calcular la desviación de ejecución de tareas con: 
+<code>=SI.ERROR(BUSCARX(ID_Tarea; Tabla_Plan[ID]; Tabla_Plan[Fecha_Fin]) - Fecha_Real_Fin; 0)</code> </p>
+<p>El Análisis de Causa Raíz (RCA) algorítmico a menudo emplea Diagramas de Ishikawa o árboles de decisión. Si una métrica de calidad de datos cae por debajo del umbral, el algoritmo debe iterar: 
+1. ¿Es un problema de origen? (Source Error) 
+2. ¿Es un error de transformación? (Logic Error) 
+3. ¿Es un error de carga? (Load Error). 
+Se utilizan técnicas de 'Drill-down' en SQL: <code>SELECT Source_ID, COUNT(*) FROM Errors GROUP BY Source_ID ORDER BY 2 DESC</code> para localizar el foco del problema.</p></div>
+
+            <div class="diagrama-box">
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg style="max-width: 80%; max-height: 350px; height: auto; width: auto;" data-width="1157pt" data-height="46pt"
+ viewBox="0.00 0.00 1157.45 45.86" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 41.86)">
+<title>G</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-41.86 1153.45,-41.86 1153.45,4 -4,4"/>
+<!-- monitor -->
+<g id="node1" class="node">
+<title>monitor</title>
+<polygon fill="#f9f9f9" stroke="black" points="128,-37.86 0,-37.86 0,-1.86 128,-1.86 128,-37.86"/>
+<text text-anchor="middle" x="64" y="-16.16" font-family="Helvetica,sans-Serif" font-size="14.00">Monitoreo de KPIs</text>
+</g>
+<!-- dev -->
+<g id="node2" class="node">
+<title>dev</title>
+<polygon fill="#f9f9f9" stroke="black" points="329.23,-37.86 183.77,-19.86 329.23,-1.86 474.68,-19.86 329.23,-37.86"/>
+<text text-anchor="middle" x="329.23" y="-16.16" font-family="Helvetica,sans-Serif" font-size="14.00">¿Desviación &gt; Umbral?</text>
+</g>
+<!-- monitor&#45;&gt;dev -->
+<g id="edge1" class="edge">
+<title>monitor&#45;&gt;dev</title>
+<path fill="none" stroke="black" d="M128.23,-20.71C134.24,-20.77 140.23,-20.82 146,-20.86 157.74,-20.93 169.91,-20.96 182.13,-20.96"/>
+<polygon fill="black" stroke="black" points="182.4,-24.46 192.4,-20.95 182.39,-17.46 182.4,-24.46"/>
+</g>
+<!-- dev&#45;&gt;monitor -->
+<g id="edge3" class="edge">
+<title>dev&#45;&gt;monitor</title>
+<path fill="none" stroke="black" d="M273.97,-8.59C237.72,-2.51 188.98,2.86 146,-1.86 143.34,-2.15 140.64,-2.49 137.92,-2.88"/>
+<polygon fill="black" stroke="black" points="137.34,0.57 128.01,-4.46 138.44,-6.34 137.34,0.57"/>
+<text text-anchor="middle" x="156" y="-5.66" font-family="Times,serif" font-size="14.00">NO</text>
+</g>
+<!-- rca -->
+<g id="node3" class="node">
+<title>rca</title>
+<polygon fill="#f9f9f9" stroke="black" points="735.45,-37.86 523.45,-37.86 523.45,-1.86 735.45,-1.86 735.45,-37.86"/>
+<text text-anchor="middle" x="629.45" y="-16.16" font-family="Helvetica,sans-Serif" font-size="14.00">Análisis Causa Raíz (5 Porqués)</text>
+</g>
+<!-- dev&#45;&gt;rca -->
+<g id="edge2" class="edge">
+<title>dev&#45;&gt;rca</title>
+<path fill="none" stroke="black" d="M474.54,-19.86C487.44,-19.86 500.39,-19.86 513.01,-19.86"/>
+<polygon fill="black" stroke="black" points="513.04,-23.36 523.04,-19.86 513.04,-16.36 513.04,-23.36"/>
+<text text-anchor="middle" x="498.95" y="-23.66" font-family="Times,serif" font-size="14.00">SI</text>
+</g>
+<!-- identify -->
+<g id="node4" class="node">
+<title>identify</title>
+<polygon fill="#f9f9f9" stroke="black" points="948.45,-37.86 772.45,-37.86 772.45,-1.86 948.45,-1.86 948.45,-37.86"/>
+<text text-anchor="middle" x="860.45" y="-16.16" font-family="Helvetica,sans-Serif" font-size="14.00">Identificar Fuente del Error</text>
+</g>
+<!-- rca&#45;&gt;identify -->
+<g id="edge4" class="edge">
+<title>rca&#45;&gt;identify</title>
+<path fill="none" stroke="black" d="M735.57,-19.86C744.36,-19.86 753.22,-19.86 761.95,-19.86"/>
+<polygon fill="black" stroke="black" points="762.12,-23.36 772.12,-19.86 762.12,-16.36 762.12,-23.36"/>
+</g>
+<!-- action -->
+<g id="node5" class="node">
+<title>action</title>
+<polygon fill="#f9f9f9" stroke="black" points="1149.45,-37.86 985.45,-37.86 985.45,-1.86 1149.45,-1.86 1149.45,-37.86"/>
+<text text-anchor="middle" x="1067.45" y="-16.16" font-family="Helvetica,sans-Serif" font-size="14.00">Definir Acción Correctiva</text>
+</g>
+<!-- identify&#45;&gt;action -->
+<g id="edge5" class="edge">
+<title>identify&#45;&gt;action</title>
+<path fill="none" stroke="black" d="M948.69,-19.86C957.38,-19.86 966.23,-19.86 974.96,-19.86"/>
+<polygon fill="black" stroke="black" points="975.15,-23.36 985.15,-19.86 975.15,-16.36 975.15,-23.36"/>
+</g>
+</g>
+</svg>
+
+            </div>
+            <p style="font-size:0.8em; color:#999; text-align:center; margin-top:-20px; margin-bottom:30px;">
+                <em>Figura: Diagrama generado automáticamente mediante Graphviz</em>
+            </p>
+
+            <h3>Intuición</h3>
+            <div><p>Si estás a dieta y notas que en lugar de perder peso estás ganando, tienes una 'desviación'. El seguimiento y control es pesarte cada mañana. El Análisis de Causa Raíz es no conformarse con decir 'subí de peso', sino investigar por qué: ¿Comí más? ¿Hice menos ejercicio? ¿Dormí mal? En un proyecto de datos, si el procesamiento de un reporte tarda 2 horas en lugar de 10 minutos, el RCA busca si es que hay más datos de lo normal, si el servidor tiene menos memoria o si alguien escribió una consulta SQL ineficiente.</p></div>
+
+            <h3>Aplicación</h3>
+            <div><p>Un Ingeniero de Datos detecta que los datos de ventas en el dashboard de Power BI no coinciden con los del sistema transaccional. Aplica RCA y descubre que la causa raíz no es el tablero, sino una actualización en el CRM que dejó de enviar el campo 'Tax_ID'. La acción correctiva no es arreglar el tablero, sino reconfigurar la API de extracción para manejar el nuevo formato de campos nulos.</p></div>
+        </article>
+        
+        <article class="subtema">
+            <h2>Implementación de Acciones Correctivas y Preventivas (CAPA)</h2>
+
+            <h3>Historia</h3>
+            <div><p>El concepto CAPA (Corrective and Preventive Actions) proviene de las industrias reguladas como la farmacéutica y la aviación (normas ISO 9001). Originalmente, se centraba en corregir defectos físicos en productos. Sin embargo, en la era del Big Data y la Inteligencia Artificial, CAPA se ha transformado en 'Self-healing systems' o sistemas de autocuración. En la década de los 2000, los administradores de bases de datos ejecutaban scripts manuales para corregir datos corruptos. Actualmente, el enfoque preventivo domina mediante el uso de 'Unit Testing' en pipelines de datos y 'Data Contracts', que impiden que los datos erróneos entren al sistema en primer lugar.</p></div>
+
+            <h3>Descripción Formal</h3>
+            <div><p>Las Acciones Correctivas actúan sobre el evento pasado para eliminar la causa de una no conformidad detectada. Las Acciones Preventivas actúan sobre el futuro para eliminar la causa de una no conformidad potencial. </p>
+<p>Lógica de implementación: 
+<code>IF Current_Error_Rate &gt; Limit THEN Execute_Corrective_Action()</code> 
+<code>IF Predicted_Trend &gt; Risk_Threshold THEN Execute_Preventive_Action()</code> </p>
+<p>En Excel, para automatizar la alerta de una acción preventiva basada en la tendencia de consumo de recursos de un proyecto, se podría usar una regresión lineal simple: 
+<code>=TENDENCIA(B2:B10; A2:A10; A11)</code> 
+Si el valor proyectado en A11 supera el presupuesto, se dispara una acción preventiva. </p>
+<p>En el código, esto se traduce en 'Circuit Breakers': si una función de limpieza de datos detecta que más del 10% de los registros son nulos (acción preventiva), detiene el proceso antes de que los datos erróneos lleguen al Data Warehouse, evitando el retrabajo.</p></div>
+
+            <div class="diagrama-box">
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg style="max-width: 80%; max-height: 350px; height: auto; width: auto;" data-width="512pt" data-height="350pt"
+ viewBox="0.00 0.00 511.50 350.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 346)">
+<title>G</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-346 507.5,-346 507.5,4 -4,4"/>
+<!-- check -->
+<g id="node1" class="node">
+<title>check</title>
+<polygon fill="#f9f9f9" stroke="black" points="351,-342 178,-342 178,-306 351,-306 351,-342"/>
+<text text-anchor="middle" x="264.5" y="-320.3" font-family="Helvetica,sans-Serif" font-size="14.00">Evaluación de Resultados</text>
+</g>
+<!-- type -->
+<g id="node2" class="node">
+<title>type</title>
+<polygon fill="#f9f9f9" stroke="black" points="264.5,-269 153.06,-251 264.5,-233 375.94,-251 264.5,-269"/>
+<text text-anchor="middle" x="264.5" y="-247.3" font-family="Helvetica,sans-Serif" font-size="14.00">¿Tipo de Acción?</text>
+</g>
+<!-- check&#45;&gt;type -->
+<g id="edge1" class="edge">
+<title>check&#45;&gt;type</title>
+<path fill="none" stroke="black" d="M264.5,-305.81C264.5,-297.79 264.5,-288.05 264.5,-279.07"/>
+<polygon fill="black" stroke="black" points="268,-279.03 264.5,-269.03 261,-279.03 268,-279.03"/>
+</g>
+<!-- corr -->
+<g id="node3" class="node">
+<title>corr</title>
+<polygon fill="#f9f9f9" stroke="black" points="269,-182 0,-182 0,-146 269,-146 269,-182"/>
+<text text-anchor="middle" x="134.5" y="-160.3" font-family="Helvetica,sans-Serif" font-size="14.00">Correctiva: Eliminar causa del error actual</text>
+</g>
+<!-- type&#45;&gt;corr -->
+<g id="edge2" class="edge">
+<title>type&#45;&gt;corr</title>
+<path fill="none" stroke="black" d="M243.61,-236.34C223.54,-223.22 192.84,-203.15 169.12,-187.63"/>
+<polygon fill="black" stroke="black" points="171.01,-184.69 160.72,-182.15 167.18,-190.55 171.01,-184.69"/>
+<text text-anchor="middle" x="251.5" y="-203.8" font-family="Times,serif" font-size="14.00">Error Detectado</text>
+</g>
+<!-- prev -->
+<g id="node4" class="node">
+<title>prev</title>
+<polygon fill="#f9f9f9" stroke="black" points="503.5,-182 287.5,-182 287.5,-146 503.5,-146 503.5,-182"/>
+<text text-anchor="middle" x="395.5" y="-160.3" font-family="Helvetica,sans-Serif" font-size="14.00">Preventiva: Eliminar riesgo futuro</text>
+</g>
+<!-- type&#45;&gt;prev -->
+<g id="edge3" class="edge">
+<title>type&#45;&gt;prev</title>
+<path fill="none" stroke="black" d="M285.55,-236.34C305.77,-223.22 336.71,-203.15 360.62,-187.63"/>
+<polygon fill="black" stroke="black" points="362.59,-190.52 369.08,-182.15 358.78,-184.65 362.59,-190.52"/>
+<text text-anchor="middle" x="391" y="-203.8" font-family="Times,serif" font-size="14.00">Riesgo Identificado</text>
+</g>
+<!-- verify -->
+<g id="node5" class="node">
+<title>verify</title>
+<polygon fill="#f9f9f9" stroke="black" points="332,-109 197,-109 197,-73 332,-73 332,-109"/>
+<text text-anchor="middle" x="264.5" y="-87.3" font-family="Helvetica,sans-Serif" font-size="14.00">Verificar Efectividad</text>
+</g>
+<!-- corr&#45;&gt;verify -->
+<g id="edge4" class="edge">
+<title>corr&#45;&gt;verify</title>
+<path fill="none" stroke="black" d="M165.64,-145.99C183.2,-136.4 205.33,-124.32 224.2,-114.01"/>
+<polygon fill="black" stroke="black" points="226.07,-116.98 233.17,-109.11 222.71,-110.84 226.07,-116.98"/>
+</g>
+<!-- prev&#45;&gt;verify -->
+<g id="edge5" class="edge">
+<title>prev&#45;&gt;verify</title>
+<path fill="none" stroke="black" d="M364.12,-145.99C346.43,-136.4 324.13,-124.32 305.11,-114.01"/>
+<polygon fill="black" stroke="black" points="306.54,-110.8 296.08,-109.11 303.2,-116.96 306.54,-110.8"/>
+</g>
+<!-- close -->
+<g id="node6" class="node">
+<title>close</title>
+<polygon fill="#f9f9f9" stroke="black" points="385.5,-36 143.5,-36 143.5,0 385.5,0 385.5,-36"/>
+<text text-anchor="middle" x="264.5" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">Cerrar Incidencia / Actualizar Proceso</text>
+</g>
+<!-- verify&#45;&gt;close -->
+<g id="edge6" class="edge">
+<title>verify&#45;&gt;close</title>
+<path fill="none" stroke="black" d="M264.5,-72.81C264.5,-64.79 264.5,-55.05 264.5,-46.07"/>
+<polygon fill="black" stroke="black" points="268,-46.03 264.5,-36.03 261,-46.03 268,-46.03"/>
+</g>
+</g>
+</svg>
+
+            </div>
+            <p style="font-size:0.8em; color:#999; text-align:center; margin-top:-20px; margin-bottom:30px;">
+                <em>Figura: Diagrama generado automáticamente mediante Graphviz</em>
+            </p>
+
+            <h3>Intuición</h3>
+            <div><p>Imagina que tienes una gotera en casa. Poner un cubo debajo del agua es una corrección inmediata, pero no soluciona el problema. Tapar el agujero en el techo es una 'Acción Correctiva' (soluciona el error detectado). Revisar el estado de todas las tejas para que no salgan más goteras el próximo año es una 'Acción Preventiva'. En los datos, una acción correctiva es limpiar un archivo Excel mal llenado; una acción preventiva es poner validación de datos en las celdas para que nadie pueda escribir mal en el futuro.</p></div>
+
+            <h3>Aplicación</h3>
+            <div><p>En el despliegue de un modelo de Machine Learning, si se detecta que la precisión baja del 80% (Data Drift), la acción correctiva es reentrenar el modelo con datos frescos. La acción preventiva sería implementar un sistema de monitoreo automático que alerte cuando las distribuciones estadísticas de las variables de entrada empiecen a cambiar, antes de que el modelo pierda precisión significativa.</p></div>
+        </article>
+        </body></html>

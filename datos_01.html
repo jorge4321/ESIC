@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1 - Fundamentos de Gestión - Concepto de Proyecto y Gestión en el Análisis de Datos.</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #f4f4f9; color: #333; margin: 0; padding: 20px; line-height: 1.6; position: relative; }
+        header { background: #2c3e50; color: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; text-align:center; }
+        h1 { margin: 0; font-size: 1.5rem; }
+
+        /* Estilo del botón Atrás */
+        .btn-atras {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #7f8c8d;
+            color: white;
+            padding: 8px 15px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            transition: background 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+        .btn-atras:hover { background: #95a5a6; }
+
+        .subtema {
+            background: white;
+            padding: 40px;
+            margin-bottom: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        h2 { color: #2980b9; border-bottom: 2px solid #eee; padding-bottom: 10px; margin-top: 0; }
+        h3 { color: #7f8c8d; font-size: 0.9em; text-transform: uppercase; margin-top: 30px; letter-spacing: 1px; border-left: 3px solid #d4af37; padding-left: 10px; }
+
+        .diagrama-box {
+            text-align: center;
+            margin: 30px 0;
+            padding: 20px;
+            background: #fafafa;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 150px;
+        }
+
+        p { margin-bottom: 1rem; }
+        strong { color: #2c3e50; font-weight: 600; }
+        code { background: #f0f0f0; padding: 2px 5px; border-radius: 3px; font-family: monospace; color: #c0392b; }
+        ul { padding-left: 20px; }
+        li { margin-bottom: 0.5rem; }
+    </style>
+</head>
+<body>
+    <button onclick="window.history.back()" class="btn-atras">Atrás</button>
+    <header><h1>1 - Fundamentos de Gestión - Concepto de Proyecto y Gestión en el Análisis de Datos.</h1></header>
+    <main>
+
+        <article class="subtema">
+            <h2>El Ciclo de Vida del Proyecto de Datos y Metodología CRISP-DM</h2>
+
+            <h3>Historia</h3>
+            <div><p>La gestión de proyectos de datos no siempre fue estructurada. En las décadas de 1970 y 1980, el análisis de datos era una tarea puramente técnica y aislada dentro de los departamentos de estadística o IT, siguiendo modelos de 'Cascada' que fallaban al no integrar el conocimiento de negocio. En 1996, un consorcio de empresas que incluía a IBM, NCR y Daimler-Benz, desarrolló el estándar CRISP-DM (Cross-Industry Standard Process for Data Mining). Este hito marcó la evolución de ver el análisis de datos como una simple extracción a entenderlo como un proceso cíclico y estratégico. Con el auge del Big Data en 2010, estas metodologías se adaptaron para ser más ágiles, pero manteniendo la esencia: el dato no tiene valor si no responde a una pregunta de negocio específica. Hoy, CRISP-DM sigue siendo el pilar fundamental para cualquier analista de datos moderno.</p></div>
+
+            <h3>Descripción Formal</h3>
+            <div><p>La gestión formal de un proyecto de datos bajo CRISP-DM se divide en seis fases: Comprensión de Negocio, Comprensión de Datos, Preparación, Modelado, Evaluación y Despliegue. Técnicamente, la fase de preparación es la más intensiva, consumiendo hasta el 80% del tiempo. En esta etapa, el uso de herramientas como Excel para la validación rápida es crucial. Por ejemplo, la función =BUSCARX(valor_buscado; matriz_buscada; matriz_devuelta; [si_no_se_encuentra]; [modo_de_coincidencia]) permite integrar fuentes de datos heterogéneas de forma eficiente, asegurando la integridad referencial antes del modelado. Desde la lógica algorítmica, un proceso de limpieza sigue una estructura condicional estricta. Pseudocódigo: IF (Dato.es_nulo OR Dato.es_outlier) THEN Ejecutar(Imputación_Media o Eliminación) ELSE Continuar_Proceso. En la fase de evaluación, se utilizan matrices de confusión y curvas ROC para determinar si el modelo cumple con los KPIs financieros establecidos inicialmente. Si la métrica de error (MSE) es mayor al umbral delta (MSE &gt; ε), el flujo lógico obliga a un retroceso hacia la fase de modelado o preparación. La gestión de estos proyectos requiere una documentación técnica rigurosa (Data Dictionary y Model Cards) para garantizar la trazabilidad y la reproducibilidad de los resultados ante auditorías de negocio.</p></div>
+
+            <div class="diagrama-box">
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg style="max-width: 80%; max-height: 350px; height: auto; width: auto;" data-width="197pt" data-height="404pt"
+ viewBox="0.00 0.00 196.69 404.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 400)">
+<title>G</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-400 192.69,-400 192.69,4 -4,4"/>
+<!-- A -->
+<g id="node1" class="node">
+<title>A</title>
+<polygon fill="#f9f9f9" stroke="black" points="170,-396 0,-396 0,-360 170,-360 170,-396"/>
+<text text-anchor="middle" x="85" y="-374.3" font-family="Helvetica,sans-Serif" font-size="14.00">Comprensión de Negocio</text>
+</g>
+<!-- B -->
+<g id="node2" class="node">
+<title>B</title>
+<polygon fill="#f9f9f9" stroke="black" points="162.5,-324 7.5,-324 7.5,-288 162.5,-288 162.5,-324"/>
+<text text-anchor="middle" x="85" y="-302.3" font-family="Helvetica,sans-Serif" font-size="14.00">Comprensión de Datos</text>
+</g>
+<!-- A&#45;&gt;B -->
+<g id="edge1" class="edge">
+<title>A&#45;&gt;B</title>
+<path fill="none" stroke="black" d="M79.08,-359.7C78.29,-351.98 78.06,-342.71 78.4,-334.11"/>
+<polygon fill="black" stroke="black" points="81.9,-334.32 79.1,-324.1 74.92,-333.84 81.9,-334.32"/>
+</g>
+<!-- B&#45;&gt;A -->
+<g id="edge2" class="edge">
+<title>B&#45;&gt;A</title>
+<path fill="none" stroke="black" d="M90.9,-324.1C91.7,-331.79 91.94,-341.05 91.6,-349.67"/>
+<polygon fill="black" stroke="black" points="88.11,-349.48 90.92,-359.7 95.09,-349.96 88.11,-349.48"/>
+</g>
+<!-- C -->
+<g id="node3" class="node">
+<title>C</title>
+<polygon fill="#f9f9f9" stroke="black" points="160.5,-252 13.5,-252 13.5,-216 160.5,-216 160.5,-252"/>
+<text text-anchor="middle" x="87" y="-230.3" font-family="Helvetica,sans-Serif" font-size="14.00">Preparación de Datos</text>
+</g>
+<!-- B&#45;&gt;C -->
+<g id="edge3" class="edge">
+<title>B&#45;&gt;C</title>
+<path fill="none" stroke="black" d="M85.49,-287.7C85.71,-279.98 85.98,-270.71 86.23,-262.11"/>
+<polygon fill="black" stroke="black" points="89.72,-262.2 86.51,-252.1 82.73,-262 89.72,-262.2"/>
+</g>
+<!-- D -->
+<g id="node4" class="node">
+<title>D</title>
+<polygon fill="#f9f9f9" stroke="black" points="125.5,-180 48.5,-180 48.5,-144 125.5,-144 125.5,-180"/>
+<text text-anchor="middle" x="87" y="-158.3" font-family="Helvetica,sans-Serif" font-size="14.00">Modelado</text>
+</g>
+<!-- C&#45;&gt;D -->
+<g id="edge4" class="edge">
+<title>C&#45;&gt;D</title>
+<path fill="none" stroke="black" d="M81.08,-215.7C80.29,-207.98 80.06,-198.71 80.4,-190.11"/>
+<polygon fill="black" stroke="black" points="83.9,-190.32 81.1,-180.1 76.92,-189.84 83.9,-190.32"/>
+</g>
+<!-- D&#45;&gt;C -->
+<g id="edge5" class="edge">
+<title>D&#45;&gt;C</title>
+<path fill="none" stroke="black" d="M92.9,-180.1C93.7,-187.79 93.94,-197.05 93.6,-205.67"/>
+<polygon fill="black" stroke="black" points="90.11,-205.48 92.92,-215.7 97.09,-205.96 90.11,-205.48"/>
+</g>
+<!-- E -->
+<g id="node5" class="node">
+<title>E</title>
+<polygon fill="#f9f9f9" stroke="black" points="179.5,-108 96.5,-108 96.5,-72 179.5,-72 179.5,-108"/>
+<text text-anchor="middle" x="138" y="-86.3" font-family="Helvetica,sans-Serif" font-size="14.00">Evaluación</text>
+</g>
+<!-- D&#45;&gt;E -->
+<g id="edge6" class="edge">
+<title>D&#45;&gt;E</title>
+<path fill="none" stroke="black" d="M99.61,-143.7C105.6,-135.47 112.88,-125.48 119.48,-116.42"/>
+<polygon fill="black" stroke="black" points="122.48,-118.25 125.54,-108.1 116.82,-114.13 122.48,-118.25"/>
+</g>
+<!-- E&#45;&gt;A -->
+<g id="edge7" class="edge">
+<title>E&#45;&gt;A</title>
+<path fill="none" stroke="black" d="M147.3,-108.12C167.89,-148.56 212.44,-252 172,-324 164.75,-336.9 152.94,-347.04 140.33,-354.83"/>
+<polygon fill="black" stroke="black" points="138.47,-351.86 131.52,-359.85 141.94,-357.94 138.47,-351.86"/>
+</g>
+<!-- F -->
+<g id="node6" class="node">
+<title>F</title>
+<polygon fill="#f9f9f9" stroke="black" points="180,-36 96,-36 96,0 180,0 180,-36"/>
+<text text-anchor="middle" x="138" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">Despliegue</text>
+</g>
+<!-- E&#45;&gt;F -->
+<g id="edge8" class="edge">
+<title>E&#45;&gt;F</title>
+<path fill="none" stroke="black" d="M138,-71.7C138,-63.98 138,-54.71 138,-46.11"/>
+<polygon fill="black" stroke="black" points="141.5,-46.1 138,-36.1 134.5,-46.1 141.5,-46.1"/>
+</g>
+</g>
+</svg>
+
+            </div>
+            <p style="font-size:0.8em; color:#999; text-align:center; margin-top:-20px; margin-bottom:30px;">
+                <em>Figura: Diagrama generado automáticamente mediante Graphviz</em>
+            </p>
+
+            <h3>Intuición</h3>
+            <div><p>Imagina que eres un chef que debe preparar una cena de gala para un cliente exigente. No puedes empezar a cocinar sin saber qué le gusta al cliente (Comprensión de Negocio). Luego, revisas tu despensa para ver si los ingredientes están frescos (Comprensión de Datos) y los picas, lavas y preparas (Preparación de Datos). Solo cuando todo está listo, enciendes los fogones para cocinar (Modelado). Antes de servir el plato, lo pruebas para ver si le falta sal o si cumple con la receta (Evaluación). Finalmente, lo llevas a la mesa (Despliegue). En el mundo de los datos, el 'plato' es una predicción o un informe que ayuda a una empresa a ganar más dinero o ahorrar costes. Si saltas la fase de probar la comida, corres el riesgo de servir algo incomible. El 'por qué' de gestionar esto como un ciclo es que el mercado cambia: lo que hoy es una receta ganadora, mañana puede necesitar un ingrediente nuevo, lo que nos obliga a volver al inicio del ciclo constantemente.</p></div>
+
+            <h3>Aplicación</h3>
+            <div><p>En el entorno profesional, un ingeniero de datos aplica estos fundamentos al desarrollar un sistema de recomendación para un e-commerce. Durante la 'Comprensión de Negocio', identifica que el objetivo es aumentar el Ticket Promedio en un 15%. En la 'Preparación', utiliza scripts de SQL y Excel para limpiar duplicados y normalizar categorías de productos. El despliegue no es solo entregar el código, sino integrar el modelo en la aplicación móvil de la empresa para que el usuario reciba sugerencias en tiempo real. Un fallo en la gestión de este ciclo resultaría en recomendaciones irrelevantes que dañarían la experiencia del usuario y la reputación de la marca.</p></div>
+        </article>
+        
+        <article class="subtema">
+            <h2>Gobernanza y Calidad de Datos como Restricción de Proyecto</h2>
+
+            <h3>Historia</h3>
+            <div><p>Históricamente, los datos se almacenaban sin un control centralizado, creando 'silos de datos' donde cada departamento tenía su propia versión de la verdad. En la década de 1990, con la llegada de los Data Warehouses, surgió la necesidad de definir quién era el dueño del dato y cómo se debía asegurar su calidad. Escándalos financieros como el de Enron y nuevas regulaciones como Basilea II o el GDPR en la Unión Europea transformaron la gobernanza de datos de ser una opción técnica a una obligación legal y de gestión. Hoy en día, la calidad del dato es considerada la restricción más crítica en la gestión de proyectos de análisis, ya que los algoritmos de IA son extremadamente sensibles a sesgos o errores en los datos de entrada.</p></div>
+
+            <h3>Descripción Formal</h3>
+            <div><p>La calidad del dato se mide a través de seis dimensiones: Exactitud, Completitud, Consistencia, Oportunidad, Validez y Unicidad. En Excel, una técnica fundamental para garantizar la validez es el uso de 'Validación de Datos' y fórmulas de control como =SI(Y(ESNUMERO(A2); A2&gt;0); "Válido"; "Error"). A nivel algorítmico, la gobernanza implica la creación de 'Data Pipelines' con chequeos de integridad automáticos. Lógica: Para cada registro R en Dataset D, IF Type(R.field) != Expected_Type THEN Log_Error(R) AND Quarantine(R). Además, la gobernanza define el 'Lineage' (linaje de datos), que es el seguimiento del dato desde su origen (fuente primaria) hasta su consumo (dashboard). Técnicamente, esto se implementa mediante metadatos que acompañan a cada transformación. El Project Manager debe incluir un 'Data Quality Assessment' (DQA) antes de cualquier fase de modelado, asegurando que el coeficiente de completitud (Registros no nulos / Total registros) supere un umbral crítico (generalmente &gt; 95%) para que el análisis sea estadísticamente significativo.</p></div>
+
+            <div class="diagrama-box">
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg style="max-width: 80%; max-height: 350px; height: auto; width: auto;" data-width="928pt" data-height="109pt"
+ viewBox="0.00 0.00 928.22 109.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 105)">
+<title>G</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-105 924.22,-105 924.22,4 -4,4"/>
+<!-- In -->
+<g id="node1" class="node">
+<title>In</title>
+<polygon fill="#f9f9f9" stroke="black" points="122,-63 0,-63 0,-27 122,-27 122,-63"/>
+<text text-anchor="middle" x="61" y="-41.3" font-family="Helvetica,sans-Serif" font-size="14.00">Entrada de Datos</text>
+</g>
+<!-- Check -->
+<g id="node2" class="node">
+<title>Check</title>
+<polygon fill="#f9f9f9" stroke="black" points="322.61,-63 158.89,-45 322.61,-27 486.33,-45 322.61,-63"/>
+<text text-anchor="middle" x="322.61" y="-41.3" font-family="Helvetica,sans-Serif" font-size="14.00">¿Pasa Validación Calidad?</text>
+</g>
+<!-- In&#45;&gt;Check -->
+<g id="edge1" class="edge">
+<title>In&#45;&gt;Check</title>
+<path fill="none" stroke="black" d="M122.21,-45C130.57,-45 139.48,-45 148.71,-45"/>
+<polygon fill="black" stroke="black" points="148.85,-48.5 158.85,-45 148.85,-41.5 148.85,-48.5"/>
+</g>
+<!-- Proc -->
+<g id="node3" class="node">
+<title>Proc</title>
+<polygon fill="#f9f9f9" stroke="black" points="744.22,-101 582.22,-101 582.22,-65 744.22,-65 744.22,-101"/>
+<text text-anchor="middle" x="663.22" y="-79.3" font-family="Helvetica,sans-Serif" font-size="14.00">Procesamiento Analítico</text>
+</g>
+<!-- Check&#45;&gt;Proc -->
+<g id="edge2" class="edge">
+<title>Check&#45;&gt;Proc</title>
+<path fill="none" stroke="black" d="M404.29,-54.05C454.72,-59.71 519.76,-67.01 571.91,-72.87"/>
+<polygon fill="black" stroke="black" points="571.83,-76.38 582.16,-74.02 572.62,-69.42 571.83,-76.38"/>
+<text text-anchor="middle" x="534.22" y="-74.8" font-family="Times,serif" font-size="14.00">SÍ</text>
+</g>
+<!-- Quar -->
+<g id="node4" class="node">
+<title>Quar</title>
+<polygon fill="#f9f9f9" stroke="black" points="739.72,-36 586.72,-36 586.72,0 739.72,0 739.72,-36"/>
+<text text-anchor="middle" x="663.22" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">Cuarentena / Limpieza</text>
+</g>
+<!-- Check&#45;&gt;Quar -->
+<g id="edge3" class="edge">
+<title>Check&#45;&gt;Quar</title>
+<path fill="none" stroke="black" d="M417.93,-37.48C467.62,-33.52 528.12,-28.69 576.47,-24.84"/>
+<polygon fill="black" stroke="black" points="576.91,-28.31 586.6,-24.03 576.35,-21.34 576.91,-28.31"/>
+<text text-anchor="middle" x="534.22" y="-33.8" font-family="Times,serif" font-size="14.00">NO</text>
+</g>
+<!-- Out -->
+<g id="node5" class="node">
+<title>Out</title>
+<polygon fill="#f9f9f9" stroke="black" points="920.22,-101 781.22,-101 781.22,-65 920.22,-65 920.22,-101"/>
+<text text-anchor="middle" x="850.72" y="-79.3" font-family="Helvetica,sans-Serif" font-size="14.00">Dashboard / Modelo</text>
+</g>
+<!-- Proc&#45;&gt;Out -->
+<g id="edge5" class="edge">
+<title>Proc&#45;&gt;Out</title>
+<path fill="none" stroke="black" d="M744.23,-83C753.04,-83 762.01,-83 770.81,-83"/>
+<polygon fill="black" stroke="black" points="771.04,-86.5 781.04,-83 771.04,-79.5 771.04,-86.5"/>
+</g>
+<!-- Quar&#45;&gt;Check -->
+<g id="edge4" class="edge">
+<title>Quar&#45;&gt;Check</title>
+<path fill="none" stroke="black" d="M586.59,-8.66C579.04,-7.98 571.48,-7.41 564.22,-7 537.59,-5.51 530.74,-4.24 504.22,-7 462.45,-11.35 416.11,-21.2 380.83,-29.79"/>
+<polygon fill="black" stroke="black" points="379.59,-26.49 370.72,-32.29 381.27,-33.28 379.59,-26.49"/>
+<text text-anchor="middle" x="534.22" y="-10.8" font-family="Times,serif" font-size="14.00">Re&#45;evaluar</text>
+</g>
+</g>
+</svg>
+
+            </div>
+            <p style="font-size:0.8em; color:#999; text-align:center; margin-top:-20px; margin-bottom:30px;">
+                <em>Figura: Diagrama generado automáticamente mediante Graphviz</em>
+            </p>
+
+            <h3>Intuición</h3>
+            <div><p>La gobernanza de datos es como el sistema de tratamiento de agua de una ciudad. No importa cuán moderna sea la arquitectura de los edificios o cuán inteligentes sean los ciudadanos; si el agua que corre por las tuberías está contaminada, la ciudad enfermará. La gobernanza establece quién tiene las llaves de las válvulas, qué filtros se deben usar y cómo se analiza el agua cada hora para asegurar que es potable. En un proyecto de datos, si los datos están 'sucios' o no tienen dueño, el resultado final será erróneo (Garbage In, Garbage Out). Gestionar la calidad es el acto de poner esos filtros antes de que el dato llegue al 'consumidor' final, que en este caso es el tomador de decisiones o el algoritmo de aprendizaje automático.</p></div>
+
+            <h3>Aplicación</h3>
+            <div><p>Un ingeniero en una entidad bancaria gestiona un proyecto de Scoring Crediticio. La gobernanza es vital aquí: debe asegurar que los datos de ingresos de los clientes sean consistentes entre la base de datos de marketing y la de riesgos. Si la calidad falla y se usan datos obsoletos (Oportunidad), el banco podría otorgar préstamos de alto riesgo por error. El cumplimiento de la gobernanza asegura que cada decisión tomada por el modelo pueda ser explicada y rastreada hasta el dato original, protegiendo al banco de sanciones legales y pérdidas financieras.</p></div>
+        </article>
+        
+        <article class="subtema">
+            <h2>Estructuras Organizativas y Roles en Proyectos de Datos</h2>
+
+            <h3>Historia</h3>
+            <div><p>Tradicionalmente, las empresas tenían estructuras jerárquicas rígidas donde el departamento de IT controlaba todos los activos digitales. Con la explosión de la Analítica de Negocio en la última década, han surgido nuevas estructuras como el Centro de Excelencia (CoE) en Datos. Los roles han evolucionado de un 'Analista de Sistemas' genérico a especialistas diferenciados: Ingenieros de Datos, Científicos de Datos y Analistas de Negocio. La figura del Data Project Manager emerge para orquestar estos perfiles, actuando como un puente bilingüe entre la complejidad técnica y la visión comercial, una necesidad que se hizo evidente tras el fracaso de muchos proyectos de IA que eran técnicamente perfectos pero no resolvían ningún problema real del mercado.</p></div>
+
+            <h3>Descripción Formal</h3>
+            <div><p>La gestión de proyectos de datos requiere una estructura matricial donde los recursos humanos se asignan según su especialidad técnica pero responden a objetivos de negocio. Un componente crítico es el 'Stakeholder Mapping' y la gestión de la comunicación. En Excel, el seguimiento de recursos y tareas se puede optimizar con funciones avanzadas para el cálculo de disponibilidad, como =DIAS.LAB.INTL(fecha_inicio; fecha_fin; 1; festivos), que permite calcular la capacidad real del equipo. Algorítmicamente, la asignación de tareas sigue una lógica de optimización de recursos: Minimizar Suma(Costo_Tarea * Tiempo) sujeto a que la Capacidad_Perfil &gt;= Requerimiento_Tarea. El Data Project Manager utiliza metodologías como Scrum, adaptadas para datos (DataOps), donde los 'sprints' incluyen no solo desarrollo de código, sino también validación de hipótesis estadísticas y pruebas de deriva de datos (data drift). La formalización del proyecto termina en un 'SLA' (Service Level Agreement) que define la disponibilidad y precisión esperada del producto de datos final.</p></div>
+
+            <div class="diagrama-box">
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg style="max-width: 80%; max-height: 350px; height: auto; width: auto;" data-width="523pt" data-height="392pt"
+ viewBox="0.00 0.00 522.50 392.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 388)">
+<title>G</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-388 518.5,-388 518.5,4 -4,4"/>
+<!-- S -->
+<g id="node1" class="node">
+<title>S</title>
+<polygon fill="#f9f9f9" stroke="black" points="434.5,-384 276.5,-384 276.5,-348 434.5,-348 434.5,-384"/>
+<text text-anchor="middle" x="355.5" y="-362.3" font-family="Helvetica,sans-Serif" font-size="14.00">Stakeholders (Negocio)</text>
+</g>
+<!-- PM -->
+<g id="node2" class="node">
+<title>PM</title>
+<polygon fill="#f9f9f9" stroke="black" points="298,-297 149,-297 149,-261 298,-261 298,-297"/>
+<text text-anchor="middle" x="223.5" y="-275.3" font-family="Helvetica,sans-Serif" font-size="14.00">Data Project Manager</text>
+</g>
+<!-- S&#45;&gt;PM -->
+<g id="edge1" class="edge">
+<title>S&#45;&gt;PM</title>
+<path fill="none" stroke="black" d="M328.79,-347.8C308.57,-334.78 280.62,-316.78 258.6,-302.6"/>
+<polygon fill="black" stroke="black" points="260.48,-299.65 250.17,-297.18 256.69,-305.53 260.48,-299.65"/>
+<text text-anchor="middle" x="340" y="-318.8" font-family="Times,serif" font-size="14.00">Requerimientos</text>
+</g>
+<!-- DE -->
+<g id="node3" class="node">
+<title>DE</title>
+<polygon fill="#f9f9f9" stroke="black" points="103,-210 0,-210 0,-174 103,-174 103,-210"/>
+<text text-anchor="middle" x="51.5" y="-188.3" font-family="Helvetica,sans-Serif" font-size="14.00">Data Engineer</text>
+</g>
+<!-- PM&#45;&gt;DE -->
+<g id="edge2" class="edge">
+<title>PM&#45;&gt;DE</title>
+<path fill="none" stroke="black" d="M148.75,-272.4C107.24,-267.56 61.42,-258.75 48.5,-243 43.31,-236.66 42.34,-228.22 43.2,-220.08"/>
+<polygon fill="black" stroke="black" points="46.66,-220.58 45.07,-210.1 39.78,-219.28 46.66,-220.58"/>
+<text text-anchor="middle" x="94" y="-231.8" font-family="Times,serif" font-size="14.00">Estructura Datos</text>
+</g>
+<!-- DS -->
+<g id="node4" class="node">
+<title>DS</title>
+<polygon fill="#f9f9f9" stroke="black" points="203.5,-123 103.5,-123 103.5,-87 203.5,-87 203.5,-123"/>
+<text text-anchor="middle" x="153.5" y="-101.3" font-family="Helvetica,sans-Serif" font-size="14.00">Data Scientist</text>
+</g>
+<!-- PM&#45;&gt;DS -->
+<g id="edge3" class="edge">
+<title>PM&#45;&gt;DS</title>
+<path fill="none" stroke="black" d="M204.7,-260.86C192.01,-248.12 176.06,-229.62 167.5,-210 156.84,-185.57 153.79,-155.1 153.14,-133.47"/>
+<polygon fill="black" stroke="black" points="156.64,-133.28 152.99,-123.34 149.64,-133.39 156.64,-133.28"/>
+<text text-anchor="middle" x="223" y="-188.3" font-family="Times,serif" font-size="14.00">Modelado/Hipótesis</text>
+</g>
+<!-- BA -->
+<g id="node5" class="node">
+<title>BA</title>
+<polygon fill="#f9f9f9" stroke="black" points="352,-36 233,-36 233,0 352,0 352,-36"/>
+<text text-anchor="middle" x="292.5" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">Business Analyst</text>
+</g>
+<!-- PM&#45;&gt;BA -->
+<g id="edge4" class="edge">
+<title>PM&#45;&gt;BA</title>
+<path fill="none" stroke="black" d="M242.33,-260.94C254.97,-248.25 270.68,-229.77 278.5,-210 289.99,-180.95 292.16,-91.62 292.49,-46.17"/>
+<polygon fill="black" stroke="black" points="295.99,-46.15 292.54,-36.13 288.99,-46.12 295.99,-46.15"/>
+<text text-anchor="middle" x="344" y="-144.8" font-family="Times,serif" font-size="14.00">Insights/Dashboards</text>
+</g>
+<!-- DE&#45;&gt;DS -->
+<g id="edge5" class="edge">
+<title>DE&#45;&gt;DS</title>
+<path fill="none" stroke="black" d="M49.31,-173.54C48.96,-163.05 50.33,-150.04 57.5,-141 66.63,-129.48 79.91,-121.75 93.7,-116.56"/>
+<polygon fill="black" stroke="black" points="94.9,-119.85 103.28,-113.37 92.69,-113.21 94.9,-119.85"/>
+<text text-anchor="middle" x="98.5" y="-144.8" font-family="Times,serif" font-size="14.00">Datos Limpios</text>
+</g>
+<!-- DS&#45;&gt;BA -->
+<g id="edge6" class="edge">
+<title>DS&#45;&gt;BA</title>
+<path fill="none" stroke="black" d="M169.59,-86.6C179.95,-76.15 194.13,-63.14 208.5,-54 216.51,-48.9 225.4,-44.27 234.3,-40.17"/>
+<polygon fill="black" stroke="black" points="235.81,-43.32 243.55,-36.08 232.98,-36.92 235.81,-43.32"/>
+<text text-anchor="middle" x="243.5" y="-57.8" font-family="Times,serif" font-size="14.00">Predicciones</text>
+</g>
+<!-- BA&#45;&gt;S -->
+<g id="edge7" class="edge">
+<title>BA&#45;&gt;S</title>
+<path fill="none" stroke="black" d="M352.18,-34.85C384.75,-47.5 418.5,-69.04 418.5,-104 418.5,-280 418.5,-280 418.5,-280 418.5,-303.84 402.31,-325.35 386.35,-340.77"/>
+<polygon fill="black" stroke="black" points="383.63,-338.51 378.6,-347.83 388.35,-343.68 383.63,-338.51"/>
+<text text-anchor="middle" x="466.5" y="-188.3" font-family="Times,serif" font-size="14.00">Valor de Negocio</text>
+</g>
+</g>
+</svg>
+
+            </div>
+            <p style="font-size:0.8em; color:#999; text-align:center; margin-top:-20px; margin-bottom:30px;">
+                <em>Figura: Diagrama generado automáticamente mediante Graphviz</em>
+            </p>
+
+            <h3>Intuición</h3>
+            <div><p>Piensa en un proyecto de datos como una orquesta sinfónica. Tienes a los ingenieros de datos (los que mantienen los instrumentos afinados y el escenario listo), a los científicos de datos (los solistas que ejecutan las partes más complejas) y a los analistas de negocio (los que conocen el oído del público). El Data Project Manager es el director de la orquesta. No necesita saber tocar todos los instrumentos a la perfección, pero sí debe saber cómo suena cada uno y asegurarse de que todos sigan el mismo ritmo y partitura. Sin este director, los músicos podrían tocar piezas increíbles individualmente, pero el resultado final para el público (la empresa) sería solo ruido confuso en lugar de una melodía armoniosa que genera beneficios.</p></div>
+
+            <h3>Aplicación</h3>
+            <div><p>En el despliegue de una plataforma de Smart Cities, el Project Manager coordina a ingenieros que instalan sensores (IoT), analistas que visualizan el tráfico y responsables municipales. Su labor es asegurar que el científico de datos no se pierda en modelos complejos si lo que el ayuntamiento necesita urgentemente es una visualización simple para la gestión de ambulancias. Utiliza herramientas de gestión (como Jira o Trello) conectadas a repositorios de datos para asegurar que los hitos técnicos se alineen con los plazos políticos y sociales de la ciudad.</p></div>
+        </article>
+        </body></html>

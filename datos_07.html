@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>7 - Gestión de la Comunicación - Identificación de Stakeholders y Plan de Comunicación.</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #f4f4f9; color: #333; margin: 0; padding: 20px; line-height: 1.6; position: relative; }
+        header { background: #2c3e50; color: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; text-align:center; }
+        h1 { margin: 0; font-size: 1.5rem; }
+
+        /* Estilo del botón Atrás */
+        .btn-atras {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #7f8c8d;
+            color: white;
+            padding: 8px 15px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            transition: background 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+        .btn-atras:hover { background: #95a5a6; }
+
+        .subtema {
+            background: white;
+            padding: 40px;
+            margin-bottom: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        h2 { color: #2980b9; border-bottom: 2px solid #eee; padding-bottom: 10px; margin-top: 0; }
+        h3 { color: #7f8c8d; font-size: 0.9em; text-transform: uppercase; margin-top: 30px; letter-spacing: 1px; border-left: 3px solid #d4af37; padding-left: 10px; }
+
+        .diagrama-box {
+            text-align: center;
+            margin: 30px 0;
+            padding: 20px;
+            background: #fafafa;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 150px;
+        }
+
+        p { margin-bottom: 1rem; }
+        strong { color: #2c3e50; font-weight: 600; }
+        code { background: #f0f0f0; padding: 2px 5px; border-radius: 3px; font-family: monospace; color: #c0392b; }
+        ul { padding-left: 20px; }
+        li { margin-bottom: 0.5rem; }
+    </style>
+</head>
+<body>
+    <button onclick="window.history.back()" class="btn-atras">Atrás</button>
+    <header><h1>7 - Gestión de la Comunicación - Identificación de Stakeholders y Plan de Comunicación.</h1></header>
+    <main>
+
+        <article class="subtema">
+            <h2>Identificación y Clasificación de Stakeholders mediante Matrices de Poder-Interés</h2>
+
+            <h3>Historia</h3>
+            <div><p>La gestión de los interesados (stakeholders) ha evolucionado significativamente desde la teoría clásica de Friedman, centrada únicamente en los accionistas (shareholders). Fue R. Edward Freeman en 1984 quien introdujo la 'Teoría de los Stakeholders', argumentando que el éxito de cualquier organización depende de un ecosistema de actores. En el ámbito de los datos, esta evolución pasó de ver a los usuarios como simples receptores de informes a considerarlos socios estratégicos en el diseño de productos de datos. Con el auge de la metodología Agile y el marco CRISP-DM, la identificación temprana de los interesados se volvió crítica para evitar el 'fracaso de adopción'. Históricamente, muchos proyectos de Big Data fallaban no por deficiencias técnicas, sino por falta de alineación con las expectativas de quienes tomaban las decisiones. Hoy, la analítica de negocio integra estas matrices en su fase de descubrimiento para asegurar que los requisitos de gobernanza y ética se cumplan desde el primer día.</p></div>
+
+            <h3>Descripción Formal</h3>
+            <div><p>La identificación formal requiere el uso de la Matriz Poder/Interés. Técnicamente, podemos cuantificar estas variables en una escala de 1 a 10. En Excel, para clasificar automáticamente a los stakeholders, se suele utilizar una lógica anidada o la función SI.CONJUNTO. Por ejemplo: <code>=SI.CONJUNTO(Y(A2&gt;7; B2&gt;7); "Gestionar de Cerca"; Y(A2&gt;7; B2&lt;=7); "Mantener Satisfecho"; Y(A2&lt;=7; B2&gt;7); "Mantener Informado"; Y(A2&lt;=7; B2&lt;=7); "Monitorear")</code>. </p>
+<p>Desde el punto de vista algorítmico, el proceso de clasificación sigue un flujo lógico de decisión: 
+1. Entrada: Lista de interesados con atributos (P, I). 
+2. Condicional: IF P &gt;= Umbral_Alto AND I &gt;= Umbral_Alto THEN Categoria = 'Key Player'. 
+3. ELSE IF P &gt;= Umbral_Alto AND I &lt; Umbral_Alto THEN Categoria = 'Keep Satisfied'. 
+4. ELSE IF P &lt; Umbral_Alto AND I &gt;= Umbral_Alto THEN Categoria = 'Keep Informed'. 
+5. ELSE Categoria = 'Minimal Effort'. 
+Este proceso asegura que los recursos de comunicación se asignen de manera óptima. En proyectos de ciencia de datos, los interesados de 'Alto Poder' suelen ser los CDO (Chief Data Officers), mientras que los de 'Alto Interés' son los analistas de negocio que consumirán el modelo.</p></div>
+
+            <div class="diagrama-box">
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg style="max-width: 80%; max-height: 350px; height: auto; width: auto;" data-width="709pt" data-height="291pt"
+ viewBox="0.00 0.00 708.50 291.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 287)">
+<title>G</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-287 704.5,-287 704.5,4 -4,4"/>
+<!-- S -->
+<g id="node1" class="node">
+<title>S</title>
+<polygon fill="#f9f9f9" stroke="black" points="465.5,-283 295.5,-283 295.5,-247 465.5,-247 465.5,-283"/>
+<text text-anchor="middle" x="380.5" y="-261.3" font-family="Helvetica,sans-Serif" font-size="14.00">Inicio: Nuevo Stakeholder</text>
+</g>
+<!-- D1 -->
+<g id="node2" class="node">
+<title>D1</title>
+<polygon fill="#f9f9f9" stroke="black" points="380.5,-210 295.88,-192 380.5,-174 465.12,-192 380.5,-210"/>
+<text text-anchor="middle" x="380.5" y="-188.3" font-family="Helvetica,sans-Serif" font-size="14.00">¿Poder &gt; 7?</text>
+</g>
+<!-- S&#45;&gt;D1 -->
+<g id="edge1" class="edge">
+<title>S&#45;&gt;D1</title>
+<path fill="none" stroke="black" d="M380.5,-246.81C380.5,-238.79 380.5,-229.05 380.5,-220.07"/>
+<polygon fill="black" stroke="black" points="384,-220.03 380.5,-210.03 377,-220.03 384,-220.03"/>
+</g>
+<!-- D2 -->
+<g id="node3" class="node">
+<title>D2</title>
+<polygon fill="#f9f9f9" stroke="black" points="280.5,-123 191.18,-105 280.5,-87 369.82,-105 280.5,-123"/>
+<text text-anchor="middle" x="280.5" y="-101.3" font-family="Helvetica,sans-Serif" font-size="14.00">¿Interés &gt; 7?</text>
+</g>
+<!-- D1&#45;&gt;D2 -->
+<g id="edge2" class="edge">
+<title>D1&#45;&gt;D2</title>
+<path fill="none" stroke="black" d="M364.43,-177.34C348.27,-163.61 323.16,-142.26 304.61,-126.5"/>
+<polygon fill="black" stroke="black" points="306.75,-123.71 296.86,-119.91 302.21,-129.05 306.75,-123.71"/>
+<text text-anchor="middle" x="343" y="-144.8" font-family="Times,serif" font-size="14.00">SÍ</text>
+</g>
+<!-- D3 -->
+<g id="node4" class="node">
+<title>D3</title>
+<polygon fill="#f9f9f9" stroke="black" points="481.5,-123 392.18,-105 481.5,-87 570.82,-105 481.5,-123"/>
+<text text-anchor="middle" x="481.5" y="-101.3" font-family="Helvetica,sans-Serif" font-size="14.00">¿Interés &gt; 7?</text>
+</g>
+<!-- D1&#45;&gt;D3 -->
+<g id="edge3" class="edge">
+<title>D1&#45;&gt;D3</title>
+<path fill="none" stroke="black" d="M396.73,-177.34C413.05,-163.61 438.41,-142.26 457.15,-126.5"/>
+<polygon fill="black" stroke="black" points="459.58,-129.02 464.98,-119.91 455.07,-123.67 459.58,-129.02"/>
+<text text-anchor="middle" x="447.5" y="-144.8" font-family="Times,serif" font-size="14.00">NO</text>
+</g>
+<!-- C1 -->
+<g id="node5" class="node">
+<title>C1</title>
+<polygon fill="#ff9999" stroke="black" points="171,-36 0,-36 0,0 171,0 171,-36"/>
+<text text-anchor="middle" x="85.5" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">GESTIONAR DE CERCA</text>
+</g>
+<!-- D2&#45;&gt;C1 -->
+<g id="edge4" class="edge">
+<title>D2&#45;&gt;C1</title>
+<path fill="none" stroke="black" d="M253.79,-92.36C223.02,-78.95 171.84,-56.64 133.99,-40.13"/>
+<polygon fill="black" stroke="black" points="135.23,-36.86 124.67,-36.07 132.44,-43.28 135.23,-36.86"/>
+<text text-anchor="middle" x="202" y="-57.8" font-family="Times,serif" font-size="14.00">SÍ</text>
+</g>
+<!-- C2 -->
+<g id="node6" class="node">
+<title>C2</title>
+<polygon fill="#ffff99" stroke="black" points="372,-36 189,-36 189,0 372,0 372,-36"/>
+<text text-anchor="middle" x="280.5" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">MANTENER SATISFECHO</text>
+</g>
+<!-- D2&#45;&gt;C2 -->
+<g id="edge5" class="edge">
+<title>D2&#45;&gt;C2</title>
+<path fill="none" stroke="black" d="M280.5,-86.8C280.5,-75.16 280.5,-59.55 280.5,-46.24"/>
+<polygon fill="black" stroke="black" points="284,-46.18 280.5,-36.18 277,-46.18 284,-46.18"/>
+<text text-anchor="middle" x="290.5" y="-57.8" font-family="Times,serif" font-size="14.00">NO</text>
+</g>
+<!-- C3 -->
+<g id="node7" class="node">
+<title>C3</title>
+<polygon fill="#99ff99" stroke="black" points="572.5,-36 390.5,-36 390.5,0 572.5,0 572.5,-36"/>
+<text text-anchor="middle" x="481.5" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">MANTENER INFORMADO</text>
+</g>
+<!-- D3&#45;&gt;C3 -->
+<g id="edge6" class="edge">
+<title>D3&#45;&gt;C3</title>
+<path fill="none" stroke="black" d="M481.5,-86.8C481.5,-75.16 481.5,-59.55 481.5,-46.24"/>
+<polygon fill="black" stroke="black" points="485,-46.18 481.5,-36.18 478,-46.18 485,-46.18"/>
+<text text-anchor="middle" x="488" y="-57.8" font-family="Times,serif" font-size="14.00">SÍ</text>
+</g>
+<!-- C4 -->
+<g id="node8" class="node">
+<title>C4</title>
+<polygon fill="#eeeeee" stroke="black" points="700.5,-36 590.5,-36 590.5,0 700.5,0 700.5,-36"/>
+<text text-anchor="middle" x="645.5" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">MONITOREAR</text>
+</g>
+<!-- D3&#45;&gt;C4 -->
+<g id="edge7" class="edge">
+<title>D3&#45;&gt;C4</title>
+<path fill="none" stroke="black" d="M505.35,-91.64C531.06,-78.31 572.49,-56.84 603.65,-40.69"/>
+<polygon fill="black" stroke="black" points="605.28,-43.79 612.55,-36.08 602.06,-37.57 605.28,-43.79"/>
+<text text-anchor="middle" x="583.5" y="-57.8" font-family="Times,serif" font-size="14.00">NO</text>
+</g>
+</g>
+</svg>
+
+            </div>
+            <p style="font-size:0.8em; color:#999; text-align:center; margin-top:-20px; margin-bottom:30px;">
+                <em>Figura: Diagrama generado automáticamente mediante Graphviz</em>
+            </p>
+
+            <h3>Intuición</h3>
+            <div><p>Imagina que estás organizando una boda. Tus padres y tu pareja tienen mucho poder sobre las decisiones y mucho interés en el resultado: a ellos debes gestionarlos de cerca. Un primo lejano quizá tiene poco interés y poco poder: a él solo lo monitoreas. En un proyecto de datos, el 'padre' es el patrocinador que pone el presupuesto y el 'primo' es un usuario ocasional de un reporte secundario. La matriz de stakeholders es, en esencia, un mapa de empatía estratégica. Nos ayuda a entender quién puede frenar el proyecto (bloqueadores) y quién puede impulsarlo (promotores), permitiéndonos hablar el lenguaje adecuado para cada grupo y evitar malentendidos que descarrilen semanas de trabajo técnico.</p></div>
+
+            <h3>Aplicación</h3>
+            <div><p>En el despliegue de un modelo de Credit Scoring en un banco, los ingenieros de datos deben identificar a los reguladores (Alto Poder, Interés Medio), al equipo de Riesgos (Alto Poder, Alto Interés) y a los agentes de sucursal (Bajo Poder, Alto Interés). Si el ingeniero no comunica el 'porqué' del modelo a los agentes, estos podrían desconfiar de los resultados y no usarlos. Un caso profesional típico es la creación de un registro de interesados en un ERP, donde cada cambio en el esquema de la base de datos dispara notificaciones automáticas solo a los perfiles de 'Alto Interés' para no saturar a la organización con ruido innecesario.</p></div>
+        </article>
+        
+        <article class="subtema">
+            <h2>Diseño del Plan de Comunicación y Matriz RACI</h2>
+
+            <h3>Historia</h3>
+            <div><p>El concepto de Plan de Comunicación formal nació con la gestión de proyectos de ingeniería civil a mediados del siglo XX, pero fue la metodología PMBOK (Project Management Body of Knowledge) la que estandarizó su estructura. En el mundo de los datos, la necesidad de un plan robusto se intensificó con la descentralización de la información. Antes, los silos de datos permitían comunicaciones informales; hoy, con arquitecturas Mesh o Fabric, es imposible coordinar a cientos de ingenieros sin una matriz de responsabilidades clara. La matriz RACI (Responsible, Accountable, Consulted, Informed) se convirtió en el estándar de oro para definir quién limpia el dato, quién valida el modelo y quién recibe la notificación de error.</p></div>
+
+            <h3>Descripción Formal</h3>
+            <div><p>El Plan de Comunicación define el 'Qué, Quién, Cuándo, Cómo y Por qué'. La Matriz RACI es su núcleo técnico. En Excel, se construye una tabla de doble entrada donde las filas son tareas y las columnas son roles. Para validar la integridad de la RACI (asegurar que haya exactamente un 'Accountable' por tarea), se usa la función: <code>=CONTAR.SI(B2:Z2; "A")</code>. Si el resultado no es 1, el proceso es inválido.</p>
+<p>Lógica Algorítmica de Notificación:
+1. Evento: El Pipeline de ETL falla.
+2. Búsqueda: BUSCARX('Tarea_ETL'; Tabla_RACI[Tarea]; Tabla_RACI[Roles]).
+3. Acción: 
+   - Enviar Alerta Crítica a 'R' (Responsible).
+   - Enviar Reporte de Incidencia a 'A' (Accountable).
+   - Notificar vía Slack a 'I' (Informed).
+Este enfoque algorítmico automatiza la gobernanza de datos, asegurando que los flujos de información sigan las jerarquías de responsabilidad definidas sin intervención manual constante.</p></div>
+
+            <div class="diagrama-box">
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg style="max-width: 80%; max-height: 350px; height: auto; width: auto;" data-width="805pt" data-height="98pt"
+ viewBox="0.00 0.00 805.00 98.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 94)">
+<title>G</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-94 801,-94 801,4 -4,4"/>
+<!-- E -->
+<g id="node1" class="node">
+<title>E</title>
+<polygon fill="#f9f9f9" stroke="black" points="116,-55 0,-55 0,-19 116,-19 116,-55"/>
+<text text-anchor="middle" x="58" y="-33.3" font-family="Helvetica,sans-Serif" font-size="14.00">Evento de Datos</text>
+</g>
+<!-- R -->
+<g id="node2" class="node">
+<title>R</title>
+<polygon fill="#f9f9f9" stroke="black" points="341,-55 192,-55 192,-19 341,-19 341,-55"/>
+<text text-anchor="middle" x="266.5" y="-33.3" font-family="Helvetica,sans-Serif" font-size="14.00">Responsible (Ejecuta)</text>
+</g>
+<!-- E&#45;&gt;R -->
+<g id="edge1" class="edge">
+<title>E&#45;&gt;R</title>
+<path fill="none" stroke="black" d="M116.25,-37C136.54,-37 159.8,-37 181.83,-37"/>
+<polygon fill="black" stroke="black" points="181.85,-40.5 191.85,-37 181.85,-33.5 181.85,-40.5"/>
+<text text-anchor="middle" x="154" y="-40.8" font-family="Times,serif" font-size="14.00">Acción</text>
+</g>
+<!-- A -->
+<g id="node3" class="node">
+<title>A</title>
+<polygon fill="#f9f9f9" stroke="black" points="584,-90 429,-90 429,-54 584,-54 584,-90"/>
+<text text-anchor="middle" x="506.5" y="-68.3" font-family="Helvetica,sans-Serif" font-size="14.00">Accountable (Aprueba)</text>
+</g>
+<!-- R&#45;&gt;A -->
+<g id="edge2" class="edge">
+<title>R&#45;&gt;A</title>
+<path fill="none" stroke="black" d="M341.17,-47.83C365.76,-51.45 393.38,-55.51 418.86,-59.26"/>
+<polygon fill="black" stroke="black" points="418.48,-62.74 428.88,-60.73 419.5,-55.81 418.48,-62.74"/>
+<text text-anchor="middle" x="385" y="-61.8" font-family="Times,serif" font-size="14.00">Reporte</text>
+</g>
+<!-- C -->
+<g id="node4" class="node">
+<title>C</title>
+<polygon fill="#f9f9f9" stroke="black" points="575,-36 438,-36 438,0 575,0 575,-36"/>
+<text text-anchor="middle" x="506.5" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">Consulted (Opinión)</text>
+</g>
+<!-- R&#45;&gt;C -->
+<g id="edge3" class="edge">
+<title>R&#45;&gt;C</title>
+<path fill="none" stroke="black" d="M341.38,-28.62C347.34,-28.04 353.27,-27.49 359,-27 381.35,-25.09 405.65,-23.43 427.91,-22.08"/>
+<polygon fill="black" stroke="black" points="428.21,-25.57 437.99,-21.48 427.8,-18.58 428.21,-25.57"/>
+<text text-anchor="middle" x="385" y="-30.8" font-family="Times,serif" font-size="14.00">Feedback</text>
+</g>
+<!-- I -->
+<g id="node5" class="node">
+<title>I</title>
+<polygon fill="#f9f9f9" stroke="black" points="797,-90 654,-90 654,-54 797,-54 797,-90"/>
+<text text-anchor="middle" x="725.5" y="-68.3" font-family="Helvetica,sans-Serif" font-size="14.00">Informed (Notificado)</text>
+</g>
+<!-- A&#45;&gt;I -->
+<g id="edge4" class="edge">
+<title>A&#45;&gt;I</title>
+<path fill="none" stroke="black" d="M584.01,-72C603.33,-72 624.15,-72 643.68,-72"/>
+<polygon fill="black" stroke="black" points="643.76,-75.5 653.76,-72 643.76,-68.5 643.76,-75.5"/>
+<text text-anchor="middle" x="619" y="-75.8" font-family="Times,serif" font-size="14.00">Status</text>
+</g>
+</g>
+</svg>
+
+            </div>
+            <p style="font-size:0.8em; color:#999; text-align:center; margin-top:-20px; margin-bottom:30px;">
+                <em>Figura: Diagrama generado automáticamente mediante Graphviz</em>
+            </p>
+
+            <h3>Intuición</h3>
+            <div><p>La matriz RACI es como el reglamento de un equipo de relevos. Si dos corredores intentan agarrar el mismo testigo, se caen; si nadie lo agarra, pierden la carrera. En un proyecto de datos, el Plan de Comunicación evita el 'caos por correo electrónico'. Define que el científico de datos no necesita pedir permiso al CEO para probar un algoritmo (él es el Responsable), pero sí debe informar al Director de Seguridad (Consultado) si va a usar datos sensibles. Tener esto por escrito reduce el estrés cognitivo y permite que los ingenieros se concentren en programar en lugar de preguntar '¿a quién le tengo que enviar esto?'.</p></div>
+
+            <h3>Aplicación</h3>
+            <div><p>En la migración de un data warehouse a la nube (ej. Snowflake), la RACI define que el Arquitecto de Cloud es 'R' (quien ejecuta), el Director de TI es 'A' (quien firma el presupuesto y responde por el éxito), el equipo de Legal es 'C' (consultados por cumplimiento de GDPR) y los analistas de marketing son 'I' (informados sobre cuándo estará listo el sistema). Un Plan de Comunicación profesional incluiría una reunión semanal (Sprint Review) y un dashboard de estado en Jira actualizado en tiempo real.</p></div>
+        </article>
+        
+        <article class="subtema">
+            <h2>Métricas de Comunicación y Feedback Loops en Analítica</h2>
+
+            <h3>Historia</h3>
+            <div><p>Tradicionalmente, la comunicación se medía de forma cualitativa (¿está la gente contenta?). Sin embargo, con la llegada de herramientas de colaboración digital como Slack, Teams y Jira, la gestión de proyectos de datos empezó a aplicar 'analítica sobre la propia analítica'. La evolución hacia los 'Feedback Loops' o bucles de retroalimentación proviene de la ingeniería de sistemas y el pensamiento Lean. En la última década, las empresas líderes han pasado de informes de estado estáticos a sistemas de monitoreo de la comunicación que miden la velocidad de respuesta, el engagement con los dashboards y la claridad de los requisitos técnicos, transformando la comunicación en un activo medible.</p></div>
+
+            <h3>Descripción Formal</h3>
+            <div><p>El seguimiento formal se realiza mediante KPIs de comunicación. Un KPI crítico es el 'Lead Time de Decisión' (tiempo entre que se comunica un hallazgo de datos y se toma una decisión). En Excel, se calcula restando marcas de tiempo: <code>=PROMEDIO(Columna_Decision - Columna_Hallazgo)</code>. </p>
+<p>Algoritmo de Optimización de Comunicación:
+1. Recolectar datos de interacción (vistas de informes, comentarios en código).
+2. Calcular 'Engagement Score': <code>E = (Vistas * 0.4) + (Interacciones * 0.6)</code>. 
+3. IF E &lt; Umbral THEN Disparar 'Plan de Contingencia de Comunicación' (ej. reunión presencial).
+Este análisis permite identificar si un stakeholder clave está desconectado del proyecto. Se utilizan técnicas de Análisis de Redes Sociales (SNA) para ver cómo fluye la información entre los nodos (personas) del equipo de datos, detectando cuellos de botella donde la información se queda estancada en un solo individuo.</p></div>
+
+            <div class="diagrama-box">
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg style="max-width: 80%; max-height: 350px; height: auto; width: auto;" data-width="367pt" data-height="291pt"
+ viewBox="0.00 0.00 366.89 291.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 287)">
+<title>G</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-287 362.89,-287 362.89,4 -4,4"/>
+<!-- M -->
+<g id="node1" class="node">
+<title>M</title>
+<polygon fill="#f9f9f9" stroke="black" points="299.39,-283 178.39,-283 178.39,-247 299.39,-247 299.39,-283"/>
+<text text-anchor="middle" x="238.89" y="-261.3" font-family="Helvetica,sans-Serif" font-size="14.00">Mensaje Enviado</text>
+</g>
+<!-- R -->
+<g id="node2" class="node">
+<title>R</title>
+<polygon fill="#f9f9f9" stroke="black" points="163.89,-210 41.4,-192 163.89,-174 286.39,-192 163.89,-210"/>
+<text text-anchor="middle" x="163.89" y="-188.3" font-family="Helvetica,sans-Serif" font-size="14.00">¿Recibido y Leído?</text>
+</g>
+<!-- M&#45;&gt;R -->
+<g id="edge1" class="edge">
+<title>M&#45;&gt;R</title>
+<path fill="none" stroke="black" d="M220.74,-246.81C210.69,-237.3 198.09,-225.38 187.31,-215.17"/>
+<polygon fill="black" stroke="black" points="189.51,-212.43 179.85,-208.1 184.7,-217.52 189.51,-212.43"/>
+</g>
+<!-- F -->
+<g id="node3" class="node">
+<title>F</title>
+<polygon fill="#f9f9f9" stroke="black" points="114.89,-123 0.11,-105 114.89,-87 229.68,-105 114.89,-123"/>
+<text text-anchor="middle" x="114.89" y="-101.3" font-family="Helvetica,sans-Serif" font-size="14.00">¿Acción Tomada?</text>
+</g>
+<!-- R&#45;&gt;F -->
+<g id="edge2" class="edge">
+<title>R&#45;&gt;F</title>
+<path fill="none" stroke="black" d="M154.68,-175.01C147.45,-162.47 137.26,-144.79 129,-130.47"/>
+<polygon fill="black" stroke="black" points="131.93,-128.54 123.9,-121.63 125.87,-132.04 131.93,-128.54"/>
+<text text-anchor="middle" x="149.39" y="-144.8" font-family="Times,serif" font-size="14.00">SÍ</text>
+</g>
+<!-- A -->
+<g id="node5" class="node">
+<title>A</title>
+<polygon fill="#f9f9f9" stroke="black" points="348.39,-36 195.39,-36 195.39,0 348.39,0 348.39,-36"/>
+<text text-anchor="middle" x="271.89" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">Ajustar Canal/Mensaje</text>
+</g>
+<!-- R&#45;&gt;A -->
+<g id="edge3" class="edge">
+<title>R&#45;&gt;A</title>
+<path fill="none" stroke="black" d="M184.83,-176.84C201.66,-164.46 224.75,-145.04 238.89,-123 254.11,-99.3 262.78,-68.05 267.38,-46.02"/>
+<polygon fill="black" stroke="black" points="270.85,-46.5 269.32,-36.01 263.98,-45.16 270.85,-46.5"/>
+<text text-anchor="middle" x="266.89" y="-101.3" font-family="Times,serif" font-size="14.00">NO</text>
+</g>
+<!-- K -->
+<g id="node4" class="node">
+<title>K</title>
+<polygon fill="#f9f9f9" stroke="black" points="177.39,-36 42.39,-36 42.39,0 177.39,0 177.39,-36"/>
+<text text-anchor="middle" x="109.89" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">Actualizar KPI Éxito</text>
+</g>
+<!-- F&#45;&gt;K -->
+<g id="edge4" class="edge">
+<title>F&#45;&gt;K</title>
+<path fill="none" stroke="black" d="M113.88,-86.8C113.2,-75.16 112.28,-59.55 111.5,-46.24"/>
+<polygon fill="black" stroke="black" points="114.99,-45.95 110.9,-36.18 108,-46.36 114.99,-45.95"/>
+<text text-anchor="middle" x="119.39" y="-57.8" font-family="Times,serif" font-size="14.00">SÍ</text>
+</g>
+<!-- F&#45;&gt;A -->
+<g id="edge5" class="edge">
+<title>F&#45;&gt;A</title>
+<path fill="none" stroke="black" d="M139.43,-90.72C163.94,-77.45 202.06,-56.81 231.13,-41.07"/>
+<polygon fill="black" stroke="black" points="233.09,-43.99 240.22,-36.15 229.76,-37.83 233.09,-43.99"/>
+<text text-anchor="middle" x="212.89" y="-57.8" font-family="Times,serif" font-size="14.00">NO</text>
+</g>
+<!-- A&#45;&gt;M -->
+<g id="edge6" class="edge">
+<title>A&#45;&gt;M</title>
+<path fill="none" stroke="black" d="M279.53,-36.16C293.69,-70.61 320.36,-150.06 294.89,-210 289.98,-221.56 281.25,-231.84 272.13,-240.25"/>
+<polygon fill="black" stroke="black" points="269.74,-237.69 264.44,-246.87 274.31,-243 269.74,-237.69"/>
+<text text-anchor="middle" x="332.39" y="-144.8" font-family="Times,serif" font-size="14.00">Reintento</text>
+</g>
+</g>
+</svg>
+
+            </div>
+            <p style="font-size:0.8em; color:#999; text-align:center; margin-top:-20px; margin-bottom:30px;">
+                <em>Figura: Diagrama generado automáticamente mediante Graphviz</em>
+            </p>
+
+            <h3>Intuición</h3>
+            <div><p>No sirve de nada tener el algoritmo más preciso del mundo si nadie lee el informe que lo explica. Medir la comunicación es como revisar el panel de control de un coche: no basta con saber que el motor (el código) funciona, hay que saber si tenemos gasolina (feedback del cliente) y si el GPS (la dirección estratégica) está bien configurado. Los Feedback Loops nos permiten corregir el rumbo rápidamente. Si enviamos un reporte diario y nadie lo abre, la métrica nos dice que estamos generando 'basura informativa'. La intuición aquí es: 'Lo que no se mide, no se puede mejorar', y la comunicación no es una excepción.</p></div>
+
+            <h3>Aplicación</h3>
+            <div><p>Un ingeniero jefe en una consultora de datos utiliza dashboards de Jira para medir cuántas veces un requerimiento de datos es 'devuelto' por falta de claridad. Si la métrica 'Re-work por Comunicación' es alta, el ingeniero sabe que el problema no es técnico, sino que la fase de identificación de stakeholders o el Plan de Comunicación fallaron. Otro caso es el uso de encuestas NPS (Net Promoter Score) internas después de entregar un producto de datos para medir la satisfacción del stakeholder y ajustar el canal de comunicación en el siguiente sprint.</p></div>
+        </article>
+        </body></html>

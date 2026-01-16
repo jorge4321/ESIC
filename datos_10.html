@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>10 - Definición del Alcance - La Estructura de Desglose del Trabajo (EDT/WBS) y su Diccionario.</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #f4f4f9; color: #333; margin: 0; padding: 20px; line-height: 1.6; position: relative; }
+        header { background: #2c3e50; color: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; text-align:center; }
+        h1 { margin: 0; font-size: 1.5rem; }
+
+        /* Estilo del botón Atrás */
+        .btn-atras {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #7f8c8d;
+            color: white;
+            padding: 8px 15px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            transition: background 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+        .btn-atras:hover { background: #95a5a6; }
+
+        .subtema {
+            background: white;
+            padding: 40px;
+            margin-bottom: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        h2 { color: #2980b9; border-bottom: 2px solid #eee; padding-bottom: 10px; margin-top: 0; }
+        h3 { color: #7f8c8d; font-size: 0.9em; text-transform: uppercase; margin-top: 30px; letter-spacing: 1px; border-left: 3px solid #d4af37; padding-left: 10px; }
+
+        .diagrama-box {
+            text-align: center;
+            margin: 30px 0;
+            padding: 20px;
+            background: #fafafa;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 150px;
+        }
+
+        p { margin-bottom: 1rem; }
+        strong { color: #2c3e50; font-weight: 600; }
+        code { background: #f0f0f0; padding: 2px 5px; border-radius: 3px; font-family: monospace; color: #c0392b; }
+        ul { padding-left: 20px; }
+        li { margin-bottom: 0.5rem; }
+    </style>
+</head>
+<body>
+    <button onclick="window.history.back()" class="btn-atras">Atrás</button>
+    <header><h1>10 - Definición del Alcance - La Estructura de Desglose del Trabajo (EDT/WBS) y su Diccionario.</h1></header>
+    <main>
+
+        <article class="subtema">
+            <h2>Jerarquía y Descomposición: La Regla del 100% en Proyectos de Datos</h2>
+
+            <h3>Historia</h3>
+            <div><p>La Estructura de Desglose del Trabajo (EDT) tiene sus raíces en el Departamento de Defensa de los Estados Unidos y la NASA en la década de 1950, específicamente durante el desarrollo del misil Polaris y el sistema PERT. Originalmente concebida para la ingeniería de hardware masiva, su evolución hacia el sector del software y la analítica de datos ocurrió con la explosión del Big Data a principios de los 2000. En este contexto, la necesidad de estructurar proyectos de datos complejos (como la migración de un Data Warehouse) obligó a los ingenieros a adoptar un enfoque jerárquico para evitar que el alcance se desbordara. Hoy en día, la EDT es la base sobre la cual se asientan marcos como el PMBOK y metodologías híbridas que combinan la rigidez del alcance con la agilidad de la ejecución, permitiendo que un científico de datos visualice la totalidad del proyecto antes de escribir la primera línea de código ETL.</p></div>
+
+            <h3>Descripción Formal</h3>
+            <div><p>La EDT es una descomposición jerárquica, orientada al producto entregable, del trabajo que será ejecutado por el equipo del proyecto. En la ingeniería de datos, esto implica desglosar el 'Producto Final' (ej: Dashboard de Ventas en Tiempo Real) en componentes manejables. La regla fundamental es la 'Regla del 100%': la suma del trabajo de los niveles inferiores debe ser igual al 100% del trabajo representado por el nivel superior. Desde una perspectiva algorítmica, la EDT puede verse como un Árbol General (N-ary Tree) donde cada nodo representa un entregable. </p>
+<p>Lógica de Algoritmo para Validación de Alcance:
+IF Sum(Subtasks_Resources) != Parent_Task_Resources THEN RAISE Error('Desbalance de Alcance')</p>
+<p>En Excel, para gestionar la jerarquía y el código de cuenta (WBS Code), se utilizan fórmulas lógicas de texto. Supongamos que la columna A tiene el nivel (1, 1.1, 1.1.1). Para identificar automáticamente el nivel de profundidad, usamos:
+=LARGO(A2)-LARGO(SUSTITUIR(A2,".",""))+1</p>
+<p>Si queremos buscar la descripción técnica de un paquete de trabajo específico usando el código de la EDT, el estándar moderno de Excel es BUSCARX:
+=BUSCARX("1.2.3", Rango_Codigos, Rango_Descripciones, "No encontrado", 0, 1)
+Esta función garantiza integridad referencial en el plan de datos.</p></div>
+
+            <div class="diagrama-box">
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg style="max-width: 80%; max-height: 350px; height: auto; width: auto;" data-width="904pt" data-height="277pt"
+ viewBox="0.00 0.00 904.00 277.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 273)">
+<title>G</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-273 900,-273 900,4 -4,4"/>
+<!-- P -->
+<g id="node1" class="node">
+<title>P</title>
+<polygon fill="#d1e7dd" stroke="black" points="782,-269 606,-269 606,-233 782,-233 782,-269"/>
+<text text-anchor="middle" x="694" y="-247.3" font-family="Helvetica,sans-Serif" font-size="14.00">Proyecto: Data Lakehouse</text>
+</g>
+<!-- F1 -->
+<g id="node2" class="node">
+<title>F1</title>
+<polygon fill="#f9f9f9" stroke="black" points="322,-196 196,-196 196,-160 322,-160 322,-196"/>
+<text text-anchor="middle" x="259" y="-174.3" font-family="Helvetica,sans-Serif" font-size="14.00">1.0 Infraestructura</text>
+</g>
+<!-- P&#45;&gt;F1 -->
+<g id="edge1" class="edge">
+<title>P&#45;&gt;F1</title>
+<path fill="none" stroke="black" d="M605.97,-235.63C525.43,-222.49 407.64,-203.26 332.15,-190.94"/>
+<polygon fill="black" stroke="black" points="332.68,-187.48 322.25,-189.32 331.55,-194.39 332.68,-187.48"/>
+</g>
+<!-- F2 -->
+<g id="node3" class="node">
+<title>F2</title>
+<polygon fill="#f9f9f9" stroke="black" points="646,-196 524,-196 524,-160 646,-160 646,-196"/>
+<text text-anchor="middle" x="585" y="-174.3" font-family="Helvetica,sans-Serif" font-size="14.00">2.0 Ingestión ETL</text>
+</g>
+<!-- P&#45;&gt;F2 -->
+<g id="edge2" class="edge">
+<title>P&#45;&gt;F2</title>
+<path fill="none" stroke="black" d="M667.89,-232.99C653.44,-223.58 635.29,-211.76 619.66,-201.57"/>
+<polygon fill="black" stroke="black" points="621.56,-198.64 611.27,-196.11 617.74,-204.5 621.56,-198.64"/>
+</g>
+<!-- F3 -->
+<g id="node4" class="node">
+<title>F3</title>
+<polygon fill="#f9f9f9" stroke="black" points="798,-196 664,-196 664,-160 798,-160 798,-196"/>
+<text text-anchor="middle" x="731" y="-174.3" font-family="Helvetica,sans-Serif" font-size="14.00">3.0 Visualización BI</text>
+</g>
+<!-- P&#45;&gt;F3 -->
+<g id="edge3" class="edge">
+<title>P&#45;&gt;F3</title>
+<path fill="none" stroke="black" d="M702.96,-232.81C707.32,-224.44 712.66,-214.2 717.5,-204.9"/>
+<polygon fill="black" stroke="black" points="720.61,-206.51 722.13,-196.03 714.4,-203.28 720.61,-206.51"/>
+</g>
+<!-- F1_1 -->
+<g id="node5" class="node">
+<title>F1_1</title>
+<polygon fill="#f9f9f9" stroke="black" points="176,-109 0,-109 0,-73 176,-73 176,-109"/>
+<text text-anchor="middle" x="88" y="-87.3" font-family="Helvetica,sans-Serif" font-size="14.00">1.1 Configurar AWS/Azure</text>
+</g>
+<!-- F1&#45;&gt;F1_1 -->
+<g id="edge4" class="edge">
+<title>F1&#45;&gt;F1_1</title>
+<path fill="none" stroke="black" d="M224.4,-159.8C197.54,-146.45 160.14,-127.86 131.3,-113.52"/>
+<polygon fill="black" stroke="black" points="132.77,-110.35 122.26,-109.03 129.66,-116.62 132.77,-110.35"/>
+</g>
+<!-- F1_2 -->
+<g id="node6" class="node">
+<title>F1_2</title>
+<polygon fill="#f9f9f9" stroke="black" points="323.5,-109 194.5,-109 194.5,-73 323.5,-73 323.5,-109"/>
+<text text-anchor="middle" x="259" y="-87.3" font-family="Helvetica,sans-Serif" font-size="14.00">1.2 Seguridad IAM</text>
+</g>
+<!-- F1&#45;&gt;F1_2 -->
+<g id="edge5" class="edge">
+<title>F1&#45;&gt;F1_2</title>
+<path fill="none" stroke="black" d="M259,-159.8C259,-148.16 259,-132.55 259,-119.24"/>
+<polygon fill="black" stroke="black" points="262.5,-119.18 259,-109.18 255.5,-119.18 262.5,-119.18"/>
+</g>
+<!-- F2_1 -->
+<g id="node7" class="node">
+<title>F2_1</title>
+<polygon fill="#f9f9f9" stroke="black" points="500,-109 342,-109 342,-73 500,-73 500,-109"/>
+<text text-anchor="middle" x="421" y="-87.3" font-family="Helvetica,sans-Serif" font-size="14.00">2.1 Conector API REST</text>
+</g>
+<!-- F2&#45;&gt;F2_1 -->
+<g id="edge6" class="edge">
+<title>F2&#45;&gt;F2_1</title>
+<path fill="none" stroke="black" d="M551.81,-159.8C526.16,-146.51 490.5,-128.02 462.89,-113.71"/>
+<polygon fill="black" stroke="black" points="464.35,-110.52 453.86,-109.03 461.13,-116.74 464.35,-110.52"/>
+</g>
+<!-- F2_2 -->
+<g id="node8" class="node">
+<title>F2_2</title>
+<polygon fill="#f9f9f9" stroke="black" points="651.5,-109 518.5,-109 518.5,-73 651.5,-73 651.5,-109"/>
+<text text-anchor="middle" x="585" y="-87.3" font-family="Helvetica,sans-Serif" font-size="14.00">2.2 Limpieza Spark</text>
+</g>
+<!-- F2&#45;&gt;F2_2 -->
+<g id="edge7" class="edge">
+<title>F2&#45;&gt;F2_2</title>
+<path fill="none" stroke="black" d="M585,-159.8C585,-148.16 585,-132.55 585,-119.24"/>
+<polygon fill="black" stroke="black" points="588.5,-119.18 585,-109.18 581.5,-119.18 588.5,-119.18"/>
+</g>
+<!-- D -->
+<g id="node9" class="node">
+<title>D</title>
+<polygon fill="#fff3cd" stroke="black" points="688,-36 516.24,-18 688,0 859.76,-18 688,-36"/>
+<text text-anchor="middle" x="688" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">¿Regla del 100% cumplida?</text>
+</g>
+<!-- F2_2&#45;&gt;D -->
+<g id="edge8" class="edge">
+<title>F2_2&#45;&gt;D</title>
+<path fill="none" stroke="black" d="M609.67,-72.99C624.1,-63.05 642.42,-50.42 657.72,-39.87"/>
+<polygon fill="black" stroke="black" points="660.08,-42.5 666.33,-33.94 656.11,-36.73 660.08,-42.5"/>
+</g>
+<!-- D&#45;&gt;P -->
+<g id="edge9" class="edge">
+<title>D&#45;&gt;P</title>
+<path fill="none" stroke="black" d="M738.83,-30.76C761.66,-38.76 786.64,-51.87 801,-73 822.79,-105.06 805.67,-121.26 807,-160 807.55,-175.99 815.53,-182.47 807,-196 798.12,-210.09 784.43,-220.58 769.62,-228.37"/>
+<polygon fill="black" stroke="black" points="767.76,-225.38 760.28,-232.88 770.8,-231.68 767.76,-225.38"/>
+<text text-anchor="middle" x="852.5" y="-130.8" font-family="Times,serif" font-size="14.00">SÍ (Integración)</text>
+</g>
+<!-- D&#45;&gt;F2 -->
+<g id="edge10" class="edge">
+<title>D&#45;&gt;F2</title>
+<path fill="none" stroke="black" d="M685.47,-36.06C682.05,-55.06 674.61,-86.1 660,-109 649.07,-126.13 632.72,-141.65 618.07,-153.53"/>
+<polygon fill="black" stroke="black" points="615.86,-150.81 610.16,-159.74 620.18,-156.32 615.86,-150.81"/>
+<text text-anchor="middle" x="736.5" y="-87.3" font-family="Times,serif" font-size="14.00">NO (Revisar Alcance)</text>
+</g>
+</g>
+</svg>
+
+            </div>
+            <p style="font-size:0.8em; color:#999; text-align:center; margin-top:-20px; margin-bottom:30px;">
+                <em>Figura: Diagrama generado automáticamente mediante Graphviz</em>
+            </p>
+
+            <h3>Intuición</h3>
+            <div><p>Imagina que tienes que construir una biblioteca gigante con millones de libros. Si intentas colocar todos los libros a la vez, el caos será total. La EDT es el plano arquitectónico que te dice: primero construye los cimientos (Ingestión), luego las estanterías (Almacenamiento), luego el catálogo (Metadatos) y finalmente coloca los libros (Visualización). La intuición detrás de la EDT es que el cerebro humano y los equipos de analítica no pueden gestionar la complejidad infinita de un tirón; necesitan 'paquetes de trabajo' que tengan un principio y un fin claro. Es el arte de comerse un elefante (o un dataset de Petabytes) bocado a bocado, asegurándote de que no te olvides de ninguna pieza por el camino. Si algo no está en la EDT, simplemente no existe para el proyecto de datos.</p></div>
+
+            <h3>Aplicación</h3>
+            <div><p>Un Ingeniero de Datos utiliza la EDT para estructurar la creación de un 'Data Lakehouse' corporativo. En el Nivel 1 está el proyecto completo. En el Nivel 2, se dividen las fases: 2.1 Configuración de Infraestructura Cloud, 2.2 Pipeline de Ingestión, 2.3 Capa de Transformación (Bronze/Silver/Gold) y 2.4 Gobierno de Datos. El ingeniero asigna estimaciones de tiempo y recursos a cada paquete de trabajo del Nivel 3 (ej: 2.2.1 Configuración de conectores API). Esto permite que el gestor de proyectos monitoree el progreso real versus el planificado, detectando cuellos de botella en la fase de limpieza de datos antes de que afecten a la capa de visualización final.</p></div>
+        </article>
+        
+        <article class="subtema">
+            <h2>El Diccionario de la EDT: Metadatos del Plan de Proyecto</h2>
+
+            <h3>Historia</h3>
+            <div><p>Históricamente, los planes de proyecto sufrían de ambigüedad léxica. Lo que un analista entendía por 'Limpieza de Datos', un arquitecto lo entendía como 'Validación de Esquema'. Con el auge de la gestión de calidad total (TQM) y posteriormente ISO 9001, se hizo evidente que un diagrama jerárquico no era suficiente. Así nació el Diccionario de la EDT. En el ámbito de la ciencia de datos, este documento evolucionó para incluir no solo descripciones de tareas, sino también definiciones de 'Done' (Hecho), criterios de aceptación técnica y especificaciones de calidad de datos (como el umbral de valores nulos permitidos), convirtiéndose en un puente vital entre los requisitos de negocio y la implementación técnica.</p></div>
+
+            <h3>Descripción Formal</h3>
+            <div><p>El Diccionario de la EDT es el documento que proporciona información detallada sobre los entregables, actividades y programación de cada componente de la EDT. Es, en esencia, la 'instancia' de los metadatos de la tarea. Técnicamente, debe contener: ID del código de cuenta, descripción del trabajo, responsables (matriz RACI), hitos y criterios de aceptación.</p>
+<p>En un entorno de ingeniería, la lógica de validación de un diccionario puede expresarse como un objeto JSON o una entrada de base de datos:</p>
+<p>TASK_INFO = {
+  'ID': '2.2.1',
+  'Description': 'ETL Spark Job',
+  'Validation_Logic': lambda x: x.is_not_null().count(),
+  'Threshold': 0.95
+}</p>
+<p>Para automatizar la extracción de información del diccionario en Excel, supongamos que el diccionario está en una hoja llamada 'Diccionario'. Para traer la descripción técnica basándonos en una celda de búsqueda (B2), usamos:
+=SI.ERROR(BUSCARV(B2, Diccionario!A:E, 2, FALSO), "Código no definido en diccionario")</p>
+<p>Adicionalmente, para verificar si una descripción en el diccionario es lo suficientemente detallada (ej: más de 50 caracteres), usamos la lógica:
+=SI(LARGO(C2)&lt;50, "Requiere más detalle", "Descripción OK")</p></div>
+
+            <div class="diagrama-box">
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg style="max-width: 80%; max-height: 350px; height: auto; width: auto;" data-width="886pt" data-height="206pt"
+ viewBox="0.00 0.00 886.02 206.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 202)">
+<title>G</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-202 882.02,-202 882.02,4 -4,4"/>
+<!-- ID -->
+<g id="node1" class="node">
+<title>ID</title>
+<polygon fill="#f9f9f9" stroke="black" points="135.5,-198 19.5,-198 19.5,-162 135.5,-162 135.5,-198"/>
+<text text-anchor="middle" x="77.5" y="-176.3" font-family="Helvetica,sans-Serif" font-size="14.00">Código EDT (ID)</text>
+</g>
+<!-- DICT -->
+<g id="node5" class="node">
+<title>DICT</title>
+<polygon fill="#e2e3e5" stroke="black" points="331,-117 192,-117 192,-81 331,-81 331,-117"/>
+<text text-anchor="middle" x="261.5" y="-95.3" font-family="Helvetica,sans-Serif" font-size="14.00">DICCIONARIO EDT</text>
+</g>
+<!-- ID&#45;&gt;DICT -->
+<g id="edge1" class="edge">
+<title>ID&#45;&gt;DICT</title>
+<path fill="none" stroke="black" d="M132.76,-161.86C140.29,-159.05 147.88,-156.06 155,-153 176.44,-143.78 199.6,-132.13 218.74,-122.01"/>
+<polygon fill="black" stroke="black" points="220.61,-124.98 227.78,-117.18 217.31,-118.8 220.61,-124.98"/>
+</g>
+<!-- DESC -->
+<g id="node2" class="node">
+<title>DESC</title>
+<polygon fill="#f9f9f9" stroke="black" points="146.5,-144 8.5,-144 8.5,-108 146.5,-108 146.5,-144"/>
+<text text-anchor="middle" x="77.5" y="-122.3" font-family="Helvetica,sans-Serif" font-size="14.00">Descripción Técnica</text>
+</g>
+<!-- DESC&#45;&gt;DICT -->
+<g id="edge2" class="edge">
+<title>DESC&#45;&gt;DICT</title>
+<path fill="none" stroke="black" d="M146.53,-115.91C158.01,-114.2 170.01,-112.42 181.73,-110.68"/>
+<polygon fill="black" stroke="black" points="182.57,-114.1 191.95,-109.17 181.54,-107.18 182.57,-114.1"/>
+</g>
+<!-- CRIT -->
+<g id="node3" class="node">
+<title>CRIT</title>
+<polygon fill="#f9f9f9" stroke="black" points="155,-90 0,-90 0,-54 155,-54 155,-90"/>
+<text text-anchor="middle" x="77.5" y="-68.3" font-family="Helvetica,sans-Serif" font-size="14.00">Criterios de Aceptación</text>
+</g>
+<!-- CRIT&#45;&gt;DICT -->
+<g id="edge3" class="edge">
+<title>CRIT&#45;&gt;DICT</title>
+<path fill="none" stroke="black" d="M155.16,-83.37C163.98,-84.68 172.99,-86.02 181.84,-87.33"/>
+<polygon fill="black" stroke="black" points="181.34,-90.79 191.74,-88.8 182.36,-83.87 181.34,-90.79"/>
+</g>
+<!-- RESP -->
+<g id="node4" class="node">
+<title>RESP</title>
+<polygon fill="#f9f9f9" stroke="black" points="147.5,-36 7.5,-36 7.5,0 147.5,0 147.5,-36"/>
+<text text-anchor="middle" x="77.5" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">Responsable (RACI)</text>
+</g>
+<!-- RESP&#45;&gt;DICT -->
+<g id="edge4" class="edge">
+<title>RESP&#45;&gt;DICT</title>
+<path fill="none" stroke="black" d="M132.76,-36.14C140.29,-38.95 147.88,-41.94 155,-45 176.44,-54.22 199.6,-65.87 218.74,-75.99"/>
+<polygon fill="black" stroke="black" points="217.31,-79.2 227.78,-80.82 220.61,-73.02 217.31,-79.2"/>
+</g>
+<!-- CHECK -->
+<g id="node6" class="node">
+<title>CHECK</title>
+<polygon fill="#fff3cd" stroke="black" points="555.51,-117 367.99,-99 555.51,-81 743.02,-99 555.51,-117"/>
+<text text-anchor="middle" x="555.51" y="-95.3" font-family="Helvetica,sans-Serif" font-size="14.00">¿Cumple Definición de Hecho?</text>
+</g>
+<!-- DICT&#45;&gt;CHECK -->
+<g id="edge5" class="edge">
+<title>DICT&#45;&gt;CHECK</title>
+<path fill="none" stroke="black" d="M331.33,-99C339.75,-99 348.65,-99 357.86,-99"/>
+<polygon fill="black" stroke="black" points="357.96,-102.5 367.96,-99 357.96,-95.5 357.96,-102.5"/>
+</g>
+<!-- DONE -->
+<g id="node7" class="node">
+<title>DONE</title>
+<polygon fill="#f9f9f9" stroke="black" points="866.52,-144 810.52,-144 810.52,-108 866.52,-108 866.52,-144"/>
+<text text-anchor="middle" x="838.52" y="-122.3" font-family="Helvetica,sans-Serif" font-size="14.00">DONE</text>
+</g>
+<!-- CHECK&#45;&gt;DONE -->
+<g id="edge6" class="edge">
+<title>CHECK&#45;&gt;DONE</title>
+<path fill="none" stroke="black" d="M650.08,-107.99C701.45,-112.93 762.28,-118.77 800.39,-122.43"/>
+<polygon fill="black" stroke="black" points="800.22,-125.93 810.51,-123.41 800.89,-118.96 800.22,-125.93"/>
+<text text-anchor="middle" x="771.02" y="-123.8" font-family="Times,serif" font-size="14.00">SÍ</text>
+</g>
+<!-- REWORK -->
+<g id="node8" class="node">
+<title>REWORK</title>
+<polygon fill="#f9f9f9" stroke="black" points="878.02,-90 799.02,-90 799.02,-54 878.02,-54 878.02,-90"/>
+<text text-anchor="middle" x="838.52" y="-68.3" font-family="Helvetica,sans-Serif" font-size="14.00">REWORK</text>
+</g>
+<!-- CHECK&#45;&gt;REWORK -->
+<g id="edge7" class="edge">
+<title>CHECK&#45;&gt;REWORK</title>
+<path fill="none" stroke="black" d="M650.08,-90.01C696.34,-85.56 750.27,-80.38 788.38,-76.72"/>
+<polygon fill="black" stroke="black" points="789.07,-80.17 798.69,-75.73 788.4,-73.2 789.07,-80.17"/>
+<text text-anchor="middle" x="771.02" y="-82.8" font-family="Times,serif" font-size="14.00">NO</text>
+</g>
+</g>
+</svg>
+
+            </div>
+            <p style="font-size:0.8em; color:#999; text-align:center; margin-top:-20px; margin-bottom:30px;">
+                <em>Figura: Diagrama generado automáticamente mediante Graphviz</em>
+            </p>
+
+            <h3>Intuición</h3>
+            <div><p>Si la EDT es el índice de un libro, el Diccionario de la EDT es el contenido de los capítulos. Sin el diccionario, el equipo está trabajando a ciegas. Un desarrollador podría ver la tarea 'Integrar API' en la EDT y pensar que solo es hacer un 'fetch', mientras que el diccionario especifica que debe incluir manejo de errores, reintentos (retry logic) y almacenamiento en caché. El diccionario elimina la subjetividad y asegura que cuando alguien dice 'he terminado', lo dice bajo los mismos criterios de calidad que el resto de la organización.</p></div>
+
+            <h3>Aplicación</h3>
+            <div><p>En el desarrollo de un modelo de Credit Scoring, el Diccionario de la EDT especifica que el paquete de trabajo '3.2 Entrenamiento de Modelo' debe utilizar el algoritmo XGBoost, con una validación cruzada de 5 pliegues (k-fold) y un AUC mínimo de 0.85. Sin esta especificación en el diccionario, el ingeniero podría entregar un modelo de Regresión Logística simple que no cumple con las expectativas de precisión del negocio, resultando en un retrabajo costoso.</p></div>
+        </article>
+        
+        <article class="subtema">
+            <h2>Control de Alcance y Línea Base: Evitando el Scope Creep en Analítica</h2>
+
+            <h3>Historia</h3>
+            <div><p>El 'Scope Creep' o corrupción del alcance es el enemigo número uno de los proyectos de datos. Históricamente, los proyectos de software fallaban en un 70% debido a cambios no controlados. Con la formalización de la EDT como 'Línea Base del Alcance' (Scope Baseline), las organizaciones aprendieron a poner barreras. En la era actual de analítica ágil, la historia ha cambiado de documentos estáticos a herramientas dinámicas como Jira o Azure DevOps, donde la EDT se mapea a Epics y User Stories. La capacidad de comparar lo que se planeó originalmente en la EDT versus lo que se está construyendo realmente es lo que separa a los proyectos exitosos de los fracasos presupuestarios.</p></div>
+
+            <h3>Descripción Formal</h3>
+            <div><p>La Línea Base del Alcance es la versión aprobada del enunciado del alcance, la EDT y su diccionario. Solo puede cambiarse mediante procedimientos formales de control de cambios. En términos de control de proyectos, utilizamos el Análisis de Valor Ganado (EVM) para monitorear desviaciones.</p>
+<p>Lógica Algorítmica de Variación de Alcance (Scope Variance):
+SV = Earned_Value (EV) - Planned_Value (PV)
+IF SV &lt; 0 THEN Status = 'Retraso/Ampliación de Alcance no autorizada'</p>
+<p>En Excel, para calcular el porcentaje de completitud de un nivel superior de la EDT basado en sus hijos, usamos una fórmula matricial o SUMAR.SI:
+=SUMAR.SI(Rango_Padres, "1.1", Rango_Progreso_Hijos) / CONTAR.SI(Rango_Padres, "1.1")</p>
+<p>Para detectar si se han añadido tareas fuera de la línea base (Scope Creep) comparando una lista actual vs una original:
+=SI(ESERROR(COINCIDIR(Tarea_Actual, Lista_Original_EDT, 0)), "FUERA DE ALCANCE", "EN ALCANCE")
+Esta lógica permite al consultor de datos identificar inmediatamente el 'trabajo extra' que no ha sido presupuestado.</p></div>
+
+            <div class="diagrama-box">
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg style="max-width: 80%; max-height: 350px; height: auto; width: auto;" data-width="532pt" data-height="364pt"
+ viewBox="0.00 0.00 531.50 364.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 360)">
+<title>G</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-360 527.5,-360 527.5,4 -4,4"/>
+<!-- REQ -->
+<g id="node1" class="node">
+<title>REQ</title>
+<polygon fill="#f9f9f9" stroke="black" points="180,-356 0,-356 0,-320 180,-320 180,-356"/>
+<text text-anchor="middle" x="90" y="-334.3" font-family="Helvetica,sans-Serif" font-size="14.00">Nueva Solicitud de Cambio</text>
+</g>
+<!-- COMP -->
+<g id="node3" class="node">
+<title>COMP</title>
+<polygon fill="#fff3cd" stroke="black" points="188,-283 9.87,-265 188,-247 366.13,-265 188,-283"/>
+<text text-anchor="middle" x="188" y="-261.3" font-family="Helvetica,sans-Serif" font-size="14.00">¿Está en el Alcance Original?</text>
+</g>
+<!-- REQ&#45;&gt;COMP -->
+<g id="edge1" class="edge">
+<title>REQ&#45;&gt;COMP</title>
+<path fill="none" stroke="black" d="M113.72,-319.81C127.36,-309.93 144.6,-297.45 159.03,-286.99"/>
+<polygon fill="black" stroke="black" points="161.11,-289.8 167.16,-281.1 157.01,-284.13 161.11,-289.8"/>
+</g>
+<!-- BASE -->
+<g id="node2" class="node">
+<title>BASE</title>
+<polygon fill="#f9f9f9" stroke="black" points="374,-356 198,-356 198,-320 374,-320 374,-356"/>
+<text text-anchor="middle" x="286" y="-334.3" font-family="Helvetica,sans-Serif" font-size="14.00">Línea Base EDT (Original)</text>
+</g>
+<!-- BASE&#45;&gt;COMP -->
+<g id="edge2" class="edge">
+<title>BASE&#45;&gt;COMP</title>
+<path fill="none" stroke="black" d="M262.28,-319.81C248.64,-309.93 231.4,-297.45 216.97,-286.99"/>
+<polygon fill="black" stroke="black" points="218.99,-284.13 208.84,-281.1 214.89,-289.8 218.99,-284.13"/>
+</g>
+<!-- EXEC -->
+<g id="node4" class="node">
+<title>EXEC</title>
+<polygon fill="#d1e7dd" stroke="black" points="236,-36 132,-36 132,0 236,0 236,-36"/>
+<text text-anchor="middle" x="184" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">Ejecutar Tarea</text>
+</g>
+<!-- COMP&#45;&gt;EXEC -->
+<g id="edge3" class="edge">
+<title>COMP&#45;&gt;EXEC</title>
+<path fill="none" stroke="black" d="M187.72,-246.77C187.03,-204.86 185.28,-97.31 184.45,-46.44"/>
+<polygon fill="black" stroke="black" points="187.94,-46.15 184.28,-36.21 180.94,-46.26 187.94,-46.15"/>
+<text text-anchor="middle" x="192.5" y="-130.8" font-family="Times,serif" font-size="14.00">SÍ</text>
+</g>
+<!-- CC -->
+<g id="node5" class="node">
+<title>CC</title>
+<polygon fill="#f9f9f9" stroke="black" points="523.5,-196 200.5,-196 200.5,-160 523.5,-160 523.5,-196"/>
+<text text-anchor="middle" x="362" y="-174.3" font-family="Helvetica,sans-Serif" font-size="14.00">Proceso de Control de Cambios (Change Request)</text>
+</g>
+<!-- COMP&#45;&gt;CC -->
+<g id="edge4" class="edge">
+<title>COMP&#45;&gt;CC</title>
+<path fill="none" stroke="black" d="M217.12,-249.77C244.68,-236.31 286.43,-215.92 318.04,-200.48"/>
+<polygon fill="black" stroke="black" points="319.63,-203.59 327.08,-196.06 316.56,-197.3 319.63,-203.59"/>
+<text text-anchor="middle" x="295" y="-217.8" font-family="Times,serif" font-size="14.00">NO</text>
+</g>
+<!-- UPDATE -->
+<g id="node6" class="node">
+<title>UPDATE</title>
+<polygon fill="#f9f9f9" stroke="black" points="422,-109 234,-109 234,-73 422,-73 422,-109"/>
+<text text-anchor="middle" x="328" y="-87.3" font-family="Helvetica,sans-Serif" font-size="14.00">Actualizar EDT y Diccionario</text>
+</g>
+<!-- CC&#45;&gt;UPDATE -->
+<g id="edge5" class="edge">
+<title>CC&#45;&gt;UPDATE</title>
+<path fill="none" stroke="black" d="M355.12,-159.8C350.42,-148.05 344.1,-132.24 338.74,-118.84"/>
+<polygon fill="black" stroke="black" points="341.83,-117.16 334.87,-109.18 335.33,-119.76 341.83,-117.16"/>
+</g>
+<!-- UPDATE&#45;&gt;EXEC -->
+<g id="edge6" class="edge">
+<title>UPDATE&#45;&gt;EXEC</title>
+<path fill="none" stroke="black" d="M293.51,-72.99C273.79,-63.27 248.87,-50.99 227.79,-40.59"/>
+<polygon fill="black" stroke="black" points="229.23,-37.4 218.71,-36.11 226.13,-43.68 229.23,-37.4"/>
+</g>
+</g>
+</svg>
+
+            </div>
+            <p style="font-size:0.8em; color:#999; text-align:center; margin-top:-20px; margin-bottom:30px;">
+                <em>Figura: Diagrama generado automáticamente mediante Graphviz</em>
+            </p>
+
+            <h3>Intuición</h3>
+            <div><p>Imagina que contratas a alguien para pintar tu casa de blanco (Alcance Original). A mitad de camino, le pides que también pinte el techo de azul y que instale unas luces led. Si no tienes un contrato (EDT) y una descripción de tareas (Diccionario), terminarás pagando mucho más de lo previsto o con un trabajo a medias. En los datos, esto ocurre cuando el cliente pide 'una columna más' en el reporte cada semana. La Línea Base es el 'ancla' que permite decir: 'Esto es lo que acordamos; si quieres más, necesitamos un nuevo proceso de aprobación'.</p></div>
+
+            <h3>Aplicación</h3>
+            <div><p>Un consultor experto utiliza la línea base de la EDT para defender su cronograma ante un Stakeholder que solicita integrar una nueva fuente de datos (ej: Redes Sociales) en un proyecto que ya está en fase de pruebas. El consultor muestra la EDT original, identifica que esa fuente no está en el Diccionario y utiliza el Control de Cambios para ajustar el presupuesto y el tiempo, evitando que el equipo se queme (burnout) por cambios imprevistos.</p></div>
+        </article>
+        </body></html>

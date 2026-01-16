@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>21 - Gestión de Riesgos I - Identificación, Categorización y Análisis Cualitativo.</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #f4f4f9; color: #333; margin: 0; padding: 20px; line-height: 1.6; position: relative; }
+        header { background: #2c3e50; color: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; text-align:center; }
+        h1 { margin: 0; font-size: 1.5rem; }
+
+        /* Estilo del botón Atrás */
+        .btn-atras {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #7f8c8d;
+            color: white;
+            padding: 8px 15px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            transition: background 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+        .btn-atras:hover { background: #95a5a6; }
+
+        .subtema {
+            background: white;
+            padding: 40px;
+            margin-bottom: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        h2 { color: #2980b9; border-bottom: 2px solid #eee; padding-bottom: 10px; margin-top: 0; }
+        h3 { color: #7f8c8d; font-size: 0.9em; text-transform: uppercase; margin-top: 30px; letter-spacing: 1px; border-left: 3px solid #d4af37; padding-left: 10px; }
+
+        .diagrama-box {
+            text-align: center;
+            margin: 30px 0;
+            padding: 20px;
+            background: #fafafa;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 150px;
+        }
+
+        p { margin-bottom: 1rem; }
+        strong { color: #2c3e50; font-weight: 600; }
+        code { background: #f0f0f0; padding: 2px 5px; border-radius: 3px; font-family: monospace; color: #c0392b; }
+        ul { padding-left: 20px; }
+        li { margin-bottom: 0.5rem; }
+    </style>
+</head>
+<body>
+    <button onclick="window.history.back()" class="btn-atras">Atrás</button>
+    <header><h1>21 - Gestión de Riesgos I - Identificación, Categorización y Análisis Cualitativo.</h1></header>
+    <main>
+
+        <article class="subtema">
+            <h2>Técnicas de Identificación de Riesgos en Proyectos de Datos</h2>
+
+            <h3>Historia</h3>
+            <div><p>La identificación de riesgos ha evolucionado desde métodos puramente intuitivos en la ingeniería civil de principios del siglo XX hasta marcos estructurados impulsados por la computación en los años 70 y 80. Inicialmente, el riesgo se veía como una fatalidad estadística. Con el auge de los proyectos de software y Big Data, la identificación se transformó en un proceso proactivo. En la década de 1990, el Project Management Institute (PMI) formalizó técnicas como el análisis DAFO (SWOT) y el método Delphi para capturar la incertidumbre. En el contexto de datos, la evolución pasó de identificar riesgos físicos (fallos de servidor) a riesgos lógicos y éticos, como el sesgo algorítmico o la degradación del modelo (model drift). Hoy, la identificación no es un evento único, sino un ciclo continuo apoyado por auditorías de datos y sistemas de observabilidad que detectan anomalías antes de que se conviertan en incidentes críticos para el negocio.</p></div>
+
+            <h3>Descripción Formal</h3>
+            <div><p>La identificación consiste en determinar qué riesgos pueden afectar el proyecto y documentar sus características. En proyectos de datos, esto implica revisar la arquitectura, la calidad de las fuentes y el cumplimiento legal. Técnicamente, se utilizan Registros de Riesgos donde cada entrada tiene un ID único. En Excel, una herramienta común para el seguimiento es el uso de validación de datos y funciones lógicas para alertar sobre nuevos riesgos. Ejemplo de sintaxis: <code>=SI(CONTAR.SI(Rango_Riesgos; "Sesgo_Algoritmo")&gt;0; "Revisar Ética"; "Pendiente")</code>. Desde la perspectiva algorítmica, la identificación puede automatizarse mediante 'Anomaly Detection' utilizando Isolation Forests o K-Means para identificar puntos de datos que se desvían de la norma, sugiriendo un riesgo de integridad. El proceso lógico sigue una estructura de escaneo: 1. Definir el alcance (Scope), 2. Ejecutar técnicas de recolección (Brainstorming, Entrevistas), 3. Clasificar en el Registro de Riesgos. Un algoritmo de pseudocódigo básico para la detección de riesgos de calidad de datos sería: <code>IF data_source.null_percentage &gt; threshold THEN CREATE_RISK_LOG('High Nullity', data_source.name)</code>. La clave es la exhaustividad sin caer en la parálisis por análisis, asegurando que cada riesgo identificado sea accionable.</p></div>
+
+            <div class="diagrama-box">
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg style="max-width: 80%; max-height: 350px; height: auto; width: auto;" data-width="366pt" data-height="437pt"
+ viewBox="0.00 0.00 365.79 437.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 433)">
+<title>G</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-433 361.79,-433 361.79,4 -4,4"/>
+<!-- start -->
+<g id="node1" class="node">
+<title>start</title>
+<ellipse fill="#e1f5fe" stroke="black" cx="190.5" cy="-411" rx="133.78" ry="18"/>
+<text text-anchor="middle" x="190.5" y="-407.3" font-family="Helvetica,sans-Serif" font-size="14.00">Inicio: Identificación de Riesgos</text>
+</g>
+<!-- reunion -->
+<g id="node2" class="node">
+<title>reunion</title>
+<polygon fill="#f9f9f9" stroke="black" points="297.5,-356 83.5,-356 83.5,-320 297.5,-320 297.5,-356"/>
+<text text-anchor="middle" x="190.5" y="-334.3" font-family="Helvetica,sans-Serif" font-size="14.00">Sesión de Brainstorming / Delphi</text>
+</g>
+<!-- start&#45;&gt;reunion -->
+<g id="edge1" class="edge">
+<title>start&#45;&gt;reunion</title>
+<path fill="none" stroke="black" d="M190.5,-392.81C190.5,-384.79 190.5,-375.05 190.5,-366.07"/>
+<polygon fill="black" stroke="black" points="194,-366.03 190.5,-356.03 187,-366.03 194,-366.03"/>
+</g>
+<!-- check -->
+<g id="node3" class="node">
+<title>check</title>
+<polygon fill="#fff9c4" stroke="black" points="190.5,-283 23.43,-265 190.5,-247 357.57,-265 190.5,-283"/>
+<text text-anchor="middle" x="190.5" y="-261.3" font-family="Helvetica,sans-Serif" font-size="14.00">¿Riesgo Nuevo Detectado?</text>
+</g>
+<!-- reunion&#45;&gt;check -->
+<g id="edge2" class="edge">
+<title>reunion&#45;&gt;check</title>
+<path fill="none" stroke="black" d="M190.5,-319.81C190.5,-311.79 190.5,-302.05 190.5,-293.07"/>
+<polygon fill="black" stroke="black" points="194,-293.03 190.5,-283.03 187,-293.03 194,-293.03"/>
+</g>
+<!-- doc -->
+<g id="node4" class="node">
+<title>doc</title>
+<polygon fill="#f9f9f9" stroke="black" points="235,-196 0,-196 0,-160 235,-160 235,-196"/>
+<text text-anchor="middle" x="117.5" y="-174.3" font-family="Helvetica,sans-Serif" font-size="14.00">Documentar en Registro de Riesgos</text>
+</g>
+<!-- check&#45;&gt;doc -->
+<g id="edge3" class="edge">
+<title>check&#45;&gt;doc</title>
+<path fill="none" stroke="black" d="M177.11,-248.41C166.41,-235.95 151.22,-218.26 138.85,-203.86"/>
+<polygon fill="black" stroke="black" points="141.48,-201.55 132.31,-196.25 136.17,-206.11 141.48,-201.55"/>
+<text text-anchor="middle" x="165" y="-217.8" font-family="Times,serif" font-size="14.00">SÍ</text>
+</g>
+<!-- fin -->
+<g id="node6" class="node">
+<title>fin</title>
+<ellipse fill="#e1f5fe" stroke="black" cx="204.5" cy="-18" rx="124.58" ry="18"/>
+<text text-anchor="middle" x="204.5" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">Fin del Ciclo de Identificación</text>
+</g>
+<!-- check&#45;&gt;fin -->
+<g id="edge4" class="edge">
+<title>check&#45;&gt;fin</title>
+<path fill="none" stroke="black" d="M207.51,-248.57C220.16,-235.88 236.4,-216.67 243.5,-196 252.12,-170.92 239.31,-91.54 233.5,-73 230.51,-63.45 225.8,-53.64 221.05,-45.04"/>
+<polygon fill="black" stroke="black" points="223.99,-43.14 215.95,-36.25 217.94,-46.66 223.99,-43.14"/>
+<text text-anchor="middle" x="255.5" y="-130.8" font-family="Times,serif" font-size="14.00">NO</text>
+</g>
+<!-- analisis -->
+<g id="node5" class="node">
+<title>analisis</title>
+<polygon fill="#f9f9f9" stroke="black" points="225,-109 68,-109 68,-73 225,-73 225,-109"/>
+<text text-anchor="middle" x="146.5" y="-87.3" font-family="Helvetica,sans-Serif" font-size="14.00">Pasar a Categorización</text>
+</g>
+<!-- doc&#45;&gt;analisis -->
+<g id="edge5" class="edge">
+<title>doc&#45;&gt;analisis</title>
+<path fill="none" stroke="black" d="M123.37,-159.8C127.38,-148.05 132.77,-132.24 137.34,-118.84"/>
+<polygon fill="black" stroke="black" points="140.72,-119.77 140.64,-109.18 134.1,-117.51 140.72,-119.77"/>
+</g>
+<!-- analisis&#45;&gt;fin -->
+<g id="edge6" class="edge">
+<title>analisis&#45;&gt;fin</title>
+<path fill="none" stroke="black" d="M160.54,-72.81C167.59,-64.18 176.27,-53.56 184.05,-44.03"/>
+<polygon fill="black" stroke="black" points="186.97,-45.99 190.59,-36.03 181.55,-41.56 186.97,-45.99"/>
+</g>
+</g>
+</svg>
+
+            </div>
+            <p style="font-size:0.8em; color:#999; text-align:center; margin-top:-20px; margin-bottom:30px;">
+                <em>Figura: Diagrama generado automáticamente mediante Graphviz</em>
+            </p>
+
+            <h3>Intuición</h3>
+            <div><p>Imagina que estás planeando un viaje largo en coche por un desierto. La identificación de riesgos es sentarse antes de salir y preguntarse: '¿Qué podría salir mal?'. Podrías quedarte sin gasolina, pinchar una rueda o que el GPS pierda la señal. No estás diciendo que va a pasar, sino que reconoces la posibilidad. En el mundo de los datos, es lo mismo. Antes de entrenar un modelo complejo, te detienes a pensar: '¿Y si los datos de entrenamiento están obsoletos?' o '¿Y si la API que nos provee la información deja de funcionar?'. La intuición detrás de esto es la prevención: es mucho más barato y fácil comprar una rueda de repuesto (plan de mitigación) antes de salir de casa que intentar conseguir una en medio del desierto a las tres de la mañana. Identificar riesgos es construir un mapa de los baches que hay en el camino de nuestro proyecto para no caer en ellos por sorpresa.</p></div>
+
+            <h3>Aplicación</h3>
+            <div><p>En el entorno profesional, un ingeniero de datos utiliza la identificación de riesgos al diseñar un Pipeline de ETL. Un caso real sería la migración de un Data Warehouse local a la nube (ej: Snowflake). Los riesgos identificados incluirían la latencia de red, la incompatibilidad de esquemas y el sobrecoste por consultas ineficientes. El ingeniero documenta estos puntos y establece alertas. Otro caso es en el despliegue de modelos de Machine Learning para crédito bancario; aquí, el riesgo identificado es la 'discriminación no intencionada'. El ingeniero aplica tests de paridad estadística en la fase de identificación para detectar si el modelo penaliza a ciertos grupos demográficos. Si el riesgo se identifica a tiempo, se pueden ajustar los pesos del modelo antes de que llegue a producción y cause problemas legales o reputacionales a la entidad financiera.</p></div>
+        </article>
+        
+        <article class="subtema">
+            <h2>Categorización Mediante RBS (Risk Breakdown Structure)</h2>
+
+            <h3>Historia</h3>
+            <div><p>La Estructura de Desglose de Riesgos (RBS) adoptó su forma de la WBS (Work Breakdown Structure) utilizada en la gestión de proyectos de defensa de EE.UU. en los años 60. A medida que los proyectos de TI se volvieron más complejos, se hizo evidente que una lista plana de riesgos era inmanejable. En los años 2000, con la explosión de la analítica de datos, la RBS se adaptó para incluir categorías específicas como 'Gobernanza de Datos', 'Infraestructura Cloud' y 'Privacidad'. La evolución permitió a las organizaciones no solo ver riesgos individuales, sino identificar patrones: si el 80% de los riesgos caen en la categoría 'Calidad de Datos', la gerencia sabe que el problema no es un evento aislado, sino una deficiencia estructural en la captura de información. Esta jerarquización facilitó la asignación de responsables por áreas de especialización técnica.</p></div>
+
+            <h3>Descripción Formal</h3>
+            <div><p>La RBS es una estructura jerárquica de los riesgos potenciales de un proyecto, organizada por categorías. Su objetivo es proporcionar un marco que ayude a asegurar que se consideren todos los aspectos del proyecto. En un entorno de datos, las categorías de nivel superior suelen ser: Técnicos, Externos, Organizacionales y de Gestión de Proyectos. En Excel, la RBS se puede gestionar mediante tablas dinámicas o funciones de búsqueda para agrupar riesgos. Ejemplo de sintaxis: <code>=BUSCARV(Riesgo_ID; Tabla_Maestra_Riesgos; 3; FALSO)</code> para extraer la categoría asociada a un riesgo específico. Algorítmicamente, se puede representar como un árbol donde cada nodo es una categoría y las hojas son los riesgos específicos. Un proceso de categorización automatizado podría usar procesamiento de lenguaje natural (NLP) con un clasificador Naive Bayes para asignar un riesgo redactado en texto a una categoría de la RBS: <code>category = model.predict([risk_description])</code>. Esto permite procesar cientos de entradas de diferentes departamentos de manera consistente, manteniendo la taxonomía corporativa.</p></div>
+
+            <div class="diagrama-box">
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg style="max-width: 80%; max-height: 350px; height: auto; width: auto;" data-width="549pt" data-height="206pt"
+ viewBox="0.00 0.00 549.00 206.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 202)">
+<title>G</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-202 545,-202 545,4 -4,4"/>
+<!-- RBS -->
+<g id="node1" class="node">
+<title>RBS</title>
+<polygon fill="#bbdefb" stroke="black" points="163,-90 0,-90 0,-54 163,-54 163,-90"/>
+<text text-anchor="middle" x="81.5" y="-68.3" font-family="Helvetica,sans-Serif" font-size="14.00">RBS: Proyecto de Datos</text>
+</g>
+<!-- Tecnico -->
+<g id="node2" class="node">
+<title>Tecnico</title>
+<polygon fill="#f9f9f9" stroke="black" points="285.5,-144 221.5,-144 221.5,-108 285.5,-108 285.5,-144"/>
+<text text-anchor="middle" x="253.5" y="-122.3" font-family="Helvetica,sans-Serif" font-size="14.00">Técnico</text>
+</g>
+<!-- RBS&#45;&gt;Tecnico -->
+<g id="edge1" class="edge">
+<title>RBS&#45;&gt;Tecnico</title>
+<path fill="none" stroke="black" d="M139.58,-90.13C163.06,-97.59 189.74,-106.07 211.27,-112.9"/>
+<polygon fill="black" stroke="black" points="210.49,-116.33 221.08,-116.02 212.61,-109.66 210.49,-116.33"/>
+</g>
+<!-- Externo -->
+<g id="node3" class="node">
+<title>Externo</title>
+<polygon fill="#f9f9f9" stroke="black" points="285,-90 222,-90 222,-54 285,-54 285,-90"/>
+<text text-anchor="middle" x="253.5" y="-68.3" font-family="Helvetica,sans-Serif" font-size="14.00">Externo</text>
+</g>
+<!-- RBS&#45;&gt;Externo -->
+<g id="edge2" class="edge">
+<title>RBS&#45;&gt;Externo</title>
+<path fill="none" stroke="black" d="M163.02,-72C179.87,-72 196.96,-72 211.62,-72"/>
+<polygon fill="black" stroke="black" points="211.83,-75.5 221.83,-72 211.83,-68.5 211.83,-75.5"/>
+</g>
+<!-- Org -->
+<g id="node4" class="node">
+<title>Org</title>
+<polygon fill="#f9f9f9" stroke="black" points="307,-36 200,-36 200,0 307,0 307,-36"/>
+<text text-anchor="middle" x="253.5" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">Organizacional</text>
+</g>
+<!-- RBS&#45;&gt;Org -->
+<g id="edge3" class="edge">
+<title>RBS&#45;&gt;Org</title>
+<path fill="none" stroke="black" d="M139.58,-53.87C155.87,-48.69 173.69,-43.03 190.27,-37.77"/>
+<polygon fill="black" stroke="black" points="191.4,-41.08 199.87,-34.72 189.28,-34.41 191.4,-41.08"/>
+</g>
+<!-- T1 -->
+<g id="node5" class="node">
+<title>T1</title>
+<polygon fill="#f9f9f9" stroke="black" points="541,-198 487,-198 487,-162 541,-162 541,-198"/>
+<text text-anchor="middle" x="514" y="-176.3" font-family="Helvetica,sans-Serif" font-size="14.00">T1</text>
+</g>
+<!-- Tecnico&#45;&gt;T1 -->
+<g id="edge4" class="edge">
+<title>Tecnico&#45;&gt;T1</title>
+<path fill="none" stroke="black" d="M285.6,-134.95C297.83,-138.32 312.02,-142.05 325,-145 377.38,-156.91 438.64,-167.75 476.64,-174.11"/>
+<polygon fill="black" stroke="black" points="476.27,-177.6 486.71,-175.78 477.42,-170.69 476.27,-177.6"/>
+<text text-anchor="middle" x="397" y="-175.8" font-family="Times,serif" font-size="14.00">Calidad de Datos</text>
+</g>
+<!-- T2 -->
+<g id="node6" class="node">
+<title>T2</title>
+<polygon fill="#f9f9f9" stroke="black" points="541,-144 487,-144 487,-108 541,-108 541,-144"/>
+<text text-anchor="middle" x="514" y="-122.3" font-family="Helvetica,sans-Serif" font-size="14.00">T2</text>
+</g>
+<!-- Tecnico&#45;&gt;T2 -->
+<g id="edge5" class="edge">
+<title>Tecnico&#45;&gt;T2</title>
+<path fill="none" stroke="black" d="M285.68,-126C333.7,-126 425.52,-126 476.54,-126"/>
+<polygon fill="black" stroke="black" points="476.78,-129.5 486.78,-126 476.78,-122.5 476.78,-129.5"/>
+<text text-anchor="middle" x="397" y="-129.8" font-family="Times,serif" font-size="14.00">Seguridad/Cifrado</text>
+</g>
+<!-- E1 -->
+<g id="node7" class="node">
+<title>E1</title>
+<polygon fill="#f9f9f9" stroke="black" points="541,-90 487,-90 487,-54 541,-54 541,-90"/>
+<text text-anchor="middle" x="514" y="-68.3" font-family="Helvetica,sans-Serif" font-size="14.00">E1</text>
+</g>
+<!-- Externo&#45;&gt;E1 -->
+<g id="edge6" class="edge">
+<title>Externo&#45;&gt;E1</title>
+<path fill="none" stroke="black" d="M285.17,-72C332.99,-72 425.14,-72 476.37,-72"/>
+<polygon fill="black" stroke="black" points="476.65,-75.5 486.65,-72 476.65,-68.5 476.65,-75.5"/>
+<text text-anchor="middle" x="397" y="-75.8" font-family="Times,serif" font-size="14.00">Cambios Legales (GDPR)</text>
+</g>
+<!-- O1 -->
+<g id="node8" class="node">
+<title>O1</title>
+<polygon fill="#f9f9f9" stroke="black" points="541,-36 487,-36 487,0 541,0 541,-36"/>
+<text text-anchor="middle" x="514" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">O1</text>
+</g>
+<!-- Org&#45;&gt;O1 -->
+<g id="edge7" class="edge">
+<title>Org&#45;&gt;O1</title>
+<path fill="none" stroke="black" d="M307.12,-18C357.58,-18 432.43,-18 476.61,-18"/>
+<polygon fill="black" stroke="black" points="476.88,-21.5 486.88,-18 476.88,-14.5 476.88,-21.5"/>
+<text text-anchor="middle" x="397" y="-21.8" font-family="Times,serif" font-size="14.00">Falta de Presupuesto</text>
+</g>
+</g>
+</svg>
+
+            </div>
+            <p style="font-size:0.8em; color:#999; text-align:center; margin-top:-20px; margin-bottom:30px;">
+                <em>Figura: Diagrama generado automáticamente mediante Graphviz</em>
+            </p>
+
+            <h3>Intuición</h3>
+            <div><p>Imagina que tienes una habitación llena de herramientas mezcladas en el suelo: martillos, destornilladores, cables, tornillos y botes de pintura. Si necesitas arreglar un enchufe, tardarás mucho tiempo buscando lo necesario. La RBS es como comprar un armario con cajones etiquetados: un cajón para 'Electricidad', otro para 'Carpintería' y otro para 'Pintura'. Al organizar los riesgos por categorías, dejas de ver una 'masa' de problemas y empiezas a ver áreas de preocupación. Si te das cuenta de que el cajón de 'Ciberseguridad' está muy lleno, sabes que necesitas contratar a un experto en esa área. La categorización nos permite aplicar la estrategia de 'divide y vencerás'. Nos ayuda a entender el origen del peligro y a quién debemos pedir ayuda para resolverlo, evitando que riesgos similares sean tratados de forma aislada y redundante.</p></div>
+
+            <h3>Aplicación</h3>
+            <div><p>En el desarrollo de un Data Lake empresarial, la RBS se utiliza para segmentar riesgos de cumplimiento (GDPR), riesgos de infraestructura (AWS/Azure downtime) y riesgos de arquitectura (esquema rígido). Por ejemplo, un Ingeniero Jefe de Datos utilizará la RBS para presentar un informe mensual al CDO (Chief Data Officer). Si la RBS muestra una alta densidad de riesgos en 'Fuentes de Datos de Terceros', el equipo decidirá diversificar los proveedores de datos. Otro ejemplo es en proyectos de Inteligencia Artificial Generativa, donde se crea una categoría específica de 'Riesgos Éticos y Alucinaciones' dentro de la RBS para monitorizar específicamente la veracidad de las respuestas del modelo, separándola de los riesgos técnicos de latencia de la API.</p></div>
+        </article>
+        
+        <article class="subtema">
+            <h2>Análisis Cualitativo y Matriz de Probabilidad e Impacto</h2>
+
+            <h3>Historia</h3>
+            <div><p>El análisis cualitativo tiene sus raíces en la psicología de la decisión y la economía conductual. Históricamente, se reconoció que no siempre se dispone de datos numéricos precisos (frecuencia exacta y coste en euros) para realizar un análisis cuantitativo. Por ello, se desarrollaron escalas ordinales (Bajo, Medio, Alto). En la década de 1970, las matrices de calor (Heatmaps) se estandarizaron en sectores de alto riesgo como el aeroespacial y el nuclear. Con la llegada de la agilidad en el desarrollo de software, el análisis cualitativo se volvió esencial para la priorización rápida en Sprints. En el ámbito de la ciencia de datos, este análisis permite evaluar riesgos subjetivos como la 'aceptación del usuario' o la 'complejidad de interpretación del modelo', que son difíciles de medir monetariamente pero críticos para el éxito del proyecto.</p></div>
+
+            <h3>Descripción Formal</h3>
+            <div><p>El análisis cualitativo evalúa la prioridad de los riesgos identificados usando su probabilidad de ocurrencia y su impacto en los objetivos del proyecto. La herramienta fundamental es la Matriz de Probabilidad e Impacto (PxI). El puntaje de riesgo se define como: <code>Score = Probabilidad * Impacto</code>. En Excel, esto se implementa mediante formatos condicionales para crear un mapa de calor. Ejemplo de sintaxis: <code>=SI(B2*C2 &gt;= 15; "ALTO"; SI(B2*C2 &gt;= 8; "MEDIO"; "BAJO"))</code> donde B2 es Probabilidad (1-5) y C2 es Impacto (1-5). Lógicamente, este proceso filtra el ruido; permite al Project Manager enfocarse en el 'Top 10' de riesgos. Un algoritmo de ordenación (como QuickSort) se aplica luego a la lista de riesgos basándose en el Score descendente. En proyectos de analítica, el impacto suele medirse en dimensiones como: Integridad del Dato, Disponibilidad y Confidencialidad (Tríada CIA). Un riesgo con probabilidad 0.2 e impacto 0.9 (score 0.18) puede ser más urgente que uno con probabilidad 0.8 e impacto 0.1 (score 0.08).</p></div>
+
+            <div class="diagrama-box">
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg style="max-width: 80%; max-height: 350px; height: auto; width: auto;" data-width="531pt" data-height="350pt"
+ viewBox="0.00 0.00 530.50 350.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 346)">
+<title>G</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-346 526.5,-346 526.5,4 -4,4"/>
+<!-- eval -->
+<g id="node1" class="node">
+<title>eval</title>
+<polygon fill="#f9f9f9" stroke="black" points="358.5,-342 200.5,-342 200.5,-306 358.5,-306 358.5,-342"/>
+<text text-anchor="middle" x="279.5" y="-320.3" font-family="Helvetica,sans-Serif" font-size="14.00">Evaluar P (1&#45;5) e I (1&#45;5)</text>
+</g>
+<!-- calc -->
+<g id="node2" class="node">
+<title>calc</title>
+<polygon fill="#f9f9f9" stroke="black" points="352.5,-269 206.5,-269 206.5,-233 352.5,-233 352.5,-269"/>
+<text text-anchor="middle" x="279.5" y="-247.3" font-family="Helvetica,sans-Serif" font-size="14.00">Calcular Score = P * I</text>
+</g>
+<!-- eval&#45;&gt;calc -->
+<g id="edge1" class="edge">
+<title>eval&#45;&gt;calc</title>
+<path fill="none" stroke="black" d="M279.5,-305.81C279.5,-297.79 279.5,-288.05 279.5,-279.07"/>
+<polygon fill="black" stroke="black" points="283,-279.03 279.5,-269.03 276,-279.03 283,-279.03"/>
+</g>
+<!-- decision -->
+<g id="node3" class="node">
+<title>decision</title>
+<polygon fill="#fff9c4" stroke="black" points="279.5,-196 123.49,-178 279.5,-160 435.51,-178 279.5,-196"/>
+<text text-anchor="middle" x="279.5" y="-174.3" font-family="Helvetica,sans-Serif" font-size="14.00">¿Score &gt; Umbral Crítico?</text>
+</g>
+<!-- calc&#45;&gt;decision -->
+<g id="edge2" class="edge">
+<title>calc&#45;&gt;decision</title>
+<path fill="none" stroke="black" d="M279.5,-232.81C279.5,-224.79 279.5,-215.05 279.5,-206.07"/>
+<polygon fill="black" stroke="black" points="283,-206.03 279.5,-196.03 276,-206.03 283,-206.03"/>
+</g>
+<!-- prioridad_alta -->
+<g id="node4" class="node">
+<title>prioridad_alta</title>
+<polygon fill="#ffcdd2" stroke="black" points="291,-109 0,-109 0,-73 291,-73 291,-109"/>
+<text text-anchor="middle" x="145.5" y="-87.3" font-family="Helvetica,sans-Serif" font-size="14.00">Prioridad ALTA: Plan de Respuesta Inmediato</text>
+</g>
+<!-- decision&#45;&gt;prioridad_alta -->
+<g id="edge3" class="edge">
+<title>decision&#45;&gt;prioridad_alta</title>
+<path fill="none" stroke="black" d="M256.77,-162.58C236.02,-149.42 205.02,-129.75 181.01,-114.52"/>
+<polygon fill="black" stroke="black" points="182.83,-111.53 172.51,-109.13 179.08,-117.44 182.83,-111.53"/>
+<text text-anchor="middle" x="228" y="-130.8" font-family="Times,serif" font-size="14.00">SÍ</text>
+</g>
+<!-- prioridad_baja -->
+<g id="node5" class="node">
+<title>prioridad_baja</title>
+<polygon fill="#c8e6c9" stroke="black" points="522.5,-109 308.5,-109 308.5,-73 522.5,-73 522.5,-109"/>
+<text text-anchor="middle" x="415.5" y="-87.3" font-family="Helvetica,sans-Serif" font-size="14.00">Prioridad BAJA: Solo Monitorizar</text>
+</g>
+<!-- decision&#45;&gt;prioridad_baja -->
+<g id="edge4" class="edge">
+<title>decision&#45;&gt;prioridad_baja</title>
+<path fill="none" stroke="black" d="M302.57,-162.58C323.63,-149.42 355.09,-129.75 379.46,-114.52"/>
+<polygon fill="black" stroke="black" points="381.47,-117.4 388.09,-109.13 377.76,-111.46 381.47,-117.4"/>
+<text text-anchor="middle" x="365.5" y="-130.8" font-family="Times,serif" font-size="14.00">NO</text>
+</g>
+<!-- actualizar -->
+<g id="node6" class="node">
+<title>actualizar</title>
+<polygon fill="#f9f9f9" stroke="black" points="380,-36 179,-36 179,0 380,0 380,-36"/>
+<text text-anchor="middle" x="279.5" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">Actualizar Registro de Riesgos</text>
+</g>
+<!-- prioridad_alta&#45;&gt;actualizar -->
+<g id="edge5" class="edge">
+<title>prioridad_alta&#45;&gt;actualizar</title>
+<path fill="none" stroke="black" d="M177.6,-72.99C195.78,-63.36 218.72,-51.21 238.22,-40.87"/>
+<polygon fill="black" stroke="black" points="240,-43.89 247.2,-36.11 236.73,-37.7 240,-43.89"/>
+</g>
+<!-- prioridad_baja&#45;&gt;actualizar -->
+<g id="edge6" class="edge">
+<title>prioridad_baja&#45;&gt;actualizar</title>
+<path fill="none" stroke="black" d="M382.92,-72.99C364.47,-63.36 341.19,-51.21 321.39,-40.87"/>
+<polygon fill="black" stroke="black" points="322.77,-37.64 312.28,-36.11 319.53,-43.84 322.77,-37.64"/>
+</g>
+</g>
+</svg>
+
+            </div>
+            <p style="font-size:0.8em; color:#999; text-align:center; margin-top:-20px; margin-bottom:30px;">
+                <em>Figura: Diagrama generado automáticamente mediante Graphviz</em>
+            </p>
+
+            <h3>Intuición</h3>
+            <div><p>Piensa en las alarmas de tu teléfono móvil. Tienes una alarma para ir al trabajo (muy importante, impacto alto), una para beber agua (importancia media) y una notificación de una oferta de pizza (importancia baja). El análisis cualitativo es el proceso mental que haces para decidir a cuál le vas a hacer caso si todas suenan a la vez. No necesitas un cálculo matemático complejo para saber que si no vas al trabajo te despiden, pero si no compras la pizza, simplemente cenas otra cosa. En un proyecto de datos, usamos esta matriz para separar los 'incendios' de las 'molestias'. Nos ayuda a no gastar todo el presupuesto y energía intentando evitar cosas que son muy improbables o que, si pasaran, no dañarían realmente el resultado final de nuestra analítica.</p></div>
+
+            <h3>Aplicación</h3>
+            <div><p>Un consultor de datos aplica el análisis cualitativo al inicio de un proyecto de Business Intelligence para una cadena de retail. Identifica un riesgo: 'El servidor de origen de datos cae durante el cierre mensual'. Evalúa: Probabilidad = 2 (Baja, ocurre rara vez) e Impacto = 5 (Crítico, se detiene el reporte financiero). Score = 10. Otro riesgo: 'El color de los gráficos no gusta al cliente'. Probabilidad = 4 (Alta) e Impacto = 1 (Muy bajo). Score = 4. Gracias a la matriz, el consultor decide invertir en un servidor de respaldo (mitigación para el riesgo 1) en lugar de pasar horas debatiendo la paleta de colores. En la práctica, esto se visualiza en un Dashboard de Riesgos donde los puntos en la zona roja de la matriz requieren un plan de respuesta inmediato y un dueño asignado (Risk Owner).</p></div>
+        </article>
+        </body></html>

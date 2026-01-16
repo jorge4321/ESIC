@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>11 - Planificación del Tiempo I - Definición, Secuencia de Actividades y Dependencias.</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #f4f4f9; color: #333; margin: 0; padding: 20px; line-height: 1.6; position: relative; }
+        header { background: #2c3e50; color: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; text-align:center; }
+        h1 { margin: 0; font-size: 1.5rem; }
+
+        /* Estilo del botón Atrás */
+        .btn-atras {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #7f8c8d;
+            color: white;
+            padding: 8px 15px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            transition: background 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+        .btn-atras:hover { background: #95a5a6; }
+
+        .subtema {
+            background: white;
+            padding: 40px;
+            margin-bottom: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        h2 { color: #2980b9; border-bottom: 2px solid #eee; padding-bottom: 10px; margin-top: 0; }
+        h3 { color: #7f8c8d; font-size: 0.9em; text-transform: uppercase; margin-top: 30px; letter-spacing: 1px; border-left: 3px solid #d4af37; padding-left: 10px; }
+
+        .diagrama-box {
+            text-align: center;
+            margin: 30px 0;
+            padding: 20px;
+            background: #fafafa;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 150px;
+        }
+
+        p { margin-bottom: 1rem; }
+        strong { color: #2c3e50; font-weight: 600; }
+        code { background: #f0f0f0; padding: 2px 5px; border-radius: 3px; font-family: monospace; color: #c0392b; }
+        ul { padding-left: 20px; }
+        li { margin-bottom: 0.5rem; }
+    </style>
+</head>
+<body>
+    <button onclick="window.history.back()" class="btn-atras">Atrás</button>
+    <header><h1>11 - Planificación del Tiempo I - Definición, Secuencia de Actividades y Dependencias.</h1></header>
+    <main>
+
+        <article class="subtema">
+            <h2>Definición de Actividades y Desglose de Trabajo (WBS/EDT)</h2>
+
+            <h3>Historia</h3>
+            <div><p>La gestión sistemática de proyectos comenzó a formalizarse a principios del siglo XX con Henry Gantt, pero fue durante el Proyecto Manhattan y el desarrollo del misil Polaris en los años 50 cuando surgió la necesidad de descomponer tareas complejas en unidades manejables. Originalmente, esta descomposición era puramente física o mecánica. Con la llegada de la era de la información en los años 90, la Estructura de Desglose de Trabajo (EDT o WBS) evolucionó para incluir componentes de software y flujos de datos. En el contexto de la analítica moderna, la definición de actividades ha pasado de ser una lista estática a un inventario dinámico de procesos ETL, modelado y validación, integrándose con metodologías ágiles donde el 'Backlog' actúa como una evolución contemporánea de la EDT tradicional, permitiendo una trazabilidad granular en entornos de Big Data.</p></div>
+
+            <h3>Descripción Formal</h3>
+            <div><p>La definición de actividades implica identificar y documentar las acciones específicas que deben realizarse para generar los entregables del proyecto. Técnicamente, esto se logra mediante la descomposición de los paquetes de trabajo de la EDT. En Excel, la gestión de niveles jerárquicos suele automatizarse mediante fórmulas de texto y lógica. Por ejemplo, para identificar el nivel de una tarea basada en su código WBS (ej: 1.1.2), se utiliza: <code>=LARGO(A2)-LARGO(SUSTITUIR(A2,".",""))+1</code>. El algoritmo de descomposición sigue una lógica recursiva: 1. Identificar el entregable final. 2. Dividir en componentes de nivel inferior. 3. Determinar si el componente es estimable en tiempo y costo (Paquete de Trabajo). 4. Si no lo es, repetir el paso 2. En términos de datos, una actividad debe definirse con atributos claros: ID_Actividad, Descripción, Predecesoras, Recursos y Duración Estimada. Para validar la integridad del árbol de tareas en una base de datos, se aplican algoritmos de búsqueda en profundidad (DFS) para asegurar que no existan nodos huérfanos y que la suma de esfuerzos de los hijos sea igual al total del padre mediante la fórmula: <code>Total_Padre = SUM(Esfuerzo_Hijos)</code>. Esta estructura jerárquica es fundamental para la posterior asignación de dependencias y el cálculo de la ruta crítica.</p></div>
+
+            <div class="diagrama-box">
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg style="max-width: 80%; max-height: 350px; height: auto; width: auto;" data-width="530pt" data-height="350pt"
+ viewBox="0.00 0.00 529.50 350.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 346)">
+<title>G</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-346 525.5,-346 525.5,4 -4,4"/>
+<!-- Proyecto Analítica -->
+<g id="node1" class="node">
+<title>Proyecto Analítica</title>
+<polygon fill="#f9f9f9" stroke="black" points="317.5,-342 192.5,-342 192.5,-306 317.5,-306 317.5,-342"/>
+<text text-anchor="middle" x="255" y="-320.3" font-family="Helvetica,sans-Serif" font-size="14.00">Proyecto Analítica</text>
+</g>
+<!-- Fase 1: Ingestión -->
+<g id="node2" class="node">
+<title>Fase 1: Ingestión</title>
+<polygon fill="#f9f9f9" stroke="black" points="242,-269 122,-269 122,-233 242,-233 242,-269"/>
+<text text-anchor="middle" x="182" y="-247.3" font-family="Helvetica,sans-Serif" font-size="14.00">Fase 1: Ingestión</text>
+</g>
+<!-- Proyecto Analítica&#45;&gt;Fase 1: Ingestión -->
+<g id="edge1" class="edge">
+<title>Proyecto Analítica&#45;&gt;Fase 1: Ingestión</title>
+<path fill="none" stroke="black" d="M237.33,-305.81C228.18,-296.92 216.86,-285.91 206.85,-276.17"/>
+<polygon fill="black" stroke="black" points="209.12,-273.49 199.51,-269.03 204.24,-278.51 209.12,-273.49"/>
+</g>
+<!-- Fase 2: Modelado -->
+<g id="node3" class="node">
+<title>Fase 2: Modelado</title>
+<polygon fill="#f9f9f9" stroke="black" points="391.5,-269 266.5,-269 266.5,-233 391.5,-233 391.5,-269"/>
+<text text-anchor="middle" x="329" y="-247.3" font-family="Helvetica,sans-Serif" font-size="14.00">Fase 2: Modelado</text>
+</g>
+<!-- Proyecto Analítica&#45;&gt;Fase 2: Modelado -->
+<g id="edge2" class="edge">
+<title>Proyecto Analítica&#45;&gt;Fase 2: Modelado</title>
+<path fill="none" stroke="black" d="M272.91,-305.81C282.18,-296.92 293.66,-285.91 303.81,-276.17"/>
+<polygon fill="black" stroke="black" points="306.46,-278.48 311.25,-269.03 301.61,-273.43 306.46,-278.48"/>
+</g>
+<!-- Configurar API -->
+<g id="node4" class="node">
+<title>Configurar API</title>
+<polygon fill="#f9f9f9" stroke="black" points="104,-196 0,-196 0,-160 104,-160 104,-196"/>
+<text text-anchor="middle" x="52" y="-174.3" font-family="Helvetica,sans-Serif" font-size="14.00">Configurar API</text>
+</g>
+<!-- Fase 1: Ingestión&#45;&gt;Configurar API -->
+<g id="edge3" class="edge">
+<title>Fase 1: Ingestión&#45;&gt;Configurar API</title>
+<path fill="none" stroke="black" d="M150.86,-232.99C133.3,-223.4 111.17,-211.32 92.3,-201.01"/>
+<polygon fill="black" stroke="black" points="93.79,-197.84 83.33,-196.11 90.43,-203.98 93.79,-197.84"/>
+</g>
+<!-- Validar Esquema -->
+<g id="node5" class="node">
+<title>Validar Esquema</title>
+<polygon fill="#f9f9f9" stroke="black" points="241.5,-196 122.5,-196 122.5,-160 241.5,-160 241.5,-196"/>
+<text text-anchor="middle" x="182" y="-174.3" font-family="Helvetica,sans-Serif" font-size="14.00">Validar Esquema</text>
+</g>
+<!-- Fase 1: Ingestión&#45;&gt;Validar Esquema -->
+<g id="edge4" class="edge">
+<title>Fase 1: Ingestión&#45;&gt;Validar Esquema</title>
+<path fill="none" stroke="black" d="M182,-232.81C182,-224.79 182,-215.05 182,-206.07"/>
+<polygon fill="black" stroke="black" points="185.5,-206.03 182,-196.03 178.5,-206.03 185.5,-206.03"/>
+</g>
+<!-- Feature Engineering -->
+<g id="node6" class="node">
+<title>Feature Engineering</title>
+<polygon fill="#f9f9f9" stroke="black" points="398.5,-196 259.5,-196 259.5,-160 398.5,-160 398.5,-196"/>
+<text text-anchor="middle" x="329" y="-174.3" font-family="Helvetica,sans-Serif" font-size="14.00">Feature Engineering</text>
+</g>
+<!-- Fase 2: Modelado&#45;&gt;Feature Engineering -->
+<g id="edge5" class="edge">
+<title>Fase 2: Modelado&#45;&gt;Feature Engineering</title>
+<path fill="none" stroke="black" d="M329,-232.81C329,-224.79 329,-215.05 329,-206.07"/>
+<polygon fill="black" stroke="black" points="332.5,-206.03 329,-196.03 325.5,-206.03 332.5,-206.03"/>
+</g>
+<!-- Entrenamiento -->
+<g id="node7" class="node">
+<title>Entrenamiento</title>
+<polygon fill="#f9f9f9" stroke="black" points="521.5,-196 416.5,-196 416.5,-160 521.5,-160 521.5,-196"/>
+<text text-anchor="middle" x="469" y="-174.3" font-family="Helvetica,sans-Serif" font-size="14.00">Entrenamiento</text>
+</g>
+<!-- Fase 2: Modelado&#45;&gt;Entrenamiento -->
+<g id="edge6" class="edge">
+<title>Fase 2: Modelado&#45;&gt;Entrenamiento</title>
+<path fill="none" stroke="black" d="M362.53,-232.99C381.61,-223.32 405.71,-211.1 426.15,-200.73"/>
+<polygon fill="black" stroke="black" points="427.92,-203.76 435.25,-196.11 424.75,-197.52 427.92,-203.76"/>
+</g>
+<!-- is_ready -->
+<g id="node8" class="node">
+<title>is_ready</title>
+<polygon fill="#f9f9f9" stroke="black" points="182,-123 75.26,-105 182,-87 288.74,-105 182,-123"/>
+<text text-anchor="middle" x="182" y="-101.3" font-family="Helvetica,sans-Serif" font-size="14.00">¿Nivel Paquete?</text>
+</g>
+<!-- Validar Esquema&#45;&gt;is_ready -->
+<g id="edge7" class="edge">
+<title>Validar Esquema&#45;&gt;is_ready</title>
+<path fill="none" stroke="black" d="M182,-159.81C182,-151.79 182,-142.05 182,-133.07"/>
+<polygon fill="black" stroke="black" points="185.5,-133.03 182,-123.03 178.5,-133.03 185.5,-133.03"/>
+</g>
+<!-- Asignar Recurso -->
+<g id="node9" class="node">
+<title>Asignar Recurso</title>
+<polygon fill="#f9f9f9" stroke="black" points="169,-36 53,-36 53,0 169,0 169,-36"/>
+<text text-anchor="middle" x="111" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">Asignar Recurso</text>
+</g>
+<!-- is_ready&#45;&gt;Asignar Recurso -->
+<g id="edge8" class="edge">
+<title>is_ready&#45;&gt;Asignar Recurso</title>
+<path fill="none" stroke="black" d="M169.31,-88.8C158.87,-76.31 143.88,-58.37 131.71,-43.8"/>
+<polygon fill="black" stroke="black" points="134.39,-41.54 125.29,-36.11 129.02,-46.03 134.39,-41.54"/>
+<text text-anchor="middle" x="157.5" y="-57.8" font-family="Times,serif" font-size="14.00">SÍ</text>
+</g>
+<!-- Descomponer Más -->
+<g id="node10" class="node">
+<title>Descomponer Más</title>
+<polygon fill="#f9f9f9" stroke="black" points="318.5,-36 187.5,-36 187.5,0 318.5,0 318.5,-36"/>
+<text text-anchor="middle" x="253" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">Descomponer Más</text>
+</g>
+<!-- is_ready&#45;&gt;Descomponer Más -->
+<g id="edge9" class="edge">
+<title>is_ready&#45;&gt;Descomponer Más</title>
+<path fill="none" stroke="black" d="M194.69,-88.8C205.13,-76.31 220.12,-58.37 232.29,-43.8"/>
+<polygon fill="black" stroke="black" points="234.98,-46.03 238.71,-36.11 229.61,-41.54 234.98,-46.03"/>
+<text text-anchor="middle" x="232" y="-57.8" font-family="Times,serif" font-size="14.00">NO</text>
+</g>
+</g>
+</svg>
+
+            </div>
+            <p style="font-size:0.8em; color:#999; text-align:center; margin-top:-20px; margin-bottom:30px;">
+                <em>Figura: Diagrama generado automáticamente mediante Graphviz</em>
+            </p>
+
+            <h3>Intuición</h3>
+            <div><p>Imagina que quieres construir un rascacielos. No puedes simplemente decir 'construir edificio'. Necesitas dividir el proyecto en cimientos, estructura, electricidad y acabados. A su vez, los cimientos se dividen en excavación, vertido de hormigón, etc. La definición de actividades es el proceso de tomar un objetivo gigante y picarlo en trozos tan pequeños que cualquier miembro del equipo sepa exactamente qué tiene que hacer el lunes a las 9:00 AM. Si un trozo es todavía demasiado grande para saber cuánto tiempo tardarás en terminarlo, es que necesitas picarlo más. En analítica de datos, es la diferencia entre decir 'haz un modelo predictivo' y decir 'limpia los valores nulos de la columna X'. Lo segundo es una actividad clara; lo primero es un deseo.</p></div>
+
+            <h3>Aplicación</h3>
+            <div><p>En el entorno de un Ingeniero de Datos, la definición de actividades es crucial para el despliegue de una infraestructura en la nube. Un caso real sería la migración de un Data Lake a Snowflake. Las actividades se definirían como: A1. Configuración de Roles y Privilegios; A2. Creación de Stages de S3; A3. Definición de Schemas de tablas; A4. Ejecución de scripts de carga COPY INTO. Sin esta definición detallada, el ingeniero no podría estimar el consumo de créditos ni coordinar con el equipo de BI cuándo estarán listos los datos para los dashboards.</p></div>
+        </article>
+        
+        <article class="subtema">
+            <h2>Secuenciación de Actividades y Tipos de Dependencias (PDM)</h2>
+
+            <h3>Historia</h3>
+            <div><p>El Método de Diagramación por Precedencia (PDM) fue popularizado por la industria de la construcción y adoptado por el software de gestión de proyectos en los años 70 y 80. Antes del PDM, se utilizaba el método de 'Flechas' (ADM), que era menos flexible. Con el auge de los sistemas de planificación de recursos empresariales (ERP), la secuenciación de actividades se convirtió en un problema de optimización matemática. En el campo de la ciencia de datos, la secuenciación ha cobrado una nueva dimensión con los grafos acíclicos dirigidos (DAGs) utilizados en herramientas como Apache Airflow, donde el orden de ejecución de las tareas de procesamiento de datos depende estrictamente de la disponibilidad y calidad de los datos generados por la tarea anterior.</p></div>
+
+            <h3>Descripción Formal</h3>
+            <div><p>La secuenciación consiste en identificar y documentar las relaciones lógicas entre las actividades. Existen cuatro tipos de dependencias fundamentales: 1. Final a Inicio (FS): La tarea B no puede empezar hasta que termine A. 2. Inicio a Inicio (SS): B empieza cuando empieza A. 3. Final a Final (FF): B termina cuando termina A. 4. Inicio a Final (SF): B termina cuando empieza A. En Excel, para calcular la fecha de inicio más temprana de una tarea B que depende de A (FS), se usa: <code>=DIA.LAB(Fecha_Fin_A, 1, Festivos)</code>. Algorítmicamente, el PDM se representa como un grafo dirigido $G=(V, E)$ donde $V$ son las actividades y $E$ las dependencias. Para detectar errores de lógica circular (donde A depende de B y B de A), se utilizan algoritmos de ordenamiento topológico. Si el algoritmo encuentra un ciclo, la secuencia es inválida. Además, se aplican adelantos (leads) y retrasos (lags). Un lag de 2 días en una relación FS se expresaría como: <code>Inicio_B = Fin_A + 2</code>. En el procesamiento de datos, esto es equivalente a esperar a que un buffer de memoria se libere antes de iniciar el siguiente hilo de ejecución.</p></div>
+
+            <div class="diagrama-box">
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg style="max-width: 80%; max-height: 350px; height: auto; width: auto;" data-width="898pt" data-height="105pt"
+ viewBox="0.00 0.00 897.76 105.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 101)">
+<title>G</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-101 893.76,-101 893.76,4 -4,4"/>
+<!-- Extracción CRM -->
+<g id="node1" class="node">
+<title>Extracción CRM</title>
+<polygon fill="#f9f9f9" stroke="black" points="115,-77 0,-77 0,-41 115,-41 115,-77"/>
+<text text-anchor="middle" x="57.5" y="-55.3" font-family="Helvetica,sans-Serif" font-size="14.00">Extracción CRM</text>
+</g>
+<!-- Limpieza Datos -->
+<g id="node2" class="node">
+<title>Limpieza Datos</title>
+<polygon fill="#f9f9f9" stroke="black" points="277,-77 167,-77 167,-41 277,-41 277,-77"/>
+<text text-anchor="middle" x="222" y="-55.3" font-family="Helvetica,sans-Serif" font-size="14.00">Limpieza Datos</text>
+</g>
+<!-- Extracción CRM&#45;&gt;Limpieza Datos -->
+<g id="edge1" class="edge">
+<title>Extracción CRM&#45;&gt;Limpieza Datos</title>
+<path fill="none" stroke="black" d="M115.33,-59C128.68,-59 143,-59 156.65,-59"/>
+<polygon fill="black" stroke="black" points="156.93,-62.5 166.93,-59 156.93,-55.5 156.93,-62.5"/>
+<text text-anchor="middle" x="141" y="-62.8" font-family="Times,serif" font-size="14.00">FS</text>
+</g>
+<!-- Análisis Estadístico -->
+<g id="node3" class="node">
+<title>Análisis Estadístico</title>
+<polygon fill="#f9f9f9" stroke="black" points="721.76,-97 588.76,-97 588.76,-61 721.76,-61 721.76,-97"/>
+<text text-anchor="middle" x="655.26" y="-75.3" font-family="Helvetica,sans-Serif" font-size="14.00">Análisis Estadístico</text>
+</g>
+<!-- Limpieza Datos&#45;&gt;Análisis Estadístico -->
+<g id="edge2" class="edge">
+<title>Limpieza Datos&#45;&gt;Análisis Estadístico</title>
+<path fill="none" stroke="black" d="M277.24,-62.93C283.23,-63.31 289.25,-63.68 295,-64 392.73,-69.43 505.51,-73.84 578.24,-76.44"/>
+<polygon fill="black" stroke="black" points="578.56,-79.95 588.68,-76.81 578.81,-72.95 578.56,-79.95"/>
+<text text-anchor="middle" x="423.38" y="-78.8" font-family="Times,serif" font-size="14.00">FS</text>
+</g>
+<!-- decision -->
+<g id="node5" class="node">
+<title>decision</title>
+<polygon fill="#f9f9f9" stroke="black" points="423.38,-50 314.12,-32 423.38,-14 532.64,-32 423.38,-50"/>
+<text text-anchor="middle" x="423.38" y="-28.3" font-family="Helvetica,sans-Serif" font-size="14.00">¿Datos Limpios?</text>
+</g>
+<!-- Limpieza Datos&#45;&gt;decision -->
+<g id="edge4" class="edge">
+<title>Limpieza Datos&#45;&gt;decision</title>
+<path fill="none" stroke="black" d="M277.22,-51.66C300.53,-48.5 328.06,-44.77 352.85,-41.42"/>
+<polygon fill="black" stroke="black" points="353.48,-44.86 362.92,-40.05 352.54,-37.93 353.48,-44.86"/>
+</g>
+<!-- Dashboard Final -->
+<g id="node4" class="node">
+<title>Dashboard Final</title>
+<polygon fill="#f9f9f9" stroke="black" points="889.76,-97 773.76,-97 773.76,-61 889.76,-61 889.76,-97"/>
+<text text-anchor="middle" x="831.76" y="-75.3" font-family="Helvetica,sans-Serif" font-size="14.00">Dashboard Final</text>
+</g>
+<!-- Análisis Estadístico&#45;&gt;Dashboard Final -->
+<g id="edge3" class="edge">
+<title>Análisis Estadístico&#45;&gt;Dashboard Final</title>
+<path fill="none" stroke="black" d="M722.23,-79C735.69,-79 749.87,-79 763.38,-79"/>
+<polygon fill="black" stroke="black" points="763.55,-82.5 773.55,-79 763.55,-75.5 763.55,-82.5"/>
+<text text-anchor="middle" x="747.76" y="-82.8" font-family="Times,serif" font-size="14.00">FF</text>
+</g>
+<!-- decision&#45;&gt;Análisis Estadístico -->
+<g id="edge5" class="edge">
+<title>decision&#45;&gt;Análisis Estadístico</title>
+<path fill="none" stroke="black" d="M481.26,-40.51C508.45,-44.89 541.41,-50.64 570.76,-57 573.41,-57.58 576.11,-58.18 578.83,-58.81"/>
+<polygon fill="black" stroke="black" points="578.22,-62.26 588.75,-61.16 579.83,-55.44 578.22,-62.26"/>
+<text text-anchor="middle" x="560.76" y="-60.8" font-family="Times,serif" font-size="14.00">SÍ</text>
+</g>
+<!-- Re&#45;ejecutar Script -->
+<g id="node6" class="node">
+<title>Re&#45;ejecutar Script</title>
+<polygon fill="#f9f9f9" stroke="black" points="717.76,-36 592.76,-36 592.76,0 717.76,0 717.76,-36"/>
+<text text-anchor="middle" x="655.26" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">Re&#45;ejecutar Script</text>
+</g>
+<!-- decision&#45;&gt;Re&#45;ejecutar Script -->
+<g id="edge6" class="edge">
+<title>decision&#45;&gt;Re&#45;ejecutar Script</title>
+<path fill="none" stroke="black" d="M486.96,-24.4C507.28,-22.25 529.95,-20.17 550.76,-19 561.02,-18.42 571.87,-18.06 582.53,-17.83"/>
+<polygon fill="black" stroke="black" points="582.72,-21.33 592.66,-17.66 582.6,-14.33 582.72,-21.33"/>
+<text text-anchor="middle" x="560.76" y="-22.8" font-family="Times,serif" font-size="14.00">NO</text>
+</g>
+</g>
+</svg>
+
+            </div>
+            <p style="font-size:0.8em; color:#999; text-align:center; margin-top:-20px; margin-bottom:30px;">
+                <em>Figura: Diagrama generado automáticamente mediante Graphviz</em>
+            </p>
+
+            <h3>Intuición</h3>
+            <div><p>La secuenciación es el arte de poner orden al caos. No puedes cocinar una tortilla antes de romper los huevos, ni puedes romper los huevos antes de comprarlos. En un proyecto, algunas tareas son 'esclavas' de otras. Entender estas relaciones evita que el equipo pierda el tiempo esperando o, peor aún, que trabaje en algo que luego tenga que desechar porque la base de datos sobre la que trabajaba no estaba actualizada. Es como una coreografía: si el bailarín A no levanta a la bailarina B en el segundo 10, el resto de la danza falla.</p></div>
+
+            <h3>Aplicación</h3>
+            <div><p>Un analista de negocios que lidera un proyecto de segmentación de clientes debe secuenciar: 1. Extracción de datos de CRM; 2. Limpieza de datos (Dependencia FS de 1); 3. Ejecución de algoritmo K-Means (Dependencia FS de 2). Si el analista intenta ejecutar el K-Means sin haber terminado la limpieza, el modelo fallará por valores nulos. Usar PDM permite visualizar que si la limpieza se retrasa, todo el proyecto de segmentación se desplaza.</p></div>
+        </article>
+        
+        <article class="subtema">
+            <h2>Dependencias Obligatorias, Discrecionales y Restricciones</h2>
+
+            <h3>Historia</h3>
+            <div><p>Históricamente, las restricciones de tiempo se consideraban inamovibles (Hard Constraints). En la gestión de proyectos de ingeniería clásica, si el cemento tardaba 7 días en secar, era una dependencia física obligatoria. Sin embargo, con el desarrollo de la ingeniería de software y la analítica de datos, surgió el concepto de 'Lógica Blanda' o dependencias discrecionales (Soft Logic), donde el orden se decide por 'mejores prácticas' y no por imposibilidad física. En la última década, con el cumplimiento normativo como el GDPR en Europa, han aparecido 'Restricciones Externas' legales que actúan como dependencias obligatorias críticas en los cronogramas de datos, forzando a los proyectos a cumplir fechas fijas independientemente de los recursos disponibles.</p></div>
+
+            <h3>Descripción Formal</h3>
+            <div><p>Las dependencias se clasifican en: 1. Obligatorias (Hard Logic): Inherentes a la naturaleza del trabajo (ej: no puedes analizar datos que no existen). 2. Discrecionales (Soft/Preferred Logic): Basadas en el conocimiento de expertos (ej: preferimos validar los datos antes de cargarlos, aunque técnicamente podríamos cargarlos y validarlos después). 3. Externas: Factores fuera del control del equipo (ej: entrega de un API por un tercero). 4. Internas: Bajo control del equipo. En la lógica de algoritmos de planificación, las restricciones de fecha (Must Start On, Finish No Later Than) se manejan mediante funciones de penalización. En Excel, podemos usar <code>=BUSCARX(ID_Tarea, Rango_Tareas, Rango_Restricciones)</code> para alertar sobre incumplimientos. Si <code>Fecha_Calculada &gt; Fecha_Restriccion</code>, se dispara una bandera de riesgo. El cálculo de la holgura (Slack) se ve afectado por estas restricciones: <code>Holgura = Fecha_Fin_Tardía - Fecha_Fin_Temprana</code>. Una restricción externa rígida puede reducir la holgura de todo el proyecto a cero, convirtiendo todas las tareas previas en parte de la ruta crítica.</p></div>
+
+            <div class="diagrama-box">
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg style="max-width: 80%; max-height: 350px; height: auto; width: auto;" data-width="360pt" data-height="378pt"
+ viewBox="0.00 0.00 359.56 378.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 374)">
+<title>G</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-374 355.56,-374 355.56,4 -4,4"/>
+<!-- Desarrollo Modelo -->
+<g id="node1" class="node">
+<title>Desarrollo Modelo</title>
+<polygon fill="#f9f9f9" stroke="black" points="302,-283 175,-283 175,-247 302,-247 302,-283"/>
+<text text-anchor="middle" x="238.5" y="-261.3" font-family="Helvetica,sans-Serif" font-size="14.00">Desarrollo Modelo</text>
+</g>
+<!-- Pruebas QA -->
+<g id="node2" class="node">
+<title>Pruebas QA</title>
+<polygon fill="#f9f9f9" stroke="black" points="284,-196 193,-196 193,-160 284,-160 284,-196"/>
+<text text-anchor="middle" x="238.5" y="-174.3" font-family="Helvetica,sans-Serif" font-size="14.00">Pruebas QA</text>
+</g>
+<!-- Desarrollo Modelo&#45;&gt;Pruebas QA -->
+<g id="edge1" class="edge">
+<title>Desarrollo Modelo&#45;&gt;Pruebas QA</title>
+<path fill="none" stroke="black" d="M238.5,-246.8C238.5,-235.16 238.5,-219.55 238.5,-206.24"/>
+<polygon fill="black" stroke="black" points="242,-206.18 238.5,-196.18 235,-206.18 242,-206.18"/>
+<text text-anchor="middle" x="273" y="-217.8" font-family="Times,serif" font-size="14.00">Discrecional</text>
+</g>
+<!-- check -->
+<g id="node6" class="node">
+<title>check</title>
+<polygon fill="#f9f9f9" stroke="black" points="238.5,-123 125.39,-105 238.5,-87 351.61,-105 238.5,-123"/>
+<text text-anchor="middle" x="238.5" y="-101.3" font-family="Helvetica,sans-Serif" font-size="14.00">¿Cumple GDPR?</text>
+</g>
+<!-- Pruebas QA&#45;&gt;check -->
+<g id="edge4" class="edge">
+<title>Pruebas QA&#45;&gt;check</title>
+<path fill="none" stroke="black" d="M238.5,-159.81C238.5,-151.79 238.5,-142.05 238.5,-133.07"/>
+<polygon fill="black" stroke="black" points="242,-133.03 238.5,-123.03 235,-133.03 242,-133.03"/>
+</g>
+<!-- Ingesta Datos -->
+<g id="node3" class="node">
+<title>Ingesta Datos</title>
+<polygon fill="#f9f9f9" stroke="black" points="288.5,-370 188.5,-370 188.5,-334 288.5,-334 288.5,-370"/>
+<text text-anchor="middle" x="238.5" y="-348.3" font-family="Helvetica,sans-Serif" font-size="14.00">Ingesta Datos</text>
+</g>
+<!-- Ingesta Datos&#45;&gt;Desarrollo Modelo -->
+<g id="edge2" class="edge">
+<title>Ingesta Datos&#45;&gt;Desarrollo Modelo</title>
+<path fill="none" stroke="black" d="M238.5,-333.8C238.5,-322.16 238.5,-306.55 238.5,-293.24"/>
+<polygon fill="black" stroke="black" points="242,-293.18 238.5,-283.18 235,-293.18 242,-293.18"/>
+<text text-anchor="middle" x="269.5" y="-304.8" font-family="Times,serif" font-size="14.00">Obligatoria</text>
+</g>
+<!-- Auditoría Legal -->
+<g id="node4" class="node">
+<title>Auditoría Legal</title>
+<polygon fill="#f9f9f9" stroke="black" points="107,-123 0,-123 0,-87 107,-87 107,-123"/>
+<text text-anchor="middle" x="53.5" y="-101.3" font-family="Helvetica,sans-Serif" font-size="14.00">Auditoría Legal</text>
+</g>
+<!-- Lanzamiento -->
+<g id="node5" class="node">
+<title>Lanzamiento</title>
+<polygon fill="#f9f9f9" stroke="black" points="134,-36 39,-36 39,0 134,0 134,-36"/>
+<text text-anchor="middle" x="86.5" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">Lanzamiento</text>
+</g>
+<!-- Auditoría Legal&#45;&gt;Lanzamiento -->
+<g id="edge3" class="edge">
+<title>Auditoría Legal&#45;&gt;Lanzamiento</title>
+<path fill="none" stroke="black" d="M55.27,-86.86C56.7,-76.98 59.2,-64.48 63.5,-54 64.77,-50.91 66.33,-47.79 68.02,-44.77"/>
+<polygon fill="black" stroke="black" points="71.12,-46.42 73.4,-36.07 65.17,-42.73 71.12,-46.42"/>
+<text text-anchor="middle" x="117.5" y="-57.8" font-family="Times,serif" font-size="14.00">Restricción Externa</text>
+</g>
+<!-- check&#45;&gt;Lanzamiento -->
+<g id="edge5" class="edge">
+<title>check&#45;&gt;Lanzamiento</title>
+<path fill="none" stroke="black" d="M221.69,-89.58C208.61,-78.84 189.68,-64.31 171.5,-54 162.56,-48.93 152.73,-44.19 143.04,-39.95"/>
+<polygon fill="black" stroke="black" points="144.39,-36.72 133.82,-36.03 141.65,-43.16 144.39,-36.72"/>
+<text text-anchor="middle" x="201" y="-57.8" font-family="Times,serif" font-size="14.00">SÍ</text>
+</g>
+<!-- Corregir Sesgo -->
+<g id="node7" class="node">
+<title>Corregir Sesgo</title>
+<polygon fill="#f9f9f9" stroke="black" points="292,-36 185,-36 185,0 292,0 292,-36"/>
+<text text-anchor="middle" x="238.5" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">Corregir Sesgo</text>
+</g>
+<!-- check&#45;&gt;Corregir Sesgo -->
+<g id="edge6" class="edge">
+<title>check&#45;&gt;Corregir Sesgo</title>
+<path fill="none" stroke="black" d="M238.5,-86.8C238.5,-75.16 238.5,-59.55 238.5,-46.24"/>
+<polygon fill="black" stroke="black" points="242,-46.18 238.5,-36.18 235,-46.18 242,-46.18"/>
+<text text-anchor="middle" x="248.5" y="-57.8" font-family="Times,serif" font-size="14.00">NO</text>
+</g>
+</g>
+</svg>
+
+            </div>
+            <p style="font-size:0.8em; color:#999; text-align:center; margin-top:-20px; margin-bottom:30px;">
+                <em>Figura: Diagrama generado automáticamente mediante Graphviz</em>
+            </p>
+
+            <h3>Intuición</h3>
+            <div><p>Las dependencias obligatorias son las leyes de la física del proyecto: no puedes saltártelas. Las discrecionales son como las 'recetas de la abuela': podrías hacerlo de otra forma, pero la experiencia dice que así sale mejor. Las restricciones son como muros: no importa lo rápido que corras, si el muro dice 'no pasar hasta el viernes', te detienes. En el mundo de los datos, una dependencia obligatoria es tener acceso al servidor; una discrecional es hacer un análisis exploratorio antes del modelo; y una restricción es el día que entra en vigor una nueva ley de privacidad.</p></div>
+
+            <h3>Aplicación</h3>
+            <div><p>Para un ingeniero que diseña un sistema de detección de fraude, una dependencia obligatoria es la ingesta de transacciones en tiempo real. Una dependencia discrecional sería realizar pruebas unitarias antes de la integración (se recomienda, pero técnicamente se puede omitir bajo riesgo). Una restricción externa sería la auditoría anual de cumplimiento bancario, que impone una fecha límite innegociable para que el sistema esté operativo y documentado.</p></div>
+        </article>
+        </body></html>

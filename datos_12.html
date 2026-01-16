@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>12 - Planificación del Tiempo I - Diagramas de Precedencia, Adelantos y Retrasos.</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #f4f4f9; color: #333; margin: 0; padding: 20px; line-height: 1.6; position: relative; }
+        header { background: #2c3e50; color: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; text-align:center; }
+        h1 { margin: 0; font-size: 1.5rem; }
+
+        /* Estilo del botón Atrás */
+        .btn-atras {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #7f8c8d;
+            color: white;
+            padding: 8px 15px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            transition: background 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+        .btn-atras:hover { background: #95a5a6; }
+
+        .subtema {
+            background: white;
+            padding: 40px;
+            margin-bottom: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        h2 { color: #2980b9; border-bottom: 2px solid #eee; padding-bottom: 10px; margin-top: 0; }
+        h3 { color: #7f8c8d; font-size: 0.9em; text-transform: uppercase; margin-top: 30px; letter-spacing: 1px; border-left: 3px solid #d4af37; padding-left: 10px; }
+
+        .diagrama-box {
+            text-align: center;
+            margin: 30px 0;
+            padding: 20px;
+            background: #fafafa;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 150px;
+        }
+
+        p { margin-bottom: 1rem; }
+        strong { color: #2c3e50; font-weight: 600; }
+        code { background: #f0f0f0; padding: 2px 5px; border-radius: 3px; font-family: monospace; color: #c0392b; }
+        ul { padding-left: 20px; }
+        li { margin-bottom: 0.5rem; }
+    </style>
+</head>
+<body>
+    <button onclick="window.history.back()" class="btn-atras">Atrás</button>
+    <header><h1>12 - Planificación del Tiempo I - Diagramas de Precedencia, Adelantos y Retrasos.</h1></header>
+    <main>
+
+        <article class="subtema">
+            <h2>Método de Diagramación por Precedencia (PDM)</h2>
+
+            <h3>Historia</h3>
+            <div><p>El Método de Diagramación por Precedencia (PDM), también conocido como Actividad en el Nodo (AON), surgió a finales de la década de 1950 y principios de los 60 como una evolución necesaria de las técnicas de Redes de Flechas (ADM). Mientras que ADM centraba la atención en los hitos, el PDM, popularizado por John Fondahl en la Universidad de Stanford, permitió una mayor flexibilidad al colocar las tareas dentro de nodos (rectángulos) y conectarlas mediante flechas que representan las dependencias lógicas. Esta evolución fue fundamental para la era de la computación, ya que permitió a los primeros sistemas informáticos de gestión de proyectos modelar procesos complejos sin la necesidad de 'actividades ficticias' (dummies), simplificando drásticamente el mantenimiento de cronogramas en entornos de ingeniería y defensa, donde los datos empezaban a dictar la eficiencia operativa.</p></div>
+
+            <h3>Descripción Formal</h3>
+            <div><p>El PDM define cuatro tipos de relaciones lógicas: Final a Inicio (FS), Final a Final (FF), Inicio a Inicio (SS) e Inicio a Final (SF). En términos algorítmicos, el PDM se resuelve mediante el cálculo de la 'Pasada hacia adelante' (Forward Pass) para determinar las fechas de inicio y fin tempranas, y la 'Pasada hacia atrás' (Backward Pass) para las fechas tardías. </p>
+<p>Lógica de Algoritmo:
+1. Early Finish (EF) = Early Start (ES) + Duración.
+2. Late Start (LS) = Late Finish (LF) - Duración.
+3. Holgura Total = LF - EF.</p>
+<p>En Excel, para calcular la fecha de finalización de una tarea considerando fines de semana y dependencias, se utiliza la función:
+<code>=DIA.LAB.INTL(fecha_inicio; duracion - 1; 1; festivos)</code>.
+Si queremos buscar la fecha de fin de una predecesora para alimentar la fecha de inicio de la siguiente tarea en una tabla de datos, aplicaríamos:
+<code>=BUSCARX(ID_Predecesora; Rango_ID; Rango_Fecha_Fin)</code>. </p>
+<p>Desde el punto de vista de datos, un diagrama PDM se representa técnicamente como un Grafo Acíclico Dirigido (DAG), donde los nodos contienen metadatos de tiempo y las aristas contienen las restricciones de precedencia.</p></div>
+
+            <div class="diagrama-box">
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg style="max-width: 80%; max-height: 350px; height: auto; width: auto;" data-width="639pt" data-height="46pt"
+ viewBox="0.00 0.00 639.00 46.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 42)">
+<title>G</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-42 635,-42 635,4 -4,4"/>
+<!-- A -->
+<g id="node1" class="node">
+<title>A</title>
+<polygon fill="#f9f9f9" stroke="black" points="114,-38 0,-38 0,0 114,0 114,-38"/>
+<text text-anchor="middle" x="57" y="-22.8" font-family="Helvetica,sans-Serif" font-size="14.00">Tarea A: Ingesta</text>
+<text text-anchor="middle" x="57" y="-7.8" font-family="Helvetica,sans-Serif" font-size="14.00">Dur: 5d</text>
+</g>
+<!-- B -->
+<g id="node2" class="node">
+<title>B</title>
+<polygon fill="#f9f9f9" stroke="black" points="291,-38 166,-38 166,0 291,0 291,-38"/>
+<text text-anchor="middle" x="228.5" y="-22.8" font-family="Helvetica,sans-Serif" font-size="14.00">Tarea B: Limpieza</text>
+<text text-anchor="middle" x="228.5" y="-7.8" font-family="Helvetica,sans-Serif" font-size="14.00">Dur: 3d</text>
+</g>
+<!-- A&#45;&gt;B -->
+<g id="edge1" class="edge">
+<title>A&#45;&gt;B</title>
+<path fill="none" stroke="black" d="M114.44,-19C127.56,-19 141.71,-19 155.4,-19"/>
+<polygon fill="black" stroke="black" points="155.77,-22.5 165.77,-19 155.77,-15.5 155.77,-22.5"/>
+<text text-anchor="middle" x="140" y="-22.8" font-family="Times,serif" font-size="14.00">FS</text>
+</g>
+<!-- C -->
+<g id="node3" class="node">
+<title>C</title>
+<polygon fill="#f9f9f9" stroke="black" points="460,-38 343,-38 343,0 460,0 460,-38"/>
+<text text-anchor="middle" x="401.5" y="-22.8" font-family="Helvetica,sans-Serif" font-size="14.00">Tarea C: Análisis</text>
+<text text-anchor="middle" x="401.5" y="-7.8" font-family="Helvetica,sans-Serif" font-size="14.00">Dur: 4d</text>
+</g>
+<!-- B&#45;&gt;C -->
+<g id="edge2" class="edge">
+<title>B&#45;&gt;C</title>
+<path fill="none" stroke="black" d="M291.23,-19C304.65,-19 318.92,-19 332.56,-19"/>
+<polygon fill="black" stroke="black" points="332.85,-22.5 342.85,-19 332.85,-15.5 332.85,-22.5"/>
+<text text-anchor="middle" x="317" y="-22.8" font-family="Times,serif" font-size="14.00">FS</text>
+</g>
+<!-- D -->
+<g id="node4" class="node">
+<title>D</title>
+<polygon fill="#f9f9f9" stroke="black" points="631,-38 512,-38 512,0 631,0 631,-38"/>
+<text text-anchor="middle" x="571.5" y="-22.8" font-family="Helvetica,sans-Serif" font-size="14.00">Tarea D: Reporte</text>
+<text text-anchor="middle" x="571.5" y="-7.8" font-family="Helvetica,sans-Serif" font-size="14.00">Dur: 2d</text>
+</g>
+<!-- C&#45;&gt;D -->
+<g id="edge3" class="edge">
+<title>C&#45;&gt;D</title>
+<path fill="none" stroke="black" d="M460.32,-19C473.55,-19 487.75,-19 501.41,-19"/>
+<polygon fill="black" stroke="black" points="501.72,-22.5 511.72,-19 501.72,-15.5 501.72,-22.5"/>
+<text text-anchor="middle" x="486" y="-22.8" font-family="Times,serif" font-size="14.00">FS</text>
+</g>
+</g>
+</svg>
+
+            </div>
+            <p style="font-size:0.8em; color:#999; text-align:center; margin-top:-20px; margin-bottom:30px;">
+                <em>Figura: Diagrama generado automáticamente mediante Graphviz</em>
+            </p>
+
+            <h3>Intuición</h3>
+            <div><p>Imagina que estás cocinando una cena compleja. No puedes meter el pollo al horno si no lo has sazonado primero (Final a Inicio). Sin embargo, podrías empezar a preparar la ensalada mientras el pollo se hornea (Inicio a Inicio). El PDM es, en esencia, un mapa que te dice exactamente qué debe ocurrir antes de qué para no perder el tiempo. Es como un árbol genealógico de tareas donde los 'padres' deben cumplir ciertas condiciones para que los 'hijos' puedan nacer. Si ignoras estas conexiones, el proyecto se colapsa porque intentas construir el tejado antes que los cimientos. Entender el PDM es entender la ley de causa y efecto aplicada al calendario de un analista de datos.</p></div>
+
+            <h3>Aplicación</h3>
+            <div><p>En el entorno de un Ingeniero de Datos, el PDM se aplica en el diseño de pipelines de ETL (Extract, Transform, Load). Por ejemplo, el nodo de 'Limpieza de Datos' tiene una precedencia de 'Final a Inicio' con respecto a la 'Ingesta de Datos'. No se pueden limpiar datos que aún no existen. Profesionalmente, esto se traduce en el uso de herramientas de orquestación como Apache Airflow, donde cada 'Task' es un nodo en un PDM digital. Un retraso en la validación de esquemas (predecesora) desplaza automáticamente la generación de reportes en Power BI (sucesora), permitiendo al ingeniero predecir cuellos de botella mediante el análisis del Camino Crítico.</p></div>
+        </article>
+        
+        <article class="subtema">
+            <h2>Modelado de Relaciones Lógicas y Dependencias</h2>
+
+            <h3>Historia</h3>
+            <div><p>Históricamente, la planificación se veía como una lista lineal de tareas. Sin embargo, con la llegada de proyectos aeroespaciales y de software masivos en los años 70, los ingenieros se dieron cuenta de que las tareas rara vez son lineales. El concepto de dependencias lógicas evolucionó para reflejar la realidad física y administrativa. El paso de sistemas manuales a sistemas relacionales de bases de datos permitió que las relaciones entre tareas dejaran de ser simples notas en un papel para convertirse en vectores de datos con atributos específicos. Esto permitió que la gestión de proyectos se integrara con la ciencia de datos, permitiendo simulaciones de Monte Carlo para predecir fechas de entrega basadas en la probabilidad de cumplimiento de cada dependencia.</p></div>
+
+            <h3>Descripción Formal</h3>
+            <div><p>Las dependencias se clasifican en Obligatorias (Lógica Dura), Discrecionales (Lógica Blanda), Externas e Internas. En el modelado de datos de proyectos, estas relaciones se gestionan mediante matrices de adyacencia o tablas de relación de muchos a muchos.</p>
+<p>En Excel, para validar si una tarea puede comenzar basándose en múltiples condiciones de precedencia, se usa lógica booleana:
+<code>=SI(Y(Estado_Tarea_A="Completada"; Estado_Tarea_B="Completada"); "Iniciar"; "Esperar")</code>.</p>
+<p>Algoritmicamente, la resolución de dependencias requiere detectar ciclos (Deadlocks). Un algoritmo de Ordenamiento Topológico es esencial aquí para asegurar que no existan referencias circulares (ej. Tarea A depende de B, y B depende de A). En SQL, esto se consultaría mediante CTEs (Common Table Expressions) recursivas para recorrer la jerarquía de la red de actividades y sumar las duraciones acumuladas hasta un nodo específico.</p></div>
+
+            <div class="diagrama-box">
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg style="max-width: 80%; max-height: 350px; height: auto; width: auto;" data-width="396pt" data-height="204pt"
+ viewBox="0.00 0.00 395.80 204.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 200)">
+<title>G</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-200 391.8,-200 391.8,4 -4,4"/>
+<!-- Inicio -->
+<g id="node1" class="node">
+<title>Inicio</title>
+<ellipse fill="#f9f9f9" stroke="black" cx="215" cy="-178" rx="68.49" ry="18"/>
+<text text-anchor="middle" x="215" y="-174.3" font-family="Helvetica,sans-Serif" font-size="14.00">Inicio Proyecto</text>
+</g>
+<!-- Check -->
+<g id="node2" class="node">
+<title>Check</title>
+<polygon fill="#f9f9f9" stroke="black" points="215,-123 42.4,-105 215,-87 387.6,-105 215,-123"/>
+<text text-anchor="middle" x="215" y="-101.3" font-family="Helvetica,sans-Serif" font-size="14.00">¿Predecesoras Finalizadas?</text>
+</g>
+<!-- Inicio&#45;&gt;Check -->
+<g id="edge1" class="edge">
+<title>Inicio&#45;&gt;Check</title>
+<path fill="none" stroke="black" d="M215,-159.81C215,-151.79 215,-142.05 215,-133.07"/>
+<polygon fill="black" stroke="black" points="218.5,-133.03 215,-123.03 211.5,-133.03 218.5,-133.03"/>
+</g>
+<!-- TareaSiguiente -->
+<g id="node3" class="node">
+<title>TareaSiguiente</title>
+<polygon fill="#f9f9f9" stroke="black" points="164,-36 0,-36 0,0 164,0 164,-36"/>
+<text text-anchor="middle" x="82" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">Ejecutar Tarea Siguiente</text>
+</g>
+<!-- Check&#45;&gt;TareaSiguiente -->
+<g id="edge2" class="edge">
+<title>Check&#45;&gt;TareaSiguiente</title>
+<path fill="none" stroke="black" d="M191.83,-89.19C171.38,-76.12 141.23,-56.85 117.69,-41.81"/>
+<polygon fill="black" stroke="black" points="119.34,-38.71 109.02,-36.27 115.57,-44.61 119.34,-38.71"/>
+<text text-anchor="middle" x="163.5" y="-57.8" font-family="Times,serif" font-size="14.00">SÍ</text>
+</g>
+<!-- Espera -->
+<g id="node4" class="node">
+<title>Espera</title>
+<polygon fill="#f9f9f9" stroke="black" points="333.5,-36 182.5,-36 182.5,0 333.5,0 333.5,-36"/>
+<text text-anchor="middle" x="258" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">Mantener en Stand&#45;by</text>
+</g>
+<!-- Check&#45;&gt;Espera -->
+<g id="edge3" class="edge">
+<title>Check&#45;&gt;Espera</title>
+<path fill="none" stroke="black" d="M211.93,-86.98C210.93,-76.91 211.11,-64.17 216,-54 217.85,-50.15 220.35,-46.57 223.21,-43.29"/>
+<polygon fill="black" stroke="black" points="225.75,-45.7 230.41,-36.18 220.83,-40.72 225.75,-45.7"/>
+<text text-anchor="middle" x="226" y="-57.8" font-family="Times,serif" font-size="14.00">NO</text>
+</g>
+<!-- Espera&#45;&gt;Check -->
+<g id="edge4" class="edge">
+<title>Espera&#45;&gt;Check</title>
+<path fill="none" stroke="black" d="M250.99,-36.38C246.91,-46.11 241.49,-58.39 236,-69 234.27,-72.34 232.35,-75.81 230.4,-79.2"/>
+<polygon fill="black" stroke="black" points="227.35,-77.47 225.26,-87.86 233.38,-81.05 227.35,-77.47"/>
+<text text-anchor="middle" x="273" y="-57.8" font-family="Times,serif" font-size="14.00">Re&#45;evaluar</text>
+</g>
+</g>
+</svg>
+
+            </div>
+            <p style="font-size:0.8em; color:#999; text-align:center; margin-top:-20px; margin-bottom:30px;">
+                <em>Figura: Diagrama generado automáticamente mediante Graphviz</em>
+            </p>
+
+            <h3>Intuición</h3>
+            <div><p>Las relaciones lógicas son las 'reglas de tráfico' de un proyecto. No todas las calles son de un solo sentido y no todos los cruces funcionan igual. A veces, dos tareas pueden correr en paralelo (Inicio a Inicio) como dos corredores en pistas diferentes, y otras veces deben terminar al mismo tiempo (Final a Final) como los dos extremos de un puente que se construye desde ambos lados del río. Si no definimos bien estas reglas, el proyecto se detiene por confusión administrativa, no por falta de recursos.</p></div>
+
+            <h3>Aplicación</h3>
+            <div><p>Un consultor de Business Analytics utiliza estas relaciones al desplegar un nuevo modelo de Machine Learning. El 'Entrenamiento del Modelo' (Tarea A) y la 'Preparación del Entorno de Producción' (Tarea B) pueden tener una relación Inicio-Inicio; pueden empezar a la vez pero son independientes. Sin embargo, el 'A/B Testing' tiene una dependencia obligatoria de 'Final a Inicio' respecto al 'Despliegue'. Estas lógicas permiten automatizar alertas en dashboards de gestión: si la Tarea A se marca como fallida, el sistema bloquea automáticamente el inicio de la Tarea B para evitar costos innecesarios de computación.</p></div>
+        </article>
+        
+        <article class="subtema">
+            <h2>Adelantos (Leads) y Retrasos (Lags)</h2>
+
+            <h3>Historia</h3>
+            <div><p>A medida que la planificación de proyectos se volvió más sofisticada con el uso de herramientas como Microsoft Project y Oracle Primavera, los gestores notaron que las relaciones puras de 'Final a Inicio' eran demasiado rígidas. En la década de 1980, se estandarizaron los conceptos de 'Lead' (aceleración) y 'Lag' (espera técnica). Esto surgió de la observación de procesos industriales donde, por ejemplo, el cemento debe secar antes de seguir construyendo (Lag), o donde la redacción de un manual puede empezar antes de que el software esté terminado (Lead). En la analítica de datos moderna, esto se traduce en el 'buffer' necesario para el procesamiento asíncrono.</p></div>
+
+            <h3>Descripción Formal</h3>
+            <div><p>Un Adelanto (Lead) es una cantidad de tiempo en que una actividad sucesora se puede anticipar respecto a su predecesora (valor negativo en el cálculo de tiempo). Un Retraso (Lag) es una cantidad de tiempo de espera impuesta entre una actividad y su sucesora (valor positivo).</p>
+<p>Cálculo de fecha con Lag en Excel:
+<code>=DIA.LAB.INTL(Fecha_Fin_Predecesora; Dias_Lag; 1; Festivos)</code>.
+Si el Lag es un porcentaje de la duración de la tarea previa:
+<code>=Fecha_Fin_Predecesora + (Duracion_Previa * 0,20)</code>.</p>
+<p>Lógica Algorítmica:
+Para una relación FS con Lag (L):
+<code>ES(Sucesora) = EF(Predecedora) + L</code>.
+Para una relación FS con Lead (P):
+<code>ES(Sucesora) = EF(Predecedora) - P</code>.</p>
+<p>En la gestión de bases de datos de tiempos, el Lead/Lag se almacena como un atributo entero en la tabla de aristas (relaciones) del grafo de proyecto, afectando el cálculo de la Ruta Crítica al expandir o contraer la duración total del camino.</p></div>
+
+            <div class="diagrama-box">
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg style="max-width: 80%; max-height: 350px; height: auto; width: auto;" data-width="597pt" data-height="382pt"
+ viewBox="0.00 0.00 597.16 382.19" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 378.19)">
+<title>G</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-378.19 593.16,-378.19 593.16,4 -4,4"/>
+<!-- T1 -->
+<g id="node1" class="node">
+<title>T1</title>
+<polygon fill="#f9f9f9" stroke="black" points="151,-98.61 7,-98.61 7,-62.61 151,-62.61 151,-98.61"/>
+<text text-anchor="middle" x="79" y="-76.91" font-family="Helvetica,sans-Serif" font-size="14.00">Tarea 1: Pintar Pared</text>
+</g>
+<!-- Lag -->
+<g id="node2" class="node">
+<title>Lag</title>
+<ellipse fill="#fff2cc" stroke="black" cx="291.58" cy="-80.61" rx="80.72" ry="80.72"/>
+<text text-anchor="middle" x="291.58" y="-84.41" font-family="Helvetica,sans-Serif" font-size="14.00">RETRAO (LAG)</text>
+<text text-anchor="middle" x="291.58" y="-69.41" font-family="Helvetica,sans-Serif" font-size="14.00">Secado: 24h</text>
+</g>
+<!-- T1&#45;&gt;Lag -->
+<g id="edge1" class="edge">
+<title>T1&#45;&gt;Lag</title>
+<path fill="none" stroke="black" d="M151.29,-80.61C167.1,-80.61 184.06,-80.61 200.51,-80.61"/>
+<polygon fill="black" stroke="black" points="200.67,-84.11 210.67,-80.61 200.67,-77.11 200.67,-84.11"/>
+</g>
+<!-- T2 -->
+<g id="node3" class="node">
+<title>T2</title>
+<polygon fill="#f9f9f9" stroke="black" points="587.66,-98.61 426.66,-98.61 426.66,-62.61 587.66,-62.61 587.66,-98.61"/>
+<text text-anchor="middle" x="507.16" y="-76.91" font-family="Helvetica,sans-Serif" font-size="14.00">Tarea 2: Segunda Mano</text>
+</g>
+<!-- Lag&#45;&gt;T2 -->
+<g id="edge2" class="edge">
+<title>Lag&#45;&gt;T2</title>
+<path fill="none" stroke="black" d="M372.41,-80.61C386.76,-80.61 401.8,-80.61 416.4,-80.61"/>
+<polygon fill="black" stroke="black" points="416.42,-84.11 426.42,-80.61 416.42,-77.11 416.42,-84.11"/>
+</g>
+<!-- T3 -->
+<g id="node4" class="node">
+<title>T3</title>
+<polygon fill="#f9f9f9" stroke="black" points="158,-294.61 0,-294.61 0,-258.61 158,-258.61 158,-294.61"/>
+<text text-anchor="middle" x="79" y="-272.91" font-family="Helvetica,sans-Serif" font-size="14.00">Tarea 3: Desarrollo App</text>
+</g>
+<!-- Lead -->
+<g id="node5" class="node">
+<title>Lead</title>
+<ellipse fill="#d9ead3" stroke="black" cx="291.58" cy="-276.61" rx="97.66" ry="97.66"/>
+<text text-anchor="middle" x="291.58" y="-280.41" font-family="Helvetica,sans-Serif" font-size="14.00">ADELANTO (LEAD)</text>
+<text text-anchor="middle" x="291.58" y="-265.41" font-family="Helvetica,sans-Serif" font-size="14.00">Solapamiento: 2d</text>
+</g>
+<!-- T3&#45;&gt;Lead -->
+<g id="edge3" class="edge">
+<title>T3&#45;&gt;Lead</title>
+<path fill="none" stroke="black" d="M158.11,-276.61C166.44,-276.61 175.01,-276.61 183.6,-276.61"/>
+<polygon fill="black" stroke="black" points="183.68,-280.11 193.68,-276.61 183.68,-273.11 183.68,-280.11"/>
+</g>
+<!-- T4 -->
+<g id="node6" class="node">
+<title>T4</title>
+<polygon fill="#f9f9f9" stroke="black" points="589.16,-294.61 425.16,-294.61 425.16,-258.61 589.16,-258.61 589.16,-294.61"/>
+<text text-anchor="middle" x="507.16" y="-272.91" font-family="Helvetica,sans-Serif" font-size="14.00">Tarea 4: Documentación</text>
+</g>
+<!-- Lead&#45;&gt;T4 -->
+<g id="edge4" class="edge">
+<title>Lead&#45;&gt;T4</title>
+<path fill="none" stroke="black" d="M389.37,-276.61C397.85,-276.61 406.41,-276.61 414.83,-276.61"/>
+<polygon fill="black" stroke="black" points="415.04,-280.11 425.04,-276.61 415.04,-273.11 415.04,-280.11"/>
+</g>
+</g>
+</svg>
+
+            </div>
+            <p style="font-size:0.8em; color:#999; text-align:center; margin-top:-20px; margin-bottom:30px;">
+                <em>Figura: Diagrama generado automáticamente mediante Graphviz</em>
+            </p>
+
+            <h3>Intuición</h3>
+            <div><p>El Lag es como el tiempo que debes esperar a que se enfríe el café antes de beberlo; no estás haciendo nada, pero el tiempo debe pasar. El Lead es como empezar a poner la mesa mientras la comida aún se está cocinando; estás ganando tiempo al solapar actividades. El Lag es un tiempo de espera técnico, mientras que el Lead es una estrategia de compresión de cronograma. Sin ellos, los planes serían teóricos y no reflejarían la realidad de los procesos humanos y técnicos.</p></div>
+
+            <h3>Aplicación</h3>
+            <div><p>En el despliegue de infraestructura cloud, un Ingeniero aplica un Lag de 24 horas después de configurar un servidor DNS para permitir la propagación global antes de iniciar el despliegue de la web. Por otro lado, aplica un Lead en la fase de documentación, comenzando a escribir los manuales de usuario cuando el desarrollo está al 80% (FS - 20%). En términos de analítica, el Lag se usa para modelar el tiempo de latencia de los datos en sistemas distribuidos, asegurando que los reportes de 'hoy' no se ejecuten hasta que el Lag de sincronización de la base de datos haya expirado.</p></div>
+        </article>
+        </body></html>

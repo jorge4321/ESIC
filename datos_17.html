@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>17 - Gestión de Recursos Humanos - El Rol del Director de Proyectos y Gestión de Talento.</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #f4f4f9; color: #333; margin: 0; padding: 20px; line-height: 1.6; position: relative; }
+        header { background: #2c3e50; color: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; text-align:center; }
+        h1 { margin: 0; font-size: 1.5rem; }
+
+        /* Estilo del botón Atrás */
+        .btn-atras {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #7f8c8d;
+            color: white;
+            padding: 8px 15px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            transition: background 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+        .btn-atras:hover { background: #95a5a6; }
+
+        .subtema {
+            background: white;
+            padding: 40px;
+            margin-bottom: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        h2 { color: #2980b9; border-bottom: 2px solid #eee; padding-bottom: 10px; margin-top: 0; }
+        h3 { color: #7f8c8d; font-size: 0.9em; text-transform: uppercase; margin-top: 30px; letter-spacing: 1px; border-left: 3px solid #d4af37; padding-left: 10px; }
+
+        .diagrama-box {
+            text-align: center;
+            margin: 30px 0;
+            padding: 20px;
+            background: #fafafa;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 150px;
+        }
+
+        p { margin-bottom: 1rem; }
+        strong { color: #2c3e50; font-weight: 600; }
+        code { background: #f0f0f0; padding: 2px 5px; border-radius: 3px; font-family: monospace; color: #c0392b; }
+        ul { padding-left: 20px; }
+        li { margin-bottom: 0.5rem; }
+    </style>
+</head>
+<body>
+    <button onclick="window.history.back()" class="btn-atras">Atrás</button>
+    <header><h1>17 - Gestión de Recursos Humanos - El Rol del Director de Proyectos y Gestión de Talento.</h1></header>
+    <main>
+
+        <article class="subtema">
+            <h2>Planificación de Recursos y Algoritmos de Nivelación</h2>
+
+            <h3>Historia</h3>
+            <div><p>Históricamente, la gestión de recursos humanos en proyectos se realizaba mediante diagramas de barras manuales y una intuición logística limitada. En la década de 1950, con la llegada del Método de la Ruta Crítica (CPM) y el PERT, los directores de proyecto comenzaron a ver el talento no solo como 'mano de obra', sino como una restricción crítica en el flujo de valor. Con la digitalización de los años 90 y el auge del software ERP, la gestión de recursos evolucionó hacia la optimización matemática. En el contexto de los datos, esta evolución ha pasado de simples hojas de cálculo a algoritmos de 'Resource Leveling' (Nivelación de Recursos) que utilizan inteligencia artificial para predecir cuellos de botella antes de que ocurran, permitiendo que el Director de Proyectos (PM) pase de ser un asignador de tareas a un estratega de capacidad operativa basado en modelos predictivos de disponibilidad y especialización técnica.</p></div>
+
+            <h3>Descripción Formal</h3>
+            <div><p>La planificación de recursos requiere un enfoque matricial donde se cruzan las competencias técnicas (Hard Skills) con la disponibilidad temporal. Desde una perspectiva técnica, el PM debe dominar herramientas de búsqueda y cruce de datos. En Excel, una fórmula fundamental para la asignación de roles es el uso de combinaciones matriciales para identificar al candidato ideal basándose en criterios múltiples. Ejemplo de sintaxis avanzada: <code>=INDICE(TablaConsultores[Nombre]; COINCIDIR(1; (TablaConsultores[Skill]="Data Engineer")*(TablaConsultores[Disponibilidad]&gt;0,5); 0))</code>. Esta fórmula busca el primer recurso que cumpla simultáneamente con la habilidad técnica y un umbral de disponibilidad. Algorítmicamente, el PM aplica la lógica de 'Heurística de Priorización', donde se ordenan las actividades según su holgura total (Total Float). Si la holgura es cero, el recurso se bloquea; si es positiva, el algoritmo permite desplazar la tarea para evitar la sobreasignación (Over-allocation). La lógica detrás de un algoritmo de nivelación de recursos sigue este patrón: 1. Identificar periodo t. 2. Calcular demanda total de recursos D(t). 3. Si D(t) &gt; Capacidad C, entonces buscar actividades con mayor holgura y retrasarlas hasta que D(t) &lt;= C, recalculando el impacto en la fecha de finalización del proyecto.</p></div>
+
+            <div class="diagrama-box">
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg style="max-width: 80%; max-height: 350px; height: auto; width: auto;" data-width="788pt" data-height="378pt"
+ viewBox="0.00 0.00 787.50 378.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 374)">
+<title>G</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-374 783.5,-374 783.5,4 -4,4"/>
+<!-- start -->
+<g id="node1" class="node">
+<title>start</title>
+<polygon fill="#f9f9f9" stroke="black" points="590.5,-370 411.5,-370 411.5,-334 590.5,-334 590.5,-370"/>
+<text text-anchor="middle" x="501" y="-348.3" font-family="Helvetica,sans-Serif" font-size="14.00">Inicio: Solicitud de Recurso</text>
+</g>
+<!-- check_skill -->
+<g id="node2" class="node">
+<title>check_skill</title>
+<polygon fill="#f9f9f9" stroke="black" points="501,-297 350.02,-279 501,-261 651.98,-279 501,-297"/>
+<text text-anchor="middle" x="501" y="-275.3" font-family="Helvetica,sans-Serif" font-size="14.00">¿Posee el Skill Técnico?</text>
+</g>
+<!-- start&#45;&gt;check_skill -->
+<g id="edge1" class="edge">
+<title>start&#45;&gt;check_skill</title>
+<path fill="none" stroke="black" d="M501,-333.81C501,-325.79 501,-316.05 501,-307.07"/>
+<polygon fill="black" stroke="black" points="504.5,-307.03 501,-297.03 497.5,-307.03 504.5,-307.03"/>
+</g>
+<!-- check_avail -->
+<g id="node3" class="node">
+<title>check_avail</title>
+<polygon fill="#f9f9f9" stroke="black" points="341,-210 159.85,-192 341,-174 522.15,-192 341,-210"/>
+<text text-anchor="middle" x="341" y="-188.3" font-family="Helvetica,sans-Serif" font-size="14.00">¿Tiene Disponibilidad &gt; 20%?</text>
+</g>
+<!-- check_skill&#45;&gt;check_avail -->
+<g id="edge2" class="edge">
+<title>check_skill&#45;&gt;check_avail</title>
+<path fill="none" stroke="black" d="M474.58,-263.96C447.99,-249.84 406.78,-227.95 377.17,-212.21"/>
+<polygon fill="black" stroke="black" points="378.47,-208.94 367.99,-207.34 375.18,-215.12 378.47,-208.94"/>
+<text text-anchor="middle" x="437.5" y="-231.8" font-family="Times,serif" font-size="14.00">SI</text>
+</g>
+<!-- search_new -->
+<g id="node5" class="node">
+<title>search_new</title>
+<polygon fill="#f9f9f9" stroke="black" points="779.5,-210 540.5,-210 540.5,-174 779.5,-174 779.5,-210"/>
+<text text-anchor="middle" x="660" y="-188.3" font-family="Helvetica,sans-Serif" font-size="14.00">Buscar en Outsourcing / Otras Áreas</text>
+</g>
+<!-- check_skill&#45;&gt;search_new -->
+<g id="edge3" class="edge">
+<title>check_skill&#45;&gt;search_new</title>
+<path fill="none" stroke="black" d="M527.26,-263.96C552.17,-250.65 589.99,-230.43 618.9,-214.97"/>
+<polygon fill="black" stroke="black" points="620.77,-217.94 627.94,-210.14 617.47,-211.77 620.77,-217.94"/>
+<text text-anchor="middle" x="601" y="-231.8" font-family="Times,serif" font-size="14.00">NO</text>
+</g>
+<!-- assign -->
+<g id="node4" class="node">
+<title>assign</title>
+<polygon fill="#f9f9f9" stroke="black" points="248,-123 0,-123 0,-87 248,-87 248,-123"/>
+<text text-anchor="middle" x="124" y="-101.3" font-family="Helvetica,sans-Serif" font-size="14.00">Asignar a Tarea y Bloquear Calendario</text>
+</g>
+<!-- check_avail&#45;&gt;assign -->
+<g id="edge4" class="edge">
+<title>check_avail&#45;&gt;assign</title>
+<path fill="none" stroke="black" d="M306.14,-177.34C271.31,-163.7 217.32,-142.55 177.15,-126.82"/>
+<polygon fill="black" stroke="black" points="178.36,-123.53 167.77,-123.15 175.8,-130.05 178.36,-123.53"/>
+<text text-anchor="middle" x="252.5" y="-144.8" font-family="Times,serif" font-size="14.00">SI</text>
+</g>
+<!-- adjust -->
+<g id="node6" class="node">
+<title>adjust</title>
+<polygon fill="#f9f9f9" stroke="black" points="485.5,-123 266.5,-123 266.5,-87 485.5,-87 485.5,-123"/>
+<text text-anchor="middle" x="376" y="-101.3" font-family="Helvetica,sans-Serif" font-size="14.00">Nivelar: Retrasar Tarea No Crítica</text>
+</g>
+<!-- check_avail&#45;&gt;adjust -->
+<g id="edge5" class="edge">
+<title>check_avail&#45;&gt;adjust</title>
+<path fill="none" stroke="black" d="M338.33,-174.16C337.46,-164.15 337.65,-151.42 342,-141 343.46,-137.51 345.44,-134.18 347.72,-131.05"/>
+<polygon fill="black" stroke="black" points="350.5,-133.17 354.29,-123.27 345.16,-128.65 350.5,-133.17"/>
+<text text-anchor="middle" x="352" y="-144.8" font-family="Times,serif" font-size="14.00">NO</text>
+</g>
+<!-- end -->
+<g id="node7" class="node">
+<title>end</title>
+<polygon fill="#f9f9f9" stroke="black" points="151,-36 97,-36 97,0 151,0 151,-36"/>
+<text text-anchor="middle" x="124" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">end</text>
+</g>
+<!-- assign&#45;&gt;end -->
+<g id="edge6" class="edge">
+<title>assign&#45;&gt;end</title>
+<path fill="none" stroke="black" d="M124,-86.8C124,-75.16 124,-59.55 124,-46.24"/>
+<polygon fill="black" stroke="black" points="127.5,-46.18 124,-36.18 120.5,-46.18 127.5,-46.18"/>
+<text text-anchor="middle" x="133.5" y="-57.8" font-family="Times,serif" font-size="14.00">Fin</text>
+</g>
+<!-- adjust&#45;&gt;check_avail -->
+<g id="edge7" class="edge">
+<title>adjust&#45;&gt;check_avail</title>
+<path fill="none" stroke="black" d="M372.42,-123.05C370.06,-132.9 366.56,-145.4 362,-156 360.58,-159.29 358.91,-162.64 357.13,-165.91"/>
+<polygon fill="black" stroke="black" points="353.99,-164.35 351.98,-174.75 360.04,-167.87 353.99,-164.35"/>
+</g>
+</g>
+</svg>
+
+            </div>
+            <p style="font-size:0.8em; color:#999; text-align:center; margin-top:-20px; margin-bottom:30px;">
+                <em>Figura: Diagrama generado automáticamente mediante Graphviz</em>
+            </p>
+
+            <h3>Intuición</h3>
+            <div><p>Imagina que eres el chef de una cocina de alta complejidad. No solo necesitas personas que sepan cocinar, sino que necesitas que el experto en salsas esté disponible justo cuando la carne sale de la parrilla. Si asignas a todos tus cocineros a preparar ensaladas al principio, cuando llegue el plato principal, tendrás un cuello de botella. La gestión de recursos se trata de entender que el tiempo de un experto en datos es un bien escaso y perecedero: hora que no se utiliza eficientemente, es capacidad de cómputo humano que se pierde para siempre. No se trata de que todos estén trabajando al 100% todo el tiempo (lo cual causa agotamiento o 'burnout'), sino de que las piezas correctas se muevan en el orden correcto para que el flujo de trabajo nunca se detenga por falta de una firma o un código específico.</p></div>
+
+            <h3>Aplicación</h3>
+            <div><p>En una consultora de Big Data, un PM utiliza estos conceptos para gestionar un pool de 50 científicos de datos asignados a 10 proyectos simultáneos. Utiliza cuadros de mando en Power BI que extraen datos de Jira para visualizar la 'Utilización de Recursos'. Si un Senior Data Scientist está asignado al 120%, el PM aplica lógica de nivelación para delegar tareas menores a un Junior, protegiendo el recurso crítico. Este enfoque es vital en auditorías de proyectos donde se debe demostrar que la asignación de personal fue óptima para no penalizar el presupuesto de capital (CAPEX) de la organización.</p></div>
+        </article>
+        
+        <article class="subtema">
+            <h2>Gestión del Talento y Matrices de Competencias (RACI)</h2>
+
+            <h3>Historia</h3>
+            <div><p>La gestión del talento ha migrado de un enfoque administrativo a uno de 'Gestión por Competencias'. En los años 60, se popularizó la Matriz RACI para clarificar roles. Sin embargo, en la era de los datos, el talento se mide mediante KSA (Knowledge, Skills, Abilities). Con la llegada de la agilidad (Scrum/Kanban) en la década de los 2000, el Director de Proyectos dejó de dar órdenes directas para centrarse en eliminar impedimentos y desarrollar las capacidades del equipo. Hoy, la gestión del talento en proyectos de analítica implica entender lenguajes de programación cambiantes y metodologías de despliegue continuo (CI/CD), donde el PM debe evaluar no solo lo que el trabajador sabe hoy, sino su velocidad de aprendizaje (Learnability).</p></div>
+
+            <h3>Descripción Formal</h3>
+            <div><p>La estructura de responsabilidad se define técnicamente mediante la matriz RACI (Responsible, Accountable, Consulted, Informed). En un entorno de datos, esto se traduce en quién escribe el código (R), quién aprueba la arquitectura (A), quién provee el contexto de negocio (C) y quién recibe los reportes finales (I). Para gestionar esto cuantitativamente, el PM puede usar lógica de Grafos para entender la centralidad de ciertos individuos. En Excel, se suelen crear 'Skill Matrices' donde se puntúa del 1 al 5 cada competencia. Una función para calcular el 'Gap de Talento' de un equipo sería: <code>=SI(PROMEDIO(B2:B10)&lt;Objetivo; "Capacitación Necesaria"; "Equipo Apto")</code>. La lógica algorítmica de desarrollo de talento se basa en el 'Modelo de Madurez de Capacidades' (CMMI), donde se define una función de transición de estados: un recurso pasa de 'Novato' a 'Experto' tras completar n ciclos de tareas con un error rate &lt; epsilon. El PM debe programar estas transiciones dentro del cronograma del proyecto para asegurar el crecimiento del capital intelectual de la empresa.</p></div>
+
+            <div class="diagrama-box">
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg style="max-width: 80%; max-height: 350px; height: auto; width: auto;" data-width="1314pt" data-height="44pt"
+ viewBox="0.00 0.00 1314.12 44.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 40)">
+<title>G</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-40 1310.12,-40 1310.12,4 -4,4"/>
+<!-- task -->
+<g id="node1" class="node">
+<title>task</title>
+<polygon fill="#f9f9f9" stroke="black" points="172,-36 0,-36 0,0 172,0 172,-36"/>
+<text text-anchor="middle" x="86" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">Tarea: Crear Pipeline ETL</text>
+</g>
+<!-- check_R -->
+<g id="node2" class="node">
+<title>check_R</title>
+<polygon fill="#f9f9f9" stroke="black" points="372.53,-36 207.97,-18 372.53,0 537.09,-18 372.53,-36"/>
+<text text-anchor="middle" x="372.53" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">¿Quién es el Responsible?</text>
+</g>
+<!-- task&#45;&gt;check_R -->
+<g id="edge1" class="edge">
+<title>task&#45;&gt;check_R</title>
+<path fill="none" stroke="black" d="M172.37,-18C180.55,-18 189.02,-18 197.66,-18"/>
+<polygon fill="black" stroke="black" points="197.87,-21.5 207.87,-18 197.87,-14.5 197.87,-21.5"/>
+</g>
+<!-- check_A -->
+<g id="node3" class="node">
+<title>check_A</title>
+<polygon fill="#f9f9f9" stroke="black" points="737.59,-36 573.03,-18 737.59,0 902.15,-18 737.59,-36"/>
+<text text-anchor="middle" x="737.59" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">¿Quién es el Accountable?</text>
+</g>
+<!-- check_R&#45;&gt;check_A -->
+<g id="edge2" class="edge">
+<title>check_R&#45;&gt;check_A</title>
+<path fill="none" stroke="black" d="M537.27,-18C545.78,-18 554.35,-18 562.9,-18"/>
+<polygon fill="black" stroke="black" points="562.91,-21.5 572.91,-18 562.91,-14.5 562.91,-21.5"/>
+</g>
+<!-- consult -->
+<g id="node5" class="node">
+<title>consult</title>
+<polygon fill="#f9f9f9" stroke="black" points="1092.12,-36 938.12,-36 938.12,0 1092.12,0 1092.12,-36"/>
+<text text-anchor="middle" x="1015.12" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">Consultar Expertos (C)</text>
+</g>
+<!-- check_A&#45;&gt;consult -->
+<g id="edge3" class="edge">
+<title>check_A&#45;&gt;consult</title>
+<path fill="none" stroke="black" d="M902.45,-18C911.06,-18 919.53,-18 927.72,-18"/>
+<polygon fill="black" stroke="black" points="927.93,-21.5 937.93,-18 927.93,-14.5 927.93,-21.5"/>
+</g>
+<!-- notify -->
+<g id="node4" class="node">
+<title>notify</title>
+<polygon fill="#f9f9f9" stroke="black" points="1306.12,-36 1128.12,-36 1128.12,0 1306.12,0 1306.12,-36"/>
+<text text-anchor="middle" x="1217.12" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">Informar a Stakeholders (I)</text>
+</g>
+<!-- consult&#45;&gt;notify -->
+<g id="edge4" class="edge">
+<title>consult&#45;&gt;notify</title>
+<path fill="none" stroke="black" d="M1092.3,-18C1100.71,-18 1109.36,-18 1117.99,-18"/>
+<polygon fill="black" stroke="black" points="1118.1,-21.5 1128.1,-18 1118.1,-14.5 1118.1,-21.5"/>
+</g>
+</g>
+</svg>
+
+            </div>
+            <p style="font-size:0.8em; color:#999; text-align:center; margin-top:-20px; margin-bottom:30px;">
+                <em>Figura: Diagrama generado automáticamente mediante Graphviz</em>
+            </p>
+
+            <h3>Intuición</h3>
+            <div><p>La matriz RACI es como las reglas de un campo de fútbol. Si todos corren detrás del balón al mismo tiempo, nadie cubre la portería y el equipo pierde. El PM es el director técnico que decide quién tiene la responsabilidad de meter el gol (Responsible) y quién es el capitán que responde ante el club si se pierde el partido (Accountable). La gestión de talento es asegurar que el jugador que hoy es defensa tenga el entrenamiento necesario para ser mediocampista mañana si el equipo lo necesita. Es pasar de ver a las personas como piezas estáticas a verlas como activos dinámicos que ganan valor con cada sprint.</p></div>
+
+            <h3>Aplicación</h3>
+            <div><p>Un PM liderando el despliegue de un modelo de Machine Learning utiliza la matriz RACI para evitar conflictos entre el Data Scientist (que quiere precisión) y el Data Engineer (que quiere estabilidad). Si el modelo falla en producción, la RACI indica que el 'Accountable' es el Arquitecto de Soluciones. Además, aplica evaluaciones 360 grados procesadas con Python para detectar líderes emergentes dentro del equipo de analítica, facilitando planes de sucesión y evitando la fuga de talento clave.</p></div>
+        </article>
+        
+        <article class="subtema">
+            <h2>People Analytics: El Liderazgo basado en Métricas</h2>
+
+            <h3>Historia</h3>
+            <div><p>People Analytics nació de la intersección entre la psicología organizacional y la ciencia de datos. A principios del siglo XXI, empresas como Google comenzaron a aplicar el método científico a sus recursos humanos (Proyecto Oxygen). Descubrieron que el éxito de un proyecto depende menos de la inteligencia individual de los miembros y más de la 'seguridad psicológica' y el liderazgo del PM. Esta disciplina transformó la gestión de talento de una función de 'recursos humanos' tradicional a una función analítica core, donde se utilizan modelos de regresión para entender qué comportamientos de un líder correlacionan con la retención de ingenieros de datos y el éxito de los entregables.</p></div>
+
+            <h3>Descripción Formal</h3>
+            <div><p>El PM moderno utiliza KPIs de rendimiento humano como el 'Churn Rate' del equipo, el 'Employee Net Promoter Score' (eNPS) y la 'Velocidad de Sprint'. Técnicamente, esto implica realizar análisis de correlación entre las horas extra trabajadas y la densidad de errores en el código. En Excel, esto se modela con la función <code>=COEF.DE.CORREL(Rango_Horas_Extra; Rango_Bugs_Reportados)</code>. Si el coeficiente se acerca a 1, el PM tiene evidencia estadística de que el equipo está sobrepasado. Otro algoritmo clave es el de 'Análisis de Redes Organizacionales' (ONA), que utiliza teoría de grafos para identificar quiénes son los verdaderos nodos de conocimiento. La lógica del algoritmo identifica el 'Betweenness Centrality': si un ingeniero de datos tiene una alta centralidad, su salida del proyecto representaría un riesgo sistémico. El PM debe entonces aplicar estrategias de mitigación (shadowing) para distribuir ese conocimiento y reducir el riesgo del proyecto.</p></div>
+
+            <div class="diagrama-box">
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg style="max-width: 80%; max-height: 350px; height: auto; width: auto;" data-width="534pt" data-height="291pt"
+ viewBox="0.00 0.00 534.00 291.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 287)">
+<title>G</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-287 530,-287 530,4 -4,4"/>
+<!-- metrics -->
+<g id="node1" class="node">
+<title>metrics</title>
+<polygon fill="#f9f9f9" stroke="black" points="444,-283 189,-283 189,-247 444,-247 444,-283"/>
+<text text-anchor="middle" x="316.5" y="-261.3" font-family="Helvetica,sans-Serif" font-size="14.00">Captura de Métricas (Jira, Git, Surveys)</text>
+</g>
+<!-- analyze -->
+<g id="node2" class="node">
+<title>analyze</title>
+<polygon fill="#f9f9f9" stroke="black" points="316.5,-210 140.88,-192 316.5,-174 492.12,-192 316.5,-210"/>
+<text text-anchor="middle" x="316.5" y="-188.3" font-family="Helvetica,sans-Serif" font-size="14.00">¿Anomalía en Performance?</text>
+</g>
+<!-- metrics&#45;&gt;analyze -->
+<g id="edge1" class="edge">
+<title>metrics&#45;&gt;analyze</title>
+<path fill="none" stroke="black" d="M316.5,-246.81C316.5,-238.79 316.5,-229.05 316.5,-220.07"/>
+<polygon fill="black" stroke="black" points="320,-220.03 316.5,-210.03 313,-220.03 320,-220.03"/>
+</g>
+<!-- burnout -->
+<g id="node3" class="node">
+<title>burnout</title>
+<polygon fill="#f9f9f9" stroke="black" points="196.5,-123 64.28,-105 196.5,-87 328.72,-105 196.5,-123"/>
+<text text-anchor="middle" x="196.5" y="-101.3" font-family="Helvetica,sans-Serif" font-size="14.00">¿Riesgo de Burnout?</text>
+</g>
+<!-- analyze&#45;&gt;burnout -->
+<g id="edge2" class="edge">
+<title>analyze&#45;&gt;burnout</title>
+<path fill="none" stroke="black" d="M295.32,-176C275.81,-162.18 246.69,-141.55 225.11,-126.27"/>
+<polygon fill="black" stroke="black" points="226.85,-123.21 216.67,-120.28 222.8,-128.92 226.85,-123.21"/>
+<text text-anchor="middle" x="271" y="-144.8" font-family="Times,serif" font-size="14.00">SI</text>
+</g>
+<!-- continue -->
+<g id="node6" class="node">
+<title>continue</title>
+<polygon fill="#f9f9f9" stroke="black" points="526,-123 347,-123 347,-87 526,-87 526,-123"/>
+<text text-anchor="middle" x="436.5" y="-101.3" font-family="Helvetica,sans-Serif" font-size="14.00">Mantener Estrategia Actual</text>
+</g>
+<!-- analyze&#45;&gt;continue -->
+<g id="edge3" class="edge">
+<title>analyze&#45;&gt;continue</title>
+<path fill="none" stroke="black" d="M337.68,-176C356.01,-163.01 382.82,-144.03 403.89,-129.1"/>
+<polygon fill="black" stroke="black" points="406.09,-131.83 412.23,-123.19 402.05,-126.11 406.09,-131.83"/>
+<text text-anchor="middle" x="394.5" y="-144.8" font-family="Times,serif" font-size="14.00">NO</text>
+</g>
+<!-- intervention -->
+<g id="node4" class="node">
+<title>intervention</title>
+<polygon fill="#f9f9f9" stroke="black" points="191,-36 0,-36 0,0 191,0 191,-36"/>
+<text text-anchor="middle" x="95.5" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">Sesión 1:1 y Ajuste de Carga</text>
+</g>
+<!-- burnout&#45;&gt;intervention -->
+<g id="edge4" class="edge">
+<title>burnout&#45;&gt;intervention</title>
+<path fill="none" stroke="black" d="M178.91,-89.19C163.71,-76.41 141.48,-57.7 123.79,-42.81"/>
+<polygon fill="black" stroke="black" points="125.93,-40.03 116.02,-36.27 121.42,-45.39 125.93,-40.03"/>
+<text text-anchor="middle" x="159" y="-57.8" font-family="Times,serif" font-size="14.00">SI</text>
+</g>
+<!-- recognition -->
+<g id="node5" class="node">
+<title>recognition</title>
+<polygon fill="#f9f9f9" stroke="black" points="385.5,-36 209.5,-36 209.5,0 385.5,0 385.5,-36"/>
+<text text-anchor="middle" x="297.5" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">Reconocimiento / Ascenso</text>
+</g>
+<!-- burnout&#45;&gt;recognition -->
+<g id="edge5" class="edge">
+<title>burnout&#45;&gt;recognition</title>
+<path fill="none" stroke="black" d="M214.09,-89.19C229.29,-76.41 251.52,-57.7 269.21,-42.81"/>
+<polygon fill="black" stroke="black" points="271.58,-45.39 276.98,-36.27 267.07,-40.03 271.58,-45.39"/>
+<text text-anchor="middle" x="321.5" y="-57.8" font-family="Times,serif" font-size="14.00">NO (Es alto desempeño)</text>
+</g>
+</g>
+</svg>
+
+            </div>
+            <p style="font-size:0.8em; color:#999; text-align:center; margin-top:-20px; margin-bottom:30px;">
+                <em>Figura: Diagrama generado automáticamente mediante Graphviz</em>
+            </p>
+
+            <h3>Intuición</h3>
+            <div><p>People Analytics es como tener un tablero de control del estado de ánimo y la eficiencia de tu equipo. En lugar de preguntar '¿cómo va todo?' y recibir un 'bien' por compromiso, el PM mira los datos: ¿están bajando las contribuciones en GitHub? ¿Ha aumentado el tiempo que tardan en responder mensajes? Estas son 'señales de humo' digitales. Liderar con datos no significa tratar a las personas como robots, sino usar la información para ser más humano: intervenir cuando los datos muestran que alguien está a punto de quemarse o reconocer a quien, sin hacer mucho ruido, está ayudando a todos los demás a ser más rápidos.</p></div>
+
+            <h3>Aplicación</h3>
+            <div><p>En un proyecto de migración a la nube a gran escala, el PM utiliza People Analytics para predecir la rotación de personal. Al observar que la satisfacción disminuye tras tres meses de tareas repetitivas de limpieza de datos, el PM rota las funciones de los ingenieros hacia tareas de arquitectura más creativas. El resultado es una reducción del 20% en la rotación de talento técnico, ahorrando a la empresa miles de dólares en costos de reclutamiento y pérdida de conocimiento específico del proyecto.</p></div>
+        </article>
+        </body></html>

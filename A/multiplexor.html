@@ -9,9 +9,9 @@
             --bg-color: #f4f7f6;
             --text-color: #333;
             --primary-color: #2c3e50;
-            --highlight-color: #3498db; /* Azul para selección */
-            --signal-on: #2ecc71;       /* Verde para bit 1 */
-            --signal-off: #bdc3c7;      /* Gris para bit 0 */
+            --highlight-color: #3498db;
+            --signal-on: #2ecc71;
+            --signal-off: #bdc3c7;
             --wire-color: #95a5a6;
             --box-fill: #ffffff;
             --box-stroke: #34495e;
@@ -192,19 +192,16 @@
             transition: all 0.3s;
         }
         
-        /* Estado: Seleccionado (Azul) */
         .wire.selected {
             stroke: var(--highlight-color);
             stroke-width: 5;
-            opacity: 0.5; /* Base tenue si no hay señal */
+            opacity: 0.5;
         }
 
-        /* Estado: Activo/High (Verde) */
         .wire.active {
             stroke: var(--signal-on);
         }
         
-        /* Combinación: Seleccionado y Activo */
         .wire.selected.active {
             stroke: var(--signal-on);
             filter: drop-shadow(0 0 5px var(--signal-on));
@@ -215,6 +212,14 @@
             font-family: sans-serif;
             font-size: 14px;
             fill: #555;
+            user-select: none;
+        }
+
+        /* Textos estáticos en SVG */
+        .svg-text-main {
+            font-size: 24px;
+            font-weight: bold;
+            fill: #34495e;
             user-select: none;
         }
         
@@ -234,7 +239,6 @@
             margin-top: auto;
         }
 
-        /* Panel Info */
         .info-panel {
             width: 100%;
             background: white;
@@ -253,7 +257,7 @@
                 border-bottom: 2px solid #eee;
                 padding-bottom: 20px;
                 display: grid;
-                grid-template-columns: 1fr 1fr; /* 2 columnas de inputs en movil */
+                grid-template-columns: 1fr 1fr;
             }
         }
     </style>
@@ -280,18 +284,18 @@
                     </defs>
 
                     <polygon points="150,20 450,80 450,370 150,430" class="mux-shape" />
-                    <text x="300" y="225" text-anchor="middle" font-size="24" font-weight="bold" fill="#34495e" style="writing-mode: vertical-rl; text-orientation: upright;">MUX 8:1</text>
+                    
+                    <text x="300" y="225" text-anchor="middle" class="svg-text-main" transform="rotate(-90, 300, 225)">MUX 8:1</text>
 
-                    <g id="input-wires-svg">
-                        </g>
+                    <g id="input-wires-svg"></g>
 
                     <line x1="250" y1="400" x2="250" y2="450" stroke="#7f8c8d" stroke-width="2" />
                     <line x1="300" y1="400" x2="300" y2="450" stroke="#7f8c8d" stroke-width="2" />
                     <line x1="350" y1="400" x2="350" y2="450" stroke="#7f8c8d" stroke-width="2" />
                     
-                    <text x="250" y="440" text-anchor="middle" font-weight="bold" fill="#333">S<sub>2</sub></text>
-                    <text x="300" y="440" text-anchor="middle" font-weight="bold" fill="#333">S<sub>1</sub></text>
-                    <text x="350" y="440" text-anchor="middle" font-weight="bold" fill="#333">S<sub>0</sub></text>
+                    <text x="250" y="440" text-anchor="middle" font-weight="bold" fill="#333" font-size="16">S<tspan baseline-shift="sub" font-size="0.7em">2</tspan></text>
+                    <text x="300" y="440" text-anchor="middle" font-weight="bold" fill="#333" font-size="16">S<tspan baseline-shift="sub" font-size="0.7em">1</tspan></text>
+                    <text x="350" y="440" text-anchor="middle" font-weight="bold" fill="#333" font-size="16">S<tspan baseline-shift="sub" font-size="0.7em">0</tspan></text>
 
                     <line id="wire-output" x1="450" y1="225" x2="550" y2="225" class="wire" />
                     <text x="560" y="230" class="output-display" id="output-val">0</text>
@@ -346,9 +350,6 @@
                 La fórmula es 2<sup>3</sup> = 8. Combinando los 3 interruptores de abajo, generas un número binario del 000 (0) al 111 (7).
                 El circuito conecta físicamente la entrada correspondiente a ese número con la salida.
             </p>
-            <p>
-                <em>Prueba: Configura la entrada D<sub>3</sub> en "1" (Verde). Luego ajusta los selectores a "011" (3 en binario). Verás como el dato pasa a la salida.</em>
-            </p>
         </div>
     </main>
 
@@ -368,18 +369,14 @@
         const wireOutput = document.getElementById('wire-output');
         const outputValText = document.getElementById('output-val');
         const selectionValText = document.getElementById('selection-val');
-
-        // Selectores DOM
         const sel2 = document.getElementById('sel-2');
         const sel1 = document.getElementById('sel-1');
         const sel0 = document.getElementById('sel-0');
 
-        // Inicialización
         function init() {
             createInputControls();
             createSvgWires();
             
-            // Listeners Selectores
             sel2.addEventListener('change', updateState);
             sel1.addEventListener('change', updateState);
             sel0.addEventListener('change', updateState);
@@ -387,14 +384,11 @@
             updateState();
         }
 
-        // Crear controles de entrada (Interruptores D0-D7)
         function createInputControls() {
             for (let i = 0; i < numInputs; i++) {
                 const div = document.createElement('div');
                 div.className = 'input-group';
                 div.id = `input-group-${i}`;
-                
-                // Nota: Usamos <sub> también aquí para los subíndices
                 div.innerHTML = `
                     <span class="label-text">D<sub>${i}</sub></span>
                     <label class="switch">
@@ -406,13 +400,11 @@
             }
         }
 
-        // Función llamada al cambiar un input de dato
         window.toggleInput = function(index, value) {
             inputValues[index] = value ? 1 : 0;
             updateState();
         }
 
-        // Crear cables en el SVG dinámicamente
         function createSvgWires() {
             const startY = 40;
             const endY = 410;
@@ -421,11 +413,9 @@
 
             for (let i = 0; i < numInputs; i++) {
                 const yPos = startY + (i * step);
-                
-                // Grupo para cada cable
                 const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
                 
-                // Línea de entrada
+                // Línea externa
                 const lineIn = document.createElementNS("http://www.w3.org/2000/svg", "line");
                 lineIn.setAttribute("x1", "0");
                 lineIn.setAttribute("y1", yPos);
@@ -435,26 +425,22 @@
                 lineIn.setAttribute("id", `wire-ext-${i}`);
                 g.appendChild(lineIn);
 
-                // Texto Label D[i] en SVG (No soporta <sub> nativo fácilmente, usamos posicionamiento o texto plano)
-                // Para simplificar en SVG puro sin <tspan>, usaremos D0, D1... que es aceptable en diagramas técnicos
-                // O podemos usar tspans para simular subindice.
-                
+                // Texto Label D[i] en SVG con subíndice nativo (tspan)
                 const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
                 text.setAttribute("x", "10");
                 text.setAttribute("y", yPos - 5);
                 text.setAttribute("class", "label-svg");
                 
-                // Creación de subíndice SVG manual usando tspan y dy
-                const tspanMain = document.createElementNS("http://www.w3.org/2000/svg", "tspan");
-                tspanMain.textContent = "D";
+                // Construcción manual del subíndice compatible con SVG
+                const tspanD = document.createElementNS("http://www.w3.org/2000/svg", "tspan");
+                tspanD.textContent = "D";
+                const tspanIdx = document.createElementNS("http://www.w3.org/2000/svg", "tspan");
+                tspanIdx.textContent = i;
+                tspanIdx.setAttribute("baseline-shift", "sub");
+                tspanIdx.setAttribute("font-size", "0.7em");
                 
-                const tspanSub = document.createElementNS("http://www.w3.org/2000/svg", "tspan");
-                tspanSub.textContent = i;
-                tspanSub.setAttribute("dy", "5"); // Bajar un poco
-                tspanSub.setAttribute("font-size", "10"); // Más pequeño
-                
-                text.appendChild(tspanMain);
-                text.appendChild(tspanSub);
+                text.appendChild(tspanD);
+                text.appendChild(tspanIdx);
                 g.appendChild(text);
 
                 // Línea Interna
@@ -473,23 +459,19 @@
         }
 
         function updateState() {
-            // Leer Selectores
             selectBits[2] = sel2.checked ? 1 : 0;
             selectBits[1] = sel1.checked ? 1 : 0;
             selectBits[0] = sel0.checked ? 1 : 0;
 
-            // Calcular Índice (Decimal)
             const selectedIndex = (selectBits[2] * 4) + (selectBits[1] * 2) + (selectBits[0] * 1);
             
-            // Actualizar Texto Selectores (usamos HTML para subindice)
+            // Actualizar Texto Selectores
             selectionValText.innerHTML = `${selectedIndex} (D<sub>${selectedIndex}</sub>)`;
 
-            // Determinar Salida
             const outputValue = inputValues[selectedIndex];
             outputValText.textContent = outputValue;
             outputValText.style.fill = outputValue === 1 ? 'var(--signal-on)' : '#777';
 
-            // --- ACTUALIZACIÓN VISUAL ---
             for (let i = 0; i < numInputs; i++) {
                 const groupDiv = document.getElementById(`input-group-${i}`);
                 const wExt = document.getElementById(`wire-ext-${i}`);
@@ -521,9 +503,7 @@
             }
         }
 
-        // Ejecutar
         init();
-
     </script>
 </body>
 </html>

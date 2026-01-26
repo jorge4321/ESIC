@@ -119,7 +119,13 @@
             justify-content: space-between;
             margin-bottom: 8px;
         }
-        .switch-label { font-family: monospace; font-size: 0.9rem; }
+        /* Aseguramos que los subíndices se vean bien en las etiquetas */
+        .switch-label { 
+            font-family: monospace; 
+            font-size: 0.9rem; 
+            display: inline-flex;
+            align-items: baseline;
+        }
 
         .switch {
             position: relative;
@@ -238,7 +244,7 @@
         /* SVG Wiring Area */
         .wiring-overlay {
             width: 100%;
-            height: 60px; /* Altura ajustada */
+            height: 60px;
             margin-top: 5px;
         }
         
@@ -261,7 +267,7 @@
             box-shadow: 0 5px 15px rgba(0,0,0,0.05);
         }
 
-        /* --- NUEVO FOOTER COMERCIAL --- */
+        /* --- FOOTER COMERCIAL --- */
         footer {
             margin-top: auto;
             padding: 20px;
@@ -277,7 +283,7 @@
             align-items: center;
             background: white;
             padding: 10px 25px;
-            border-radius: 50px; /* Forma de píldora */
+            border-radius: 50px;
             box-shadow: 0 4px 10px rgba(0,0,0,0.08);
             border: 1px solid #eee;
             transition: transform 0.3s ease;
@@ -295,7 +301,7 @@
             object-fit: cover;
             object-position: top center;
             margin-right: 15px;
-            /* Eliminado el borde para una imagen limpia */
+            /* Eliminado el borde sólido */
             background-color: #ecf0f1;
         }
 
@@ -322,7 +328,6 @@
             .simulation-container { grid-template-columns: 1fr; }
             .controls-panel { border-right: none; border-bottom: 2px solid #eee; padding-bottom: 20px; }
             .ram-visualization { grid-template-columns: 60px repeat(4, 40px); gap: 3px; }
-            /* Ajuste footer móvil */
             .footer-card { padding: 8px 15px; }
             .footer-name { font-size: 0.9rem; }
         }
@@ -442,9 +447,9 @@
                 La RAM es una matriz de celdas de memoria. Para usarla necesitamos dos buses:
             </p>
             <ul>
-                <li><strong>Dirección (Address):</strong> El Decoder interno usa los bits $A_1, A_0$ para activar una sola fila (mostrada en verde). Solo la fila activa puede ser leída o escrita.</li>
+                <li><strong>Dirección (Address):</strong> El Decoder interno usa los bits A<sub>1</sub>, A<sub>0</sub> para activar una sola fila (mostrada en verde). Solo la fila activa puede ser leída o escrita.</li>
                 <li><strong>Lectura (Read):</strong> La RAM siempre muestra en la salida (Data Out) el contenido de la fila seleccionada. Cambia la dirección y verás cambiar la salida.</li>
-                <li><strong>Escritura (Write):</strong> Para guardar datos, seleccionamos una dirección, configuramos los bits de entrada ($D_{in}$) y enviamos un pulso de escritura. Los datos se copian permanentemente en esa fila.</li>
+                <li><strong>Escritura (Write):</strong> Para guardar datos, seleccionamos una dirección, configuramos los bits de entrada (D<sub>in</sub>) y enviamos un pulso de escritura. Los datos se copian permanentemente en esa fila.</li>
             </ul>
         </div>
     </main>
@@ -460,6 +465,7 @@
     </footer>
 
     <script>
+        // Estado de la memoria
         let memory = [
             [0, 0, 0, 0],
             [0, 0, 0, 0],
@@ -467,6 +473,7 @@
             [0, 0, 0, 0]
         ];
 
+        // Referencias DOM
         const swA1 = document.getElementById('sw-a1');
         const swA0 = document.getElementById('sw-a0');
         const addrVal = document.getElementById('addr-val');
@@ -476,14 +483,17 @@
         const dispDataIn = document.getElementById('disp-data-in');
         const dispDataOut = document.getElementById('disp-data-out');
 
+        // Inicialización
         updateSimulation();
 
+        // Listeners
         swA1.addEventListener('change', updateSimulation);
         swA0.addEventListener('change', updateSimulation);
         dataInputs.forEach(input => input.addEventListener('change', updateSimulation));
         btnWrite.addEventListener('click', performWrite);
 
         function updateSimulation() {
+            // 1. Leer Dirección
             const a1 = swA1.checked ? 1 : 0;
             const a0 = swA0.checked ? 1 : 0;
             const currentRow = (a1 * 2) + a0;
@@ -491,6 +501,7 @@
             addrVal.textContent = `${a1}${a0}`;
             rowVal.textContent = currentRow;
 
+            // 2. Leer Datos de Entrada
             let currentInput = [0,0,0,0];
             dataInputs.forEach(input => {
                 const bit = parseInt(input.dataset.bit);
@@ -498,6 +509,7 @@
             });
             dispDataIn.textContent = currentInput.join('');
 
+            // 3. Actualizar Visualización de Matriz
             for(let r=0; r<4; r++) {
                 const addrCell = document.getElementById(`addr-cell-${r}`);
                 const isSelected = (r === currentRow);
@@ -524,6 +536,7 @@
                 }
             }
 
+            // 4. Leer Memoria (Data Out)
             const dataOut = memory[currentRow].join('');
             dispDataOut.textContent = dataOut;
         }
@@ -541,10 +554,11 @@
 
             memory[row] = [...newData];
 
+            // Animación flash
             for(let b=0; b<=3; b++) {
                 const cell = document.getElementById(`cell-${row}-${b}`);
                 cell.classList.remove('writing');
-                void cell.offsetWidth;
+                void cell.offsetWidth; // Trigger reflow
                 cell.classList.add('writing');
             }
             updateSimulation();

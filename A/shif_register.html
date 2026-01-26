@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulador Shift Register (6-bit)</title>
+    <style>
+        :root {
+            --bg-color: #f4f7f6;
+            --text-color: #333;
+            --primary-color: #2c3e50;
+            --accent-color: #3498db;
+            --signal-on: #2ecc71; /* Verde para 1 lógico */
+            --signal-off: #bdc3c7; /* Gris para 0 lógico */
+            --wire-color: #7f8c8d;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Header y Botón Volver */
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 1rem;
+            position: relative;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 1.5rem;
+        }
+
+        .btn-volver {
+            position: absolute;
+            top: 50%;
+            right: 20px;
+            transform: translateY(-50%);
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 0.9rem;
+            transition: background 0.3s;
+        }
+
+        .btn-volver:hover {
+            background-color: #c0392b;
+        }
+
+        /* Contenedor Principal */
+        main {
+            flex: 1;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        /* Sección de Diagrama SVG */
+        .diagram-container {
+            width: 100%;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            padding: 20px;
+            margin-bottom: 20px;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+        }
+
+        svg {
+            width: 100%;
+            height: auto;
+            max-width: 900px;
+            /* Asegura que el SVG no se deforme */
+            display: block;
+        }
+
+        /* Estilos internos del SVG (transiciones) */
+        .ff-box {
+            fill: #ecf0f1;
+            stroke: #34495e;
+            stroke-width: 2;
+            transition: fill 0.3s ease;
+        }
+        .ff-box.active {
+            fill: #d5f5e3; /* Fondo verde claro cuando Q=1 */
+            stroke: var(--signal-on);
+        }
+        
+        .signal-line {
+            fill: none;
+            stroke: var(--wire-color);
+            stroke-width: 3;
+            transition: stroke 0.2s;
+            stroke-linecap: round;
+        }
+        .signal-line.active {
+            stroke: var(--signal-on);
+        }
+        
+        .led-indicator {
+            fill

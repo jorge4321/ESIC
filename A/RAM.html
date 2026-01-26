@@ -166,7 +166,7 @@
         .btn-write:hover { background-color: #c0392b; }
         .btn-write:active { transform: scale(0.98); }
 
-        /* Estilos de la Matriz de Memoria (HTML/CSS Grid visual) */
+        /* Estilos de la Matriz de Memoria */
         .memory-grid-container {
             display: flex;
             flex-direction: column;
@@ -175,7 +175,6 @@
             position: relative;
         }
 
-        /* Representación Visual de la RAM */
         .ram-visualization {
             display: grid;
             grid-template-columns: 80px repeat(4, 50px);
@@ -216,44 +215,31 @@
             font-weight: bold;
             font-size: 1.2rem;
             border-radius: 4px;
-            color: #ccc; /* Default off */
+            color: #ccc;
             transition: all 0.3s;
         }
 
-        /* Estado Activo (Fila seleccionada) */
+        /* Estado Activo */
         .ram-row-active .addr-cell {
             background: var(--ram-color);
             box-shadow: 0 0 10px rgba(46, 204, 113, 0.5);
         }
-        .ram-row-active .bit-cell {
-            background: white;
-            border-color: var(--ram-color);
-        }
+        
+        .bit-one { color: var(--signal-on); text-shadow: 0 0 2px var(--signal-on); }
+        .bit-zero { color: #bdc3c7; }
 
-        /* Bits almacenados (1 logic) */
-        .bit-one {
-            color: var(--signal-on);
-            text-shadow: 0 0 2px var(--signal-on);
-        }
-        .bit-zero {
-            color: #bdc3c7;
-        }
-
-        /* Animación de escritura */
         @keyframes flashWrite {
             0% { background: white; }
             50% { background: var(--write-color); color: white; }
             100% { background: white; }
         }
-        .writing {
-            animation: flashWrite 0.4s ease-out;
-        }
+        .writing { animation: flashWrite 0.4s ease-out; }
 
         /* SVG Wiring Area */
         .wiring-overlay {
             width: 100%;
-            height: 100px;
-            margin-top: -10px;
+            height: 60px; /* Altura ajustada */
+            margin-top: 5px;
         }
         
         .io-display {
@@ -261,9 +247,9 @@
             justify-content: space-between;
             width: 100%;
             max-width: 400px;
-            margin-top: 10px;
             font-family: monospace;
             font-weight: bold;
+            align-items: center;
         }
 
         footer {
@@ -285,18 +271,9 @@
         }
 
         @media (max-width: 800px) {
-            .simulation-container {
-                grid-template-columns: 1fr;
-            }
-            .controls-panel {
-                border-right: none;
-                border-bottom: 2px solid #eee;
-                padding-bottom: 20px;
-            }
-            .ram-visualization {
-                grid-template-columns: 60px repeat(4, 40px);
-                gap: 3px;
-            }
+            .simulation-container { grid-template-columns: 1fr; }
+            .controls-panel { border-right: none; border-bottom: 2px solid #eee; padding-bottom: 20px; }
+            .ram-visualization { grid-template-columns: 60px repeat(4, 40px); gap: 3px; }
         }
     </style>
 </head>
@@ -385,20 +362,25 @@
                     <div class="bit-cell" id="cell-3-0">0</div>
                 </div>
 
+                <svg class="wiring-overlay" viewBox="0 0 400 60" preserveAspectRatio="none">
+                    <defs>
+                        <marker id="arrow-write" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                            <polygon points="0 0, 10 3.5, 0 7" fill="#e74c3c" />
+                        </marker>
+                        <marker id="arrow-read" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                            <polygon points="0 0, 10 3.5, 0 7" fill="#2ecc71" />
+                        </marker>
+                    </defs>
+                    
+                    <line x1="50" y1="50" x2="50" y2="10" stroke="#e74c3c" stroke-width="4" marker-end="url(#arrow-write)" opacity="0.8"/>
+                    
+                    <line x1="350" y1="10" x2="350" y2="50" stroke="#2ecc71" stroke-width="4" marker-end="url(#arrow-read)" opacity="0.8"/>
+                </svg>
+
                 <div class="io-display">
                     <span style="color:var(--write-color)">Data In: <span id="disp-data-in">0000</span></span>
                     <span style="color:var(--ram-color)">Data Out (Read): <span id="disp-data-out">0000</span></span>
                 </div>
-                
-                <svg class="wiring-overlay" viewBox="0 0 400 50" preserveAspectRatio="none">
-                    <defs>
-                         <marker id="arrow" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
-                            <polygon points="0 0, 10 3.5, 0 7" fill="#95a5a6" />
-                        </marker>
-                    </defs>
-                    <line x1="50" y1="10" x2="50" y2="40" stroke="#e74c3c" stroke-width="2" marker-end="url(#arrow)" opacity="0.5"/>
-                    <line x1="350" y1="40" x2="350" y2="10" stroke="#27ae60" stroke-width="2" marker-end="url(#arrow)" opacity="0.5"/>
-                </svg>
 
             </div>
         </div>
@@ -421,9 +403,6 @@
     </footer>
 
     <script>
-        // --- Estado de la Memoria ---
-        // Matriz 4x4 inicializada a 0
-        // memory[row][bit]
         let memory = [
             [0, 0, 0, 0],
             [0, 0, 0, 0],
@@ -431,77 +410,50 @@
             [0, 0, 0, 0]
         ];
 
-        // Referencias DOM
         const swA1 = document.getElementById('sw-a1');
         const swA0 = document.getElementById('sw-a0');
         const addrVal = document.getElementById('addr-val');
         const rowVal = document.getElementById('row-val');
-        
         const dataInputs = document.querySelectorAll('.data-in');
         const btnWrite = document.getElementById('btn-write');
-        
         const dispDataIn = document.getElementById('disp-data-in');
         const dispDataOut = document.getElementById('disp-data-out');
 
-        // Inicialización
         updateSimulation();
 
-        // Listeners
         swA1.addEventListener('change', updateSimulation);
         swA0.addEventListener('change', updateSimulation);
-        
-        dataInputs.forEach(input => {
-            input.addEventListener('change', updateSimulation);
-        });
-
-        btnWrite.addEventListener('click', () => {
-            performWrite();
-        });
+        dataInputs.forEach(input => input.addEventListener('change', updateSimulation));
+        btnWrite.addEventListener('click', performWrite);
 
         function updateSimulation() {
-            // 1. Leer Dirección
             const a1 = swA1.checked ? 1 : 0;
             const a0 = swA0.checked ? 1 : 0;
             const currentRow = (a1 * 2) + a0;
 
-            // Actualizar textos dirección
             addrVal.textContent = `${a1}${a0}`;
             rowVal.textContent = currentRow;
 
-            // 2. Leer Datos de Entrada (para display)
             let currentInput = [0,0,0,0];
             dataInputs.forEach(input => {
                 const bit = parseInt(input.dataset.bit);
-                currentInput[3 - bit] = input.checked ? 1 : 0; // Ordenar MSB a LSB en array
+                currentInput[3 - bit] = input.checked ? 1 : 0;
             });
             dispDataIn.textContent = currentInput.join('');
 
-            // 3. Actualizar Visualización de la Matriz
             for(let r=0; r<4; r++) {
-                // Fila seleccionada?
-                const rowDivs = []; 
-                // Obtenemos celdas
                 const addrCell = document.getElementById(`addr-cell-${r}`);
-                const parent = addrCell.parentElement; // No tenemos referencia directa al row wrapper porque usamos grid plano, 
-                // pero podemos usar clases en las celdas o controlar estilos dinámicamente.
-                
-                // Opción más limpia: Resetear estilos de todas las celdas
-                // y aplicar estilo "active" solo a las celdas de la fila r == currentRow
-                
                 const isSelected = (r === currentRow);
                 
-                // Estilar celda de dirección
                 addrCell.style.background = isSelected ? 'var(--ram-color)' : '#2c3e50';
                 addrCell.style.boxShadow = isSelected ? '0 0 8px #2ecc71' : 'none';
 
-                // Estilar celdas de bits y actualizar contenido
                 for(let b=3; b>=0; b--) {
                     const cell = document.getElementById(`cell-${r}-${b}`);
-                    const val = memory[r][3-b]; // memory[r][0] es MSB (bit 3)
+                    const val = memory[r][3-b];
                     
                     cell.textContent = val;
-                    cell.className = 'bit-cell'; // Reset base class
-                    
+                    cell.className = 'bit-cell';
                     if(val === 1) cell.classList.add('bit-one');
                     else cell.classList.add('bit-zero');
 
@@ -515,47 +467,31 @@
                 }
             }
 
-            // 4. Leer Memoria (Data Out)
-            // Data Out siempre refleja la fila seleccionada
             const dataOut = memory[currentRow].join('');
             dispDataOut.textContent = dataOut;
         }
 
         function performWrite() {
-            // 1. Obtener dirección actual
             const a1 = swA1.checked ? 1 : 0;
             const a0 = swA0.checked ? 1 : 0;
             const row = (a1 * 2) + a0;
 
-            // 2. Obtener datos de interruptores
-            // Array ordenado [Bit3, Bit2, Bit1, Bit0]
             let newData = [0,0,0,0];
-            
-            // Recorremos inputs. Input data-bit="3" va al index 0
             document.querySelectorAll('.data-in').forEach(input => {
                 const bitPos = parseInt(input.dataset.bit);
-                // Si bitPos es 3 -> index 0
-                // Si bitPos es 0 -> index 3
                 newData[3 - bitPos] = input.checked ? 1 : 0;
             });
 
-            // 3. Escribir en memoria
-            memory[row] = [...newData]; // Clonar array
+            memory[row] = [...newData];
 
-            // 4. Efecto Visual (Flash)
             for(let b=0; b<=3; b++) {
                 const cell = document.getElementById(`cell-${row}-${b}`);
-                
-                // Truco para reiniciar animación CSS
                 cell.classList.remove('writing');
-                void cell.offsetWidth; // Trigger reflow
+                void cell.offsetWidth;
                 cell.classList.add('writing');
             }
-
-            // 5. Actualizar interfaz
             updateSimulation();
         }
-
     </script>
 </body>
 </html>

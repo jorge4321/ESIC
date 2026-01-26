@@ -223,7 +223,7 @@
             stroke-width: 2;
         }
         .ff-box.active {
-            fill: #e8f5e9;
+            fill: #e8f5e9; /* Fondo verde claro */
             stroke: var(--signal-on);
         }
 
@@ -238,6 +238,12 @@
         }
 
         text { user-select: none; font-family: monospace; }
+        
+        .label-ff {
+            font-size: 18px; 
+            fill: #555; 
+            text-anchor: middle;
+        }
 
         /* Footer */
         footer {
@@ -338,7 +344,7 @@
 
                     <g transform="translate(450, 100)" id="ff-0">
                         <rect x="0" y="0" width="80" height="100" rx="5" class="ff-box" id="box-0" />
-                        <text x="40" y="55" text-anchor="middle" font-size="18" fill="#555">Q<sub>0</sub></text>
+                        <text x="40" y="55" class="label-ff">Q<tspan baseline-shift="sub" font-size="0.7em">0</tspan></text>
                         <circle cx="40" cy="-20" r="10" class="led-circle" id="led-0" />
                         <line x1="40" y1="0" x2="40" y2="-10" stroke="#555" />
                         <line x1="40" y1="100" x2="40" y2="180" stroke="#999" />
@@ -347,7 +353,7 @@
 
                     <g transform="translate(330, 100)" id="ff-1">
                         <rect x="0" y="0" width="80" height="100" rx="5" class="ff-box" id="box-1" />
-                        <text x="40" y="55" text-anchor="middle" font-size="18" fill="#555">Q<sub>1</sub></text>
+                        <text x="40" y="55" class="label-ff">Q<tspan baseline-shift="sub" font-size="0.7em">1</tspan></text>
                         <circle cx="40" cy="-20" r="10" class="led-circle" id="led-1" />
                         <line x1="40" y1="0" x2="40" y2="-10" stroke="#555" />
                         <line x1="40" y1="100" x2="40" y2="180" stroke="#999" />
@@ -356,7 +362,7 @@
 
                     <g transform="translate(210, 100)" id="ff-2">
                         <rect x="0" y="0" width="80" height="100" rx="5" class="ff-box" id="box-2" />
-                        <text x="40" y="55" text-anchor="middle" font-size="18" fill="#555">Q<sub>2</sub></text>
+                        <text x="40" y="55" class="label-ff">Q<tspan baseline-shift="sub" font-size="0.7em">2</tspan></text>
                         <circle cx="40" cy="-20" r="10" class="led-circle" id="led-2" />
                         <line x1="40" y1="0" x2="40" y2="-10" stroke="#555" />
                         <line x1="40" y1="100" x2="40" y2="180" stroke="#999" />
@@ -365,7 +371,7 @@
 
                     <g transform="translate(90, 100)" id="ff-3">
                         <rect x="0" y="0" width="80" height="100" rx="5" class="ff-box" id="box-3" />
-                        <text x="40" y="55" text-anchor="middle" font-size="18" fill="#555">Q<sub>3</sub></text>
+                        <text x="40" y="55" class="label-ff">Q<tspan baseline-shift="sub" font-size="0.7em">3</tspan></text>
                         <circle cx="40" cy="-20" r="10" class="led-circle" id="led-3" />
                         <line x1="40" y1="0" x2="40" y2="-10" stroke="#555" />
                         <line x1="40" y1="100" x2="40" y2="180" stroke="#999" />
@@ -516,16 +522,11 @@
         }
 
         function flashClock() {
-            // Pequeña animación visual en el bus de reloj podría ir aquí
-            // Por simplicidad, confiamos en el cambio de números
+            // Animación
         }
 
         function pulseLoadWires() {
-            // Iluminar cables de carga momentáneamente
-            const wires = [wireLoad0, wireLoad1, wireLoad2, wireLoad3];
-            jumpInputs.forEach((input, idx) => {
-                // Mapear indice de inputs al wire correcto (input 0 es bit 0)
-                // En el array wires, wires[0] es bit 0
+            jumpInputs.forEach((input) => {
                 const wire = document.getElementById(`wire-load-${input.dataset.bit}`);
                 if(input.checked) {
                     wire.classList.add('jump-active');

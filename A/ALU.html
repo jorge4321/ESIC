@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ALU (Arithmetic Logic Unit) Interactiva</title>
+    <style>
+        :root {
+            --bg-color: #f4f7f6;
+            --text-color: #333;
+            --primary-color: #2c3e50;
+            --alu-color: #3498db;    /* Azul clásico para ALU */
+            --signal-on: #2ecc71;    /* Verde (High) */
+            --signal-off: #bdc3c7;   /* Gris (Low) */
+            --flag-on: #e74c3c;      /* Rojo para Flags */
+            --wire-color: #95a5a6;
+            --box-fill: #ffffff;
+            --box-stroke: #34495e;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 1rem;
+            position: relative;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        h1 { margin: 0; font-size: 1.5rem; }
+
+        .btn-volver {
+            position: absolute;
+            top: 50%;
+            right: 20px;
+            transform: translateY(-50%);
+            background-color: #e67e22;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 0.9rem;
+            transition: background 0.3s;
+        }
+        .btn-volver:hover { background-color: #d35400; }
+
+        /* Contenido Principal */
+        main {
+            flex: 1;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            box-sizing: border-box;
+        }
+
+        .simulation-container {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 20px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        /* Panel de Control */
+        .controls-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            border-right: 2px solid #eee;
+            padding-right: 20px;
+        }
+
+        .control-section {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .section-title {
+            font-weight: bold;
+            margin-bottom: 8px;
+            display: block;
+            color: #555;
+            font-size: 0.9rem;
+        }
+
+        .bit-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+        }
+
+        .bit-control {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .bit-label { font-size: 0.7rem; color: #888; margin-bottom: 2px; }
+
+        /* Switches pequeños */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 30px;
+            height: 16px;
+        }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 16px;
+        }
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 10px;
+            width: 10px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        input:checked + .slider { background-color: var(--signal-on); }
+        input:checked + .slider:before { transform: translateX(14px); }
+
+        /* OpCode Selector */
+        select {
+            width: 100%;
+            padding: 8px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            background: white;
+            font-size: 1rem;
+        }
+
+        /* Visualización de Valores */
+        .value-display {
+            text-align: right;
+            font-family: monospace;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        /* Diagrama SVG */
+        .diagram-area {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        svg {
+            max-width: 100%;
+            height: auto;
+            min-height: 400px;
+        }
+
+        /* Estilos SVG */
+        .alu-shape {
+            fill: #ecf0f1;
+            stroke: var(--primary-color);
+            stroke-width: 3;
+            transition: fill 0.3s;
+        }
+        
+        .wire {
+            fill: none;
+            stroke: var(--wire-color);
+            stroke-width: 4;
+            stroke-linecap: round;
+            transition: stroke 0.2s;
+        }
+        .wire.active { stroke: var(--signal-on); }
+
+        .bus-text {
+            font-family: monospace;
+            font-weight: bold;
+            fill: #555;
+            font-size: 14px;
+        }
+
+        /* Flags */
+        .flag-box {
+            fill: #fff;
+            stroke: #999;
+            stroke-width: 1;
+        }
+        .flag-text {
+            font-size: 12px;
+            font-weight: bold;
+            fill: #777;
+            text-anchor: middle;
+        }
+        .flag-led {
+            fill: #bdc3c7;
+            stroke: #7f8c8d;
+            transition: fill 0.2s;
+        }
+        .flag-led.active {
+            fill: var(--flag-on); /* Rojo brillante */
+            filter: drop-shadow(0 0 5px var(--flag-on));
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 15px;
+            font-size: 0.8rem;
+            color: #777;
+            background-color: #eee;
+            margin-top: auto;
+        }
+
+        .info-panel {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            max-width: 1200px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        @media (max-width: 800px) {
+            .simulation-container {
+                grid-template-columns: 1fr;
+            }
+            .controls-panel {
+                border-right: none;
+                border-bottom: 2px solid #eee;
+                padding-bottom: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>ALU de 4 Bits (Unidad Aritmético Lógica)</h1>
+        <a href="javascript:history.back()" class="btn-volver">Volver</a>
+    </header>
+
+    <main>
+        <div class="simulation-container">
+            <div class="controls-panel">
+                
+                <div class="control-section">
+                    <span class="section-title">Operando A (4 bits)</span>
+                    <div class="bit-row" id="container-a">
+                        </div>
+                    <div class="value-display" id="val-a-display">Dec: 0</div>
+                </div>
+
+                <div class="control-section">
+                    <span class="section-title">Operando B (4 bits)</span>
+                    <div class="bit-row" id="container-b">
+                        </div>
+                    <div class="value-display" id="val-b-display">Dec: 0</div>
+                </div>
+
+                <div class="control-section" style="border-left-color: var(--alu-color);">
+                    <span class="section-title">Operación (OpCode)</span>
+                    <select id="op-selector">
+                        <option value="ADD">SUMA (A + B)</option>
+                        <option value="SUB">RESTA (A - B)</option>
+                        <option value="AND">AND (A & B)</option>
+                        <option value="OR">OR (A | B)</option>
+                        <option value="XOR">XOR (A ^ B)</option>
+                        <option value="NOT">NOT A (~A)</option>
+                    </select>
+                    <div style="margin-top:5px; font-size:0.8rem; color:#777;">
+                        Código Op: <span id="opcode-bin" style="font-family:monospace; font-weight:bold;">000</span>
+                    </div>
+                </div>
+
+                <div class="control-section">
+                    <span class="section-title">Resultado (Y)</span>
+                    <div class="value-display" id="res-display" style="color: var(--signal-on); font-size: 1.2rem;">0000 (0)</div>
+                </div>
+
+            </div>
+
+            <div class="diagram-area">
+                <svg viewBox="0 0 500 400" preserveAspectRatio="xMidYMid meet">
+                    <defs>
+                        <marker id="arrow" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                            <polygon points="0 0, 10 3.5, 0 7" fill="#95a5a6" />
+                        </marker>
+                    </defs>
+
+                    <line id="bus-a" x1="180" y1="20" x2="180" y2="100" class="wire" marker-end="url(#arrow)" />
+                    <text x="190" y="50" class="bus-text" id="text-bus-a">A: 0000</text>
+
+                    <line id="bus-b" x1="320" y1="20" x2="320" y2="100" class="wire" marker-end="url(#arrow)" />
+                    <text x="330" y="50" class="bus-text" id="text-bus-b">B: 0000</text>
+
+                    <path d="M 150,100 L 230,100 L 250,130 L 270,100 L 350,100 L 300,300 L 200,300 Z" 
+                          class="alu-shape" id="alu-body" />
+                    
+                    <text x="250" y="220" text-anchor="middle" font-size="24" font-weight="bold" fill="#34495e">ALU</text>
+                    <text x="250" y="240" text-anchor="middle" font-size="14" fill="#fff" id="op-text-svg">ADD</text>
+
+                    <line id="bus-out" x1="250" y1="300" x2="250" y2="380" class="wire" marker-end="url(#arrow)" />
+                    <text x="260" y="350" class="bus-text" id="text-bus-out">Y: 0000</text>
+
+                    <line x1="80" y1="200" x2="185" y2="200" stroke="#8e44ad" stroke-width="3" marker-end="url(#arrow)" />
+                    <text x="80" y="190" fill="#8e44ad" font-size="12" font-weight="bold">OpCode</text>
+
+                    <g transform="translate(380, 150)">
+                        <text x="0" y="-10" font-weight="bold" fill="#555">FLAGS</text>
+                        
+                        <g transform="translate(0, 0)">
+                            <circle cx="10" cy="10" r="8" class="flag-led" id="led-z" />
+                            <text x="30" y="15" class="flag-text" text-anchor="start">Z (Zero)</text>
+                        </g>
+
+                        <g transform="translate(0, 30)">
+                            <circle cx="10" cy="10" r="8" class="flag-led" id="led-c" />
+                            <text x="30" y="15" class="flag-text" text-anchor="start">C (Carry)</text>
+                        </g>
+
+                        <g transform="translate(0, 60)">
+                            <circle cx="10" cy="10" r="8" class="flag-led" id="led-n" />
+                            <text x="30" y="15" class="flag-text" text-anchor="start">N (Neg)</text>
+                        </g>
+
+                        <g transform="translate(0, 90)">
+                            <circle cx="10" cy="10" r="8" class="flag-led" id="led-v" />
+                            <text x="30" y="15" class="flag-text" text-anchor="start">V (Ovfl)</text>
+                        </g>
+                    </g>
+                </svg>
+            </div>
+        </div>
+
+        <div class="info-panel">
+            <h3>¿Qué está pasando aquí?</h3>
+            <p>
+                La <strong>ALU</strong> recibe dos números binarios (A y B) y realiza una operación seleccionada por la Unidad de Control (aquí simulada por el menú desplegable).
+            </p>
+            <ul>
+                <li><strong>Z (Zero Flag):</strong> Se enciende si el resultado de la operación es exactamente 0.</li>
+                <li><strong>C (Carry Flag):</strong> Se enciende en sumas si el resultado es mayor que 15 (desbordamiento de 4 bits).</li>
+                <li><strong>N (Negative Flag):</strong> Se enciende si el bit más significativo (MSB) es 1. En sistemas con signo, esto indica un número negativo.</li>
+                <li><strong>V (Overflow Flag):</strong> Indica error matemático en operaciones con signo (ej: sumar dos positivos y obtener un negativo).</li>
+            </ul>
+        </div>
+    </main>
+
+    <footer>
+        (C) 2026, Prof. Jorge López-Cifre, PhD
+    </footer>
+
+    <script>
+        // --- Configuración ---
+        const BITS = 4;
+        const MAX_VAL = Math.pow(2, BITS) - 1; // 15
+        
+        // Estado
+        let valA = 0;
+        let valB = 0;
+        let opMode = 'ADD';
+
+        // --- Referencias DOM ---
+        const containerA = document.getElementById('container-a');
+        const containerB = document.getElementById('container-b');
+        const displayA = document.getElementById('val-a-display');
+        const displayB = document.getElementById('val-b-display');
+        const opSelector = document.getElementById('op-selector');
+        const opCodeDisplay = document.getElementById('opcode-bin');
+        const resDisplay = document.getElementById('res-display');
+
+        // Referencias SVG
+        const svgTextA = document.getElementById('text-bus-a');
+        const svgTextB = document.getElementById('text-bus-b');
+        const svgTextOut = document.getElementById('text-bus-out');
+        const svgOpText = document.getElementById('op-text-svg');
+        const aluBody = document.getElementById('alu-body');
+        
+        const ledZ = document.getElementById('led-z');
+        const ledC = document.getElementById('led-c');
+        const ledN = document.getElementById('led-n');
+        const ledV = document.getElementById('led-v');
+
+        const busA = document.getElementById('bus-a');
+        const busB = document.getElementById('bus-b');
+        const busOut = document.getElementById('bus-out');
+
+        // --- Inicialización ---
+        function init() {
+            createControls(containerA, 'a');
+            createControls(containerB, 'b');
+            
+            opSelector.addEventListener('change', (e) => {
+                opMode = e.target.value;
+                updateALU();
+            });
+
+            updateALU();
+        }
+
+        // Crear switches HTML dinámicamente
+        function createControls(container, prefix) {
+            // Ordenamos visualmente 3..0 (MSB a la izquierda)
+            for (let i = BITS - 1; i >= 0; i--) {
+                const wrapper = document.createElement('div');
+                wrapper.className = 'bit-control';
+                
+                const label = document.createElement('span');
+                label.className = 'bit-label';
+                // Corrección: Usamos innerHTML para el subíndice
+                label.innerHTML = `${prefix.toUpperCase()}<sub>${i}</sub>`;
+                
+                const labelSwitch = document.createElement('label');
+                labelSwitch.className = 'switch';
+                
+                const input = document.createElement('input');
+                input.type = 'checkbox';
+                input.dataset.bit = i;
+                input.dataset.group = prefix;
+                input.addEventListener('change', handleInputChange);
+
+                const slider = document.createElement('span');
+                slider.className = 'slider';
+
+                labelSwitch.appendChild(input);
+                labelSwitch.appendChild(slider);
+                wrapper.appendChild(label);
+                wrapper.appendChild(labelSwitch);
+                container.appendChild(wrapper);
+            }
+        }
+
+        function handleInputChange() {
+            // Recalcular A y B desde los inputs
+            valA = readBinary('a');
+            valB = readBinary('b');
+            updateALU();
+        }
+
+        function readBinary(group) {
+            let val = 0;
+            const inputs = document.querySelectorAll(`input[data-group="${group}"]`);
+            inputs.forEach(input => {
+                if (input.checked) {
+                    val += Math.pow(2, parseInt(input.dataset.bit));
+                }
+            });
+            return val;
+        }
+
+        // --- LÓGICA DE LA ALU ---
+        function updateALU() {
+            let result = 0;
+            let carry = false;
+            let overflow = false;
+            
+            // Simular OpCodes binarios para efecto visual
+            const opCodes = {
+                'ADD': '000', 'SUB': '001', 'AND': '010', 
+                'OR': '011', 'XOR': '100', 'NOT': '101'
+            };
+            opCodeDisplay.textContent = opCodes[opMode];
+            svgOpText.textContent = opMode;
+
+            // Operaciones
+            switch (opMode) {
+                case 'ADD':
+                    result = valA + valB;
+                    // Carry Out: Si resultado > 15
+                    if (result > MAX_VAL) carry = true;
+                    // Overflow (Signado): (Pos + Pos = Neg) o (Neg + Neg = Pos)
+                    // MSB de A, B y Resultado
+                    {
+                        const msbA = (valA >> 3) & 1;
+                        const msbB = (valB >> 3) & 1;
+                        const msbR = (result & 0xF) >> 3; // Miramos el bit 3 del resultado truncado
+                        if (msbA === msbB && msbA !== msbR) overflow = true;
+                    }
+                    break;
+                case 'SUB':
+                    result = valA - valB;
+                    // En restas, Carry suele actuar como "Borrow". 
+                    // Si A < B, necesitamos Borrow, lo representamos encendiendo C o apagandolo según arquitectura.
+                    // Para simplificar: Si resultado < 0, Carry activo (Borrow).
+                    if (result < 0) carry = true; 
+                    
+                    // Overflow en resta: (Pos - Neg = Neg) o (Neg - Pos = Pos)
+                    {
+                        const msbA = (valA >> 3) & 1;
+                        const msbB = (valB >> 3) & 1;
+                        const realRes = result & 0xF; // Truncado a 4 bits
+                        const msbR = (realRes >> 3) & 1;
+                        // Overflow ocurre si operandos tienen signos distintos y el resultado tiene signo distinto de A
+                        if (msbA !== msbB && msbA !== msbR) overflow = true;
+                    }
+                    break;
+                case 'AND':
+                    result = valA & valB;
+                    break;
+                case 'OR':
+                    result = valA | valB;
+                    break;
+                case 'XOR':
+                    result = valA ^ valB;
+                    break;
+                case 'NOT':
+                    result = ~valA;
+                    break;
+            }
+
+            // Máscara de 4 bits (El hardware físico corta los bits extra)
+            const maskedResult = result & 0xF; 
+
+            // --- Calcular Flags ---
+            
+            // Z (Zero)
+            const flagZ = (maskedResult === 0);
+            
+            // N (Negative / MSB)
+            // Bit 3 (cuarto bit) es el de signo en 4 bits
+            const flagN = ((maskedResult >> 3) & 1) === 1;
+
+            // C (Carry) - Ya calculado en ADD/SUB, apagar en lógicas
+            if (!['ADD', 'SUB'].includes(opMode)) carry = false;
+
+            // V (Overflow) - Ya calculado, apagar en lógicas
+            if (!['ADD', 'SUB'].includes(opMode)) overflow = false;
+
+
+            // --- Actualizar Interfaz ---
+            
+            displayA.textContent = `Dec: ${valA}`;
+            displayB.textContent = `Dec: ${valB}`;
+            
+            // Binario Helper
+            const toBin = (n) => n.toString(2).padStart(4, '0');
+            
+            svgTextA.textContent = `A: ${toBin(valA)}`;
+            svgTextB.textContent = `B: ${toBin(valB)}`;
+            svgTextOut.textContent = `Y: ${toBin(maskedResult)}`;
+            
+            resDisplay.textContent = `${toBin(maskedResult)} (${maskedResult})`;
+
+            // Animación cables
+            if (valA > 0) busA.classList.add('active'); else busA.classList.remove('active');
+            if (valB > 0) busB.classList.add('active'); else busB.classList.remove('active');
+            // Bus Out siempre activo si hay resultado o simplemente color por defecto
+            if (maskedResult > 0) busOut.classList.add('active'); else busOut.classList.remove('active');
+
+            // Actualizar LEDs Flags
+            setLed(ledZ, flagZ);
+            setLed(ledC, carry);
+            setLed(ledN, flagN);
+            setLed(ledV, overflow);
+        }
+
+        function setLed(element, state) {
+            if (state) {
+                element.classList.add('active');
+            } else {
+                element.classList.remove('active');
+            }
+        }
+
+        // Arrancar
+        init();
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memoria RAM 4x4 Interactiva</title>
+    <style>
+        :root {
+            --bg-color: #f4f7f6;
+            --text-color: #333;
+            --primary-color: #2c3e50;
+            --ram-color: #27ae60;    /* Verde para Memoria */
+            --signal-on: #2ecc71;
+            --signal-off: #bdc3c7;
+            --wire-color: #95a5a6;
+            --box-fill: #ffffff;
+            --box-stroke: #34495e;
+            --write-color: #e74c3c;  /* Rojo para acción de escribir */
+            --highlight-row: #d5f5e3;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 1rem;
+            position: relative;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        h1 { margin: 0; font-size: 1.5rem; }
+
+        .btn-volver {
+            position: absolute;
+            top: 50%;
+            right: 20px;
+            transform: translateY(-50%);
+            background-color: #e67e22;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 0.9rem;
+            transition: background 0.3s;
+        }
+        .btn-volver:hover { background-color: #d35400; }
+
+        main {
+            flex: 1;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            box-sizing: border-box;
+        }
+
+        .simulation-container {
+            display: grid;
+            grid-template-columns: 260px 1fr;
+            gap: 20px;
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        /* Panel de Control */
+        .controls-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            border-right: 2px solid #eee;
+            padding-right: 20px;
+        }
+
+        .control-group {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 5px solid var(--ram-color);
+        }
+
+        .control-group.write-group {
+            border-left-color: var(--write-color);
+            background: #fdedec;
+        }
+
+        .group-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            display: block;
+            color: #555;
+            font-size: 0.95rem;
+        }
+
+        /* Switches */
+        .switch-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+        .switch-label { font-family: monospace; font-size: 0.9rem; }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 40px;
+            height: 20px;
+        }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 20px;
+        }
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 14px;
+            width: 14px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        input:checked + .slider { background-color: var(--signal-on); }
+        input:checked + .slider:before { transform: translateX(20px); }
+
+        /* Botón Write */
+        .btn-write {
+            background-color: var(--write-color);
+            color: white;
+            border: none;
+            padding: 12px;
+            width: 100%;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.1s, background 0.2s;
+            margin-top: 5px;
+        }
+        .btn-write:hover { background-color: #c0392b; }
+        .btn-write:active { transform: scale(0.98); }
+
+        /* Estilos de la Matriz de Memoria (HTML/CSS Grid visual) */
+        .memory-grid-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        /* Representación Visual de la RAM */
+        .ram-visualization {
+            display: grid;
+            grid-template-columns: 80px repeat(4, 50px);
+            gap: 5px;
+            padding: 20px;
+            background: #ecf0f1;
+            border-radius: 8px;
+            border: 2px solid #bdc3c7;
+        }
+
+        .ram-header {
+            font-weight: bold;
+            text-align: center;
+            padding: 5px;
+            color: #7f8c8d;
+            font-size: 0.8rem;
+        }
+
+        .addr-cell {
+            background: #2c3e50;
+            color: white;
+            padding: 10px;
+            text-align: center;
+            font-family: monospace;
+            border-radius: 4px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .bit-cell {
+            background: white;
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: center;
+            font-family: monospace;
+            font-weight: bold;
+            font-size: 1.2rem;
+            border-radius: 4px;
+            color: #ccc; /* Default off */
+            transition: all 0.3s;
+        }
+
+        /* Estado Activo (Fila seleccionada) */
+        .ram-row-active .addr-cell {
+            background: var(--ram-color);
+            box-shadow: 0 0 10px rgba(46, 204, 113, 0.5);
+        }
+        .ram-row-active .bit-cell {
+            background: white;
+            border-color: var(--ram-color);
+        }
+
+        /* Bits almacenados (1 logic) */
+        .bit-one {
+            color: var(--signal-on);
+            text-shadow: 0 0 2px var(--signal-on);
+        }
+        .bit-zero {
+            color: #bdc3c7;
+        }
+
+        /* Animación de escritura */
+        @keyframes flashWrite {
+            0% { background: white; }
+            50% { background: var(--write-color); color: white; }
+            100% { background: white; }
+        }
+        .writing {
+            animation: flashWrite 0.4s ease-out;
+        }
+
+        /* SVG Wiring Area */
+        .wiring-overlay {
+            width: 100%;
+            height: 100px;
+            margin-top: -10px;
+        }
+        
+        .io-display {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            max-width: 400px;
+            margin-top: 10px;
+            font-family: monospace;
+            font-weight: bold;
+        }
+
+        footer {
+            text-align: center;
+            padding: 15px;
+            font-size: 0.8rem;
+            color: #777;
+            background-color: #eee;
+            margin-top: auto;
+        }
+        
+        .info-panel {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            width: 100%;
+            margin-top: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        @media (max-width: 800px) {
+            .simulation-container {
+                grid-template-columns: 1fr;
+            }
+            .controls-panel {
+                border-right: none;
+                border-bottom: 2px solid #eee;
+                padding-bottom: 20px;
+            }
+            .ram-visualization {
+                grid-template-columns: 60px repeat(4, 40px);
+                gap: 3px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Memoria RAM (4 Palabras x 4 Bits)</h1>
+        <a href="javascript:history.back()" class="btn-volver">Volver</a>
+    </header>
+
+    <main>
+        <div class="simulation-container">
+            <div class="controls-panel">
+                
+                <div class="control-group">
+                    <span class="group-title">Bus de Direcciones (Address)</span>
+                    <div class="switch-row">
+                        <span class="switch-label">A<sub>1</sub> (MSB)</span>
+                        <label class="switch"><input type="checkbox" id="sw-a1"><span class="slider"></span></label>
+                    </div>
+                    <div class="switch-row">
+                        <span class="switch-label">A<sub>0</sub> (LSB)</span>
+                        <label class="switch"><input type="checkbox" id="sw-a0"><span class="slider"></span></label>
+                    </div>
+                    <div style="text-align:right; font-size:0.9rem; font-weight:bold; color:var(--primary-color); margin-top:5px;">
+                        Dir: <span id="addr-val">00</span> (Fila <span id="row-val">0</span>)
+                    </div>
+                </div>
+
+                <div class="control-group write-group">
+                    <span class="group-title">Bus de Datos (Data In)</span>
+                    <div class="switch-row">
+                        <span class="switch-label">D<sub>3</sub></span>
+                        <label class="switch"><input type="checkbox" class="data-in" data-bit="3"><span class="slider"></span></label>
+                    </div>
+                    <div class="switch-row">
+                        <span class="switch-label">D<sub>2</sub></span>
+                        <label class="switch"><input type="checkbox" class="data-in" data-bit="2"><span class="slider"></span></label>
+                    </div>
+                    <div class="switch-row">
+                        <span class="switch-label">D<sub>1</sub></span>
+                        <label class="switch"><input type="checkbox" class="data-in" data-bit="1"><span class="slider"></span></label>
+                    </div>
+                    <div class="switch-row">
+                        <span class="switch-label">D<sub>0</sub></span>
+                        <label class="switch"><input type="checkbox" class="data-in" data-bit="0"><span class="slider"></span></label>
+                    </div>
+                    
+                    <button class="btn-write" id="btn-write">ESCRIBIR (WRITE PULSE)</button>
+                </div>
+
+            </div>
+
+            <div class="memory-grid-container">
+                <h3 style="color:#555; margin-bottom:10px;">Matriz de Memoria Interna</h3>
+                
+                <div class="ram-visualization">
+                    <div class="ram-header">ADDR</div>
+                    <div class="ram-header">Bit 3</div>
+                    <div class="ram-header">Bit 2</div>
+                    <div class="ram-header">Bit 1</div>
+                    <div class="ram-header">Bit 0</div>
+
+                    <div class="addr-cell" id="addr-cell-0">00</div>
+                    <div class="bit-cell" id="cell-0-3">0</div>
+                    <div class="bit-cell" id="cell-0-2">0</div>
+                    <div class="bit-cell" id="cell-0-1">0</div>
+                    <div class="bit-cell" id="cell-0-0">0</div>
+
+                    <div class="addr-cell" id="addr-cell-1">01</div>
+                    <div class="bit-cell" id="cell-1-3">0</div>
+                    <div class="bit-cell" id="cell-1-2">0</div>
+                    <div class="bit-cell" id="cell-1-1">0</div>
+                    <div class="bit-cell" id="cell-1-0">0</div>
+
+                    <div class="addr-cell" id="addr-cell-2">10</div>
+                    <div class="bit-cell" id="cell-2-3">0</div>
+                    <div class="bit-cell" id="cell-2-2">0</div>
+                    <div class="bit-cell" id="cell-2-1">0</div>
+                    <div class="bit-cell" id="cell-2-0">0</div>
+
+                    <div class="addr-cell" id="addr-cell-3">11</div>
+                    <div class="bit-cell" id="cell-3-3">0</div>
+                    <div class="bit-cell" id="cell-3-2">0</div>
+                    <div class="bit-cell" id="cell-3-1">0</div>
+                    <div class="bit-cell" id="cell-3-0">0</div>
+                </div>
+
+                <div class="io-display">
+                    <span style="color:var(--write-color)">Data In: <span id="disp-data-in">0000</span></span>
+                    <span style="color:var(--ram-color)">Data Out (Read): <span id="disp-data-out">0000</span></span>
+                </div>
+                
+                <svg class="wiring-overlay" viewBox="0 0 400 50" preserveAspectRatio="none">
+                    <defs>
+                         <marker id="arrow" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                            <polygon points="0 0, 10 3.5, 0 7" fill="#95a5a6" />
+                        </marker>
+                    </defs>
+                    <line x1="50" y1="10" x2="50" y2="40" stroke="#e74c3c" stroke-width="2" marker-end="url(#arrow)" opacity="0.5"/>
+                    <line x1="350" y1="40" x2="350" y2="10" stroke="#27ae60" stroke-width="2" marker-end="url(#arrow)" opacity="0.5"/>
+                </svg>
+
+            </div>
+        </div>
+
+        <div class="info-panel">
+            <h3>¿Cómo funciona la RAM?</h3>
+            <p>
+                La RAM es una matriz de celdas de memoria. Para usarla necesitamos dos buses:
+            </p>
+            <ul>
+                <li><strong>Dirección (Address):</strong> El Decoder interno usa los bits $A_1, A_0$ para activar una sola fila (mostrada en verde). Solo la fila activa puede ser leída o escrita.</li>
+                <li><strong>Lectura (Read):</strong> La RAM siempre muestra en la salida (Data Out) el contenido de la fila seleccionada. Cambia la dirección y verás cambiar la salida.</li>
+                <li><strong>Escritura (Write):</strong> Para guardar datos, seleccionamos una dirección, configuramos los bits de entrada ($D_{in}$) y enviamos un pulso de escritura. Los datos se copian permanentemente en esa fila.</li>
+            </ul>
+        </div>
+    </main>
+
+    <footer>
+        (C) 2026, Prof. Jorge López-Cifre, PhD
+    </footer>
+
+    <script>
+        // --- Estado de la Memoria ---
+        // Matriz 4x4 inicializada a 0
+        // memory[row][bit]
+        let memory = [
+            [0, 0, 0, 0],
+            [0, 0, 0, 0],
+            [0, 0, 0, 0],
+            [0, 0, 0, 0]
+        ];
+
+        // Referencias DOM
+        const swA1 = document.getElementById('sw-a1');
+        const swA0 = document.getElementById('sw-a0');
+        const addrVal = document.getElementById('addr-val');
+        const rowVal = document.getElementById('row-val');
+        
+        const dataInputs = document.querySelectorAll('.data-in');
+        const btnWrite = document.getElementById('btn-write');
+        
+        const dispDataIn = document.getElementById('disp-data-in');
+        const dispDataOut = document.getElementById('disp-data-out');
+
+        // Inicialización
+        updateSimulation();
+
+        // Listeners
+        swA1.addEventListener('change', updateSimulation);
+        swA0.addEventListener('change', updateSimulation);
+        
+        dataInputs.forEach(input => {
+            input.addEventListener('change', updateSimulation);
+        });
+
+        btnWrite.addEventListener('click', () => {
+            performWrite();
+        });
+
+        function updateSimulation() {
+            // 1. Leer Dirección
+            const a1 = swA1.checked ? 1 : 0;
+            const a0 = swA0.checked ? 1 : 0;
+            const currentRow = (a1 * 2) + a0;
+
+            // Actualizar textos dirección
+            addrVal.textContent = `${a1}${a0}`;
+            rowVal.textContent = currentRow;
+
+            // 2. Leer Datos de Entrada (para display)
+            let currentInput = [0,0,0,0];
+            dataInputs.forEach(input => {
+                const bit = parseInt(input.dataset.bit);
+                currentInput[3 - bit] = input.checked ? 1 : 0; // Ordenar MSB a LSB en array
+            });
+            dispDataIn.textContent = currentInput.join('');
+
+            // 3. Actualizar Visualización de la Matriz
+            for(let r=0; r<4; r++) {
+                // Fila seleccionada?
+                const rowDivs = []; 
+                // Obtenemos celdas
+                const addrCell = document.getElementById(`addr-cell-${r}`);
+                const parent = addrCell.parentElement; // No tenemos referencia directa al row wrapper porque usamos grid plano, 
+                // pero podemos usar clases en las celdas o controlar estilos dinámicamente.
+                
+                // Opción más limpia: Resetear estilos de todas las celdas
+                // y aplicar estilo "active" solo a las celdas de la fila r == currentRow
+                
+                const isSelected = (r === currentRow);
+                
+                // Estilar celda de dirección
+                addrCell.style.background = isSelected ? 'var(--ram-color)' : '#2c3e50';
+                addrCell.style.boxShadow = isSelected ? '0 0 8px #2ecc71' : 'none';
+
+                // Estilar celdas de bits y actualizar contenido
+                for(let b=3; b>=0; b--) {
+                    const cell = document.getElementById(`cell-${r}-${b}`);
+                    const val = memory[r][3-b]; // memory[r][0] es MSB (bit 3)
+                    
+                    cell.textContent = val;
+                    cell.className = 'bit-cell'; // Reset base class
+                    
+                    if(val === 1) cell.classList.add('bit-one');
+                    else cell.classList.add('bit-zero');
+
+                    if(isSelected) {
+                        cell.style.borderColor = 'var(--ram-color)';
+                        cell.style.background = '#fff';
+                    } else {
+                        cell.style.borderColor = '#ccc';
+                        cell.style.background = '#fff';
+                    }
+                }
+            }
+
+            // 4. Leer Memoria (Data Out)
+            // Data Out siempre refleja la fila seleccionada
+            const dataOut = memory[currentRow].join('');
+            dispDataOut.textContent = dataOut;
+        }
+
+        function performWrite() {
+            // 1. Obtener dirección actual
+            const a1 = swA1.checked ? 1 : 0;
+            const a0 = swA0.checked ? 1 : 0;
+            const row = (a1 * 2) + a0;
+
+            // 2. Obtener datos de interruptores
+            // Array ordenado [Bit3, Bit2, Bit1, Bit0]
+            let newData = [0,0,0,0];
+            
+            // Recorremos inputs. Input data-bit="3" va al index 0
+            document.querySelectorAll('.data-in').forEach(input => {
+                const bitPos = parseInt(input.dataset.bit);
+                // Si bitPos es 3 -> index 0
+                // Si bitPos es 0 -> index 3
+                newData[3 - bitPos] = input.checked ? 1 : 0;
+            });
+
+            // 3. Escribir en memoria
+            memory[row] = [...newData]; // Clonar array
+
+            // 4. Efecto Visual (Flash)
+            for(let b=0; b<=3; b++) {
+                const cell = document.getElementById(`cell-${row}-${b}`);
+                
+                // Truco para reiniciar animación CSS
+                cell.classList.remove('writing');
+                void cell.offsetWidth; // Trigger reflow
+                cell.classList.add('writing');
+            }
+
+            // 5. Actualizar interfaz
+            updateSimulation();
+        }
+
+    </script>
+</body>
+</html>

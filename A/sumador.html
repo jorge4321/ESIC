@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sumador de 6 Bits (Ripple Carry Adder)</title>
+    <style>
+        :root {
+            --bg-color: #f4f7f6;
+            --text-color: #333;
+            --primary-color: #2c3e50;
+            --accent-color: #e67e22; /* Naranja para Aritmética */
+            --signal-on: #2ecc71; /* Verde neón para 1 */
+            --signal-off: #bdc3c7; /* Gris para 0 */
+            --wire-color: #95a5a6;
+            --box-fill: #ecf0f1;
+            --box-stroke: #34495e;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 1rem;
+            position: relative;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        h1 { margin: 0; font-size: 1.5rem; }
+
+        .btn-volver {
+            position: absolute;
+            top: 50%;
+            right: 20px;
+            transform: translateY(-50%);
+            background-color: #c0392b;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 0.9rem;
+            transition: background 0.3s;
+        }
+        .btn-volver:hover { background-color: #a93226; }
+
+        /* Contenido Principal */
+        main {
+            flex: 1;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            box-sizing: border-box;
+        }
+
+        /* Panel de Control de Entradas */
+        .input-panel {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            width: 100%;
+            max-width: 900px;
+        }
+
+        .input-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+            padding: 10px;
+            background: #f9f9f9;
+            border-radius: 5px;
+        }
+
+        .row-label {
+            font-weight: bold;
+            min-width: 100px;
+            font-size: 1.1rem;
+        }
+
+        .bits-container {
+            display: flex;
+            gap: 10px;
+            flex-direction: row-reverse; /* Para que el bit 0 esté a la derecha */
+        }
+
+        .bit-switch {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .bit-label { font-size: 0.75rem; color: #777; margin-bottom: 3px; }
+
+        /* Estilo Checkbox */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 40px;
+            height: 20px;
+        }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 20px;
+        }
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 14px;
+            width: 14px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        input:checked + .slider { background-color: var(--signal-on); }
+        input:checked + .slider:before { transform: translateX(20px); }
+
+        .decimal-display {
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: bold;
+            color: var(--primary-color);
+            background: #eee;
+            padding: 5px 10px;
+            border-radius: 4px;
+            min-width: 40px;
+            text-align: center;
+        }
+
+        /* SVG Diagrama */
+        .diagram-container {
+            width: 100%;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            padding: 20px;
+            margin-bottom: 20px;
+            overflow-x: auto; /* Scroll horizontal si es necesario */
+            display: flex;
+            justify-content: center;
+        }
+
+        svg {
+            min-width: 800px; /* Asegura que no se aplaste demasiado */
+            height: auto;
+            max-width: 100%;
+        }
+
+        /* Clases SVG dinámicas */
+        .wire {
+            fill: none;
+            stroke: var(--wire-color);
+            stroke-width: 3;
+            stroke-linecap: round;
+            transition: stroke 0.2s;
+        }
+        .wire.active { stroke: var(--signal-on); }
+        
+        .box {
+            fill: var(--box-fill);
+            stroke: var(--box-stroke);
+            stroke-width: 2;
+        }
+        
+        .led-circle {
+            fill: #bdc3c7;
+            stroke: #7f8c8d;
+            transition: fill 0.2s;
+        }
+        .led-circle.active {
+            fill: var(--signal-on);
+            filter: drop-shadow(0 0 5px var(--signal-on));
+        }
+
+        text { user-select: none; font-family: monospace;}
+        .text-label { fill: #555; font-size: 12px; }
+        .text-title { fill: #333; font-weight: bold; font-size: 14px; }
+
+        /* Panel Informativo */
+        .info-panel {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            max-width: 900px;
+            width: 100%;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        .result-highlight {
+            font-size: 1.2rem;
+            color: var(--accent-color);
+            font-weight: bold;
+        }
+
+        footer {
+            text-align: center;
+            padding: 15px;
+            font-size: 0.8rem;
+            color: #777;
+            background-color: #eee;
+            margin-top: auto;
+        }
+
+        @media (max-width: 768px) {
+            .input-row { flex-direction: column; align-items: flex-start; }
+            .bits-container { justify-content: center; width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Sumador de 6 Bits</h1>
+        <a href="javascript:history.back()" class="btn-volver">Volver</a>
+    </header>
+
+    <main>
+        <div class="input-panel">
+            <div class="input-row">
+                <div class="row-label">Número A:</div>
+                <div class="bits-container" id="container-a">
+                    </div>
+                <div class="decimal-display">Dec: <span id="dec-a">0</span></div>
+            </div>
+
+            <div class="input-row">
+                <div class="row-label">Número B:</div>
+                <div class="bits-container" id="container-b">
+                    </div>
+                <div class="decimal-display">Dec: <span id="dec-b">0</span></div>
+            </div>
+
+            <div class="input-row" style="justify-content: flex-end; background: none;">
+                <span style="margin-right: 10px; font-size: 0.9rem;">Carry de Entrada ($C_{in}$):</span>
+                <label class="switch">
+                    <input type="checkbox" id="cin-global">
+                    <span class="slider"></span>
+                </label>
+             </div>
+        </div>
+
+        <div class="diagram-container">
+            <svg id="adder-svg" viewBox="0 0 950 350" preserveAspectRatio="xMidYMid meet">
+                <defs>
+                    <marker id="arrow" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                        <polygon points="0 0, 10 3.5, 0 7" fill="#95a5a6" />
+                    </marker>
+                </defs>
+                
+                </svg>
+        </div>
+
+        <div class="info-panel">
+            <h3>Resultado: <span id="res-bin">0000000</span> (Binario) = <span id="res-dec" class="result-highlight">0</span> (Decimal)</h3>
+            <p>
+                Este sistema utiliza 6 bloques <strong>Full Adder</strong>. Cada bloque suma tres bits: $A_i$, $B_i$ y el Acarreo de Entrada ($C_{in}$) que viene del bloque anterior (derecha).
+            </p>
+            <ul>
+                <li>Si la línea horizontal entre bloques se ilumina, indica que hay un <strong>Carry</strong> ($1$) propagándose hacia el siguiente bit más significativo.</li>
+                <li>El resultado final incluye el posible bit de desbordamiento (Overflow/Carry Out) en el extremo izquierdo.</li>
+            </ul>
+        </div>
+    </main>
+
+    <footer>
+        (C) 2026, Prof. Jorge López-Cifre, PhD
+    </footer>
+
+    <script>
+        // Configuración
+        const NUM_BITS = 6;
+        let bitsA = new Array(NUM_BITS).fill(0);
+        let bitsB = new Array(NUM_BITS).fill(0);
+        let cinGlobal = 0;
+
+        // Elementos DOM
+        const containerA = document.getElementById('container-a');
+        const containerB = document.getElementById('container-b');
+        const decADisplay = document.getElementById('dec-a');
+        const decBDisplay = document.getElementById('dec-b');
+        const cinInput = document.getElementById('cin-global');
+        const svgContainer = document.getElementById('adder-svg');
+        const resBinDisplay = document.getElementById('res-bin');
+        const resDecDisplay = document.getElementById('res-dec');
+
+        // Inicialización
+        function init() {
+            createControls(containerA, 'a', bitsA);
+            createControls(containerB, 'b', bitsB);
+            generateSVG();
+            
+            // Listeners
+            cinInput.addEventListener('change', (e) => {
+                cinGlobal = e.target.checked ? 1 : 0;
+                updateCircuit();
+            });
+
+            updateCircuit();
+        }
+
+        // Crear controles HTML
+        function createControls(container, prefix, dataArray) {
+            for (let i = 0; i < NUM_BITS; i++) {
+                const wrapper = document.createElement('div');
+                wrapper.className = 'bit-switch';
+                
+                const label = document.createElement('span');
+                label.className = 'bit-label';
+                label.textContent = `${prefix.toUpperCase()}${i}`;
+                
+                const labelSwitch = document.createElement('label');
+                labelSwitch.className = 'switch';
+                
+                const input = document.createElement('input');
+                input.type = 'checkbox';
+                input.dataset.index = i;
+                input.addEventListener('change', (e) => {
+                    dataArray[i] = e.target.checked ? 1 : 0;
+                    updateCircuit();
+                });
+
+                const spanSlider = document.createElement('span');
+                spanSlider.className = 'slider';
+
+                labelSwitch.appendChild(input);
+                labelSwitch.appendChild(spanSlider);
+                
+                wrapper.appendChild(label);
+                wrapper.appendChild(labelSwitch);
+                container.appendChild(wrapper); // Se añade en orden 0..5, pero CSS flex-reverse los muestra 5..0
+            }
+        }
+
+        // Generar SVG Dinámicamente (para no escribir 6 bloques a mano y manejar IDs)
+        function generateSVG() {
+            // Dimensiones
+            const startX = 800; // Empezamos a la derecha (LSB)
+            const gap = 130;
+            const boxW = 80;
+            const boxH = 100;
+            const yPos = 120;
+
+            let svgContent = '';
+
+            // Texto general
+            svgContent += `<text x="400" y="30" text-anchor="middle" font-size="16" font-weight="bold" fill="#333">Diagrama Lógico de Sumador (Ripple Carry)</text>`;
+
+            // Wire Cin Global (Entrada derecha al bloque 0)
+            svgContent += `
+                <line id="wire-cin-in" x1="${startX + boxW + 40}" y1="${yPos + boxH/2}" x2="${startX + boxW}" y2="${yPos + boxH/2}" class="wire" />
+                <text x="${startX + boxW + 10}" y="${yPos + boxH/2 - 10}" class="text-label">Cin</text>
+            `;
+
+            for (let i = 0; i < NUM_BITS; i++) {
+                const x = startX - (i * gap);
+                
+                // Grupo para el bloque i
+                svgContent += `<g id="group-${i}">`;
+                
+                // Cables de entrada A y B (arriba)
+                // Wire A
+                svgContent += `<line id="wire-a-${i}" x1="${x + 20}" y1="50" x2="${x + 20}" y2="${yPos}" class="wire" />`;
+                svgContent += `<text x="${x + 15}" y="45" class="text-label">A${i}</text>`;
+                
+                // Wire B
+                svgContent += `<line id="wire-b-${i}" x1="${x + 60}" y1="50" x2="${x + 60}" y2="${yPos}" class="wire" />`;
+                svgContent += `<text x="${x + 55}" y="45" class="text-label">B${i}</text>`;
+
+                // Caja Full Adder
+                svgContent += `<rect x="${x}" y="${yPos}" width="${boxW}" height="${boxH}" rx="5" class="box" />`;
+                svgContent += `<text x="${x + boxW/2}" y="${yPos + boxH/2 + 5}" text-anchor="middle" class="text-title">FA ${i}</text>`;
+
+                // Cable de Salida Suma (abajo)
+                svgContent += `<line id="wire-sum-${i}" x1="${x + boxW/2}" y1="${yPos + boxH}" x2="${x + boxW/2}" y2="${yPos + boxH + 40}" class="wire" />`;
+                
+                // LED Salida Suma
+                svgContent += `<circle id="led-sum-${i}" cx="${x + boxW/2}" cy="${yPos + boxH + 50}" r="10" class="led-circle" />`;
+                svgContent += `<text x="${x + boxW/2}" y="${yPos + boxH + 75}" text-anchor="middle" class="text-label" font-weight="bold">S${i}</text>`;
+
+                // Cable Carry Out (hacia la izquierda) -> Se conecta al siguiente
+                if (i < NUM_BITS - 1) {
+                    const nextX = startX - ((i+1) * gap);
+                    svgContent += `<line id="wire-cout-${i}" x1="${x}" y1="${yPos + boxH/2}" x2="${nextX + boxW}" y2="${yPos + boxH/2}" class="wire" />`;
+                } else {
+                    // Último Carry Out (Salida final del sistema)
+                    svgContent += `<line id="wire-cout-${i}" x1="${x}" y1="${yPos + boxH/2}" x2="${x - 40}" y2="${yPos + boxH/2}" class="wire" />`;
+                    // LED para COUT final
+                    svgContent += `<circle id="led-cout-final" cx="${x - 50}" cy="${yPos + boxH/2}" r="10" class="led-circle" />`;
+                    svgContent += `<text x="${x - 50}" y="${yPos + boxH/2 + 25}" text-anchor="middle" class="text-label" font-weight="bold">Cout</text>`;
+                }
+
+                svgContent += `</g>`;
+            }
+
+            svgContainer.innerHTML += svgContent;
+        }
+
+        // Lógica del Circuito
+        function updateCircuit() {
+            let carry = cinGlobal;
+
+            // Actualizar visual input Cin
+            const wCin = document.getElementById('wire-cin-in');
+            if(carry) wCin.classList.add('active'); else wCin.classList.remove('active');
+
+            let finalSumBits = [];
+
+            // Calcular Decimales de Entradas
+            let valA = 0;
+            let valB = 0;
+
+            for (let i = 0; i < NUM_BITS; i++) {
+                if(bitsA[i]) valA += Math.pow(2, i);
+                if(bitsB[i]) valB += Math.pow(2, i);
+
+                // Lógica Full Adder
+                const a = bitsA[i];
+                const b = bitsB[i];
+                
+                // Suma = A XOR B XOR Cin
+                const sum = (a ^ b ^ carry);
+                
+                // Nuevo Carry = (A AND B) OR (Cin AND (A XOR B))
+                const nextCarry = (a & b) | (carry & (a ^ b));
+
+                // Guardar resultado
+                finalSumBits.push(sum);
+
+                // --- Actualización Visual ---
+                
+                // Inputs Verticales
+                const wA = document.getElementById(`wire-a-${i}`);
+                const wB = document.getElementById(`wire-b-${i}`);
+                if(a) wA.classList.add('active'); else wA.classList.remove('active');
+                if(b) wB.classList.add('active'); else wB.classList.remove('active');
+
+                // Output Sum Vertical
+                const wSum = document.getElementById(`wire-sum-${i}`);
+                const ledSum = document.getElementById(`led-sum-${i}`);
+                if(sum) {
+                    wSum.classList.add('active');
+                    ledSum.classList.add('active');
+                } else {
+                    wSum.classList.remove('active');
+                    ledSum.classList.remove('active');
+                }
+
+                // Carry Horizontal (Salida de este bloque)
+                const wCout = document.getElementById(`wire-cout-${i}`);
+                if(nextCarry) wCout.classList.add('active'); else wCout.classList.remove('active');
+
+                // Preparar para siguiente iteración
+                carry = nextCarry;
+            }
+
+            // Actualizar LED final de Carry Out
+            const ledCoutFinal = document.getElementById('led-cout-final');
+            if(carry) ledCoutFinal.classList.add('active'); else ledCoutFinal.classList.remove('active');
+
+            // --- Actualizar Textos y Displays ---
+            decADisplay.textContent = valA;
+            decBDisplay.textContent = valB;
+
+            // Resultado Total
+            // Valor binario completo: Cout + S5 + ... + S0
+            const fullBinString = carry + finalSumBits.slice().reverse().join('');
+            resBinDisplay.textContent = fullBinString;
+
+            const totalSum = valA + valB + cinGlobal;
+            resDecDisplay.textContent = totalSum;
+        }
+
+        // Ejecutar init al cargar
+        init();
+
+    </script>
+</body>
+</html>

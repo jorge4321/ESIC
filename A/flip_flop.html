@@ -3,181 +3,143 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simulador Didáctico Flip-Flop JK</title>
+    <title>Simulador JK Flip-Flop - Ingeniería</title>
     <style>
         :root {
-            --primary-color: #0056b3;
-            --accent-color: #28a745;
-            --off-color: #dc3545;
-            --bg-color: #f4f4f9;
-            --panel-bg: #ffffff;
-            --text-color: #333;
-            --border-radius: 8px;
-            --shadow: 0 4px 6px rgba(0,0,0,0.1);
+            --primary: #0056b3;
+            --bg: #f0f2f5;
+            --panel: #ffffff;
+            --text: #333;
+            --wire-off: #555;
+            --wire-on: #e74c3c; /* Rojo para señal activa */
+            --led-off: #444;
+            --led-on: #ff3333;
+            --led-glow: 0 0 10px #ff3333;
         }
 
         body {
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
             margin: 0;
-            padding: 0;
-            background-color: var(--bg-color);
-            color: var(--text-color);
             display: flex;
             flex-direction: column;
             min-height: 100vh;
         }
 
-        /* Header */
+        /* --- Header & Footer --- */
         header {
-            background-color: var(--primary-color);
+            background: linear-gradient(135deg, #004085, #0056b3);
             color: white;
             padding: 1rem 2rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: var(--shadow);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
         }
-
-        h1 { margin: 0; font-size: 1.5rem; }
 
         .btn-back {
-            background-color: white;
-            color: var(--primary-color);
-            border: none;
-            padding: 0.5rem 1rem;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.5);
+            padding: 8px 16px;
             border-radius: 4px;
             text-decoration: none;
-            font-weight: bold;
             cursor: pointer;
-            transition: background 0.2s;
+            transition: 0.3s;
         }
-        .btn-back:hover { background-color: #e0e0e0; }
+        .btn-back:hover { background: rgba(255,255,255,0.4); }
 
-        /* Main Grid */
+        footer {
+            text-align: center;
+            padding: 15px;
+            font-size: 0.8rem;
+            color: #777;
+            background: #e9ecef;
+            margin-top: auto;
+        }
+
+        /* --- Layout --- */
         main {
-            flex: 1;
             padding: 20px;
             display: grid;
-            grid-template-columns: 1fr;
             gap: 20px;
             max-width: 1200px;
             margin: 0 auto;
             width: 100%;
             box-sizing: border-box;
+            grid-template-columns: 1fr;
         }
 
         @media (min-width: 900px) {
             main {
-                grid-template-columns: 1fr 1fr;
+                grid-template-columns: 2fr 1fr; /* Izquierda más ancha para gráfico */
                 grid-template-rows: auto auto;
             }
-            .schematic-container { grid-column: 1 / 2; }
-            .controls-container { grid-column: 1 / 2; }
-            .oscilloscope-container { grid-column: 1 / -1; } /* Full width bottom */
-            .truth-table-container { grid-column: 2 / 3; grid-row: 1 / 3; }
+            .panel-schematic { grid-column: 1 / 2; }
+            .panel-controls { grid-column: 2 / 3; }
+            .panel-scope { grid-column: 1 / 3; } /* Abajo ancho completo */
         }
 
-        /* Cards */
         .card {
-            background: var(--panel-bg);
+            background: var(--panel);
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
             padding: 20px;
-            border-radius: var(--border-radius);
-            box-shadow: var(--shadow);
+            border: 1px solid #ddd;
         }
 
-        h2 { margin-top: 0; border-bottom: 2px solid #eee; padding-bottom: 10px; font-size: 1.2rem; }
+        h2 { font-size: 1.2rem; color: #444; border-bottom: 2px solid #eee; padding-bottom: 10px; margin-top: 0; }
 
-        /* Schematic Representation */
-        .schematic {
+        /* --- SVG Diagram Styles --- */
+        .svg-container {
+            width: 100%;
             display: flex;
             justify-content: center;
-            align-items: center;
-            position: relative;
-            height: 200px;
-        }
-
-        .flip-flop-box {
-            width: 150px;
-            height: 150px;
-            border: 3px solid #333;
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-around;
-            align-items: center;
-            background: #fff;
-            font-weight: bold;
-            font-size: 1.2rem;
-        }
-
-        .pin {
-            position: absolute;
-            width: 30px;
-            height: 2px;
-            background: #333;
-            display: flex;
-            align-items: center;
-        }
-        .pin-label { position: absolute; font-size: 0.9rem; }
-        
-        /* Pin positions */
-        .pin-j { top: 30px; left: -30px; }
-        .pin-j .pin-label { left: -20px; top: -20px; color: var(--primary-color); }
-        
-        .pin-clk { top: 75px; left: -30px; }
-        .pin-clk::after { /* Triangle for clock */
-            content: ''; position: absolute; right: -10px; top: -6px;
-            border-top: 6px solid transparent;
-            border-bottom: 6px solid transparent;
-            border-left: 10px solid #333;
         }
         
-        .pin-k { bottom: 30px; left: -30px; }
-        .pin-k .pin-label { left: -20px; top: -20px; color: var(--primary-color); }
+        svg {
+            max-width: 100%;
+            height: auto;
+            max-height: 300px;
+        }
 
-        .pin-q { top: 30px; right: -30px; }
-        .pin-q .pin-label { right: -25px; top: -20px; }
+        /* Estilos base del SVG */
+        .circuit-wire { fill: none; stroke: var(--wire-off); stroke-width: 3; stroke-linecap: round; transition: stroke 0.2s; }
+        .circuit-box { fill: #fff; stroke: #333; stroke-width: 3; }
+        .circuit-text { font-family: monospace; font-weight: bold; fill: #333; font-size: 14px; user-select: none; }
+        .pin-label { font-size: 12px; fill: #666; }
         
-        .pin-qnot { bottom: 30px; right: -30px; }
-        .pin-qnot .pin-label { right: -35px; top: -20px; }
+        .led-indicator { fill: var(--led-off); stroke: #222; stroke-width: 1; transition: fill 0.1s; }
+        
+        /* Clases activas para SVG */
+        .wire-active { stroke: var(--wire-on); }
+        .led-active { fill: var(--led-on); filter: drop-shadow(0 0 5px #ff3333); }
 
-        .led {
-            width: 20px; height: 20px;
-            border-radius: 50%;
-            background-color: #ccc;
-            border: 2px solid #999;
-            box-shadow: inset 2px 2px 5px rgba(0,0,0,0.2);
-            transition: background-color 0.1s;
-        }
-        .led.on {
-            background-color: #ff3333;
-            box-shadow: 0 0 10px #ff3333, inset 2px 2px 5px rgba(255,255,255,0.4);
-            border-color: #cc0000;
-        }
-
-        /* Controls */
-        .controls-container {
+        /* --- Controls --- */
+        .control-group {
             display: flex;
             flex-direction: column;
             gap: 15px;
         }
-
-        .control-row {
+        
+        .switch-row {
             display: flex;
-            align-items: center;
             justify-content: space-between;
-            padding: 10px;
+            align-items: center;
             background: #f8f9fa;
+            padding: 12px;
             border-radius: 6px;
         }
 
-        .switch {
+        /* Toggle Switch CSS */
+        .toggle {
             position: relative;
             display: inline-block;
-            width: 60px;
-            height: 34px;
+            width: 50px;
+            height: 28px;
         }
-        .switch input { opacity: 0; width: 0; height: 0; }
+        .toggle input { opacity: 0; width: 0; height: 0; }
         .slider {
             position: absolute;
             cursor: pointer;
@@ -189,384 +151,342 @@
         .slider:before {
             position: absolute;
             content: "";
-            height: 26px; width: 26px;
+            height: 20px; width: 20px;
             left: 4px; bottom: 4px;
             background-color: white;
             transition: .4s;
             border-radius: 50%;
         }
-        input:checked + .slider { background-color: var(--primary-color); }
-        input:checked + .slider:before { transform: translateX(26px); }
+        input:checked + .slider { background-color: var(--primary); }
+        input:checked + .slider:before { transform: translateX(22px); }
 
-        .clk-btn {
-            width: 100%;
-            padding: 15px;
-            background-color: var(--text-color);
-            color: white;
+        /* Clock Button */
+        .btn-clock {
+            background: #333;
+            color: #fff;
             border: none;
+            padding: 15px;
             border-radius: 6px;
             font-size: 1rem;
             cursor: pointer;
-            transition: transform 0.1s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-        }
-        .clk-btn:active { transform: scale(0.98); background-color: black; }
-        .clk-icon {
-            width: 20px; height: 20px;
-            border: 2px solid white;
-            border-top: none; border-right: none;
-            transform: rotate(45deg);
-        }
-
-        /* Truth Table */
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.9rem;
-        }
-        th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: center;
-        }
-        th { background-color: #eee; }
-        tr.active-row {
-            background-color: #fff3cd;
             font-weight: bold;
-            border: 2px solid #ffc107;
+            box-shadow: 0 4px #000;
+            transform: translateY(0);
+            transition: 0.1s;
+        }
+        .btn-clock:active {
+            transform: translateY(4px);
+            box-shadow: 0 0 #000;
         }
 
-        /* Oscilloscope */
+        /* --- Canvas Oscilloscope --- */
         canvas {
             width: 100%;
-            height: 150px;
-            background-color: #222;
+            height: 120px;
+            background: #222;
             border-radius: 4px;
+            border: 1px solid #444;
         }
-
-        footer {
-            margin-top: auto;
-            padding: 15px;
-            text-align: center;
-            font-size: 0.8rem;
-            color: #666;
-            border-top: 1px solid #ddd;
+        .legend {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            font-size: 0.85rem;
+            margin-top: 5px;
         }
+        .dot { width: 10px; height: 10px; display: inline-block; border-radius: 50%; margin-right: 5px; }
 
-        .status-text {
+        /* Tabla informativa pequeña */
+        .status-badge {
+            display: inline-block;
+            padding: 5px 10px;
+            background: #eee;
+            border-radius: 4px;
             font-weight: bold;
-            color: var(--primary-color);
+            margin-top: 10px;
+            border-left: 5px solid #ccc;
         }
-
     </style>
 </head>
 <body>
 
-    <header>
-        <h1>Simulador Flip-Flop JK</h1>
-        <button class="btn-back" onclick="goBack()">Volver</button>
-    </header>
+<header>
+    <div style="font-weight: bold; font-size: 1.2rem;">Lab. Electrónica Digital</div>
+    <button class="btn-back" onclick="goBack()">Volver</button>
+</header>
 
-    <main>
-        <div class="card schematic-container">
-            <h2>Esquema Lógico</h2>
-            <div class="schematic">
-                <div style="position: absolute; left: 20px; top: 60px; width: 100px; height: 2px; background: #999;"></div> <div style="position: absolute; left: 20px; top: 106px; width: 100px; height: 2px; background: #999;"></div> <div style="position: absolute; left: 20px; top: 150px; width: 100px; height: 2px; background: #999;"></div> <div class="flip-flop-box">
-                    <span>JK</span>
-                    
-                    <div class="pin pin-j"><span class="pin-label">J</span></div>
-                    <div class="pin pin-clk"><span class="pin-label">CLK</span></div>
-                    <div class="pin pin-k"><span class="pin-label">K</span></div>
-                    
-                    <div class="pin pin-q"><span class="pin-label">Q</span></div>
-                    <div class="pin pin-qnot"><span class="pin-label">Q'</span></div>
-                </div>
+<main>
+    <div class="card panel-schematic">
+        <h2>Diagrama Lógico (Flip-Flop JK)</h2>
+        <div class="svg-container">
+            <svg viewBox="0 0 500 250">
+                <path d="M 50 70 L 150 70" id="wire-j" class="circuit-wire" />
+                <path d="M 50 180 L 150 180" id="wire-k" class="circuit-wire" />
+                <path d="M 50 125 L 150 125" id="wire-clk" class="circuit-wire" />
 
-                <div style="position: absolute; right: 40px; top: 60px; display: flex; align-items: center; gap: 5px;">
-                    <div id="led-q" class="led"></div> <span>Q</span>
-                </div>
-                <div style="position: absolute; right: 40px; top: 150px; display: flex; align-items: center; gap: 5px;">
-                    <div id="led-qnot" class="led on"></div> <span>Q'</span>
-                </div>
-            </div>
-            <p style="text-align: center;">Estado Actual: <span id="state-desc" class="status-text">RESET (0)</span></p>
-        </div>
-
-        <div class="card controls-container">
-            <h2>Panel de Control</h2>
-            
-            <div class="control-row">
-                <label>Entrada <strong>J</strong> (Set)</label>
-                <label class="switch">
-                    <input type="checkbox" id="input-j">
-                    <span class="slider"></span>
-                </label>
-            </div>
-
-            <div class="control-row">
-                <label>Entrada <strong>K</strong> (Reset)</label>
-                <label class="switch">
-                    <input type="checkbox" id="input-k">
-                    <span class="slider"></span>
-                </label>
-            </div>
-
-            <button class="clk-btn" id="btn-clock">
-                <span>GENERAR PULSO DE RELOJ (CLOCK)</span>
-            </button>
-            <small style="text-align: center; color: #666;">El cambio ocurre solo al presionar el reloj.</small>
-        </div>
-
-        <div class="card truth-table-container">
-            <h2>Tabla de Verdad (JK)</h2>
-            <table id="truth-table">
-                <thead>
-                    <tr>
-                        <th>J</th>
-                        <th>K</th>
-                        <th>Clk</th>
-                        <th>Q (Siguiente)</th>
-                        <th>Modo</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr id="row-hold">
-                        <td>0</td>
-                        <td>0</td>
-                        <td>↑</td>
-                        <td>Q (Sin cambio)</td>
-                        <td>Memoria / Hold</td>
-                    </tr>
-                    <tr id="row-reset">
-                        <td>0</td>
-                        <td>1</td>
-                        <td>↑</td>
-                        <td>0</td>
-                        <td>Reset</td>
-                    </tr>
-                    <tr id="row-set">
-                        <td>1</td>
-                        <td>0</td>
-                        <td>↑</td>
-                        <td>1</td>
-                        <td>Set</td>
-                    </tr>
-                    <tr id="row-toggle">
-                        <td>1</td>
-                        <td>1</td>
-                        <td>↑</td>
-                        <td>Q' (Invierte)</td>
-                        <td>Basculación / Toggle</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <div class="card oscilloscope-container">
-            <h2>Osciloscopio (Diagrama de Tiempos)</h2>
-            <canvas id="scope"></canvas>
-            <div style="display: flex; justify-content: space-around; font-size: 0.8rem; margin-top: 5px;">
-                <span style="color: cyan;">CLK</span>
-                <span style="color: yellow;">J</span>
-                <span style="color: magenta;">K</span>
-                <span style="color: lime;">Q (Salida)</span>
-            </div>
-        </div>
-
-    </main>
-
-    <footer>
-        (C) 2026, Prof. Jorge López-Cifre, PhD
-    </footer>
-
-    <script>
-        // --- Logic and State ---
-        let stateQ = 0; // Initial state 0
-        let valJ = 0;
-        let valK = 0;
-        let clkPulse = 0; // Visual pulse state
-
-        // DOM Elements
-        const inputJ = document.getElementById('input-j');
-        const inputK = document.getElementById('input-k');
-        const btnClock = document.getElementById('btn-clock');
-        const ledQ = document.getElementById('led-q');
-        const ledQnot = document.getElementById('led-qnot');
-        const stateDesc = document.getElementById('state-desc');
-
-        // Navigation
-        function goBack() {
-            if(document.referrer) {
-                window.location.href = document.referrer;
-            } else {
-                window.history.back();
-            }
-        }
-
-        // --- Interaction Handlers ---
-        inputJ.addEventListener('change', (e) => {
-            valJ = e.target.checked ? 1 : 0;
-            updateTableHighlight();
-        });
-
-        inputK.addEventListener('change', (e) => {
-            valK = e.target.checked ? 1 : 0;
-            updateTableHighlight();
-        });
-
-        btnClock.addEventListener('mousedown', () => {
-            clkPulse = 1;
-            processFlipFlopLogic();
-        });
-
-        btnClock.addEventListener('mouseup', () => {
-            clkPulse = 0;
-        });
-        
-        // Touch support for mobile
-        btnClock.addEventListener('touchstart', (e) => {
-            e.preventDefault(); 
-            clkPulse = 1;
-            processFlipFlopLogic();
-        });
-        btnClock.addEventListener('touchend', (e) => {
-            e.preventDefault();
-            clkPulse = 0;
-        });
-
-        // --- Core Logic ---
-        function processFlipFlopLogic() {
-            // JK Flip Flop Logic on Rising Edge (simulated by click)
-            let mode = "";
-
-            if (valJ === 0 && valK === 0) {
-                // Hold
-                mode = "MEMORIA (HOLD)";
-            } else if (valJ === 0 && valK === 1) {
-                // Reset
-                stateQ = 0;
-                mode = "RESET";
-            } else if (valJ === 1 && valK === 0) {
-                // Set
-                stateQ = 1;
-                mode = "SET";
-            } else if (valJ === 1 && valK === 1) {
-                // Toggle
-                stateQ = stateQ === 0 ? 1 : 0;
-                mode = "TOGGLE (BASCULACIÓN)";
-            }
-
-            updateVisuals(mode);
-        }
-
-        function updateVisuals(modeText) {
-            // Update LEDs
-            if (stateQ === 1) {
-                ledQ.classList.add('on');
-                ledQnot.classList.remove('on');
-                stateDesc.textContent = modeText ? `${modeText} (Q=1)` : "ESTADO ALTO (1)";
-            } else {
-                ledQ.classList.remove('on');
-                ledQnot.classList.add('on');
-                stateDesc.textContent = modeText ? `${modeText} (Q=0)` : "ESTADO BAJO (0)";
-            }
-        }
-
-        function updateTableHighlight() {
-            // Reset rows
-            document.querySelectorAll('tbody tr').forEach(tr => tr.classList.remove('active-row'));
-
-            // Highlight based on Inputs ONLY (Logic to predict next state)
-            if (valJ === 0 && valK === 0) document.getElementById('row-hold').classList.add('active-row');
-            else if (valJ === 0 && valK === 1) document.getElementById('row-reset').classList.add('active-row');
-            else if (valJ === 1 && valK === 0) document.getElementById('row-set').classList.add('active-row');
-            else if (valJ === 1 && valK === 1) document.getElementById('row-toggle').classList.add('active-row');
-        }
-
-        // --- Oscilloscope / Canvas Animation ---
-        const canvas = document.getElementById('scope');
-        const ctx = canvas.getContext('2d');
-        
-        // Resize canvas handling
-        function resizeCanvas() {
-            canvas.width = canvas.parentElement.clientWidth;
-            canvas.height = 150;
-        }
-        window.addEventListener('resize', resizeCanvas);
-        resizeCanvas();
-
-        // Data history for plotting
-        const historySize = 200;
-        const data = {
-            clk: new Array(historySize).fill(0),
-            j: new Array(historySize).fill(0),
-            k: new Array(historySize).fill(0),
-            q: new Array(historySize).fill(0)
-        };
-
-        function loop() {
-            // Shift data
-            data.clk.shift(); data.clk.push(clkPulse);
-            data.j.shift(); data.j.push(valJ);
-            data.k.shift(); data.k.push(valK);
-            data.q.shift(); data.q.push(stateQ);
-
-            // Clear
-            ctx.fillStyle = "#222";
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-            // Draw Grids
-            ctx.strokeStyle = "#444";
-            ctx.lineWidth = 1;
-            ctx.beginPath();
-            for(let i=0; i<canvas.width; i+=50) { ctx.moveTo(i,0); ctx.lineTo(i, canvas.height); }
-            ctx.stroke();
-
-            // Draw Signals
-            drawSignal(data.clk, 'cyan', 20, 20); // Top
-            drawSignal(data.j, 'yellow', 50, 20);
-            drawSignal(data.k, 'magenta', 80, 20);
-            drawSignal(data.q, 'lime', 110, 20); // Bottom
-
-            requestAnimationFrame(loop);
-        }
-
-        function drawSignal(signalData, color, yBase, height) {
-            ctx.strokeStyle = color;
-            ctx.lineWidth = 2;
-            ctx.beginPath();
-            const step = canvas.width / historySize;
-
-            for (let i = 0; i < signalData.length; i++) {
-                const x = i * step;
-                // Invert y because canvas coords (0,0) is top-left. 
-                // Value 1 goes UP (yBase - height), Value 0 stays at yBase
-                const y = signalData[i] ? yBase - height : yBase;
+                <rect x="150" y="40" width="200" height="170" rx="5" class="circuit-box" />
                 
-                if (i === 0) ctx.moveTo(x, y);
-                else {
-                    // Create square wave look
-                    const prevY = signalData[i-1] ? yBase - height : yBase;
-                    ctx.lineTo(x, prevY); // horizontal to current x
-                    ctx.lineTo(x, y); // vertical to current y
-                }
-            }
-            ctx.stroke();
+                <text x="30" y="75" class="circuit-text">J</text>
+                <text x="30" y="185" class="circuit-text">K</text>
+                <text x="25" y="130" class="circuit-text">CLK</text>
+
+                <text x="160" y="75" class="pin-label">J</text>
+                <text x="160" y="185" class="pin-label">K</text>
+                
+                <path d="M 150 115 L 170 125 L 150 135" fill="none" stroke="#333" stroke-width="2"/>
+
+                <text x="320" y="75" class="pin-label">Q</text>
+                <text x="320" y="185" class="pin-label">Q'</text>
+                <text x="470" y="75" class="circuit-text">Q</text>
+                <text x="470" y="185" class="circuit-text">Q'</text>
+
+                <path d="M 350 70 L 450 70" id="wire-q" class="circuit-wire" />
+                <path d="M 350 180 L 450 180" id="wire-qnot" class="circuit-wire" />
+                
+                <circle cx="400" cy="70" r="8" id="led-q" class="led-indicator" />
+                <circle cx="400" cy="180" r="8" id="led-qnot" class="led-indicator" />
+
+                <text x="250" y="130" text-anchor="middle" font-size="24" font-weight="bold" fill="#333">JK</text>
+            </svg>
+        </div>
+        <div style="text-align: center;">
+            <div id="status-display" class="status-badge" style="border-color: var(--primary);">Esperando Reloj...</div>
+        </div>
+    </div>
+
+    <div class="card panel-controls">
+        <h2>Entradas</h2>
+        <div class="control-group">
+            <div class="switch-row">
+                <label for="sw-j">Entrada <strong>J</strong> (Set)</label>
+                <label class="toggle">
+                    <input type="checkbox" id="sw-j">
+                    <span class="slider"></span>
+                </label>
+            </div>
             
-            // Draw Label
-            ctx.fillStyle = color;
-            ctx.font = "10px Arial";
-            ctx.fillText(signalData[signalData.length-1] ? "1" : "0", canvas.width - 15, yBase - 5);
+            <div class="switch-row">
+                <label for="sw-k">Entrada <strong>K</strong> (Reset)</label>
+                <label class="toggle">
+                    <input type="checkbox" id="sw-k">
+                    <span class="slider"></span>
+                </label>
+            </div>
+
+            <hr style="border: 0; border-top: 1px solid #ddd; width: 100%;">
+            
+            <button id="btn-pulse" class="btn-clock">
+                PULSAR RELOJ (CLOCK)
+            </button>
+            <small style="color: #666; text-align: center;">El estado solo cambia en el flanco de subida.</small>
+        </div>
+    </div>
+
+    <div class="card panel-scope">
+        <h2>Cronograma (Osciloscopio)</h2>
+        <canvas id="scopeCanvas"></canvas>
+        <div class="legend">
+            <span><span class="dot" style="background: cyan;"></span>CLK</span>
+            <span><span class="dot" style="background: yellow;"></span>J</span>
+            <span><span class="dot" style="background: magenta;"></span>K</span>
+            <span><span class="dot" style="background: lime;"></span>Q</span>
+        </div>
+    </div>
+</main>
+
+<footer>
+    (C) 2026, Prof. Jorge López-Cifre, PhD
+</footer>
+
+<script>
+    // --- Referencias DOM ---
+    const swJ = document.getElementById('sw-j');
+    const swK = document.getElementById('sw-k');
+    const btnPulse = document.getElementById('btn-pulse');
+    const statusDisplay = document.getElementById('status-display');
+
+    // Elementos SVG
+    const wireJ = document.getElementById('wire-j');
+    const wireK = document.getElementById('wire-k');
+    const wireClk = document.getElementById('wire-clk');
+    const wireQ = document.getElementById('wire-q');
+    const wireQnot = document.getElementById('wire-qnot');
+    const ledQ = document.getElementById('led-q');
+    const ledQnot = document.getElementById('led-qnot');
+
+    // Canvas
+    const canvas = document.getElementById('scopeCanvas');
+    const ctx = canvas.getContext('2d');
+
+    // --- Estado del Sistema ---
+    let state = {
+        Q: 0,
+        J: 0,
+        K: 0,
+        Clk: 0
+    };
+
+    // --- Funciones de Navegación ---
+    function goBack() {
+        if(document.referrer) window.location.href = document.referrer;
+        else window.history.back();
+    }
+
+    // --- Lógica del Flip Flop JK ---
+    function triggerClock() {
+        // Lógica de flanco de subida
+        let nextQ = state.Q;
+        let mode = "";
+
+        if (state.J === 0 && state.K === 0) {
+            nextQ = state.Q; // Hold
+            mode = "MEMORIA (Sin cambio)";
+        } else if (state.J === 0 && state.K === 1) {
+            nextQ = 0; // Reset
+            mode = "RESET (Puesta a 0)";
+        } else if (state.J === 1 && state.K === 0) {
+            nextQ = 1; // Set
+            mode = "SET (Puesta a 1)";
+        } else if (state.J === 1 && state.K === 1) {
+            nextQ = state.Q === 0 ? 1 : 0; // Toggle
+            mode = "BASCULACIÓN (Toggle)";
         }
 
-        // Initialize
-        updateVisuals("INICIO");
-        updateTableHighlight();
-        loop();
+        state.Q = nextQ;
+        updateVisuals(mode);
+    }
 
-    </script>
+    // --- Actualización Visual (SVG y Textos) ---
+    function updateVisuals(modeText) {
+        // Colorear cables de entrada
+        if(state.J) wireJ.classList.add('wire-active'); else wireJ.classList.remove('wire-active');
+        if(state.K) wireK.classList.add('wire-active'); else wireK.classList.remove('wire-active');
+        
+        // Colorear salidas y LEDs
+        if (state.Q === 1) {
+            wireQ.classList.add('wire-active');
+            ledQ.classList.add('led-active');
+            
+            wireQnot.classList.remove('wire-active');
+            ledQnot.classList.remove('led-active');
+        } else {
+            wireQ.classList.remove('wire-active');
+            ledQ.classList.remove('led-active');
+            
+            wireQnot.classList.add('wire-active');
+            ledQnot.classList.add('led-active');
+        }
+
+        if(modeText) {
+            statusDisplay.textContent = modeText + " -> Q=" + state.Q;
+            // Cambiar color del borde del status para feedback visual
+            statusDisplay.style.borderColor = state.Q ? '#28a745' : '#dc3545';
+        }
+    }
+
+    // --- Event Listeners ---
+    swJ.addEventListener('change', (e) => {
+        state.J = e.target.checked ? 1 : 0;
+        updateVisuals(null); // Actualizar solo cables entrada
+    });
+
+    swK.addEventListener('change', (e) => {
+        state.K = e.target.checked ? 1 : 0;
+        updateVisuals(null);
+    });
+
+    // Manejo del botón de Reloj (Simula pulso)
+    const handleClockDown = (e) => {
+        if(e.cancelable) e.preventDefault(); // Evitar scroll en touch
+        state.Clk = 1;
+        wireClk.classList.add('wire-active'); // Feedback visual en el cable de reloj
+        triggerClock();
+    };
+
+    const handleClockUp = (e) => {
+        if(e.cancelable) e.preventDefault();
+        state.Clk = 0;
+        wireClk.classList.remove('wire-active');
+    };
+
+    btnPulse.addEventListener('mousedown', handleClockDown);
+    btnPulse.addEventListener('mouseup', handleClockUp);
+    btnPulse.addEventListener('touchstart', handleClockDown);
+    btnPulse.addEventListener('touchend', handleClockUp);
+
+    // --- Osciloscopio (Canvas Loop) ---
+    // Historial de datos
+    const historyLen = 300;
+    const dataHistory = {
+        clk: new Array(historyLen).fill(0),
+        j: new Array(historyLen).fill(0),
+        k: new Array(historyLen).fill(0),
+        q: new Array(historyLen).fill(0)
+    };
+
+    function resizeCanvas() {
+        canvas.width = canvas.parentElement.clientWidth;
+        canvas.height = 120;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    function drawScope() {
+        // Actualizar datos
+        dataHistory.clk.shift(); dataHistory.clk.push(state.Clk);
+        dataHistory.j.shift(); dataHistory.j.push(state.J);
+        dataHistory.k.shift(); dataHistory.k.push(state.K);
+        dataHistory.q.shift(); dataHistory.q.push(state.Q);
+
+        // Limpiar
+        ctx.fillStyle = "#222";
+        ctx.fillRect(0,0, canvas.width, canvas.height);
+
+        // Dibujar Grid
+        ctx.strokeStyle = "#333";
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        for(let x=0; x<canvas.width; x+=40) { ctx.moveTo(x,0); ctx.lineTo(x,canvas.height); }
+        ctx.stroke();
+
+        // Dibujar Señales
+        drawSignal(dataHistory.clk, 'cyan', 20);
+        drawSignal(dataHistory.j, 'yellow', 50);
+        drawSignal(dataHistory.k, 'magenta', 80);
+        drawSignal(dataHistory.q, 'lime', 110); // Q abajo
+
+        requestAnimationFrame(drawScope);
+    }
+
+    function drawSignal(data, color, yBase) {
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        
+        const step = canvas.width / historyLen;
+        const h = 15; // Altura de la onda
+
+        for(let i=0; i<data.length; i++) {
+            let x = i * step;
+            let val = data[i];
+            let y = yBase - (val * h); // Si es 1 sube, si es 0 queda en base
+            
+            if(i===0) ctx.moveTo(x, y);
+            else {
+                // Onda cuadrada perfecta
+                let prevVal = data[i-1];
+                let prevY = yBase - (prevVal * h);
+                ctx.lineTo(x, prevY);
+                ctx.lineTo(x, y);
+            }
+        }
+        ctx.stroke();
+    }
+
+    // Inicialización
+    updateVisuals("Estado Inicial");
+    drawScope();
+
+</script>
 </body>
 </html>

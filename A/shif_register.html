@@ -120,4 +120,398 @@
         }
         
         .led-indicator {
-            fill
+            fill: #7f8c8d;
+            stroke: #555;
+            transition: fill 0.2s;
+        }
+        .led-indicator.active {
+            fill: var(--signal-on);
+            filter: drop-shadow(0 0 5px var(--signal-on));
+        }
+
+        text {
+            font-family: monospace;
+            user-select: none;
+        }
+
+        /* Panel de Control */
+        .controls {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+        }
+
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .btn-clock {
+            background-color: var(--accent-color);
+            color: white;
+        }
+        .btn-clock:hover { background-color: #2980b9; }
+        .btn-clock:active { transform: scale(0.98); }
+
+        .btn-reset {
+            background-color: #95a5a6;
+            color: white;
+        }
+        .btn-reset:hover { background-color: #7f8c8d; }
+
+        .input-toggle {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #f0f0f0;
+            padding: 5px 15px;
+            border-radius: 5px;
+        }
+
+        .switch-label { font-weight: bold; }
+        
+        /* Checkbox slider personalizado */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+        }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 24px;
+        }
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        input:checked + .slider { background-color: var(--signal-on); }
+        input:checked + .slider:before { transform: translateX(26px); }
+
+        /* Información Teórica */
+        .info-panel {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            max-width: 800px;
+            line-height: 1.6;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+        .bit-display {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 1.2rem;
+            background: #222;
+            color: var(--signal-on);
+            padding: 5px 10px;
+            border-radius: 4px;
+            margin-left: 10px;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 15px;
+            font-size: 0.8rem;
+            color: #777;
+            background-color: #eee;
+            margin-top: auto;
+        }
+        
+        /* Ajustes responsivos adicionales para móviles pequeños */
+        @media (max-width: 600px) {
+            h1 { font-size: 1.2rem; margin-right: 60px; text-align: left; }
+            .btn-volver { padding: 5px 10px; font-size: 0.8rem; }
+            .controls { flex-direction: column; align-items: stretch; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Shift Register de 6 Bits (SIPO)</h1>
+        <a href="javascript:history.back()" class="btn-volver">Volver</a>
+    </header>
+
+    <main>
+        <div class="controls">
+            <div class="input-toggle">
+                <span class="switch-label">Entrada (D): <span id="input-val-text">0</span></span>
+                <label class="switch">
+                    <input type="checkbox" id="input-switch">
+                    <span class="slider"></span>
+                </label>
+            </div>
+            
+            <button class="btn-clock" id="btn-pulse">Pulsar Reloj (CLK)</button>
+            <button class="btn-clock" id="btn-auto" style="background-color: #8e44ad;">Auto (1Hz)</button>
+            <button class="btn-reset" id="btn-reset">Reset</button>
+        </div>
+
+        <div class="diagram-container">
+            <svg viewBox="0 0 850 300" preserveAspectRatio="xMidYMid meet" id="circuit-svg">
+                <defs>
+                    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                        <polygon points="0 0, 10 3.5, 0 7" fill="#7f8c8d" />
+                    </marker>
+                    <marker id="arrowhead-active" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                        <polygon points="0 0, 10 3.5, 0 7" fill="#2ecc71" />
+                    </marker>
+                </defs>
+
+                <path d="M 50 250 L 800 250" stroke="#aaa" stroke-width="2" />
+                <text x="10" y="255" fill="#555" font-size="14" font-weight="bold">CLK</text>
+
+                <line id="wire-input" x1="20" y1="120" x2="100" y2="120" class="signal-line" />
+                <text x="20" y="110" font-size="12" fill="#555">DATA IN</text>
+
+                <g transform="translate(100, 80)">
+                    <rect id="ff-0" class="ff-box" width="80" height="80" rx="5" />
+                    <text x="10" y="25" font-size="14" fill="#555">D</text>
+                    <text x="60" y="25" font-size="14" fill="#555">Q</text>
+                    <path d="M 40 80 L 40 170" stroke="#aaa" stroke-width="2" /> <polygon points="35 80, 40 70, 45 80" fill="none" stroke="#34495e" stroke-width="1"/> <circle id="led-0" cx="40" cy="-20" r="10" class="led-indicator" />
+                    <line x1="40" y1="0" x2="40" y2="-10" stroke="#555" />
+                    <text x="35" y="-35" font-size="12" fill="#555">Q0</text>
+                </g>
+
+                <line id="wire-0" x1="180" y1="120" x2="220" y2="120" class="signal-line" />
+
+                <g transform="translate(220, 80)">
+                    <rect id="ff-1" class="ff-box" width="80" height="80" rx="5" />
+                    <text x="10" y="25" font-size="14" fill="#555">D</text>
+                    <text x="60" y="25" font-size="14" fill="#555">Q</text>
+                    <path d="M 40 80 L 40 170" stroke="#aaa" stroke-width="2" />
+                    <polygon points="35 80, 40 70, 45 80" fill="none" stroke="#34495e" stroke-width="1"/>
+                    <circle id="led-1" cx="40" cy="-20" r="10" class="led-indicator" />
+                    <line x1="40" y1="0" x2="40" y2="-10" stroke="#555" />
+                    <text x="35" y="-35" font-size="12" fill="#555">Q1</text>
+                </g>
+
+                <line id="wire-1" x1="300" y1="120" x2="340" y2="120" class="signal-line" />
+
+                <g transform="translate(340, 80)">
+                    <rect id="ff-2" class="ff-box" width="80" height="80" rx="5" />
+                    <text x="10" y="25" font-size="14" fill="#555">D</text>
+                    <text x="60" y="25" font-size="14" fill="#555">Q</text>
+                    <path d="M 40 80 L 40 170" stroke="#aaa" stroke-width="2" />
+                    <polygon points="35 80, 40 70, 45 80" fill="none" stroke="#34495e" stroke-width="1"/>
+                    <circle id="led-2" cx="40" cy="-20" r="10" class="led-indicator" />
+                    <line x1="40" y1="0" x2="40" y2="-10" stroke="#555" />
+                    <text x="35" y="-35" font-size="12" fill="#555">Q2</text>
+                </g>
+
+                <line id="wire-2" x1="420" y1="120" x2="460" y2="120" class="signal-line" />
+
+                <g transform="translate(460, 80)">
+                    <rect id="ff-3" class="ff-box" width="80" height="80" rx="5" />
+                    <text x="10" y="25" font-size="14" fill="#555">D</text>
+                    <text x="60" y="25" font-size="14" fill="#555">Q</text>
+                    <path d="M 40 80 L 40 170" stroke="#aaa" stroke-width="2" />
+                    <polygon points="35 80, 40 70, 45 80" fill="none" stroke="#34495e" stroke-width="1"/>
+                    <circle id="led-3" cx="40" cy="-20" r="10" class="led-indicator" />
+                    <line x1="40" y1="0" x2="40" y2="-10" stroke="#555" />
+                    <text x="35" y="-35" font-size="12" fill="#555">Q3</text>
+                </g>
+
+                <line id="wire-3" x1="540" y1="120" x2="580" y2="120" class="signal-line" />
+
+                <g transform="translate(580, 80)">
+                    <rect id="ff-4" class="ff-box" width="80" height="80" rx="5" />
+                    <text x="10" y="25" font-size="14" fill="#555">D</text>
+                    <text x="60" y="25" font-size="14" fill="#555">Q</text>
+                    <path d="M 40 80 L 40 170" stroke="#aaa" stroke-width="2" />
+                    <polygon points="35 80, 40 70, 45 80" fill="none" stroke="#34495e" stroke-width="1"/>
+                    <circle id="led-4" cx="40" cy="-20" r="10" class="led-indicator" />
+                    <line x1="40" y1="0" x2="40" y2="-10" stroke="#555" />
+                    <text x="35" y="-35" font-size="12" fill="#555">Q4</text>
+                </g>
+
+                <line id="wire-4" x1="660" y1="120" x2="700" y2="120" class="signal-line" />
+
+                <g transform="translate(700, 80)">
+                    <rect id="ff-5" class="ff-box" width="80" height="80" rx="5" />
+                    <text x="10" y="25" font-size="14" fill="#555">D</text>
+                    <text x="60" y="25" font-size="14" fill="#555">Q</text>
+                    <path d="M 40 80 L 40 170" stroke="#aaa" stroke-width="2" />
+                    <polygon points="35 80, 40 70, 45 80" fill="none" stroke="#34495e" stroke-width="1"/>
+                    <circle id="led-5" cx="40" cy="-20" r="10" class="led-indicator" />
+                    <line x1="40" y1="0" x2="40" y2="-10" stroke="#555" />
+                    <text x="35" y="-35" font-size="12" fill="#555">Q5</text>
+                </g>
+
+                 <line id="wire-out" x1="780" y1="120" x2="820" y2="120" class="signal-line" />
+                 <text x="825" y="125" font-size="12" fill="#555">OUT</text>
+
+            </svg>
+        </div>
+
+        <div class="info-panel">
+            <h3>Estado Actual del Registro: <span id="bit-string" class="bit-display">000000</span></h3>
+            <p>
+                <strong>Funcionamiento:</strong> Este circuito es un Registro de Desplazamiento SIPO (Serial-In, Parallel-Out). 
+                Consta de 6 Flip-Flops tipo D conectados en serie. 
+            </p>
+            <ul>
+                <li>La entrada <strong>D</strong> del primer Flip-Flop recibe el dato del interruptor externo.</li>
+                <li>La salida <strong>Q</strong> de cada Flip-Flop está conectada a la entrada <strong>D</strong> del siguiente.</li>
+                <li>En cada <strong>flanco de subida</strong> del reloj (Clock), el dato presente en la entrada D se transfiere a la salida Q.</li>
+            </ul>
+            <p><em>Utiliza los controles para cambiar la entrada y enviar pulsos de reloj para ver cómo los bits se desplazan de izquierda a derecha.</em></p>
+        </div>
+    </main>
+
+    <footer>
+        (C) 2026, Prof. Jorge López-Cifre, PhD
+    </footer>
+
+    <script>
+        // Estado del sistema
+        const NUM_BITS = 6;
+        let registers = new Array(NUM_BITS).fill(0);
+        let currentInput = 0;
+        let autoInterval = null;
+
+        // Referencias al DOM
+        const inputSwitch = document.getElementById('input-switch');
+        const inputValText = document.getElementById('input-val-text');
+        const btnPulse = document.getElementById('btn-pulse');
+        const btnAuto = document.getElementById('btn-auto');
+        const btnReset = document.getElementById('btn-reset');
+        const bitStringDisplay = document.getElementById('bit-string');
+
+        // Referencias SVG
+        const wireInput = document.getElementById('wire-input');
+        
+        // Inicialización
+        updateVisuals();
+
+        // Event Listeners
+        inputSwitch.addEventListener('change', (e) => {
+            currentInput = e.target.checked ? 1 : 0;
+            inputValText.textContent = currentInput;
+            updateVisuals(); // Actualizar solo cables de entrada
+        });
+
+        btnPulse.addEventListener('click', () => {
+            pulseClock();
+        });
+
+        btnReset.addEventListener('click', () => {
+            registers.fill(0);
+            stopAuto();
+            // Resetear input switch
+            inputSwitch.checked = false;
+            currentInput = 0;
+            inputValText.textContent = "0";
+            updateVisuals();
+        });
+
+        btnAuto.addEventListener('click', () => {
+            if (autoInterval) {
+                stopAuto();
+            } else {
+                startAuto();
+            }
+        });
+
+        // Funciones Lógicas
+        function pulseClock() {
+            // Animación simple: desplazamos el array
+            // Movemos de derecha a izquierda para no sobrescribir datos antes de tiempo
+            for (let i = NUM_BITS - 1; i > 0; i--) {
+                registers[i] = registers[i - 1];
+            }
+            registers[0] = currentInput;
+            
+            updateVisuals();
+        }
+
+        function startAuto() {
+            btnAuto.textContent = "Detener Auto";
+            btnAuto.style.backgroundColor = "#e74c3c";
+            pulseClock(); // Primer pulso inmediato
+            autoInterval = setInterval(pulseClock, 1000);
+        }
+
+        function stopAuto() {
+            clearInterval(autoInterval);
+            autoInterval = null;
+            btnAuto.textContent = "Auto (1Hz)";
+            btnAuto.style.backgroundColor = "#8e44ad";
+        }
+
+        function updateVisuals() {
+            // 1. Actualizar Cable de Entrada (Antes del FF0)
+            if (currentInput === 1) {
+                wireInput.classList.add('active');
+            } else {
+                wireInput.classList.remove('active');
+            }
+
+            // 2. Actualizar Flip-Flops y Cables internos
+            let bitString = "";
+
+            for (let i = 0; i < NUM_BITS; i++) {
+                const val = registers[i];
+                bitString += val; // Construir string para display (ojo: orden visual)
+                
+                // Elementos SVG
+                const ffRect = document.getElementById(`ff-${i}`);
+                const led = document.getElementById(`led-${i}`);
+                
+                // Actualizar estado del bloque y LED
+                if (val === 1) {
+                    ffRect.classList.add('active');
+                    led.classList.add('active');
+                } else {
+                    ffRect.classList.remove('active');
+                    led.classList.remove('active');
+                }
+
+                // Actualizar cable que sale de este FF (hacia el siguiente)
+                if (i < NUM_BITS - 1) {
+                    const wire = document.getElementById(`wire-${i}`);
+                    if (val === 1) {
+                        wire.classList.add('active');
+                    } else {
+                        wire.classList.remove('active');
+                    }
+                } else {
+                    // Último cable (Salida final)
+                    const wireOut = document.getElementById('wire-out');
+                    if (val === 1) {
+                        wireOut.classList.add('active');
+                    } else {
+                        wireOut.classList.remove('active');
+                    }
+                }
+            }
+
+            // Actualizar texto informativo (mostramos Q0 a la izquierda, Q5 a la derecha)
+            bitStringDisplay.textContent = registers.join(' ');
+        }
+    </script>
+</body>
+</html>

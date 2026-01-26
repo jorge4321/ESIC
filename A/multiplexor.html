@@ -289,9 +289,9 @@
                     <line x1="300" y1="400" x2="300" y2="450" stroke="#7f8c8d" stroke-width="2" />
                     <line x1="350" y1="400" x2="350" y2="450" stroke="#7f8c8d" stroke-width="2" />
                     
-                    <text x="250" y="440" text-anchor="middle" font-weight="bold" fill="#333">S2</text>
-                    <text x="300" y="440" text-anchor="middle" font-weight="bold" fill="#333">S1</text>
-                    <text x="350" y="440" text-anchor="middle" font-weight="bold" fill="#333">S0</text>
+                    <text x="250" y="440" text-anchor="middle" font-weight="bold" fill="#333">S<sub>2</sub></text>
+                    <text x="300" y="440" text-anchor="middle" font-weight="bold" fill="#333">S<sub>1</sub></text>
+                    <text x="350" y="440" text-anchor="middle" font-weight="bold" fill="#333">S<sub>0</sub></text>
 
                     <line id="wire-output" x1="450" y1="225" x2="550" y2="225" class="wire" />
                     <text x="560" y="230" class="output-display" id="output-val">0</text>
@@ -304,7 +304,7 @@
                     <span style="font-weight: bold; margin-right: 10px;">Selectores (Dirección):</span>
                     
                     <div class="selector-group">
-                        <span style="font-size:0.8rem">S2 (MSB)</span>
+                        <span style="font-size:0.8rem">S<sub>2</sub> (MSB)</span>
                         <label class="switch">
                             <input type="checkbox" id="sel-2">
                             <span class="slider"></span>
@@ -312,7 +312,7 @@
                     </div>
                     
                     <div class="selector-group">
-                        <span style="font-size:0.8rem">S1</span>
+                        <span style="font-size:0.8rem">S<sub>1</sub></span>
                         <label class="switch">
                             <input type="checkbox" id="sel-1">
                             <span class="slider"></span>
@@ -320,7 +320,7 @@
                     </div>
                     
                     <div class="selector-group">
-                        <span style="font-size:0.8rem">S0 (LSB)</span>
+                        <span style="font-size:0.8rem">S<sub>0</sub> (LSB)</span>
                         <label class="switch">
                             <input type="checkbox" id="sel-0">
                             <span class="slider"></span>
@@ -329,7 +329,7 @@
 
                     <div style="margin-left: 20px; text-align: center;">
                         <div style="font-size: 0.8rem;">Seleccionado:</div>
-                        <div class="selector-display" id="selection-val">0 (D0)</div>
+                        <div class="selector-display" id="selection-val">0 (D<sub>0</sub>)</div>
                     </div>
                 </div>
 
@@ -339,15 +339,15 @@
         <div class="info-panel">
             <h3>¿Cómo funciona?</h3>
             <p>
-                Un multiplexor 8:1 tiene <strong>8 líneas de entrada de datos ($D_0$ a $D_7$)</strong> y <strong>1 línea de salida ($Y$)</strong>.
-                Para decidir cuál de las 8 entradas se conecta a la salida, utiliza <strong>3 bits de selección ($S_2, S_1, S_0$)</strong>.
+                Un multiplexor 8:1 tiene <strong>8 líneas de entrada de datos (D<sub>0</sub> a D<sub>7</sub>)</strong> y <strong>1 línea de salida (Y)</strong>.
+                Para decidir cuál de las 8 entradas se conecta a la salida, utiliza <strong>3 bits de selección (S<sub>2</sub>, S<sub>1</sub>, S<sub>0</sub>)</strong>.
             </p>
             <p>
-                La fórmula es $2^3 = 8$. Combinando los 3 interruptores de abajo, generas un número binario del 000 (0) al 111 (7).
+                La fórmula es 2<sup>3</sup> = 8. Combinando los 3 interruptores de abajo, generas un número binario del 000 (0) al 111 (7).
                 El circuito conecta físicamente la entrada correspondiente a ese número con la salida.
             </p>
             <p>
-                <em>Prueba: Configura la entrada $D_3$ en "1" (Verde). Luego ajusta los selectores a "011" (3 en binario). Verás como el dato pasa a la salida.</em>
+                <em>Prueba: Configura la entrada D<sub>3</sub> en "1" (Verde). Luego ajusta los selectores a "011" (3 en binario). Verás como el dato pasa a la salida.</em>
             </p>
         </div>
     </main>
@@ -389,15 +389,14 @@
 
         // Crear controles de entrada (Interruptores D0-D7)
         function createInputControls() {
-            // Generamos de D7 a D0 (orden descendente visualmente suele ser más ordenado en digital, 
-            // pero para correspondencia con SVG vertical lo haremos 0 arriba, 7 abajo)
             for (let i = 0; i < numInputs; i++) {
                 const div = document.createElement('div');
                 div.className = 'input-group';
                 div.id = `input-group-${i}`;
                 
+                // Nota: Usamos <sub> también aquí para los subíndices
                 div.innerHTML = `
-                    <span class="label-text">D${i}</span>
+                    <span class="label-text">D<sub>${i}</sub></span>
                     <label class="switch">
                         <input type="checkbox" onchange="toggleInput(${i}, this.checked)">
                         <span class="slider"></span>
@@ -426,13 +425,6 @@
                 // Grupo para cada cable
                 const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
                 
-                // 1. Línea externa (Entrada hasta borde MUX)
-                // Calculamos borde izquierdo del trapecio aproximado
-                // Trapecio va de x=150 (arriba) a x=150 (abajo) en el lado izquierdo... espera, es recto a la izq?
-                // En points="150,20 450,80..." -> El lado izq es vertical de 20 a 430? NO.
-                // Points: 150,20 (TL) -> 450,80 (TR) -> 450,370 (BR) -> 150,430 (BL)
-                // El lado izquierdo es la línea entre 150,20 y 150,430. Es vertical. x=150. Perfecto.
-                
                 // Línea de entrada
                 const lineIn = document.createElementNS("http://www.w3.org/2000/svg", "line");
                 lineIn.setAttribute("x1", "0");
@@ -443,24 +435,37 @@
                 lineIn.setAttribute("id", `wire-ext-${i}`);
                 g.appendChild(lineIn);
 
-                // Texto Label D[i]
+                // Texto Label D[i] en SVG (No soporta <sub> nativo fácilmente, usamos posicionamiento o texto plano)
+                // Para simplificar en SVG puro sin <tspan>, usaremos D0, D1... que es aceptable en diagramas técnicos
+                // O podemos usar tspans para simular subindice.
+                
                 const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
                 text.setAttribute("x", "10");
                 text.setAttribute("y", yPos - 5);
                 text.setAttribute("class", "label-svg");
-                text.textContent = `D${i}`;
+                
+                // Creación de subíndice SVG manual usando tspan y dy
+                const tspanMain = document.createElementNS("http://www.w3.org/2000/svg", "tspan");
+                tspanMain.textContent = "D";
+                
+                const tspanSub = document.createElementNS("http://www.w3.org/2000/svg", "tspan");
+                tspanSub.textContent = i;
+                tspanSub.setAttribute("dy", "5"); // Bajar un poco
+                tspanSub.setAttribute("font-size", "10"); // Más pequeño
+                
+                text.appendChild(tspanMain);
+                text.appendChild(tspanSub);
                 g.appendChild(text);
 
-                // 2. Línea Interna (Ruta hacia la salida)
-                // Salida está en 450, 225.
+                // Línea Interna
                 const lineInt = document.createElementNS("http://www.w3.org/2000/svg", "line");
                 lineInt.setAttribute("x1", "150");
                 lineInt.setAttribute("y1", yPos);
                 lineInt.setAttribute("x2", "450");
-                lineInt.setAttribute("y2", "225"); // Todas convergen al punto medio derecho
+                lineInt.setAttribute("y2", "225");
                 lineInt.setAttribute("class", "wire");
                 lineInt.setAttribute("id", `wire-int-${i}`);
-                lineInt.style.opacity = "0.1"; // Ocultas por defecto
+                lineInt.style.opacity = "0.1";
                 g.appendChild(lineInt);
 
                 inputWiresSvg.appendChild(g);
@@ -474,60 +479,40 @@
             selectBits[0] = sel0.checked ? 1 : 0;
 
             // Calcular Índice (Decimal)
-            // S2*4 + S1*2 + S0*1
             const selectedIndex = (selectBits[2] * 4) + (selectBits[1] * 2) + (selectBits[0] * 1);
             
-            // Actualizar Texto Selectores
-            selectionValText.textContent = `${selectedIndex} (D${selectedIndex})`;
+            // Actualizar Texto Selectores (usamos HTML para subindice)
+            selectionValText.innerHTML = `${selectedIndex} (D<sub>${selectedIndex}</sub>)`;
 
             // Determinar Salida
             const outputValue = inputValues[selectedIndex];
             outputValText.textContent = outputValue;
-            
-            // Color salida texto
             outputValText.style.fill = outputValue === 1 ? 'var(--signal-on)' : '#777';
 
             // --- ACTUALIZACIÓN VISUAL ---
-
-            // 1. Resetear estilos básicos
             for (let i = 0; i < numInputs; i++) {
-                // UI Input Background
                 const groupDiv = document.getElementById(`input-group-${i}`);
-                
-                // SVG Wires
                 const wExt = document.getElementById(`wire-ext-${i}`);
                 const wInt = document.getElementById(`wire-int-${i}`);
-                
-                // Estado del dato (0 o 1)
                 const isHigh = inputValues[i] === 1;
 
-                // Limpiar clases
                 wExt.classList.remove('active', 'selected');
                 wInt.classList.remove('active', 'selected');
                 groupDiv.classList.remove('selected');
-                wInt.style.opacity = "0.1"; // Reset opacidad ruta interna
+                wInt.style.opacity = "0.1";
 
-                // Colorear cable externo si tiene dato 1
                 if (isHigh) wExt.classList.add('active');
 
-                // Si este es el índice seleccionado
                 if (i === selectedIndex) {
                     groupDiv.classList.add('selected');
-                    
-                    // Resaltar ruta (Azul)
                     wExt.classList.add('selected');
                     wInt.classList.add('selected');
                     wInt.style.opacity = "1";
-
-                    // Si además es High, se pone verde brillante
                     if (isHigh) wInt.classList.add('active');
                 }
             }
 
-            // 2. Cable de Salida Final
             wireOutput.classList.remove('active', 'selected');
-            // El cable de salida siempre está "seleccionado" (conectado), 
-            // pero su color depende del valor que pasa.
             if (outputValue === 1) {
                 wireOutput.classList.add('active');
                 wireOutput.style.stroke = "var(--signal-on)";

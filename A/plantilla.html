@@ -1,0 +1,322 @@
+/* PROMT: "Usa este código base como plantilla de estilo y estructura
+
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plantilla Base - Prof. López-Cifre</title>
+    <style>
+        /* --- VARIABLES DE DISEÑO (PALETA DE COLORES) --- */
+        :root {
+            --bg-color: #f4f7f6;
+            --text-color: #333;
+            --primary-color: #2c3e50;  /* Azul oscuro corporativo Header */
+            --accent-color: #3498db;   /* Color principal del elemento (cambiar según tema) */
+            --signal-on: #2ecc71;      /* Verde (Estado Activo/1) */
+            --signal-off: #bdc3c7;     /* Gris (Estado Inactivo/0) */
+            --wire-color: #95a5a6;     /* Color cables inactivos */
+            --box-fill: #ffffff;       /* Fondo cajas SVG */
+            --box-stroke: #34495e;     /* Borde cajas SVG */
+            --action-color: #e74c3c;   /* Color botones de acción principal */
+        }
+
+        /* --- ESTRUCTURA GENERAL --- */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* --- HEADER Y BOTÓN VOLVER --- */
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 1rem;
+            position: relative;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        h1 { margin: 0; font-size: 1.5rem; }
+
+        .btn-volver {
+            position: absolute;
+            top: 50%;
+            right: 20px;
+            transform: translateY(-50%);
+            background-color: #e67e22; /* Naranja standard para volver */
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 0.9rem;
+            transition: background 0.3s;
+        }
+        .btn-volver:hover { background-color: #d35400; }
+
+        /* --- CONTENEDOR PRINCIPAL --- */
+        main {
+            flex: 1;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            box-sizing: border-box;
+        }
+
+        /* --- CLASES DE UTILIDAD PARA LA IA (Layouts comunes) --- */
+        
+        /* Contenedor Grid estándar (Panel Izq + Panel Der) */
+        .simulation-container {
+            display: grid;
+            grid-template-columns: 280px 1fr; /* Ajustable según necesidad */
+            gap: 20px;
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        /* Estilos Panel de Control (Izquierda) */
+        .controls-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            border-right: 2px solid #eee;
+            padding-right: 20px;
+        }
+
+        /* Grupo de controles con borde de color */
+        .control-group {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 5px solid var(--accent-color);
+        }
+
+        .group-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            display: block;
+            color: #555;
+            font-size: 0.95rem;
+        }
+
+        /* --- COMPONENTES DE INTERFAZ (Switches y Botones) --- */
+        
+        /* Interruptor deslizante (Toggle) */
+        .switch-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+        .switch-label { 
+            font-family: monospace; 
+            font-size: 0.9rem; 
+            display: inline-flex;
+            align-items: baseline;
+        }
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 40px;
+            height: 20px;
+        }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 20px;
+        }
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 14px;
+            width: 14px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        input:checked + .slider { background-color: var(--signal-on); }
+        input:checked + .slider:before { transform: translateX(20px); }
+
+        /* Botón de Acción Genérico */
+        .btn-action {
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1rem;
+            width: 100%;
+            transition: transform 0.1s, background 0.2s;
+            margin-top: 5px;
+        }
+        .btn-action:hover { opacity: 0.9; }
+        .btn-action:active { transform: scale(0.98); }
+
+        /* Panel de Información inferior */
+        .info-panel {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            width: 100%;
+            margin-top: 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        /* Area de Diagrama SVG */
+        .diagram-area {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-x: auto;
+        }
+        svg {
+            max-width: 100%;
+            height: auto;
+            min-width: 400px; /* Ajustable */
+        }
+        
+        /* Estilos comunes SVG */
+        text { user-select: none; font-family: monospace; }
+        .wire { fill: none; stroke: var(--wire-color); stroke-width: 3; transition: stroke 0.2s; }
+        .wire.active { stroke: var(--signal-on); }
+
+        /* --- FOOTER COMERCIAL (ESTILO TARJETA) --- */
+        footer {
+            margin-top: auto;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f0f2f5;
+            border-top: 1px solid #e1e4e8;
+        }
+
+        .footer-card {
+            display: flex;
+            align-items: center;
+            background: white;
+            padding: 10px 25px;
+            border-radius: 50px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+            border: 1px solid #eee;
+            transition: transform 0.3s ease;
+        }
+        
+        .footer-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.12);
+        }
+
+        .footer-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            object-position: top center;
+            margin-right: 15px;
+            background-color: #ecf0f1; /* Sin borde sólido */
+        }
+
+        .footer-info {
+            display: flex;
+            flex-direction: column;
+            text-align: left;
+        }
+
+        .footer-name {
+            font-weight: bold;
+            color: var(--primary-color);
+            font-size: 1rem;
+            line-height: 1.2;
+        }
+
+        .footer-copy {
+            font-size: 0.8rem;
+            color: #7f8c8d;
+            margin-top: 2px;
+        }
+
+        /* --- RESPONSIVE --- */
+        @media (max-width: 800px) {
+            .simulation-container { grid-template-columns: 1fr; }
+            .controls-panel { border-right: none; border-bottom: 2px solid #eee; padding-bottom: 20px; padding-right: 0; }
+            .footer-card { padding: 8px 15px; }
+            .footer-name { font-size: 0.9rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>[TITULO DE LA SIMULACIÓN]</h1>
+        <a href="javascript:history.back()" class="btn-volver">Volver</a>
+    </header>
+
+    <main>
+        <div class="simulation-container">
+            
+            <div class="controls-panel">
+                </div>
+
+            <div class="diagram-area">
+                </div>
+            
+        </div>
+
+        <div class="info-panel">
+            <h3>Descripción del concepto</h3>
+            <p>
+                Aquí irá la explicación teórica del funcionamiento.
+            </p>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-card">
+            <img src="ICONO_JLC.png" alt="Prof. Jorge López-Cifre" class="footer-avatar">
+            <div class="footer-info">
+                <span class="footer-name">Prof. Jorge López-Cifre PhD</span>
+                <span class="footer-copy">© 2026</span>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // --- SECCIÓN DE LÓGICA JAVASCRIPT ---
+        
+        // Inicialización
+        function init() {
+            // Lógica de inicio
+        }
+
+        // Ejecutar
+        init();
+    </script>
+</body>
+</html>

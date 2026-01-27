@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clausura de Kleene - Automata Interactivo</title>
+    <style>
+        /* ESTILOS GENERALES (Basados en la plantilla solicitada) */
+        :root {
+            --primary-color: #2c3e50;
+            --accent-color: #3498db;
+            --success-color: #27ae60;
+            --error-color: #c0392b;
+            --bg-color: #f4f6f7;
+            --text-color: #333;
+            --panel-bg: #ffffff;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* HEADER */
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 1rem 2rem;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 1.8rem;
+        }
+
+        header p {
+            margin: 0.5rem 0 0;
+            opacity: 0.9;
+            font-size: 0.9rem;
+        }
+
+        /* CONTENEDOR PRINCIPAL */
+        .container {
+            max-width: 1000px;
+            margin: 20px auto;
+            padding: 0 20px;
+            flex: 1;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+
+        /* TARJETAS / PANELES */
+        .card {
+            background-color: var(--panel-bg);
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            padding: 20px;
+        }
+
+        h2 {
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 10px;
+            margin-top: 0;
+        }
+
+        /* DIAGRAMA SVG */
+        .svg-container {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        svg {
+            width: 100%;
+            max-width: 600px;
+            height: auto;
+            display: block;
+        }
+
+        /* ELEMENTOS DEL DIAGRAMA */
+        .node {
+            fill: #fff;
+            stroke: #333;
+            stroke-width: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .node-text {
+            font-family: monospace;
+            font-size: 16px;
+            text-anchor: middle;
+            dominant-baseline: middle;
+            fill: #000;
+            user-select: none;
+        }
+
+        .edge {
+            fill: none;
+            stroke: #333;
+            stroke-width: 2px;
+            transition: stroke 0.3s ease;
+        }
+
+        .edge-marker {
+            fill: #333;
+            transition: fill 0.3s ease;
+        }
+
+        .edge-label {
+            font-family: sans-serif;
+            font-size: 14px;
+            fill: #555;
+            text-anchor: middle;
+            background-color: white; /* Simulado con filtro o rect */
+        }
+
+        /* CLASES ACTIVAS PARA ANIMACIÓN */
+        .active-node {
+            fill: #ffeaa7;
+            stroke: #e67e22;
+            stroke-width: 3px;
+        }
+
+        .active-edge {
+            stroke: #e67e22;
+            stroke-width: 3px;
+        }
+
+        .active-marker {
+            fill: #e67e22;
+        }
+
+        /* CONTROLES */
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            align-items: center;
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #eee;
+        }
+
+        input[type="text"] {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+            flex-grow: 1;
+            font-family: monospace;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.2s;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+        }
+
+        button:disabled {
+            background-color: #bdc3c7;
+            cursor: not-allowed;
+        }
+
+        #btn-reset {
+            background-color: #7f8c8d;
+        }
+
+        /* LOG / RESULTADOS */
+        .status-panel {
+            margin-top: 15px;
+            padding: 15px;
+            background-color: #fdfdfd;
+            border-left: 4px solid #ccc;
+            font-family: monospace;
+            min-height: 40px;
+        }
+
+        .status-processing { border-color: var(--accent-color); color: var(--accent-color); }
+        .status-success { border-color: var(--success-color); color: var(--success-color); font-weight: bold; }
+        .status-error { border-color: var(--error-color); color: var(--error-color); }
+
+        .tape-container {
+            display: flex;
+            justify-content: center;
+            margin: 10px 0;
+            font-family: monospace;
+            font-size: 1.2rem;
+        }
+
+        .tape-char {
+            padding: 5px 10px;
+            border: 1px solid #ddd;
+            margin: 0 2px;
+            border-radius: 3px;
+            background: #fff;
+        }
+
+        .tape-char.current {
+            background-color: var(--accent-color);
+            color: white;
+            transform: scale(1.1);
+            font-weight: bold;
+        }
+
+        /* FOOTER */
+        footer {
+            text-align: center;
+            padding: 20px;
+            background-color: var(--primary-color);
+            color: white;
+            font-size: 0.8rem;
+            margin-top: auto;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 600px) {
+            header h1 { font-size: 1.4rem; }
+            .controls { flex-direction: column; align-items: stretch; }
+            input[type="text"] { width: 100%; box-sizing: border-box; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Clausura de Kleene (&Sigma;<sup>*</sup>)</h1>
+    <p>Visualización interactiva de autómatas finitos</p>
+</header>
+
+<div class="container">
+    
+    <section class="card">
+        <h2>Concepto</h2>
+        <p>
+            La <strong>Clausura de Kleene</strong>, denotada como <strong>&Sigma;<sup>*</sup></strong>, representa el conjunto de todas las cadenas posibles (de cualquier longitud, incluyendo la longitud cero) que se pueden formar utilizando los símbolos de un alfabeto &Sigma;.
+        </p>
+        <p>
+            En este ejemplo, el alfabeto es <strong>&Sigma; = {0, 1}</strong>.
+            El autómata comienza en un estado de "Inicio" y utiliza una transición vacía (&epsilon;) para llegar al estado de aceptación "A". Una vez en "A", puede ciclar indefinidamente con cualquier combinación de 0s y 1s.
+        </p>
+    </section>
+
+    <section class="card">
+        <h2>Simulación del Autómata</h2>
+        
+        <div class="svg-container">
+            <svg viewBox="0 0 600 300" aria-labelledby="svg-title">
+                <title id="svg-title">Diagrama de transición Clausura de Kleene</title>
+                <defs>
+                    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                        <polygon points="0 0, 10 3.5, 0 7" fill="#333" class="edge-marker" />
+                    </marker>
+                    <marker id="arrowhead-active" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                        <polygon points="0 0, 10 3.5, 0 7" fill="#e67e22" />
+                    </marker>
+                </defs>
+
+                <circle id="node-start" cx="150" cy="150" r="45" class="node" />
+                <text x="150" y="150" class="node-text">Inicio</text>
+
+                <circle id="node-a-outer" cx="450" cy="150" r="45" class="node" />
+                <circle id="node-a-inner" cx="450" cy="150" r="38" class="node" />
+                <text x="450" y="150" class="node-text">A</text>
+
+                <line id="edge-epsilon" x1="195" y1="150" x2="395" y2="150" 
+                      class="edge" marker-end="url(#arrowhead)" />
+                <text x="300" y="140" class="edge-label" font-size="18">&epsilon;</text>
+
+                <path id="edge-loop" d="M 450 105 C 420 40, 480 40, 450 105" 
+                      class="edge" fill="none" marker-end="url(#arrowhead)" />
+                
+                <text x="450" y="30" class="edge-label" text-anchor="middle">
+                    0, 1
+                </text>
+            </svg>
+        </div>
+
+        <div class="controls">
+            <input type="text" id="inputString" placeholder="Introduce una cadena (ej: 1001, 10, vacío)" maxlength="15">
+            <button id="btn-run" onclick="startSimulation()">Validar Cadena</button>
+            <button id="btn-reset" onclick="resetSimulation()">Reiniciar</button>
+        </div>
+
+        <div class="tape-container" id="tapeDisplay">
+            </div>
+
+        <div id="statusLog" class="status-panel">
+            Esperando entrada... Introduce solo 0s y 1s.
+        </div>
+    </section>
+
+</div>
+
+<footer>
+    <p>Recurso Didáctico para Ingeniería - Autómatas y Lenguajes Formales</p>
+</footer>
+
+<script>
+    // Referencias al DOM
+    const nodeStart = document.getElementById('node-start');
+    const nodeAOuter = document.getElementById('node-a-outer');
+    const nodeAInner = document.getElementById('node-a-inner');
+    const edgeEpsilon = document.getElementById('edge-epsilon');
+    const edgeLoop = document.getElementById('edge-loop');
+    const inputField = document.getElementById('inputString');
+    const statusLog = document.getElementById('statusLog');
+    const tapeDisplay = document.getElementById('tapeDisplay');
+    const btnRun = document.getElementById('btn-run');
+    const arrowMarker = document.getElementById('arrowhead');
+
+    let animationTimeouts = [];
+
+    // Validar input: solo permite 0 y 1
+    inputField.addEventListener('input', function(e) {
+        this.value = this.value.replace(/[^01]/g, '');
+    });
+
+    // Función para reiniciar el estilo de los nodos
+    function resetVisuals() {
+        // Limpiar timeouts pendientes
+        animationTimeouts.forEach(t => clearTimeout(t));
+        animationTimeouts = [];
+
+        // Quitar clases activas
+        [nodeStart, nodeAOuter, nodeAInner].forEach(el => el.classList.remove('active-node'));
+        [edgeEpsilon, edgeLoop].forEach(el => {
+            el.classList.remove('active-edge');
+            el.setAttribute('marker-end', 'url(#arrowhead)');
+        });
+        
+        statusLog.className = 'status-panel';
+        statusLog.innerHTML = 'Listo. Introduce una cadena.';
+        tapeDisplay.innerHTML = '';
+        btnRun.disabled = false;
+        inputField.disabled = false;
+    }
+
+    function resetSimulation() {
+        inputField.value = '';
+        resetVisuals();
+    }
+
+    function setStatus(msg, type) {
+        statusLog.innerHTML = msg;
+        statusLog.className = `status-panel status-${type}`;
+    }
+
+    function highlightNode(node, active) {
+        if(active) node.classList.add('active-node');
+        else node.classList.remove('active-node');
+    }
+
+    function highlightEdge(edge, active) {
+        if(active) {
+            edge.classList.add('active-edge');
+            edge.setAttribute('marker-end', 'url(#arrowhead-active)');
+        } else {
+            edge.classList.remove('active-edge');
+            edge.setAttribute('marker-end', 'url(#arrowhead)');
+        }
+    }
+
+    function createTape(str) {
+        tapeDisplay.innerHTML = '';
+        if (str.length === 0) {
+            const span = document.createElement('div');
+            span.className = 'tape-char';
+            span.innerHTML = '(&epsilon;)'; // Cadena vacía
+            span.id = 'char-eps';
+            tapeDisplay.appendChild(span);
+            return;
+        }
+        for (let i = 0; i < str.length; i++) {
+            const span = document.createElement('div');
+            span.className = 'tape-char';
+            span.innerText = str[i];
+            span.id = `char-${i}`;
+            tapeDisplay.appendChild(span);
+        }
+    }
+
+    function startSimulation() {
+        resetVisuals();
+        const inputStr = inputField.value;
+        
+        // Bloquear controles durante animación
+        btnRun.disabled = true;
+        inputField.disabled = true;
+
+        createTape(inputStr);
+        setStatus("Iniciando análisis...", "processing");
+
+        let delay = 0;
+        const stepTime = 1000; // Tiempo por paso
+
+        // PASO 1: Estado Inicial
+        animationTimeouts.push(setTimeout(() => {
+            highlightNode(nodeStart, true);
+            setStatus("Estado actual: <strong>Inicio</strong>", "processing");
+        }, delay));
+
+        delay += stepTime;
+
+        // PASO 2: Transición Epsilon
+        animationTimeouts.push(setTimeout(() => {
+            highlightNode(nodeStart, false);
+            highlightEdge(edgeEpsilon, true);
+            setStatus("Transición &epsilon; (automática) hacia estado <strong>A</strong>", "processing");
+            
+            // Si es cadena vacía, marcar cinta visualmente
+            if(inputStr.length === 0) {
+                 const epsChar = document.getElementById('char-eps');
+                 if(epsChar) epsChar.classList.add('current');
+            }
+        }, delay));
+
+        delay += stepTime;
+
+        // PASO 3: Llegada a A (antes de procesar caracteres)
+        animationTimeouts.push(setTimeout(() => {
+            highlightEdge(edgeEpsilon, false);
+            highlightNode(nodeAOuter, true);
+            highlightNode(nodeAInner, true); // Doble círculo activo
+            setStatus("Estado actual: <strong>A</strong> (Aceptación). Preparado para leer caracteres.", "processing");
+        }, delay));
+
+        delay += stepTime;
+
+        // PASO 4: Procesar cadena (Bucle)
+        if (inputStr.length > 0) {
+            for (let i = 0; i < inputStr.length; i++) {
+                // Animar el bucle para el caracter actual
+                animationTimeouts.push(setTimeout(() => {
+                    // Resaltar caracter en la cinta
+                    if(i > 0) document.getElementById(`char-${i-1}`).classList.remove('current');
+                    document.getElementById(`char-${i}`).classList.add('current');
+
+                    // Efecto visual de "re-activar" el nodo para mostrar el bucle
+                    highlightNode(nodeAOuter, false); 
+                    highlightNode(nodeAInner, false);
+                    highlightEdge(edgeLoop, true);
+                    
+                    setStatus(`Leyendo entrada: <strong>${inputStr[i]}</strong>. Bucle sobre estado <strong>A</strong>.`, "processing");
+                }, delay));
+
+                delay += stepTime;
+
+                // Volver a iluminar el nodo A tras el bucle
+                animationTimeouts.push(setTimeout(() => {
+                    highlightEdge(edgeLoop, false);
+                    highlightNode(nodeAOuter, true);
+                    highlightNode(nodeAInner, true);
+                }, delay));
+                
+                delay += 500; // Pausa pequeña entre caracteres
+            }
+        }
+
+        // PASO FINAL: Validación
+        animationTimeouts.push(setTimeout(() => {
+            // Quitar resaltado del último caracter
+            if(inputStr.length > 0) {
+                 document.getElementById(`char-${inputStr.length-1}`).classList.remove('current');
+            } else {
+                 const epsChar = document.getElementById('char-eps');
+                 if(epsChar) epsChar.classList.remove('current');
+            }
+
+            // El estado final siempre es A en este autómata específico para Sigma*
+            setStatus(`Fin de cadena. El autómata termina en estado de Aceptación (A).<br>La cadena "<strong>${inputStr === '' ? 'vacía' : inputStr}</strong>" pertenece a &Sigma;<sup>*</sup>.`, "success");
+            
+            btnRun.disabled = false;
+            inputField.disabled = false;
+        }, delay));
+    }
+</script>
+
+</body>
+</html>

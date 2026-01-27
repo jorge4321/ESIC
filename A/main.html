@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laboratorio Virtual - Índice de Simulaciones</title>
+    <style>
+        :root {
+            --bg-color: #f4f7f6;
+            --text-color: #333;
+            --primary-color: #2c3e50;
+            --accent-color: #3498db;
+            --card-bg: #ffffff;
+            --hover-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 1.8rem;
+        }
+        
+        header p {
+            margin: 5px 0 0;
+            opacity: 0.8;
+            font-weight: 300;
+        }
+
+        /* Contenido Principal */
+        main {
+            flex: 1;
+            padding: 40px 20px;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            box-sizing: border-box;
+        }
+
+        /* Grid de Tarjetas */
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 25px;
+        }
+
+        /* Estilo de Tarjeta */
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 25px;
+            text-align: center;
+            text-decoration: none;
+            color: var(--text-color);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid #eee;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            box-sizing: border-box;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--hover-shadow);
+            border-color: var(--accent-color);
+        }
+
+        /* Iconos SVG dentro de las tarjetas */
+        .card-icon {
+            width: 60px;
+            height: 60px;
+            margin-bottom: 15px;
+            fill: none;
+            stroke: var(--primary-color);
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            transition: stroke 0.3s;
+        }
+
+        .card:hover .card-icon {
+            stroke: var(--accent-color);
+        }
+
+        .card-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: var(--primary-color);
+        }
+
+        .card-desc {
+            font-size: 0.9rem;
+            color: #666;
+            line-height: 1.4;
+        }
+
+        /* Footer */
+        footer {
+            background-color: white;
+            border-top: 1px solid #ccc;
+            padding: 20px;
+            text-align: center;
+            margin-top: auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        footer img {
+            height: 50px;
+            width: auto;
+        }
+
+        footer p {
+            margin: 0;
+            color: #666;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Laboratorio Virtual de Electrónica Digital</h1>
+        <p>Seleccione una práctica para comenzar la simulación</p>
+    </header>
+
+    <main>
+        <div class="grid-container">
+            
+            <a href="flip_flop.html" class="card">
+                <svg class="card-icon" viewBox="0 0 24 24">
+                    <rect x="4" y="4" width="16" height="16" rx="2" />
+                    <path d="M8 9v6" />
+                    <path d="M16 9v6" />
+                    <path d="M12 4v4" /> <polyline points="10 16 12 18 14 16" />
+                </svg>
+                <div class="card-title">Flip-Flop JK</div>
+                <div class="card-desc">Memoria básica de 1 bit. Control por flanco de reloj y estados de báscula.</div>
+            </a>
+
+            <a href="shift_register.html" class="card">
+                <svg class="card-icon" viewBox="0 0 24 24">
+                    <rect x="2" y="6" width="20" height="12" rx="2" />
+                    <path d="M7 12h2m3 0h2m3 0h2" /> <polyline points="12 18 12 22 18 22 18 12" stroke-dasharray="2 2" /> <polyline points="4 12 2 12 2 4 8 4" /> </svg>
+                <div class="card-title">Shift Register</div>
+                <div class="card-desc">Registro de desplazamiento SIPO. Movimiento de bits en serie.</div>
+            </a>
+
+            <a href="multiplexor.html" class="card">
+                <svg class="card-icon" viewBox="0 0 24 24">
+                    <path d="M6 4 L18 8 L18 16 L6 20 Z" /> <line x1="2" y1="7" x2="6" y2="7" />
+                    <line x1="2" y1="12" x2="6" y2="12" />
+                    <line x1="2" y1="17" x2="6" y2="17" />
+                    <line x1="18" y1="12" x2="22" y2="12" />
+                </svg>
+                <div class="card-title">Multiplexor 8:1</div>
+                <div class="card-desc">Selector de datos. Elige una entrada entre varias para enviarla a la salida.</div>
+            </a>
+
+            <a href="decodificador.html" class="card">
+                <svg class="card-icon" viewBox="0 0 24 24">
+                    <rect x="6" y="4" width="12" height="16" rx="1" />
+                    <line x1="2" y1="8" x2="6" y2="8" />
+                    <line x1="2" y1="16" x2="6" y2="16" />
+                    <line x1="18" y1="6" x2="22" y2="6" />
+                    <line x1="18" y1="10" x2="22" y2="10" />
+                    <line x1="18" y1="14" x2="22" y2="14" />
+                    <line x1="18" y1="18" x2="22" y2="18" />
+                </svg>
+                <div class="card-title">Decodificador</div>
+                <div class="card-desc">Conversor de código binario a una salida activa única (1 de N).</div>
+            </a>
+
+            <a href="sumador.html" class="card">
+                <svg class="card-icon" viewBox="0 0 24 24">
+                    <rect x="4" y="4" width="16" height="16" rx="2" />
+                    <line x1="12" y1="8" x2="12" y2="16" />
+                    <line x1="8" y1="12" x2="16" y2="12" />
+                </svg>
+                <div class="card-title">Sumador Binario</div>
+                <div class="card-desc">Suma aritmética de bits con propagación de acarreo (Ripple Carry).</div>
+            </a>
+
+            <a href="contador.html" class="card">
+                <svg class="card-icon" viewBox="0 0 24 24">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" fill="none"/> <text x="12" y="16" font-family="monospace" font-size="8" text-anchor="middle" stroke="none" fill="currentColor">101</text>
+                    <path d="M12 6v2" />
+                </svg>
+                <div class="card-title">Contador Binario</div>
+                <div class="card-desc">Circuito secuencial que cuenta pulsos de reloj en binario.</div>
+            </a>
+
+            <a href="alu.html" class="card">
+                <svg class="card-icon" viewBox="0 0 24 24">
+                    <path d="M4 4 L12 4 L14 10 L16 4 L20 4 L16 20 L8 20 Z" /> <text x="12" y="16" font-size="6" text-anchor="middle" stroke="none" fill="currentColor">ALU</text>
+                </svg>
+                <div class="card-title">ALU (4 Bits)</div>
+                <div class="card-desc">Unidad Aritmético Lógica. Realiza operaciones matemáticas y lógicas.</div>
+            </a>
+
+            <a href="ram.html" class="card">
+                <svg class="card-icon" viewBox="0 0 24 24">
+                    <rect x="3" y="3" width="18" height="18" rx="2" />
+                    <line x1="9" y1="3" x2="9" y2="21" />
+                    <line x1="15" y1="3" x2="15" y2="21" />
+                    <line x1="3" y1="9" x2="21" y2="9" />
+                    <line x1="3" y1="15" x2="21" y2="15" />
+                </svg>
+                <div class="card-title">Memoria RAM</div>
+                <div class="card-desc">Matriz de memoria de acceso aleatorio para lectura y escritura de datos.</div>
+            </a>
+
+        </div>
+    </main>
+
+    <footer>
+        <img src="ICONO_JLC.png" alt="Prof. Jorge López-Cifre">
+        <p>Prof. Jorge López-Cifre PhD<br>© 2026</p>
+    </footer>
+
+</body>
+</html>

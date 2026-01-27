@@ -229,14 +229,29 @@
             fill: var(--text-color);
         }
 
-        /* Footer */
+        /* Footer Actualizado (Estilo Plantilla) */
         footer {
+            background-color: white;
+            border-top: 1px solid #ccc;
+            padding: 20px;
             text-align: center;
-            padding: 15px;
-            font-size: 0.8rem;
-            color: #777;
-            background-color: #eee;
             margin-top: auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        footer img {
+            height: 50px;
+            width: auto;
+        }
+
+        footer p {
+            margin: 0;
+            color: #666;
+            font-size: 0.9rem;
+            line-height: 1.4;
         }
 
         .info-panel {
@@ -354,7 +369,8 @@
     </main>
 
     <footer>
-        (C) 2026, Prof. Jorge López-Cifre, PhD
+        <img src="ICONO_JLC.png" alt="Prof. Jorge López-Cifre">
+        <p>Prof. Jorge López-Cifre PhD<br>© 2026</p>
     </footer>
 
     <script>

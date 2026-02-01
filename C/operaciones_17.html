@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>17 - Optimización y Cuellos de Botella - Teoría de las Limitaciones (TOC).</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #f4f4f9; color: #333; margin: 0; padding: 20px; line-height: 1.6; position: relative; }
+        header { background: #2c3e50; color: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; text-align:center; }
+        h1 { margin: 0; font-size: 1.5rem; }
+
+        /* Estilo del botón Atrás */
+        .btn-atras {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #7f8c8d;
+            color: white;
+            padding: 8px 15px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            transition: background 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+        .btn-atras:hover { background: #95a5a6; }
+
+        .subtema {
+            background: white;
+            padding: 40px;
+            margin-bottom: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        h2 { color: #2980b9; border-bottom: 2px solid #eee; padding-bottom: 10px; margin-top: 0; }
+        h3 { color: #7f8c8d; font-size: 0.9em; text-transform: uppercase; margin-top: 30px; letter-spacing: 1px; border-left: 3px solid #d4af37; padding-left: 10px; }
+
+        .diagrama-box {
+            text-align: center;
+            margin: 30px 0;
+            padding: 20px;
+            background: #fafafa;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 150px;
+        }
+
+        p { margin-bottom: 1rem; }
+        strong { color: #2c3e50; font-weight: 600; }
+        code { background: #f0f0f0; padding: 2px 5px; border-radius: 3px; font-family: monospace; color: #c0392b; }
+        ul { padding-left: 20px; }
+        li { margin-bottom: 0.5rem; }
+    </style>
+</head>
+<body>
+    <button onclick="window.history.back()" class="btn-atras">Atrás</button>
+    <header><h1>17 - Optimización y Cuellos de Botella - Teoría de las Limitaciones (TOC).</h1></header>
+    <main>
+
+        <article class="subtema">
+            <h2>Los Cinco Pasos de la Mejora Continua (POOGI)</h2>
+
+            <h3>Historia</h3>
+            <div><p>La Teoría de las Limitaciones (TOC) fue introducida por el Dr. Eliyahu M. Goldratt en su célebre novela empresarial de 1984, 'The Goal' (La Meta). En un contexto donde la industria manufacturera occidental perdía terreno frente a los métodos japoneses (como el Sistema de Producción Toyota), Goldratt propuso un cambio de paradigma radical: en lugar de intentar optimizar cada proceso de forma aislada, los directivos debían enfocarse exclusivamente en el eslabón más débil de la cadena. Este concepto evolucionó desde una herramienta de gestión de talleres de producción hasta convertirse en una filosofía sistémica aplicada hoy en sectores de Digital Business, desarrollo de software y servicios. La premisa es simple pero disruptiva: cualquier mejora realizada fuera del cuello de botella es una ilusión, ya que no incrementa la capacidad total del sistema, sino que simplemente aumenta el inventario o el trabajo en proceso antes de la restricción.</p></div>
+
+            <h3>Descripción Formal</h3>
+            <div><p>El proceso formal de TOC se articula a través de los 'Cinco Pasos de Focalización'. 1. IDENTIFICAR la restricción: Determinar qué recurso limita la capacidad del sistema de generar más dinero. Por ejemplo, en un flujo de desarrollo de software, puede ser la fase de QA (Quality Assurance) si las tareas se acumulan allí. 2. EXPLOTAR la restricción: Asegurarse de que el cuello de botella no pierda tiempo. Si el servidor es la restricción, no debe estar inactivo durante actualizaciones innecesarias en horas pico. 3. SUBORDINAR todo lo demás: Ajustar el ritmo de todos los demás procesos no restrictivos al ritmo del cuello de botella. No tiene sentido programar 100 funciones si QA solo puede testear 10; hacerlo solo crea caos. 4. ELEVAR la restricción: Si tras los pasos anteriores el sistema sigue limitado, se debe invertir en más capacidad (comprar más servidores, contratar más ingenieros de QA). 5. REPETIR (No permitir que la inercia sea la restricción): Una vez resuelto un cuello de botella, aparecerá otro en una nueva ubicación del sistema. Este ciclo garantiza la mejora continua (Process of On-Going Improvement - POOGI). Un error común es saltar directamente al paso 4 (invertir dinero) sin haber completado el 2 y 3, lo que genera ineficiencia de capital.</p></div>
+
+            <div class="diagrama-box">
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg style="max-width: 80%; max-height: 350px; height: auto; width: auto;" data-width="376pt" data-height="346pt"
+ viewBox="0.00 0.00 375.50 346.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 342)">
+<title>G</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-342 371.5,-342 371.5,4 -4,4"/>
+<!-- Step1 -->
+<g id="node1" class="node">
+<title>Step1</title>
+<polygon fill="#f9f9f9" stroke="black" points="300.5,-338 100.5,-338 100.5,-300 300.5,-300 300.5,-338"/>
+<text text-anchor="middle" x="200.5" y="-322.8" font-family="Helvetica,sans-Serif" font-size="14.00">1. IDENTIFICAR</text>
+<text text-anchor="middle" x="200.5" y="-307.8" font-family="Helvetica,sans-Serif" font-size="14.00">(Localizar el Cuello de Botella)</text>
+</g>
+<!-- Step2 -->
+<g id="node2" class="node">
+<title>Step2</title>
+<polygon fill="#f9f9f9" stroke="black" points="249,-263 0,-263 0,-225 249,-225 249,-263"/>
+<text text-anchor="middle" x="124.5" y="-247.8" font-family="Helvetica,sans-Serif" font-size="14.00">2. EXPLOTAR</text>
+<text text-anchor="middle" x="124.5" y="-232.8" font-family="Helvetica,sans-Serif" font-size="14.00">(Sacar el máximo del recurso limitado)</text>
+</g>
+<!-- Step1&#45;&gt;Step2 -->
+<g id="edge1" class="edge">
+<title>Step1&#45;&gt;Step2</title>
+<path fill="none" stroke="black" d="M181.71,-299.96C172.4,-291.01 160.99,-280.05 150.82,-270.28"/>
+<polygon fill="black" stroke="black" points="152.97,-267.49 143.33,-263.09 148.12,-272.54 152.97,-267.49"/>
+</g>
+<!-- Step3 -->
+<g id="node3" class="node">
+<title>Step3</title>
+<polygon fill="#f9f9f9" stroke="black" points="239.5,-188 25.5,-188 25.5,-150 239.5,-150 239.5,-188"/>
+<text text-anchor="middle" x="132.5" y="-172.8" font-family="Helvetica,sans-Serif" font-size="14.00">3. SUBORDINAR</text>
+<text text-anchor="middle" x="132.5" y="-157.8" font-family="Helvetica,sans-Serif" font-size="14.00">(Sincronizar el resto del sistema)</text>
+</g>
+<!-- Step2&#45;&gt;Step3 -->
+<g id="edge2" class="edge">
+<title>Step2&#45;&gt;Step3</title>
+<path fill="none" stroke="black" d="M126.48,-224.96C127.36,-216.88 128.43,-207.18 129.41,-198.18"/>
+<polygon fill="black" stroke="black" points="132.91,-198.41 130.52,-188.09 125.95,-197.65 132.91,-198.41"/>
+</g>
+<!-- Step4 -->
+<g id="node4" class="node">
+<title>Step4</title>
+<polygon fill="#f9f9f9" stroke="black" points="245.5,-113 37.5,-113 37.5,-75 245.5,-75 245.5,-113"/>
+<text text-anchor="middle" x="141.5" y="-97.8" font-family="Helvetica,sans-Serif" font-size="14.00">4. ELEVAR</text>
+<text text-anchor="middle" x="141.5" y="-82.8" font-family="Helvetica,sans-Serif" font-size="14.00">(Invertir en capacidad adicional)</text>
+</g>
+<!-- Step3&#45;&gt;Step4 -->
+<g id="edge3" class="edge">
+<title>Step3&#45;&gt;Step4</title>
+<path fill="none" stroke="black" d="M134.72,-149.96C135.72,-141.88 136.92,-132.18 138.03,-123.18"/>
+<polygon fill="black" stroke="black" points="141.52,-123.44 139.27,-113.09 134.57,-122.59 141.52,-123.44"/>
+</g>
+<!-- Step5 -->
+<g id="node5" class="node">
+<title>Step5</title>
+<polygon fill="#f9f9f9" stroke="black" points="327.5,-38 91.5,-38 91.5,0 327.5,0 327.5,-38"/>
+<text text-anchor="middle" x="209.5" y="-22.8" font-family="Helvetica,sans-Serif" font-size="14.00">5. REPETIR</text>
+<text text-anchor="middle" x="209.5" y="-7.8" font-family="Helvetica,sans-Serif" font-size="14.00">(Evitar la inercia y buscar nuevo CB)</text>
+</g>
+<!-- Step4&#45;&gt;Step5 -->
+<g id="edge4" class="edge">
+<title>Step4&#45;&gt;Step5</title>
+<path fill="none" stroke="black" d="M158.31,-74.96C166.56,-66.09 176.65,-55.26 185.69,-45.56"/>
+<polygon fill="black" stroke="black" points="188.39,-47.79 192.65,-38.09 183.27,-43.02 188.39,-47.79"/>
+</g>
+<!-- Step5&#45;&gt;Step1 -->
+<g id="edge5" class="edge">
+<title>Step5&#45;&gt;Step1</title>
+<path fill="none" stroke="black" d="M241.11,-38.12C258.87,-50.88 277.5,-69.79 277.5,-93 277.5,-245 277.5,-245 277.5,-245 277.5,-265.39 263.1,-281.8 246.76,-293.85"/>
+<polygon fill="black" stroke="black" points="244.39,-291.23 238.1,-299.76 248.33,-297.02 244.39,-291.23"/>
+<text text-anchor="middle" x="322.5" y="-165.3" font-family="Times,serif" font-size="14.00">Ciclo de Mejora</text>
+</g>
+</g>
+</svg>
+
+            </div>
+            <p style="font-size:0.8em; color:#999; text-align:center; margin-top:-20px; margin-bottom:30px;">
+                <em>Figura: Diagrama generado automáticamente mediante Graphviz</em>
+            </p>
+
+            <h3>Intuición</h3>
+            <div><p>Imagina que estás organizando una excursión con un grupo de amigos y el objetivo es llegar todos juntos a la cima de la montaña lo antes posible. En el grupo hay una persona que camina mucho más lento que los demás. No importa cuánto corran los más rápidos al frente; la velocidad del grupo entero está determinada exclusivamente por el caminante más lento. Si los rápidos corren más, solo conseguirán separarse del grupo y generar frustración o peligro, pero no llegarán antes a la meta como equipo. Para optimizar, primero identificas quién es el más lento (Identificar). Luego, le quitas peso de su mochila para que camine lo mejor posible (Explotar). Ajustas el paso de todos para que nadie lo adelante innecesariamente (Subordinar). Si aún así es muy lento, quizás alguien deba ayudarlo físicamente o usar un vehículo (Elevar). Finalmente, cuando él ya no sea el más lento, buscas quién es el siguiente que frena al grupo (Repetir).</p></div>
+
+            <h3>Aplicación</h3>
+            <div><p>En el entorno de un Director de Operaciones (COO) de una plataforma E-commerce, estos pasos se aplican para optimizar el 'Order-to-Cash'. Si el análisis de datos muestra que el empaquetado manual es el cuello de botella, el COO no invertirá en más publicidad (que traería más pedidos que no se pueden servir), sino que asegurará que los empaquetadores tengan todo el material listo (Explotar), pedirá al equipo de picking que no recoja más de lo que se puede empaquetar (Subordinar) y, finalmente, automatizará la línea de embalaje (Elevar).</p></div>
+        </article>
+        
+        <article class="subtema">
+            <h2>El Sistema de Sincronización Drum-Buffer-Rope (DBR)</h2>
+
+            <h3>Historia</h3>
+            <div><p>El método Drum-Buffer-Rope (Tambor-Amortiguador-Cuerda) surgió como la respuesta logística de la TOC para gestionar la variabilidad en los procesos de producción. Antes de DBR, las empresas intentaban programar cada máquina al 100% de su capacidad, lo que resultaba en atascos masivos. Goldratt observó que los sistemas complejos se comportan como una fila de soldados: si no hay un mecanismo de coordinación, la fila se estira y se crean huecos o colisiones. El DBR se formalizó para proporcionar un método de control que permitiera maximizar el flujo (throughput) minimizando simultáneamente el inventario y los gastos operativos, adaptándose tanto a entornos de fabricación física como a flujos de trabajo digitales modernos como Kanban o Lean Software Development.</p></div>
+
+            <h3>Descripción Formal</h3>
+            <div><p>DBR es un modelo de control de flujo basado en tres elementos: 1. El TAMBOR (Drum): Es el recurso restringido (cuello de botella) que marca el ritmo de toda la planta o proceso. Su programa de trabajo es el 'latido' que define la salida total. 2. El AMORTIGUADOR (Buffer): Es una protección en tiempo (no necesariamente en unidades) situada justo antes del Tambor. Asegura que si hay una pequeña interrupción en los procesos anteriores, el Tambor nunca se quede sin trabajo. En Digital Business, esto podría ser un backlog de tareas prioritarias listas para el equipo de desarrollo. 3. La CUERDA (Rope): Es el mecanismo de comunicación que libera trabajo en el inicio del proceso solo cuando el Tambor ha procesado algo. Esto evita la saturación del sistema. Si el Tambor no procesa, la Cuerda no 'tira' de nuevos inputs al sistema. Este enfoque transforma un sistema 'Push' (empujar trabajo) en un sistema 'Pull' (tirar de trabajo según la capacidad de la restricción).</p></div>
+
+            <div class="diagrama-box">
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg style="max-width: 80%; max-height: 350px; height: auto; width: auto;" data-width="639pt" data-height="82pt"
+ viewBox="0.00 0.00 639.00 81.96" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 77.96)">
+<title>G</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-77.96 635,-77.96 635,4 -4,4"/>
+<!-- Input -->
+<g id="node1" class="node">
+<title>Input</title>
+<polygon fill="#f9f9f9" stroke="black" points="132,-73.96 0,-73.96 0,-35.96 132,-35.96 132,-73.96"/>
+<text text-anchor="middle" x="66" y="-58.76" font-family="Helvetica,sans-Serif" font-size="14.00">Entrada de Trabajo</text>
+<text text-anchor="middle" x="66" y="-43.76" font-family="Helvetica,sans-Serif" font-size="14.00">(Gate)</text>
+</g>
+<!-- Buffer -->
+<g id="node2" class="node">
+<title>Buffer</title>
+<polygon fill="#fff2cc" stroke="black" points="332,-73.96 179,-73.96 179,-35.96 332,-35.96 332,-73.96"/>
+<text text-anchor="middle" x="255.5" y="-58.76" font-family="Helvetica,sans-Serif" font-size="14.00">BUFFER</text>
+<text text-anchor="middle" x="255.5" y="-43.76" font-family="Helvetica,sans-Serif" font-size="14.00">(Protección de tiempo)</text>
+</g>
+<!-- Input&#45;&gt;Buffer -->
+<g id="edge1" class="edge">
+<title>Input&#45;&gt;Buffer</title>
+<path fill="none" stroke="black" d="M132.05,-54.96C143.87,-54.96 156.36,-54.96 168.66,-54.96"/>
+<polygon fill="black" stroke="black" points="168.94,-58.46 178.94,-54.96 168.94,-51.46 168.94,-58.46"/>
+</g>
+<!-- Drum -->
+<g id="node3" class="node">
+<title>Drum</title>
+<polygon fill="#f8cecc" stroke="black" points="494,-73.96 379,-73.96 379,-35.96 494,-35.96 494,-73.96"/>
+<text text-anchor="middle" x="436.5" y="-58.76" font-family="Helvetica,sans-Serif" font-size="14.00">DRUM</text>
+<text text-anchor="middle" x="436.5" y="-43.76" font-family="Helvetica,sans-Serif" font-size="14.00">(Restricción/CB)</text>
+</g>
+<!-- Buffer&#45;&gt;Drum -->
+<g id="edge2" class="edge">
+<title>Buffer&#45;&gt;Drum</title>
+<path fill="none" stroke="black" d="M332.15,-54.96C344.26,-54.96 356.7,-54.96 368.59,-54.96"/>
+<polygon fill="black" stroke="black" points="368.86,-58.46 378.86,-54.96 368.86,-51.46 368.86,-58.46"/>
+</g>
+<!-- Drum&#45;&gt;Input -->
+<g id="edge4" class="edge">
+<title>Drum&#45;&gt;Input</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M402.97,-35.78C385.53,-26.6 363.29,-16.62 342,-11.96 266.89,4.49 244.36,3.28 169,-11.96 149.61,-15.88 129.32,-23.6 111.99,-31.43"/>
+<polygon fill="black" stroke="black" points="110.28,-28.36 102.69,-35.76 113.24,-34.71 110.28,-28.36"/>
+<text text-anchor="middle" x="255.5" y="-15.76" font-family="Times,serif" font-size="14.00">CUERDA (Comunicación/Pull)</text>
+</g>
+<!-- Output -->
+<g id="node4" class="node">
+<title>Output</title>
+<polygon fill="#f9f9f9" stroke="black" points="631,-72.96 531,-72.96 531,-36.96 631,-36.96 631,-72.96"/>
+<text text-anchor="middle" x="581" y="-51.26" font-family="Helvetica,sans-Serif" font-size="14.00">Salida / Venta</text>
+</g>
+<!-- Drum&#45;&gt;Output -->
+<g id="edge3" class="edge">
+<title>Drum&#45;&gt;Output</title>
+<path fill="none" stroke="black" d="M494.23,-54.96C502.93,-54.96 511.94,-54.96 520.69,-54.96"/>
+<polygon fill="black" stroke="black" points="520.83,-58.46 530.83,-54.96 520.83,-51.46 520.83,-58.46"/>
+</g>
+</g>
+</svg>
+
+            </div>
+            <p style="font-size:0.8em; color:#999; text-align:center; margin-top:-20px; margin-bottom:30px;">
+                <em>Figura: Diagrama generado automáticamente mediante Graphviz</em>
+            </p>
+
+            <h3>Intuición</h3>
+            <div><p>Pensemos en una discoteca con un control de seguridad muy estricto en la puerta (el Tambor). Si dejas que 500 personas lleguen a la puerta a la vez desde el parking, crearás una aglomeración caótica y peligrosa. El 'Buffer' sería una pequeña fila de 10 personas justo delante del portero, garantizando que él siempre tenga a alguien a quien revisar. La 'Cuerda' sería un walkie-talkie que usa el portero para avisar al personal del parking: 'Solo deja pasar a 2 personas más cuando yo deje entrar a 2 a la discoteca'. Así, el parking (inicio del proceso) está perfectamente sincronizado con el portero (el cuello de botella), evitando que la entrada se colapse y manteniendo un flujo constante y ordenado.</p></div>
+
+            <h3>Aplicación</h3>
+            <div><p>Un Director de Operaciones en una agencia de marketing digital utiliza DBR para gestionar el diseño de contenidos. Si el diseñador senior es el 'Drum', el COO establece un 'Buffer' de 3 briefings ya aprobados y listos. La 'Rope' impide que el equipo de ventas prometa nuevas fechas de entrega sin verificar primero cuántas tareas ha liberado el diseñador senior, evitando el burnout del equipo y el incumplimiento de plazos con clientes.</p></div>
+        </article>
+        
+        <article class="subtema">
+            <h2>Contabilidad de Throughput: Toma de Decisiones Financieras</h2>
+
+            <h3>Historia</h3>
+            <div><p>La Contabilidad de Throughput (TA) fue desarrollada por Goldratt como una alternativa crítica a la contabilidad de costes tradicional. Él argumentaba que los métodos contables estándar (como el costeo por absorción) incentivan comportamientos erróneos, como producir en exceso para 'reducir el coste unitario' mediante la dilución de gastos fijos, lo que en realidad daña la liquidez. En los años 90, con la aceleración de los negocios digitales, la TA ganó relevancia porque en estos entornos los costes variables suelen ser mínimos y la velocidad de entrega es la clave del éxito. La TA se centra en el flujo de caja y en cómo las decisiones operativas afectan globalmente a la rentabilidad, ignorando las asignaciones arbitrarias de costes fijos por producto.</p></div>
+
+            <h3>Descripción Formal</h3>
+            <div><p>La Contabilidad de Throughput se basa en tres métricas fundamentales: 1. THROUGHPUT (T): La tasa a la cual el sistema genera dinero a través de las ventas (Ingresos menos Costes Totalmente Variables, como comisiones o materias primas). 2. INVERSIÓN/INVENTARIO (I): Todo el dinero que el sistema gasta en comprar cosas que pretende vender (stock, equipos, propiedad intelectual). 3. GASTOS OPERATIVOS (OE): Todo el dinero que el sistema gasta en convertir la Inversión en Throughput (sueldos, alquileres, software). Las fórmulas clave son: Beneficio Neto = T - OE y ROI = (T - OE) / I. Bajo esta óptica, el objetivo de un Director de Operaciones es maximizar el Throughput mientras se reducen simultáneamente la Inversión y los Gastos Operativos. Lo más importante es que la TA prioriza las decisiones basadas en el 'Throughput por unidad de tiempo en el cuello de botella', lo que determina qué productos son realmente los más rentables para la empresa en un momento de saturación.</p></div>
+
+            <div class="diagrama-box">
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg style="max-width: 80%; max-height: 350px; height: auto; width: auto;" data-width="628pt" data-height="125pt"
+ viewBox="0.00 0.00 628.19 125.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 121)">
+<title>G</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-121 624.19,-121 624.19,4 -4,4"/>
+<!-- Sales -->
+<g id="node1" class="node">
+<title>Sales</title>
+<polygon fill="#f9f9f9" stroke="black" points="144.5,-117 43.5,-117 43.5,-81 144.5,-81 144.5,-117"/>
+<text text-anchor="middle" x="94" y="-95.3" font-family="Helvetica,sans-Serif" font-size="14.00">Ventas Brutas</text>
+</g>
+<!-- T -->
+<g id="node3" class="node">
+<title>T</title>
+<polygon fill="#d5e8d4" stroke="black" points="403.5,-90 269.5,-90 269.5,-54 403.5,-54 403.5,-90"/>
+<text text-anchor="middle" x="336.5" y="-68.3" font-family="Helvetica,sans-Serif" font-size="14.00">THROUGHPUT (T)</text>
+</g>
+<!-- Sales&#45;&gt;T -->
+<g id="edge1" class="edge">
+<title>Sales&#45;&gt;T</title>
+<path fill="none" stroke="black" d="M144.54,-93.44C177.47,-89.74 221.37,-84.81 258.78,-80.61"/>
+<polygon fill="black" stroke="black" points="259.6,-84.04 269.14,-79.45 258.82,-77.09 259.6,-84.04"/>
+</g>
+<!-- TVC -->
+<g id="node2" class="node">
+<title>TVC</title>
+<polygon fill="#f9f9f9" stroke="black" points="188,-63 0,-63 0,-27 188,-27 188,-63"/>
+<text text-anchor="middle" x="94" y="-41.3" font-family="Helvetica,sans-Serif" font-size="14.00">Costes Totalmente Variables</text>
+</g>
+<!-- TVC&#45;&gt;T -->
+<g id="edge2" class="edge">
+<title>TVC&#45;&gt;T</title>
+<path fill="none" stroke="black" d="M188.33,-55.48C211.8,-58.11 236.72,-60.91 259.24,-63.44"/>
+<polygon fill="black" stroke="black" points="259.08,-66.94 269.41,-64.58 259.86,-59.99 259.08,-66.94"/>
+<text text-anchor="middle" x="221.5" y="-63.8" font-family="Times,serif" font-size="14.00">Resta</text>
+</g>
+<!-- NetProfit -->
+<g id="node5" class="node">
+<title>NetProfit</title>
+<ellipse fill="#f9f9f9" stroke="black" cx="552.59" cy="-33" rx="67.69" ry="18"/>
+<text text-anchor="middle" x="552.59" y="-29.3" font-family="Helvetica,sans-Serif" font-size="14.00">Beneficio Neto</text>
+</g>
+<!-- T&#45;&gt;NetProfit -->
+<g id="edge3" class="edge">
+<title>T&#45;&gt;NetProfit</title>
+<path fill="none" stroke="black" d="M403.77,-59.93C430.13,-55.13 460.36,-49.62 486.58,-44.84"/>
+<polygon fill="black" stroke="black" points="487.21,-48.29 496.42,-43.05 485.96,-41.4 487.21,-48.29"/>
+</g>
+<!-- OE -->
+<g id="node4" class="node">
+<title>OE</title>
+<polygon fill="#f8cecc" stroke="black" points="418,-36 255,-36 255,0 418,0 418,-36"/>
+<text text-anchor="middle" x="336.5" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">Gastos Operativos (OE)</text>
+</g>
+<!-- OE&#45;&gt;NetProfit -->
+<g id="edge4" class="edge">
+<title>OE&#45;&gt;NetProfit</title>
+<path fill="none" stroke="black" d="M418.13,-23.65C437.43,-25 457.94,-26.44 476.95,-27.77"/>
+<polygon fill="black" stroke="black" points="476.81,-31.27 487.03,-28.48 477.3,-24.29 476.81,-31.27"/>
+<text text-anchor="middle" x="451.5" y="-29.8" font-family="Times,serif" font-size="14.00">Resta</text>
+</g>
+</g>
+</svg>
+
+            </div>
+            <p style="font-size:0.8em; color:#999; text-align:center; margin-top:-20px; margin-bottom:30px;">
+                <em>Figura: Diagrama generado automáticamente mediante Graphviz</em>
+            </p>
+
+            <h3>Intuición</h3>
+            <div><p>Imagina que tienes una cafetería. La contabilidad tradicional te diría que cada café cuesta X en granos, Y en luz y Z en sueldo del camarero. Si el camarero está libre, parece que hacer un café es barato. Pero si la cafetera es vieja y solo puede hacer 10 cafés por hora (el cuello de botella), y tienes una fila de 50 clientes, el coste real no es el grano, sino el tiempo de la cafetera. Si un cliente pide un café normal (2€, tarda 1 min) y otro un frapuccino complejo (4€, tarda 10 min), la contabilidad de Throughput te diría que el café normal es mucho más rentable. ¿Por qué? Porque en los 10 minutos del frapuccino podrías haber hecho 10 cafés normales ganando 20€ en lugar de solo 4€. La TA te ayuda a ver dónde rinde más tu limitación.</p></div>
+
+            <h3>Aplicación</h3>
+            <div><p>En una empresa de SaaS, el Director de Operaciones utiliza TA para decidir qué funcionalidades desarrollar. Si el equipo de ingeniería es la restricción, no eligen la funcionalidad con el precio de venta más alto, sino la que genera más ingresos recurrentes (Throughput) por cada hora de ingeniería invertida, asegurando que el recurso más escaso de la empresa produzca el máximo valor financiero posible.</p></div>
+        </article>
+        </body></html>

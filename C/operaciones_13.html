@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>13 - Planificación de Materiales - Desarrollo de la matriz MRP.</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #f4f4f9; color: #333; margin: 0; padding: 20px; line-height: 1.6; position: relative; }
+        header { background: #2c3e50; color: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; text-align:center; }
+        h1 { margin: 0; font-size: 1.5rem; }
+
+        /* Estilo del botón Atrás */
+        .btn-atras {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #7f8c8d;
+            color: white;
+            padding: 8px 15px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            transition: background 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+        .btn-atras:hover { background: #95a5a6; }
+
+        .subtema {
+            background: white;
+            padding: 40px;
+            margin-bottom: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        h2 { color: #2980b9; border-bottom: 2px solid #eee; padding-bottom: 10px; margin-top: 0; }
+        h3 { color: #7f8c8d; font-size: 0.9em; text-transform: uppercase; margin-top: 30px; letter-spacing: 1px; border-left: 3px solid #d4af37; padding-left: 10px; }
+
+        .diagrama-box {
+            text-align: center;
+            margin: 30px 0;
+            padding: 20px;
+            background: #fafafa;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 150px;
+        }
+
+        p { margin-bottom: 1rem; }
+        strong { color: #2c3e50; font-weight: 600; }
+        code { background: #f0f0f0; padding: 2px 5px; border-radius: 3px; font-family: monospace; color: #c0392b; }
+        ul { padding-left: 20px; }
+        li { margin-bottom: 0.5rem; }
+    </style>
+</head>
+<body>
+    <button onclick="window.history.back()" class="btn-atras">Atrás</button>
+    <header><h1>13 - Planificación de Materiales - Desarrollo de la matriz MRP.</h1></header>
+    <main>
+
+        <article class="subtema">
+            <h2>Insumos Fundamentales y Estructura de Datos (BOM, MPS e Inventarios)</h2>
+
+            <h3>Historia</h3>
+            <div><p>La planificación de necesidades de materiales (MRP) surgió en la década de 1960 como una respuesta a las ineficiencias de los métodos tradicionales de gestión de inventarios basados en puntos de pedido (ROP). Joseph Orlicky, mientras trabajaba en IBM, lideró el desarrollo de este concepto tras observar que la demanda de componentes no era independiente, sino que dependía directamente de la demanda del producto final. Antes del MRP, las empresas solían sobreproducir piezas individuales basándose en estadísticas históricas, lo que resultaba en almacenes saturados de componentes inútiles y escasez de piezas críticas. Con la llegada de los primeros mainframes, Orlicky y su equipo pudieron procesar la compleja lógica de las listas de materiales (BOM). En 1975, la publicación de su libro 'Material Requirements Planning' sentó las bases de lo que hoy es el núcleo de cualquier sistema ERP moderno, transformando la manufactura de una actividad puramente reactiva a una basada en la planificación lógica y computacional.</p></div>
+
+            <h3>Descripción Formal</h3>
+            <div><p>El desarrollo de la matriz MRP requiere tres fuentes de datos críticas y precisas. 1) El Programa Maestro de Producción (MPS): Establece qué productos finales se van a producir y en qué plazos (el 'qué' y 'cuándo'). 2) La Lista de Materiales (BOM): Una estructura jerárquica que detalla todos los componentes, subensamblajes y materias primas necesarios para fabricar una unidad de producto. Ejemplo: Para fabricar una bicicleta (Nivel 0), se requieren un cuadro (Nivel 1), dos ruedas (Nivel 1) y un kit de frenos (Nivel 1). A su vez, la rueda requiere una llanta, un neumático y radios (Nivel 2). 3) Registro de Inventarios: Contiene el estado actual de las existencias (On-hand), las recepciones programadas (pedidos ya realizados) y los tiempos de espera (Lead Times). El rigor en estos datos es vital; un error del 1% en la BOM puede invalidar todo el cálculo del MRP. El proceso comienza con la 'explosión de necesidades', donde el sistema desglosa el MPS a través de la BOM para identificar los componentes necesarios. Por ejemplo, si el MPS dicta producir 100 bicicletas en la semana 4, el MRP identificará automáticamente que se requieren 200 ruedas. Si el inventario actual es de 50 ruedas y hay un Lead Time de 2 semanas, el sistema emitirá una recomendación de pedido en la semana 2 para asegurar la disponibilidad.</p></div>
+
+            <div class="diagrama-box">
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg style="max-width: 80%; max-height: 350px; height: auto; width: auto;" data-width="541pt" data-height="188pt"
+ viewBox="0.00 0.00 541.00 188.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 184)">
+<title>G</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-184 537,-184 537,4 -4,4"/>
+<!-- MPS -->
+<g id="node1" class="node">
+<title>MPS</title>
+<polygon fill="#f9f9f9" stroke="black" points="173,-180 0,-180 0,-144 173,-144 173,-180"/>
+<text text-anchor="middle" x="86.5" y="-158.3" font-family="Helvetica,sans-Serif" font-size="14.00">Programa Maestro (MPS)</text>
+</g>
+<!-- MRP -->
+<g id="node4" class="node">
+<title>MRP</title>
+<polygon fill="#e1f5fe" stroke="black" points="356.5,-108 202.5,-108 202.5,-72 356.5,-72 356.5,-108"/>
+<text text-anchor="middle" x="279.5" y="-86.3" font-family="Helvetica,sans-Serif" font-size="14.00">Motor de Cálculo MRP</text>
+</g>
+<!-- MPS&#45;&gt;MRP -->
+<g id="edge1" class="edge">
+<title>MPS&#45;&gt;MRP</title>
+<path fill="none" stroke="black" d="M133.71,-143.88C160.57,-134.14 194.38,-121.87 222.68,-111.61"/>
+<polygon fill="black" stroke="black" points="224.23,-114.77 232.44,-108.07 221.85,-108.19 224.23,-114.77"/>
+</g>
+<!-- BOM -->
+<g id="node2" class="node">
+<title>BOM</title>
+<polygon fill="#f9f9f9" stroke="black" points="367.5,-180 191.5,-180 191.5,-144 367.5,-144 367.5,-180"/>
+<text text-anchor="middle" x="279.5" y="-158.3" font-family="Helvetica,sans-Serif" font-size="14.00">Lista de Materiales (BOM)</text>
+</g>
+<!-- BOM&#45;&gt;MRP -->
+<g id="edge2" class="edge">
+<title>BOM&#45;&gt;MRP</title>
+<path fill="none" stroke="black" d="M279.5,-143.7C279.5,-135.98 279.5,-126.71 279.5,-118.11"/>
+<polygon fill="black" stroke="black" points="283,-118.1 279.5,-108.1 276,-118.1 283,-118.1"/>
+</g>
+<!-- INV -->
+<g id="node3" class="node">
+<title>INV</title>
+<polygon fill="#f9f9f9" stroke="black" points="533,-180 386,-180 386,-144 533,-144 533,-180"/>
+<text text-anchor="middle" x="459.5" y="-158.3" font-family="Helvetica,sans-Serif" font-size="14.00">Estado de Inventarios</text>
+</g>
+<!-- INV&#45;&gt;MRP -->
+<g id="edge3" class="edge">
+<title>INV&#45;&gt;MRP</title>
+<path fill="none" stroke="black" d="M415.47,-143.88C390.53,-134.18 359.16,-121.98 332.84,-111.74"/>
+<polygon fill="black" stroke="black" points="333.98,-108.43 323.39,-108.07 331.44,-114.95 333.98,-108.43"/>
+</g>
+<!-- ORD -->
+<g id="node5" class="node">
+<title>ORD</title>
+<polygon fill="#f9f9f9" stroke="black" points="389,-36 170,-36 170,0 389,0 389,-36"/>
+<text text-anchor="middle" x="279.5" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">Órdenes de Compra / Producción</text>
+</g>
+<!-- MRP&#45;&gt;ORD -->
+<g id="edge4" class="edge">
+<title>MRP&#45;&gt;ORD</title>
+<path fill="none" stroke="black" d="M279.5,-71.7C279.5,-63.98 279.5,-54.71 279.5,-46.11"/>
+<polygon fill="black" stroke="black" points="283,-46.1 279.5,-36.1 276,-46.1 283,-46.1"/>
+</g>
+</g>
+</svg>
+
+            </div>
+            <p style="font-size:0.8em; color:#999; text-align:center; margin-top:-20px; margin-bottom:30px;">
+                <em>Figura: Diagrama generado automáticamente mediante Graphviz</em>
+            </p>
+
+            <h3>Intuición</h3>
+            <div><p>Imagine que va a preparar una cena para 20 personas y el plato principal es lasaña. El MRP es el proceso mental que usted realiza para asegurar el éxito. Primero, consulta la receta (BOM) para saber qué ingredientes lleva cada lasaña. Luego, revisa su agenda para saber a qué hora deben estar listas (MPS). Después, abre la despensa para ver qué tiene ya comprado y qué le falta (Registro de Inventarios). Si sabe que el carnicero tarda un día en prepararle la carne picada (Lead Time), usted no irá a comprar el mismo día de la cena, sino el anterior. El MRP simplemente escala este razonamiento lógico a miles de piezas y productos complejos, utilizando computadoras para que nada se olvide y para que los ingredientes lleguen 'justo a tiempo', evitando que su cocina (o fábrica) se llene de comida que se echa a perder o que falte la sal en el último momento.</p></div>
+
+            <h3>Aplicación</h3>
+            <div></div>
+        </article>
+        
+        <article class="subtema">
+            <h2>Mecánica de la Matriz: Explosión, Netting y Offsetting</h2>
+
+            <h3>Historia</h3>
+            <div><p>A medida que las computadoras se volvieron más potentes en los años 80, la mecánica del MRP se sofisticó. El desafío original no era solo qué comprar, sino cuándo exactamente. Los primeros algoritmos eran rudimentarios y no gestionaban bien los cambios dinámicos. Con la evolución hacia el MRP II, se introdujeron bucles de retroalimentación de capacidad. La mecánica actual de 'Netting' (cálculo de necesidades netas) y 'Offsetting' (desplazamiento en el tiempo) es el resultado de décadas de refinamiento matemático para minimizar el capital circulante. El desarrollo de interfaces gráficas permitió pasar de listados impresos a matrices dinámicas donde los planificadores podían ver el impacto de un cambio en la demanda de forma casi instantánea, permitiendo una gestión mucho más granular del flujo de materiales en plantas de ensamblaje masivo.</p></div>
+
+            <h3>Descripción Formal</h3>
+            <div><p>La matriz MRP se desarrolla típicamente en una tabla con cubos de tiempo (semanas o días). Los pasos técnicos son: 1) Necesidades Brutas (Gross Requirements): Demanda total derivada del MPS o de niveles superiores de la BOM. 2) Recepciones Programadas: Pedidos que ya están en camino. 3) Inventario Proyectado: Saldo disponible calculado como (Inventario Inicial + Recepciones - Necesidades Brutas). 4) Necesidades Netas (Net Requirements): El déficit real de materiales; si el inventario proyectado es negativo, esa cantidad es la necesidad neta. 5) Recepción de Órdenes Planificadas: La cantidad que debemos recibir para cubrir la necesidad neta, ajustada por el tamaño del lote. 6) Lanzamiento de Órdenes Planificadas (Offsetting): Se desplaza hacia atrás la recepción planificada según el Lead Time. Ejemplo: Si necesito 50 unidades en la semana 5 (Recepción) y el Lead Time es de 2 semanas, el lanzamiento debe ocurrir en la semana 3. Este proceso se repite nivel por nivel de la BOM, técnica conocida como 'explosión', donde el lanzamiento de una orden en el Nivel 0 se convierte en la necesidad bruta del Nivel 1.</p></div>
+
+            <div class="diagrama-box">
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg style="max-width: 80%; max-height: 350px; height: auto; width: auto;" data-width="308pt" data-height="437pt"
+ viewBox="0.00 0.00 307.50 437.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 433)">
+<title>G</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-433 303.5,-433 303.5,4 -4,4"/>
+<!-- NB -->
+<g id="node1" class="node">
+<title>NB</title>
+<polygon fill="#f9f9f9" stroke="black" points="247,-429 110,-429 110,-393 247,-393 247,-429"/>
+<text text-anchor="middle" x="178.5" y="-407.3" font-family="Helvetica,sans-Serif" font-size="14.00">Necesidades Brutas</text>
+</g>
+<!-- INV -->
+<g id="node2" class="node">
+<title>INV</title>
+<polygon fill="#f9f9f9" stroke="black" points="250,-356 107,-356 107,-320 250,-320 250,-356"/>
+<text text-anchor="middle" x="178.5" y="-334.3" font-family="Helvetica,sans-Serif" font-size="14.00">Inventario Disponible</text>
+</g>
+<!-- NB&#45;&gt;INV -->
+<g id="edge1" class="edge">
+<title>NB&#45;&gt;INV</title>
+<path fill="none" stroke="black" d="M178.5,-392.81C178.5,-384.79 178.5,-375.05 178.5,-366.07"/>
+<polygon fill="black" stroke="black" points="182,-366.03 178.5,-356.03 175,-366.03 182,-366.03"/>
+</g>
+<!-- CHECK -->
+<g id="node3" class="node">
+<title>CHECK</title>
+<polygon fill="#f9f9f9" stroke="black" points="178.5,-283 91.36,-265 178.5,-247 265.64,-265 178.5,-283"/>
+<text text-anchor="middle" x="178.5" y="-261.3" font-family="Helvetica,sans-Serif" font-size="14.00">¿Hay déficit?</text>
+</g>
+<!-- INV&#45;&gt;CHECK -->
+<g id="edge2" class="edge">
+<title>INV&#45;&gt;CHECK</title>
+<path fill="none" stroke="black" d="M178.5,-319.81C178.5,-311.79 178.5,-302.05 178.5,-293.07"/>
+<polygon fill="black" stroke="black" points="182,-293.03 178.5,-283.03 175,-293.03 182,-293.03"/>
+</g>
+<!-- NET -->
+<g id="node4" class="node">
+<title>NET</title>
+<polygon fill="#f9f9f9" stroke="black" points="189.5,-196 55.5,-196 55.5,-160 189.5,-160 189.5,-196"/>
+<text text-anchor="middle" x="122.5" y="-174.3" font-family="Helvetica,sans-Serif" font-size="14.00">Necesidades Netas</text>
+</g>
+<!-- CHECK&#45;&gt;NET -->
+<g id="edge3" class="edge">
+<title>CHECK&#45;&gt;NET</title>
+<path fill="none" stroke="black" d="M168.49,-248.8C160.41,-236.54 148.87,-219.03 139.37,-204.61"/>
+<polygon fill="black" stroke="black" points="142.2,-202.53 133.77,-196.11 136.35,-206.39 142.2,-202.53"/>
+<text text-anchor="middle" x="161" y="-217.8" font-family="Times,serif" font-size="14.00">SÍ</text>
+</g>
+<!-- LANZ -->
+<g id="node6" class="node">
+<title>LANZ</title>
+<polygon fill="#f9f9f9" stroke="black" points="239,-36 84,-36 84,0 239,0 239,-36"/>
+<text text-anchor="middle" x="161.5" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">Lanzamiento de Orden</text>
+</g>
+<!-- CHECK&#45;&gt;LANZ -->
+<g id="edge4" class="edge">
+<title>CHECK&#45;&gt;LANZ</title>
+<path fill="none" stroke="black" d="M185.56,-248.4C199.56,-215.16 227.67,-135.31 205.5,-73 201.75,-62.47 194.97,-52.5 187.84,-44.06"/>
+<polygon fill="black" stroke="black" points="190.28,-41.54 180.98,-36.47 185.09,-46.24 190.28,-41.54"/>
+<text text-anchor="middle" x="257" y="-130.8" font-family="Times,serif" font-size="14.00">NO (Mantener)</text>
+</g>
+<!-- LT -->
+<g id="node5" class="node">
+<title>LT</title>
+<polygon fill="#f9f9f9" stroke="black" points="197,-109 0,-109 0,-73 197,-73 197,-109"/>
+<text text-anchor="middle" x="98.5" y="-87.3" font-family="Helvetica,sans-Serif" font-size="14.00">Aplicar Lead Time (Offsetting)</text>
+</g>
+<!-- NET&#45;&gt;LT -->
+<g id="edge5" class="edge">
+<title>NET&#45;&gt;LT</title>
+<path fill="none" stroke="black" d="M117.64,-159.8C114.33,-148.05 109.86,-132.24 106.08,-118.84"/>
+<polygon fill="black" stroke="black" points="109.44,-117.85 103.35,-109.18 102.7,-119.75 109.44,-117.85"/>
+</g>
+<!-- LT&#45;&gt;LANZ -->
+<g id="edge6" class="edge">
+<title>LT&#45;&gt;LANZ</title>
+<path fill="none" stroke="black" d="M113.75,-72.81C121.49,-64.09 131.03,-53.34 139.54,-43.75"/>
+<polygon fill="black" stroke="black" points="142.37,-45.83 146.39,-36.03 137.13,-41.19 142.37,-45.83"/>
+</g>
+</g>
+</svg>
+
+            </div>
+            <p style="font-size:0.8em; color:#999; text-align:center; margin-top:-20px; margin-bottom:30px;">
+                <em>Figura: Diagrama generado automáticamente mediante Graphviz</em>
+            </p>
+
+            <h3>Intuición</h3>
+            <div><p>La mecánica del MRP se basa en dos conceptos clave: 'Netting' y 'Offsetting'. El 'Netting' es como mirar tu cuenta bancaria: si tienes que pagar un alquiler de 1000€ y solo tienes 400€, tu necesidad neta son 600€. No pides prestados los 1000€ completos, solo lo que te falta. El 'Offsetting' es la gestión del tiempo: si sabes que una transferencia tarda 48 horas en llegar, no la haces el día que vence el alquiler, sino dos días antes. La matriz MRP hace esto para miles de piezas simultáneamente. Es un rompecabezas temporal donde cada pieza debe encajar en el momento justo para que el producto final se ensamble sin interrupciones, pero también sin tener piezas acumulando polvo en la estantería meses antes de ser usadas.</p></div>
+
+            <h3>Aplicación</h3>
+            <div></div>
+        </article>
+        
+        <article class="subtema">
+            <h2>Dimensionamiento de Lotes y Dinámica en el MRP Digital</h2>
+
+            <h3>Historia</h3>
+            <div><p>Históricamente, el MRP asumía que podíamos pedir la cantidad exacta necesaria (Lote por Lote). Sin embargo, los costes de transporte y configuración de máquinas hicieron evidente la necesidad de técnicas de loteo. Desde el EOQ (Economic Order Quantity) desarrollado a principios del siglo XX, hasta algoritmos modernos como 'Part Period Balancing' o el 'Algoritmo de Wagner-Whitin', el enfoque ha evolucionado. Hoy, en la era del Digital Business y la Industria 4.0, el MRP ya no es un proceso estático que se corre una vez por semana (batch processing). Los sistemas modernos de 'MRP en tiempo real' o 'DDMRP' (Demand Driven MRP) utilizan Big Data para ajustar los tamaños de lote y los stocks de seguridad basándose en la demanda real del mercado y no solo en pronósticos, mitigando el famoso 'efecto látigo' (bullwhip effect).</p></div>
+
+            <h3>Descripción Formal</h3>
+            <div><p>El dimensionamiento de lotes es el proceso de determinar la cantidad óptima a pedir o producir. Las técnicas principales incluyen: 1) Lote por Lote (LxL): Se pide exactamente lo necesario en cada periodo; minimiza inventario pero maximiza costes de pedido. 2) Cantidad de Pedido Económica (EOQ): Balancea costes de posesión frente a costes de emisión. 3) Periodo Constante: Agrupa las necesidades de 'n' periodos en una sola orden. 4) Técnica de Mínimo Coste Total: Busca el lote que iguale más cercanamente los costes de mantenimiento y pedido. Ejemplo: Si una empresa de e-commerce necesita 10 sensores en la semana 1, 15 en la semana 2 y 20 en la semana 3, con LxL haría 3 pedidos. Con un lote de 45 unidades, haría un solo pedido, ahorrando en transporte pero pagando más por almacenar los sensores de las semanas 2 y 3. El MRP moderno también integra el 'Safety Stock' (stock de seguridad) para protegerse de la variabilidad en el suministro o la demanda, actuando como un amortiguador en la matriz de necesidades netas.</p></div>
+
+            <div class="diagrama-box">
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg style="max-width: 80%; max-height: 350px; height: auto; width: auto;" data-width="825pt" data-height="98pt"
+ viewBox="0.00 0.00 824.79 98.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 94)">
+<title>G</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-94 820.79,-94 820.79,4 -4,4"/>
+<!-- DEM -->
+<g id="node1" class="node">
+<title>DEM</title>
+<polygon fill="#f9f9f9" stroke="black" points="113,-63 0,-63 0,-27 113,-27 113,-63"/>
+<text text-anchor="middle" x="56.5" y="-41.3" font-family="Helvetica,sans-Serif" font-size="14.00">Necesidad Neta</text>
+</g>
+<!-- OPT -->
+<g id="node2" class="node">
+<title>OPT</title>
+<polygon fill="#f9f9f9" stroke="black" points="264.89,-63 150.11,-45 264.89,-27 379.68,-45 264.89,-63"/>
+<text text-anchor="middle" x="264.89" y="-41.3" font-family="Helvetica,sans-Serif" font-size="14.00">¿Criterio de Lote?</text>
+</g>
+<!-- DEM&#45;&gt;OPT -->
+<g id="edge1" class="edge">
+<title>DEM&#45;&gt;OPT</title>
+<path fill="none" stroke="black" d="M113.08,-45C121.59,-45 130.64,-45 139.94,-45"/>
+<polygon fill="black" stroke="black" points="140.1,-48.5 150.1,-45 140.1,-41.5 140.1,-48.5"/>
+</g>
+<!-- LXL -->
+<g id="node3" class="node">
+<title>LXL</title>
+<polygon fill="#f9f9f9" stroke="black" points="643.79,-90 470.79,-90 470.79,-54 643.79,-54 643.79,-90"/>
+<text text-anchor="middle" x="557.29" y="-68.3" font-family="Helvetica,sans-Serif" font-size="14.00">Lote por Lote (Mín. Stock)</text>
+</g>
+<!-- OPT&#45;&gt;LXL -->
+<g id="edge2" class="edge">
+<title>OPT&#45;&gt;LXL</title>
+<path fill="none" stroke="black" d="M337.68,-51.67C374.76,-55.12 420.51,-59.38 460.56,-63.1"/>
+<polygon fill="black" stroke="black" points="460.33,-66.59 470.61,-64.03 460.98,-59.62 460.33,-66.59"/>
+<text text-anchor="middle" x="425.29" y="-64.8" font-family="Times,serif" font-size="14.00">Agilidad</text>
+</g>
+<!-- EOQ -->
+<g id="node4" class="node">
+<title>EOQ</title>
+<polygon fill="#f9f9f9" stroke="black" points="636.79,-36 477.79,-36 477.79,0 636.79,0 636.79,-36"/>
+<text text-anchor="middle" x="557.29" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">EOQ (Mín. Coste Total)</text>
+</g>
+<!-- OPT&#45;&gt;EOQ -->
+<g id="edge3" class="edge">
+<title>OPT&#45;&gt;EOQ</title>
+<path fill="none" stroke="black" d="M337.68,-38.33C376.93,-34.68 425.91,-30.12 467.54,-26.25"/>
+<polygon fill="black" stroke="black" points="468.05,-29.72 477.68,-25.31 467.4,-22.75 468.05,-29.72"/>
+<text text-anchor="middle" x="425.29" y="-35.8" font-family="Times,serif" font-size="14.00">Eficiencia</text>
+</g>
+<!-- ALGO -->
+<g id="node5" class="node">
+<title>ALGO</title>
+<polygon fill="#f9f9f9" stroke="black" points="816.79,-62 680.79,-62 680.79,-26 816.79,-26 816.79,-62"/>
+<text text-anchor="middle" x="748.79" y="-40.3" font-family="Helvetica,sans-Serif" font-size="14.00">Cálculo Matriz Final</text>
+</g>
+<!-- LXL&#45;&gt;ALGO -->
+<g id="edge4" class="edge">
+<title>LXL&#45;&gt;ALGO</title>
+<path fill="none" stroke="black" d="M643.89,-59.35C652.87,-58.02 661.96,-56.68 670.83,-55.37"/>
+<polygon fill="black" stroke="black" points="671.36,-58.83 680.74,-53.91 670.34,-51.91 671.36,-58.83"/>
+</g>
+<!-- EOQ&#45;&gt;ALGO -->
+<g id="edge5" class="edge">
+<title>EOQ&#45;&gt;ALGO</title>
+<path fill="none" stroke="black" d="M637.01,-28.8C648.14,-30.33 659.58,-31.9 670.68,-33.42"/>
+<polygon fill="black" stroke="black" points="670.38,-36.91 680.77,-34.8 671.33,-29.98 670.38,-36.91"/>
+</g>
+</g>
+</svg>
+
+            </div>
+            <p style="font-size:0.8em; color:#999; text-align:center; margin-top:-20px; margin-bottom:30px;">
+                <em>Figura: Diagrama generado automáticamente mediante Graphviz</em>
+            </p>
+
+            <h3>Intuición</h3>
+            <div><p>Imagine que compra leche. ¿Compra exactamente el vaso de leche que va a beber cada vez que tiene sed (Lote por Lote)? Probablemente no, porque el coste (tiempo y gasolina) de ir al supermercado es muy alto. Por otro lado, ¿compra 500 cartones de leche de una vez? Tampoco, porque no tiene sitio en la nevera y se caducaría (coste de posesión). Usted instintivamente usa una 'técnica de loteo': compra un pack de 6 cartones porque cabe en su despensa y le ahorra viajes diarios. En una fábrica, el Director de Operaciones hace lo mismo: decide si conviene pedir más cantidad para obtener un descuento por volumen o para amortizar el coste de envío, siempre vigilando que el coste de tener ese material parado en el almacén no sea mayor que el ahorro conseguido.</p></div>
+
+            <h3>Aplicación</h3>
+            <div></div>
+        </article>
+        </body></html>

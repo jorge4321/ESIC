@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>14 - Planificación de Materiales - explosión de necesidades.</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #f4f4f9; color: #333; margin: 0; padding: 20px; line-height: 1.6; position: relative; }
+        header { background: #2c3e50; color: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; text-align:center; }
+        h1 { margin: 0; font-size: 1.5rem; }
+
+        /* Estilo del botón Atrás */
+        .btn-atras {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #7f8c8d;
+            color: white;
+            padding: 8px 15px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            transition: background 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+        .btn-atras:hover { background: #95a5a6; }
+
+        .subtema {
+            background: white;
+            padding: 40px;
+            margin-bottom: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        h2 { color: #2980b9; border-bottom: 2px solid #eee; padding-bottom: 10px; margin-top: 0; }
+        h3 { color: #7f8c8d; font-size: 0.9em; text-transform: uppercase; margin-top: 30px; letter-spacing: 1px; border-left: 3px solid #d4af37; padding-left: 10px; }
+
+        .diagrama-box {
+            text-align: center;
+            margin: 30px 0;
+            padding: 20px;
+            background: #fafafa;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 150px;
+        }
+
+        p { margin-bottom: 1rem; }
+        strong { color: #2c3e50; font-weight: 600; }
+        code { background: #f0f0f0; padding: 2px 5px; border-radius: 3px; font-family: monospace; color: #c0392b; }
+        ul { padding-left: 20px; }
+        li { margin-bottom: 0.5rem; }
+    </style>
+</head>
+<body>
+    <button onclick="window.history.back()" class="btn-atras">Atrás</button>
+    <header><h1>14 - Planificación de Materiales - explosión de necesidades.</h1></header>
+    <main>
+
+        <article class="subtema">
+            <h2>La Lista de Materiales (BOM - Bill of Materials)</h2>
+
+            <h3>Historia</h3>
+            <div><p>La evolución de la Lista de Materiales (BOM) ha sido fundamental para el paso de la artesanía a la producción en masa. Históricamente, en la era pre-industrial, los maestros artesanos guardaban la 'receta' de sus productos en su memoria o en cuadernos privados. Con la llegada de la Revolución Industrial y la complejidad técnica, surgió la necesidad de planos de ingeniería detallados. Sin embargo, no fue hasta la década de 1960, con el desarrollo de los primeros sistemas computacionales de la mano de Joseph Orlicky en IBM, cuando la BOM se convirtió en una estructura de datos jerárquica y digital. Originalmente, las empresas luchaban con la 'explosión' manual de piezas, lo que solía llevar a errores críticos en el inventario. Hoy, en el contexto de Digital Business, la BOM no solo incluye componentes físicos, sino también activos digitales y licencias de software, integrándose en sistemas PLM (Product Lifecycle Management) que conectan el diseño con la fabricación en tiempo real.</p></div>
+
+            <h3>Descripción Formal</h3>
+            <div><p>La Lista de Materiales es un inventario completo de los materiales, conjuntos, subconjuntos, piezas y componentes necesarios para fabricar un producto final, incluyendo las cantidades exactas de cada uno. Se estructura de forma jerárquica mediante niveles: el Nivel 0 representa el producto terminado (Padre), y los niveles sucesivos representan los componentes (Hijos). </p>
+<p>Existen varios tipos de BOM: la de Ingeniería (EBOM), enfocada en el diseño, y la de Fabricación (MBOM), que refleja cómo se construye realmente el producto. Un concepto técnico clave es el 'Low Level Code', que asegura que un componente que aparece en múltiples niveles de la estructura sea procesado solo una vez en el nivel más bajo donde aparece durante el cálculo de necesidades.</p>
+<p>Ejemplo: Imaginemos la fabricación de una bicicleta eléctrica (Nivel 0). Su BOM nivel 1 incluiría: Cuadro (1 unidad), Motor (1 unidad), Batería (1 unidad) y Ruedas (2 unidades). A su vez, el subconjunto 'Rueda' (Nivel 1) tiene su propia estructura de nivel 2: Llanta (1), Radios (32), Buje (1) y Neumático (1). Si el Director de Operaciones recibe un pedido de 100 bicicletas, la explosión de la BOM indicará instantáneamente que se requieren 3,200 radios. Este cálculo matricial permite sincronizar la cadena de suministro evitando roturas de stock o excesos de inventario innecesarios.</p></div>
+
+            <div class="diagrama-box">
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg style="max-width: 80%; max-height: 350px; height: auto; width: auto;" data-width="456pt" data-height="188pt"
+ viewBox="0.00 0.00 456.00 188.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 184)">
+<title>G</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-184 452,-184 452,4 -4,4"/>
+<!-- P -->
+<g id="node1" class="node">
+<title>P</title>
+<polygon fill="#e1f5fe" stroke="black" points="402.5,-180 210.5,-180 210.5,-144 402.5,-144 402.5,-180"/>
+<text text-anchor="middle" x="306.5" y="-158.3" font-family="Helvetica,sans-Serif" font-size="14.00">Producto Terminado (Nivel 0)</text>
+</g>
+<!-- S1 -->
+<g id="node2" class="node">
+<title>S1</title>
+<polygon fill="#f9f9f9" stroke="black" points="297.5,-108 167.5,-108 167.5,-72 297.5,-72 297.5,-108"/>
+<text text-anchor="middle" x="232.5" y="-86.3" font-family="Helvetica,sans-Serif" font-size="14.00">Subconjunto A (x2)</text>
+</g>
+<!-- P&#45;&gt;S1 -->
+<g id="edge1" class="edge">
+<title>P&#45;&gt;S1</title>
+<path fill="none" stroke="black" d="M288.21,-143.7C279.07,-135.05 267.86,-124.45 257.9,-115.03"/>
+<polygon fill="black" stroke="black" points="260.25,-112.43 250.58,-108.1 255.44,-117.52 260.25,-112.43"/>
+</g>
+<!-- S2 -->
+<g id="node3" class="node">
+<title>S2</title>
+<polygon fill="#f9f9f9" stroke="black" points="448,-108 317,-108 317,-72 448,-72 448,-108"/>
+<text text-anchor="middle" x="382.5" y="-86.3" font-family="Helvetica,sans-Serif" font-size="14.00">Subconjunto B (x1)</text>
+</g>
+<!-- P&#45;&gt;S2 -->
+<g id="edge2" class="edge">
+<title>P&#45;&gt;S2</title>
+<path fill="none" stroke="black" d="M325.29,-143.7C334.67,-135.05 346.18,-124.45 356.41,-115.03"/>
+<polygon fill="black" stroke="black" points="358.95,-117.45 363.93,-108.1 354.2,-112.3 358.95,-117.45"/>
+</g>
+<!-- C1 -->
+<g id="node4" class="node">
+<title>C1</title>
+<polygon fill="#f9f9f9" stroke="black" points="143,-36 0,-36 0,0 143,0 143,-36"/>
+<text text-anchor="middle" x="71.5" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">Componente C1 (x4)</text>
+</g>
+<!-- S1&#45;&gt;C1 -->
+<g id="edge3" class="edge">
+<title>S1&#45;&gt;C1</title>
+<path fill="none" stroke="black" d="M193.11,-71.88C171.11,-62.31 143.49,-50.3 120.14,-40.15"/>
+<polygon fill="black" stroke="black" points="121.32,-36.85 110.76,-36.07 118.53,-43.27 121.32,-36.85"/>
+</g>
+<!-- C2 -->
+<g id="node5" class="node">
+<title>C2</title>
+<polygon fill="#f9f9f9" stroke="black" points="304,-36 161,-36 161,0 304,0 304,-36"/>
+<text text-anchor="middle" x="232.5" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">Componente C2 (x1)</text>
+</g>
+<!-- S1&#45;&gt;C2 -->
+<g id="edge4" class="edge">
+<title>S1&#45;&gt;C2</title>
+<path fill="none" stroke="black" d="M232.5,-71.7C232.5,-63.98 232.5,-54.71 232.5,-46.11"/>
+<polygon fill="black" stroke="black" points="236,-46.1 232.5,-36.1 229,-46.1 236,-46.1"/>
+</g>
+<!-- C3 -->
+<g id="node6" class="node">
+<title>C3</title>
+<polygon fill="#f9f9f9" stroke="black" points="447,-36 322,-36 322,0 447,0 447,-36"/>
+<text text-anchor="middle" x="384.5" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">Materia Prima M1</text>
+</g>
+<!-- S2&#45;&gt;C3 -->
+<g id="edge5" class="edge">
+<title>S2&#45;&gt;C3</title>
+<path fill="none" stroke="black" d="M382.99,-71.7C383.21,-63.98 383.48,-54.71 383.73,-46.11"/>
+<polygon fill="black" stroke="black" points="387.22,-46.2 384.01,-36.1 380.23,-46 387.22,-46.2"/>
+</g>
+</g>
+</svg>
+
+            </div>
+            <p style="font-size:0.8em; color:#999; text-align:center; margin-top:-20px; margin-bottom:30px;">
+                <em>Figura: Diagrama generado automáticamente mediante Graphviz</em>
+            </p>
+
+            <h3>Intuición</h3>
+            <div><p>Piensa en la BOM como la receta detallada de un plato de alta cocina. Si quieres preparar 50 cenas para un evento, no puedes simplemente 'adivinar' cuántos huevos o gramos de harina necesitas. Necesitas saber que por cada pastel (producto final), requieres exactamente 4 huevos y 200g de harina. Si te falta un solo huevo, no puedes terminar el pastel, aunque tengas toneladas de harina. En el mundo de las operaciones, la BOM es el mapa que nos dice qué piezas encajan con cuáles y en qué cantidad. Sin este mapa, la 'explosión de necesidades' sería imposible porque no sabríamos qué pedir a nuestros proveedores. Es la base de datos que transforma una idea de producto en una lista de compras accionable.</p></div>
+
+            <h3>Aplicación</h3>
+            <div><p>En el entorno profesional, un Director de Operaciones utiliza la BOM para la planificación de la capacidad y el control de costes. Por ejemplo, en una empresa de dispositivos IoT, si el precio del litio sube, el director puede usar la BOM para calcular instantáneamente el impacto exacto en el margen de beneficio de cada producto que utiliza baterías. También es vital en la gestión de cambios (ECN - Engineering Change Notices): si se decide cambiar un chip por otro más eficiente, la actualización de la BOM asegura que el departamento de compras deje de adquirir el modelo antiguo y empiece con el nuevo, evitando la obsolescencia. En negocios digitales de hardware (como drones o wearables), la precisión de la BOM es lo que separa a una empresa escalable de una que quiebra por mala gestión de suministros.</p></div>
+        </article>
+        
+        <article class="subtema">
+            <h2>Lógica del MRP: Explosión y Desfase en el Tiempo</h2>
+
+            <h3>Historia</h3>
+            <div><p>Antes de la década de 1970, la mayoría de las fábricas utilizaban el método de 'Punto de Pedido' (Reorder Point), basado en reponer stock cuando este llegaba a un nivel mínimo. Esto funcionaba para demandas constantes, pero era un desastre para productos complejos. Joseph Orlicky y George Plossl revolucionaron esto al proponer el MRP (Material Requirements Planning). Su gran innovación fue entender que la demanda de componentes es 'dependiente' de la demanda del producto final. Con la aparición de las primeras mainframes de computación, fue posible por primera vez realizar el cálculo de 'explosión' (multiplicar necesidades) y 'offsetting' (restar el tiempo de entrega) de forma automatizada, permitiendo que las empresas supieran no solo qué pedir, sino exactamente CUÁNDO pedirlo.</p></div>
+
+            <h3>Descripción Formal</h3>
+            <div><p>La lógica central del MRP se basa en dos pasos críticos: la Explosión de Necesidades y el Desfase en el Tiempo (Time-Phasing). 
+1. <strong>Explosión Bruta:</strong> Se toma el Plan Maestro de Producción (MPS) y se multiplica por las cantidades de la BOM.
+2. <strong>Cálculo de Necesidades Netas:</strong> Se aplica la fórmula: Necesidades Netas = Necesidades Brutas - (Stock Disponible + Recepciones Programadas) + Stock de Seguridad.
+3. <strong>Desfase (Offsetting):</strong> Una vez calculada la necesidad neta, se retrocede en el tiempo según el 'Lead Time' (tiempo de suministro) para determinar cuándo debe emitirse la orden de compra o producción.</p>
+<p>Ejemplo: Si necesitamos entregar 100 servidores el viernes (Semana 1) y el ensamblaje tarda 1 semana, la explosión nos dice que necesitamos los procesadores el viernes de la Semana 0. Si el proveedor de procesadores tarda 2 semanas en enviarlos, el sistema MRP realizará un desfase y nos indicará que la 'Emisión de la Orden de Compra' debe ocurrir en la Semana -2. El resultado es un calendario dinámico que coordina a cientos de proveedores externos con la línea de montaje interna.</p></div>
+
+            <div class="diagrama-box">
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg style="max-width: 80%; max-height: 350px; height: auto; width: auto;" data-width="1011pt" data-height="125pt"
+ viewBox="0.00 0.00 1010.62 125.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 121)">
+<title>G</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-121 1006.62,-121 1006.62,4 -4,4"/>
+<!-- MPS -->
+<g id="node1" class="node">
+<title>MPS</title>
+<polygon fill="#fff9c4" stroke="black" points="140,-117 0,-117 0,-81 140,-81 140,-117"/>
+<text text-anchor="middle" x="70" y="-95.3" font-family="Helvetica,sans-Serif" font-size="14.00">Plan Maestro (MPS)</text>
+</g>
+<!-- EXP -->
+<g id="node4" class="node">
+<title>EXP</title>
+<polygon fill="#e8f5e9" stroke="black" points="320.31,-90 176.19,-72 320.31,-54 464.42,-72 320.31,-90"/>
+<text text-anchor="middle" x="320.31" y="-68.3" font-family="Helvetica,sans-Serif" font-size="14.00">Explosión Necesidades</text>
+</g>
+<!-- MPS&#45;&gt;EXP -->
+<g id="edge1" class="edge">
+<title>MPS&#45;&gt;EXP</title>
+<path fill="none" stroke="black" d="M140.17,-91.48C168.79,-88.37 202.3,-84.72 232.54,-81.43"/>
+<polygon fill="black" stroke="black" points="233.1,-84.9 242.66,-80.33 232.34,-77.94 233.1,-84.9"/>
+</g>
+<!-- BOM -->
+<g id="node2" class="node">
+<title>BOM</title>
+<polygon fill="#f9f9f9" stroke="black" points="122,-63 18,-63 18,-27 122,-27 122,-63"/>
+<text text-anchor="middle" x="70" y="-41.3" font-family="Helvetica,sans-Serif" font-size="14.00">BOM (Receta)</text>
+</g>
+<!-- BOM&#45;&gt;EXP -->
+<g id="edge2" class="edge">
+<title>BOM&#45;&gt;EXP</title>
+<path fill="none" stroke="black" d="M122.15,-50.56C153.94,-54.02 195.64,-58.55 232.5,-62.56"/>
+<polygon fill="black" stroke="black" points="232.44,-66.07 242.76,-63.68 233.19,-59.12 232.44,-66.07"/>
+</g>
+<!-- INV -->
+<g id="node3" class="node">
+<title>INV</title>
+<polygon fill="#f9f9f9" stroke="black" points="381.31,-36 259.31,-36 259.31,0 381.31,0 381.31,-36"/>
+<text text-anchor="middle" x="320.31" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">Estado Inventario</text>
+</g>
+<!-- NET -->
+<g id="node5" class="node">
+<title>NET</title>
+<polygon fill="#f9f9f9" stroke="black" points="634.62,-63 500.62,-63 500.62,-27 634.62,-27 634.62,-63"/>
+<text text-anchor="middle" x="567.62" y="-41.3" font-family="Helvetica,sans-Serif" font-size="14.00">Necesidades Netas</text>
+</g>
+<!-- INV&#45;&gt;NET -->
+<g id="edge4" class="edge">
+<title>INV&#45;&gt;NET</title>
+<path fill="none" stroke="black" d="M381.32,-24.6C414.11,-28.21 455.06,-32.72 490.13,-36.58"/>
+<polygon fill="black" stroke="black" points="490,-40.09 500.33,-37.7 490.77,-33.13 490,-40.09"/>
+</g>
+<!-- EXP&#45;&gt;NET -->
+<g id="edge3" class="edge">
+<title>EXP&#45;&gt;NET</title>
+<path fill="none" stroke="black" d="M397.58,-63.61C427.02,-60.36 460.64,-56.66 490.1,-53.42"/>
+<polygon fill="black" stroke="black" points="490.78,-56.87 500.34,-52.29 490.01,-49.91 490.78,-56.87"/>
+</g>
+<!-- OFF -->
+<g id="node6" class="node">
+<title>OFF</title>
+<polygon fill="#f9f9f9" stroke="black" points="813.62,-63 670.62,-63 670.62,-27 813.62,-27 813.62,-63"/>
+<text text-anchor="middle" x="742.12" y="-41.3" font-family="Helvetica,sans-Serif" font-size="14.00">Desfase (Lead Time)</text>
+</g>
+<!-- NET&#45;&gt;OFF -->
+<g id="edge5" class="edge">
+<title>NET&#45;&gt;OFF</title>
+<path fill="none" stroke="black" d="M634.82,-45C643.21,-45 651.88,-45 660.48,-45"/>
+<polygon fill="black" stroke="black" points="660.51,-48.5 670.51,-45 660.51,-41.5 660.51,-48.5"/>
+</g>
+<!-- ORD -->
+<g id="node7" class="node">
+<title>ORD</title>
+<polygon fill="#ffccbc" stroke="black" points="1002.62,-63 849.62,-63 849.62,-27 1002.62,-27 1002.62,-63"/>
+<text text-anchor="middle" x="926.12" y="-41.3" font-family="Helvetica,sans-Serif" font-size="14.00">Orden de Compra/Fab</text>
+</g>
+<!-- OFF&#45;&gt;ORD -->
+<g id="edge6" class="edge">
+<title>OFF&#45;&gt;ORD</title>
+<path fill="none" stroke="black" d="M813.74,-45C822.14,-45 830.79,-45 839.38,-45"/>
+<polygon fill="black" stroke="black" points="839.41,-48.5 849.41,-45 839.41,-41.5 839.41,-48.5"/>
+</g>
+</g>
+</svg>
+
+            </div>
+            <p style="font-size:0.8em; color:#999; text-align:center; margin-top:-20px; margin-bottom:30px;">
+                <em>Figura: Diagrama generado automáticamente mediante Graphviz</em>
+            </p>
+
+            <h3>Intuición</h3>
+            <div><p>Imagina que estás organizando una boda para 200 personas dentro de 6 meses. La 'explosión' te dice cuántas botellas de vino necesitas. Pero el 'desfase' es lo que te dice que, si el vino debe estar en la mesa el sábado, y el proveedor tarda 3 días en entregarlo, y tú necesitas 2 días para enfriarlo, debes pedirlo el lunes anterior como tarde. El MRP hace este razonamiento lógico para miles de piezas simultáneamente. Es como un GPS temporal que nos dice: 'Si quieres llegar a tu destino (entrega al cliente) en este momento, debes realizar estas acciones (pedidos) en estos momentos exactos del pasado'.</p></div>
+
+            <h3>Aplicación</h3>
+            <div><p>Un Director de Operaciones en una empresa de e-commerce con fabricación propia utiliza esta lógica para gestionar el flujo de caja. Al saber exactamente cuándo se necesitan los materiales, no tiene que pagar por ellos meses antes de que se conviertan en producto terminado. En el entorno de 'Digital Business', donde los ciclos de vida de los productos son cortos (como en la moda rápida o electrónica de consumo), el MRP permite una agilidad extrema. Si un influencer hace viral un producto y la demanda se dispara en el MPS, el sistema 'explota' esa nueva necesidad hacia atrás, alertando inmediatamente a compras sobre qué pedidos deben acelerarse para no perder ventas.</p></div>
+        </article>
+        
+        <article class="subtema">
+            <h2>Políticas de Dimensionado de Lotes (Lot Sizing)</h2>
+
+            <h3>Historia</h3>
+            <div><p>Una vez que sabemos qué necesitamos y cuándo, surge la pregunta: ¿cuánto pedimos? Históricamente, las empresas pedían grandes cantidades para obtener descuentos por volumen, basándose en el modelo de Ford Harris de 1913 (Economic Order Quantity - EOQ). Sin embargo, con el auge del Toyota Production System y el Just-in-Time en los años 80, la industria empezó a cuestionar el coste oculto de mantener inventario (almacenaje, obsolescencia, seguros). En la era digital actual, con el auge del Big Data y la analítica predictiva, el dimensionado de lotes se ha vuelto más sofisticado, permitiendo equilibrar los costes de preparación (setup) con los de posesión de stock mediante algoritmos dinámicos que se ajustan a la volatilidad del mercado.</p></div>
+
+            <h3>Descripción Formal</h3>
+            <div><p>El dimensionado de lotes es el proceso de agrupar las necesidades netas de materiales en cantidades de pedido eficientes. Existen varias técnicas principales:
+1. <strong>Lote a Lote (L4L):</strong> Se pide exactamente lo que se necesita para cada periodo. Minimiza el stock pero maximiza los costes de emisión de pedidos.
+2. <strong>Cantidad de Pedido Económica (EOQ):</strong> Utiliza una fórmula matemática para encontrar el punto donde el coste de pedir y el coste de almacenar son iguales.
+3. <strong>Period Order Quantity (POQ):</strong> Agrupa las necesidades de un número fijo de periodos futuros en un solo pedido.</p>
+<p>Ejemplo: Si una startup de hardware necesita 10 sensores cada semana, y el coste de envío es de 100€ independientemente del tamaño del paquete, usar L4L significaría pagar 100€ de envío cada semana. Si el coste de almacenar cada sensor es de solo 0.10€ a la semana, la técnica de dimensionado de lotes sugerirá probablemente comprar 120 sensores a la vez (suministro para un trimestre), reduciendo drásticamente el coste total de adquisición a pesar de aumentar el inventario medio.</p></div>
+
+            <div class="diagrama-box">
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg style="max-width: 80%; max-height: 350px; height: auto; width: auto;" data-width="348pt" data-height="350pt"
+ viewBox="0.00 0.00 348.00 350.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 346)">
+<title>G</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-346 344,-346 344,4 -4,4"/>
+<!-- NEC -->
+<g id="node1" class="node">
+<title>NEC</title>
+<polygon fill="#f9f9f9" stroke="black" points="265.5,-342 87.5,-342 87.5,-306 265.5,-306 265.5,-342"/>
+<text text-anchor="middle" x="176.5" y="-320.3" font-family="Helvetica,sans-Serif" font-size="14.00">Necesidad Neta Detectada</text>
+</g>
+<!-- DEC -->
+<g id="node2" class="node">
+<title>DEC</title>
+<polygon fill="#f9f9f9" stroke="black" points="176.5,-269 33.22,-251 176.5,-233 319.78,-251 176.5,-269"/>
+<text text-anchor="middle" x="176.5" y="-247.3" font-family="Helvetica,sans-Serif" font-size="14.00">¿Coste de pedido alto?</text>
+</g>
+<!-- NEC&#45;&gt;DEC -->
+<g id="edge1" class="edge">
+<title>NEC&#45;&gt;DEC</title>
+<path fill="none" stroke="black" d="M176.5,-305.81C176.5,-297.79 176.5,-288.05 176.5,-279.07"/>
+<polygon fill="black" stroke="black" points="180,-279.03 176.5,-269.03 173,-279.03 180,-279.03"/>
+</g>
+<!-- L4L -->
+<g id="node3" class="node">
+<title>L4L</title>
+<polygon fill="#c8e6c9" stroke="black" points="175,-182 0,-182 0,-146 175,-146 175,-182"/>
+<text text-anchor="middle" x="87.5" y="-160.3" font-family="Helvetica,sans-Serif" font-size="14.00">Lote a Lote (Pedir lo justo)</text>
+</g>
+<!-- DEC&#45;&gt;L4L -->
+<g id="edge2" class="edge">
+<title>DEC&#45;&gt;L4L</title>
+<path fill="none" stroke="black" d="M160.59,-234.8C147.39,-222.2 128.37,-204.03 113.04,-189.4"/>
+<polygon fill="black" stroke="black" points="115.06,-186.49 105.42,-182.11 110.23,-191.55 115.06,-186.49"/>
+<text text-anchor="middle" x="146" y="-203.8" font-family="Times,serif" font-size="14.00">No</text>
+</g>
+<!-- EOQ -->
+<g id="node4" class="node">
+<title>EOQ</title>
+<polygon fill="#ffecb3" stroke="black" points="340,-182 193,-182 193,-146 340,-146 340,-182"/>
+<text text-anchor="middle" x="266.5" y="-160.3" font-family="Helvetica,sans-Serif" font-size="14.00">Lote Económico / Fijo</text>
+</g>
+<!-- DEC&#45;&gt;EOQ -->
+<g id="edge3" class="edge">
+<title>DEC&#45;&gt;EOQ</title>
+<path fill="none" stroke="black" d="M192.59,-234.8C206.06,-222.08 225.52,-203.7 241.09,-188.99"/>
+<polygon fill="black" stroke="black" points="243.52,-191.52 248.38,-182.11 238.71,-186.43 243.52,-191.52"/>
+<text text-anchor="middle" x="232.5" y="-203.8" font-family="Times,serif" font-size="14.00">Si</text>
+</g>
+<!-- STK -->
+<g id="node5" class="node">
+<title>STK</title>
+<polygon fill="#f9f9f9" stroke="black" points="275,-109 78,-109 78,-73 275,-73 275,-109"/>
+<text text-anchor="middle" x="176.5" y="-87.3" font-family="Helvetica,sans-Serif" font-size="14.00">Actualizar Stock de Seguridad</text>
+</g>
+<!-- L4L&#45;&gt;STK -->
+<g id="edge4" class="edge">
+<title>L4L&#45;&gt;STK</title>
+<path fill="none" stroke="black" d="M109.04,-145.81C120.52,-136.66 134.81,-125.26 147.27,-115.32"/>
+<polygon fill="black" stroke="black" points="149.52,-118 155.15,-109.03 145.15,-112.53 149.52,-118"/>
+</g>
+<!-- EOQ&#45;&gt;STK -->
+<g id="edge5" class="edge">
+<title>EOQ&#45;&gt;STK</title>
+<path fill="none" stroke="black" d="M244.71,-145.81C233.11,-136.66 218.66,-125.26 206.06,-115.32"/>
+<polygon fill="black" stroke="black" points="208.1,-112.47 198.09,-109.03 203.77,-117.97 208.1,-112.47"/>
+</g>
+<!-- FIN -->
+<g id="node6" class="node">
+<title>FIN</title>
+<polygon fill="#f9f9f9" stroke="black" points="266.5,-36 86.5,-36 86.5,0 266.5,0 266.5,-36"/>
+<text text-anchor="middle" x="176.5" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">Generar Orden de Compra</text>
+</g>
+<!-- STK&#45;&gt;FIN -->
+<g id="edge6" class="edge">
+<title>STK&#45;&gt;FIN</title>
+<path fill="none" stroke="black" d="M176.5,-72.81C176.5,-64.79 176.5,-55.05 176.5,-46.07"/>
+<polygon fill="black" stroke="black" points="180,-46.03 176.5,-36.03 173,-46.03 180,-46.03"/>
+</g>
+</g>
+</svg>
+
+            </div>
+            <p style="font-size:0.8em; color:#999; text-align:center; margin-top:-20px; margin-bottom:30px;">
+                <em>Figura: Diagrama generado automáticamente mediante Graphviz</em>
+            </p>
+
+            <h3>Intuición</h3>
+            <div><p>Es el dilema de ir al supermercado. Puedes ir todos los días a comprar solo lo que vas a cenar hoy (Lote a Lote), lo que evita que la comida se caduque pero te hace perder mucho tiempo y gasolina en el trayecto. O puedes ir una vez al mes y llenar el carrito (EOQ/Lote Fijo), ahorrando viajes pero arriesgándote a que la comida se eche a perder y necesitando una nevera más grande (coste de almacenaje). El Director de Operaciones debe decidir, basándose en los datos, cuál es el equilibrio perfecto para que la empresa no gaste demasiado ni en logística ni en espacio de almacén.</p></div>
+
+            <h3>Aplicación</h3>
+            <div><p>Para un Director de Operaciones en Digital Business, el dimensionado de lotes es clave para gestionar la escalabilidad. En una empresa de hardware por suscripción, el uso de técnicas como POQ permite sincronizar las compras con las proyecciones de crecimiento de suscriptores. Además, en entornos globales donde los fletes marítimos son caros y lentos, el dimensionado de lotes ayuda a optimizar el llenado de contenedores (Container Optimization). Un director experto utilizará software de simulación para probar diferentes políticas de lote y ver cómo afectan al 'Working Capital' (Capital de Trabajo) de la empresa, asegurando que el dinero no esté innecesariamente bloqueado en estanterías del almacén.</p></div>
+        </article>
+        </body></html>

@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>18 - Optimización y Cuellos de Botella - sistema Tambor-Amortiguador-Cuerda.</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #f4f4f9; color: #333; margin: 0; padding: 20px; line-height: 1.6; position: relative; }
+        header { background: #2c3e50; color: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; text-align:center; }
+        h1 { margin: 0; font-size: 1.5rem; }
+
+        /* Estilo del botón Atrás */
+        .btn-atras {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #7f8c8d;
+            color: white;
+            padding: 8px 15px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            transition: background 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+        .btn-atras:hover { background: #95a5a6; }
+
+        .subtema {
+            background: white;
+            padding: 40px;
+            margin-bottom: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        h2 { color: #2980b9; border-bottom: 2px solid #eee; padding-bottom: 10px; margin-top: 0; }
+        h3 { color: #7f8c8d; font-size: 0.9em; text-transform: uppercase; margin-top: 30px; letter-spacing: 1px; border-left: 3px solid #d4af37; padding-left: 10px; }
+
+        .diagrama-box {
+            text-align: center;
+            margin: 30px 0;
+            padding: 20px;
+            background: #fafafa;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 150px;
+        }
+
+        p { margin-bottom: 1rem; }
+        strong { color: #2c3e50; font-weight: 600; }
+        code { background: #f0f0f0; padding: 2px 5px; border-radius: 3px; font-family: monospace; color: #c0392b; }
+        ul { padding-left: 20px; }
+        li { margin-bottom: 0.5rem; }
+    </style>
+</head>
+<body>
+    <button onclick="window.history.back()" class="btn-atras">Atrás</button>
+    <header><h1>18 - Optimización y Cuellos de Botella - sistema Tambor-Amortiguador-Cuerda.</h1></header>
+    <main>
+
+        <article class="subtema">
+            <h2>Teoría de las Restricciones (TOC) e Identificación de Cuellos de Botella</h2>
+
+            <h3>Historia</h3>
+            <div><p>La Teoría de las Restricciones (TOC) fue popularizada por el Dr. Eliyahu M. Goldratt en su influyente novela de gestión de 1984, 'La Meta'. En una época dominada por la contabilidad de costes tradicional y la búsqueda de la eficiencia local en cada departamento, Goldratt introdujo un cambio de paradigma radical: el rendimiento de cualquier sistema complejo está limitado por un único eslabón, la restricción. A lo largo de los años 80 y 90, esta filosofía evolucionó desde la fabricación pura hacia la gestión de proyectos y servicios digitales. En el contexto de ESIC y el Digital Business, la TOC ha sido fundamental para entender que optimizar procesos que no son el cuello de botella es un desperdicio de recursos, una lección vital en la economía de la atención y la inmediatez actual, donde la agilidad organizacional depende de saber exactamente dónde intervenir para mejorar el flujo global.</p></div>
+
+            <h3>Descripción Formal</h3>
+            <div><p>La identificación de cuellos de botella es el primer paso crítico de los cinco pasos de enfoque de Goldratt. Un cuello de botella o restricción es cualquier recurso cuya capacidad es igual o menor que la demanda depositada sobre él. Matemáticamente, si el tiempo de ciclo de una estación de trabajo (Tc) es mayor que el Takt Time del mercado, esa estación limita el 'Throughput' (tasa de generación de dinero a través de las ventas). </p>
+<p>Existen tres tipos de restricciones: físicas (maquinaria, ancho de banda de servidores), de mercado (falta de demanda) y de políticas (reglas de negocio obsoletas). El proceso formal de optimización implica: 1) Identificar la restricción, 2) Explotar la restricción (asegurar que no pierda tiempo), 3) Subordinar todo lo demás (ajustar el ritmo del resto del sistema al de la restricción), 4) Elevar la restricción (invertir en más capacidad) y 5) Volver al paso 1 sin dejar que la inercia se convierta en restricción. </p>
+<p>Ejemplo: En una agencia de marketing digital, el equipo de diseño puede producir 10 creatividades al día, pero el equipo de copy solo 5. El copy es el cuello de botella. Si el equipo de diseño produce 10, solo generará inventario de diseños sin texto (WIP o trabajo en curso), aumentando los costes y el tiempo de entrega total sin añadir valor real al cliente final.</p></div>
+
+            <div class="diagrama-box">
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg style="max-width: 80%; max-height: 350px; height: auto; width: auto;" data-width="616pt" data-height="44pt"
+ viewBox="0.00 0.00 616.00 44.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 40)">
+<title>G</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-40 612,-40 612,4 -4,4"/>
+<!-- Restriccion -->
+<g id="node1" class="node">
+<title>Restriccion</title>
+<polygon fill="#ffcccc" stroke="black" points="408,-36 210,-36 210,0 408,0 408,-36"/>
+<text text-anchor="middle" x="309" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">Cuello de Botella (Restricción)</text>
+</g>
+<!-- Proceso2 -->
+<g id="node4" class="node">
+<title>Proceso2</title>
+<polygon fill="#f9f9f9" stroke="black" points="518,-36 444,-36 444,0 518,0 518,-36"/>
+<text text-anchor="middle" x="481" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">Proceso2</text>
+</g>
+<!-- Restriccion&#45;&gt;Proceso2 -->
+<g id="edge3" class="edge">
+<title>Restriccion&#45;&gt;Proceso2</title>
+<path fill="none" stroke="black" d="M408.4,-18C417.18,-18 425.76,-18 433.77,-18"/>
+<polygon fill="black" stroke="black" points="433.92,-21.5 443.92,-18 433.92,-14.5 433.92,-21.5"/>
+</g>
+<!-- Entrada -->
+<g id="node2" class="node">
+<title>Entrada</title>
+<polygon fill="#f9f9f9" stroke="black" points="64,-36 0,-36 0,0 64,0 64,-36"/>
+<text text-anchor="middle" x="32" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">Entrada</text>
+</g>
+<!-- Proceso1 -->
+<g id="node3" class="node">
+<title>Proceso1</title>
+<polygon fill="#f9f9f9" stroke="black" points="174,-36 100,-36 100,0 174,0 174,-36"/>
+<text text-anchor="middle" x="137" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">Proceso1</text>
+</g>
+<!-- Entrada&#45;&gt;Proceso1 -->
+<g id="edge1" class="edge">
+<title>Entrada&#45;&gt;Proceso1</title>
+<path fill="none" stroke="black" d="M64.18,-18C72.27,-18 81.15,-18 89.83,-18"/>
+<polygon fill="black" stroke="black" points="89.86,-21.5 99.86,-18 89.86,-14.5 89.86,-21.5"/>
+</g>
+<!-- Proceso1&#45;&gt;Restriccion -->
+<g id="edge2" class="edge">
+<title>Proceso1&#45;&gt;Restriccion</title>
+<path fill="none" stroke="black" d="M174.05,-18C181.93,-18 190.65,-18 199.76,-18"/>
+<polygon fill="black" stroke="black" points="199.77,-21.5 209.77,-18 199.77,-14.5 199.77,-21.5"/>
+</g>
+<!-- Salida -->
+<g id="node5" class="node">
+<title>Salida</title>
+<polygon fill="#f9f9f9" stroke="black" points="608,-36 554,-36 554,0 608,0 608,-36"/>
+<text text-anchor="middle" x="581" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">Salida</text>
+</g>
+<!-- Proceso2&#45;&gt;Salida -->
+<g id="edge4" class="edge">
+<title>Proceso2&#45;&gt;Salida</title>
+<path fill="none" stroke="black" d="M518.21,-18C526.49,-18 535.3,-18 543.59,-18"/>
+<polygon fill="black" stroke="black" points="543.73,-21.5 553.73,-18 543.73,-14.5 543.73,-21.5"/>
+</g>
+</g>
+</svg>
+
+            </div>
+            <p style="font-size:0.8em; color:#999; text-align:center; margin-top:-20px; margin-bottom:30px;">
+                <em>Figura: Diagrama generado automáticamente mediante Graphviz</em>
+            </p>
+
+            <h3>Intuición</h3>
+            <div><p>Imagina que estás organizando una excursión de senderismo con un grupo de amigos. El grupo solo avanzará tan rápido como la persona más lenta. Si el más rápido corre hacia adelante, lo único que logra es que el grupo se fragmente y que la comunicación se pierda, pero el grupo no llegará antes a la cima. En una empresa, esa 'persona más lenta' es el cuello de botella. La intuición detrás de la optimización de restricciones nos dice que no sirve de nada que los departamentos más rápidos trabajen a su máxima capacidad si el cuello de botella no puede procesar ese trabajo. De hecho, obligar a los departamentos rápidos a trabajar al 100% suele crear montañas de trabajo pendiente que confunden y saturan el sistema. La clave no es trabajar más, sino trabajar al ritmo que marca el eslabón más débil del sistema.</p></div>
+
+            <h3>Aplicación</h3>
+            <div><p>En el entorno de un Director de Operaciones (COO), la identificación de cuellos de botella se aplica diariamente en la gestión de proyectos de software (DevOps). Por ejemplo, si el equipo de desarrollo lanza código más rápido de lo que el equipo de QA (Quality Assurance) puede testearlo, el QA es el cuello de botella. El COO debe intervenir no para contratar más desarrolladores, sino para 'explotar' el QA (asegurando que no testen errores triviales) o 'elevar' el QA (automatizando pruebas). Otro caso real es en el e-commerce: si el almacén puede preparar 1000 pedidos pero la pasarela de pagos falla tras 500, la tecnología es la restricción que frena el flujo de caja.</p></div>
+        </article>
+        
+        <article class="subtema">
+            <h2>El Sistema Tambor-Amortiguador-Cuerda (Drum-Buffer-Rope)</h2>
+
+            <h3>Historia</h3>
+            <div><p>El concepto Drum-Buffer-Rope (DBR) surgió como la metodología logística operativa de la Teoría de las Restricciones. Tras el éxito de 'La Meta', las empresas necesitaban un método práctico para controlar el flujo en la planta de producción sin depender de complejos sistemas de planificación de recursos (ERP) que a menudo ignoraban la capacidad finita. DBR se inspiró en los movimientos de tropas y bandas de música, donde se requiere sincronización perfecta. Con el auge de la agilidad en los negocios digitales, DBR se ha adaptado para gestionar flujos de información y servicios, convirtiéndose en el predecesor conceptual de muchos sistemas Kanban modernos que buscan limitar el trabajo en curso (WIP) para maximizar la velocidad de entrega.</p></div>
+
+            <h3>Descripción Formal</h3>
+            <div><p>El sistema DBR se compone de tres elementos integrados que regulan el flujo de producción:</p>
+<ol>
+<li>El Tambor (Drum): Es el programa de trabajo del cuello de botella. Dicta el ritmo de toda la organización. Toda la planificación debe girar en torno a maximizar la utilización de este recurso crítico.</li>
+<li>El Amortiguador (Buffer): A diferencia del stock de seguridad tradicional, el amortiguador en DBR es de 'tiempo'. Se coloca inmediatamente antes del cuello de botella para asegurar que, si hay una pequeña interrupción en los procesos anteriores, el tambor nunca se quede sin material para trabajar.</li>
+<li>La Cuerda (Rope): Es el mecanismo de comunicación que libera trabajo en el inicio del proceso solo cuando el tambor ha procesado algo. Evita la acumulación de inventario innecesario (WIP) sincronizando el inicio de la cadena con el ritmo de la restricción.</li>
+</ol>
+<p>Ejemplo: En una línea de ensamblaje de servidores personalizados, si el test de estrés final es el tambor (procesa 2 unidades/hora), la 'cuerda' impide que el almacén libere piezas para más de 2 unidades por hora. El 'amortiguador' serían 4 unidades ya ensambladas esperando el test, protegiendo al tambor contra retrasos menores en el ensamblaje inicial.</p></div>
+
+            <div class="diagrama-box">
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg style="max-width: 80%; max-height: 350px; height: auto; width: auto;" data-width="839pt" data-height="82pt"
+ viewBox="0.00 0.00 838.98 82.32" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 78.32)">
+<title>G</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-78.32 834.98,-78.32 834.98,4 -4,4"/>
+<!-- Inicio -->
+<g id="node1" class="node">
+<title>Inicio</title>
+<polygon fill="#f9f9f9" stroke="black" points="163,-74.32 0,-74.32 0,-38.32 163,-38.32 163,-74.32"/>
+<text text-anchor="middle" x="81.5" y="-52.62" font-family="Helvetica,sans-Serif" font-size="14.00">Lanzamiento de Trabajo</text>
+</g>
+<!-- Amortiguador -->
+<g id="node3" class="node">
+<title>Amortiguador</title>
+<ellipse fill="#fff9c4" stroke="black" cx="323.49" cy="-56.32" rx="123.48" ry="18"/>
+<text text-anchor="middle" x="323.49" y="-52.62" font-family="Helvetica,sans-Serif" font-size="14.00">AMORTIGUADOR (Tiempo)</text>
+</g>
+<!-- Inicio&#45;&gt;Amortiguador -->
+<g id="edge1" class="edge">
+<title>Inicio&#45;&gt;Amortiguador</title>
+<path fill="none" stroke="black" d="M163.08,-56.32C171.69,-56.32 180.6,-56.32 189.61,-56.32"/>
+<polygon fill="black" stroke="black" points="189.81,-59.82 199.81,-56.32 189.81,-52.82 189.81,-59.82"/>
+</g>
+<!-- Tambor -->
+<g id="node2" class="node">
+<title>Tambor</title>
+<polygon fill="#e1f5fe" stroke="black" points="638.98,-74.32 483.98,-74.32 483.98,-38.32 638.98,-38.32 638.98,-74.32"/>
+<text text-anchor="middle" x="561.48" y="-52.62" font-family="Helvetica,sans-Serif" font-size="14.00">TAMBOR (Restricción)</text>
+</g>
+<!-- Tambor&#45;&gt;Inicio -->
+<g id="edge4" class="edge">
+<title>Tambor&#45;&gt;Inicio</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M522.04,-38.22C500.5,-29.08 472.83,-18.95 446.98,-14.32 338.93,5.03 308.15,4.42 200,-14.32 176.97,-18.32 152.47,-26.41 131.84,-34.43"/>
+<polygon fill="black" stroke="black" points="130.34,-31.26 122.36,-38.22 132.94,-37.76 130.34,-31.26"/>
+<text text-anchor="middle" x="323.49" y="-18.12" font-family="Times,serif" font-size="14.00">CUERDA (Señal de liberación)</text>
+</g>
+<!-- Fin -->
+<g id="node4" class="node">
+<title>Fin</title>
+<polygon fill="#f9f9f9" stroke="black" points="830.98,-74.32 675.98,-74.32 675.98,-38.32 830.98,-38.32 830.98,-74.32"/>
+<text text-anchor="middle" x="753.48" y="-52.62" font-family="Helvetica,sans-Serif" font-size="14.00">Producto/Servicio Final</text>
+</g>
+<!-- Tambor&#45;&gt;Fin -->
+<g id="edge3" class="edge">
+<title>Tambor&#45;&gt;Fin</title>
+<path fill="none" stroke="black" d="M639.21,-56.32C647.87,-56.32 656.74,-56.32 665.52,-56.32"/>
+<polygon fill="black" stroke="black" points="665.77,-59.82 675.77,-56.32 665.77,-52.82 665.77,-59.82"/>
+</g>
+<!-- Amortiguador&#45;&gt;Tambor -->
+<g id="edge2" class="edge">
+<title>Amortiguador&#45;&gt;Tambor</title>
+<path fill="none" stroke="black" d="M447.32,-56.32C456.26,-56.32 465.16,-56.32 473.81,-56.32"/>
+<polygon fill="black" stroke="black" points="473.85,-59.82 483.85,-56.32 473.85,-52.82 473.85,-59.82"/>
+</g>
+</g>
+</svg>
+
+            </div>
+            <p style="font-size:0.8em; color:#999; text-align:center; margin-top:-20px; margin-bottom:30px;">
+                <em>Figura: Diagrama generado automáticamente mediante Graphviz</em>
+            </p>
+
+            <h3>Intuición</h3>
+            <div><p>Pensemos en una fila de exploradores. El tambor es el explorador más lento, quien marca el paso con un tambor real. El amortiguador es un espacio prudencial delante de él para que, si tropieza, no detenga a los que ya han pasado. La cuerda es un cordel físico que une al explorador más lento con el primero de la fila. Cuando el explorador lento avanza un paso, tira de la cuerda y permite que el primero dé un paso. Esto garantiza que la fila no se estire indefinidamente y que nadie camine más rápido de lo que el grupo puede avanzar unido. En una empresa digital, esto significa que no iniciamos un nuevo proyecto de marketing hasta que el equipo de despliegue web (el cuello de botella) haya terminado el anterior.</p></div>
+
+            <h3>Aplicación</h3>
+            <div><p>Un Director de Operaciones en una Fintech utiliza DBR para gestionar el proceso de 'Onboarding' de clientes. Si el cuello de botella es la revisión legal de documentos (Tambor), el COO establecerá una 'Cuerda' que limite la entrada de nuevos leads desde marketing para que no saturen el sistema. Se crea un 'Amortiguador' de expedientes ya escaneados y listos para revisión legal, asegurando que los abogados siempre tengan trabajo disponible. Esto reduce el 'Lead Time' total y mejora la experiencia del cliente al evitar promesas de activación que el sistema no puede cumplir rítmicamente.</p></div>
+        </article>
+        
+        <article class="subtema">
+            <h2>Gestión de Amortiguadores (Buffer Management) y Mejora Continua</h2>
+
+            <h3>Historia</h3>
+            <div><p>La Gestión de Amortiguadores evolucionó como la herramienta de control y diagnóstico del sistema DBR. Mientras que DBR estabiliza el flujo, el Buffer Management proporciona los datos necesarios para la mejora continua. Históricamente, las empresas intentaban mejorar todo a la vez (Total Quality Management), lo que diluía el impacto. La gestión de amortiguadores permitió a los gerentes de operaciones enfocarse exclusivamente en las variaciones que realmente ponían en peligro el cumplimiento de los plazos. Esta metodología fue el puente entre la estabilidad operativa de TOC y la agilidad de Lean Manufacturing, permitiendo una gestión visual que hoy vemos replicada en tableros de control de salud de sistemas y KPIs de rendimiento en tiempo real.</p></div>
+
+            <h3>Descripción Formal</h3>
+            <div><p>La Gestión de Amortiguadores divide el amortiguador de tiempo en tres zonas iguales: Verde, Amarilla y Roja. </p>
+<ul>
+<li>Zona Verde: El trabajo llega con mucho tiempo de sobra respecto al inicio programado en el tambor. No se requiere acción.</li>
+<li>Zona Amarilla: El trabajo llega en el tiempo previsto, pero el margen de seguridad se está reduciendo. Se observa, pero no se interviene.</li>
+<li>Zona Roja: El trabajo no ha llegado y el tambor corre el riesgo de detenerse. Se requiere intervención inmediata para localizar el pedido y acelerarlo.</li>
+</ul>
+<p>La clave estadística es el análisis de frecuencia: si un proceso específico (ej. aprobación de créditos) causa constantemente que los pedidos entren en la 'Zona Roja', se ha identificado la causa raíz del problema de flujo. No es solo un sistema de alerta, es un sistema de recogida de datos para la fase de 'Elevar la restricción'. El éxito se mide por el Buffer Consumption Rate (tasa de consumo del amortiguador).</p>
+<p>Ejemplo: Si el amortiguador para un hito de proyecto es de 9 días, cada zona tiene 3 días. Si al día 7 el trabajo no ha llegado a la restricción, estamos en zona roja. El director de operaciones debe priorizar ese trabajo sobre cualquier otro en las fases previas.</p></div>
+
+            <div class="diagrama-box">
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg style="max-width: 80%; max-height: 350px; height: auto; width: auto;" data-width="542pt" data-height="218pt"
+ viewBox="0.00 0.00 541.50 218.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 214)">
+<title>G</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-214 537.5,-214 537.5,4 -4,4"/>
+<!-- ZonaV -->
+<g id="node1" class="node">
+<title>ZonaV</title>
+<polygon fill="#c8e6c9" stroke="black" points="119,-123 0,-123 0,-87 119,-87 119,-123"/>
+<text text-anchor="middle" x="59.5" y="-101.3" font-family="Helvetica,sans-Serif" font-size="14.00">Zona Verde (OK)</text>
+</g>
+<!-- ZonaA -->
+<g id="node2" class="node">
+<title>ZonaA</title>
+<polygon fill="#fff9c4" stroke="black" points="306,-123 137,-123 137,-87 306,-87 306,-123"/>
+<text text-anchor="middle" x="221.5" y="-101.3" font-family="Helvetica,sans-Serif" font-size="14.00">Zona Amarilla (Observar)</text>
+</g>
+<!-- ZonaR -->
+<g id="node3" class="node">
+<title>ZonaR</title>
+<polygon fill="#ffcdd2" stroke="black" points="488.5,-123 324.5,-123 324.5,-87 488.5,-87 488.5,-123"/>
+<text text-anchor="middle" x="406.5" y="-101.3" font-family="Helvetica,sans-Serif" font-size="14.00">Zona Roja (ACCIONAR)</text>
+</g>
+<!-- Mejora -->
+<g id="node5" class="node">
+<title>Mejora</title>
+<polygon fill="#e1f5fe" stroke="black" points="496,-36 317,-36 317,0 496,0 496,-36"/>
+<text text-anchor="middle" x="406.5" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">Elevación de la Restricción</text>
+</g>
+<!-- ZonaR&#45;&gt;Mejora -->
+<g id="edge4" class="edge">
+<title>ZonaR&#45;&gt;Mejora</title>
+<path fill="none" stroke="black" d="M406.5,-86.8C406.5,-75.16 406.5,-59.55 406.5,-46.24"/>
+<polygon fill="black" stroke="black" points="410,-46.18 406.5,-36.18 403,-46.18 410,-46.18"/>
+<text text-anchor="middle" x="470" y="-57.8" font-family="Times,serif" font-size="14.00">Análisis de Causa Raíz</text>
+</g>
+<!-- Decision -->
+<g id="node4" class="node">
+<title>Decision</title>
+<polygon fill="#f9f9f9" stroke="black" points="221.5,-210 55.26,-192 221.5,-174 387.74,-192 221.5,-210"/>
+<text text-anchor="middle" x="221.5" y="-188.3" font-family="Helvetica,sans-Serif" font-size="14.00">¿Estado del Amortiguador?</text>
+</g>
+<!-- Decision&#45;&gt;ZonaV -->
+<g id="edge1" class="edge">
+<title>Decision&#45;&gt;ZonaV</title>
+<path fill="none" stroke="black" d="M177.76,-178.7C160.33,-172.96 140.44,-165.32 123.5,-156 110.18,-148.67 96.73,-138.64 85.62,-129.49"/>
+<polygon fill="black" stroke="black" points="87.87,-126.82 77.97,-123.04 83.35,-132.16 87.87,-126.82"/>
+<text text-anchor="middle" x="170.5" y="-144.8" font-family="Times,serif" font-size="14.00">Consumo &lt; 33%</text>
+</g>
+<!-- Decision&#45;&gt;ZonaA -->
+<g id="edge2" class="edge">
+<title>Decision&#45;&gt;ZonaA</title>
+<path fill="none" stroke="black" d="M221.5,-173.8C221.5,-162.16 221.5,-146.55 221.5,-133.24"/>
+<polygon fill="black" stroke="black" points="225,-133.18 221.5,-123.18 218,-133.18 225,-133.18"/>
+<text text-anchor="middle" x="271.5" y="-144.8" font-family="Times,serif" font-size="14.00">Consumo 33&#45;66%</text>
+</g>
+<!-- Decision&#45;&gt;ZonaR -->
+<g id="edge3" class="edge">
+<title>Decision&#45;&gt;ZonaR</title>
+<path fill="none" stroke="black" d="M265.37,-178.68C284.26,-172.76 306.36,-164.98 325.5,-156 341.98,-148.27 359.27,-137.93 373.63,-128.67"/>
+<polygon fill="black" stroke="black" points="375.71,-131.48 382.15,-123.07 371.87,-125.63 375.71,-131.48"/>
+<text text-anchor="middle" x="399.5" y="-144.8" font-family="Times,serif" font-size="14.00">Consumo &gt; 66%</text>
+</g>
+</g>
+</svg>
+
+            </div>
+            <p style="font-size:0.8em; color:#999; text-align:center; margin-top:-20px; margin-bottom:30px;">
+                <em>Figura: Diagrama generado automáticamente mediante Graphviz</em>
+            </p>
+
+            <h3>Intuición</h3>
+            <div><p>Imagina el depósito de gasolina de tu coche. La reserva (zona roja) te indica que debes actuar de inmediato. La zona media (amarilla) te dice que deberías empezar a buscar una gasolinera en tu ruta. El depósito lleno (zona verde) te da tranquilidad. En la gestión de operaciones, no queremos que todos los procesos funcionen perfectamente siempre; queremos saber cuáles están fallando tanto que podrían 'secar' el motor de nuestra empresa (el cuello de botella). La gestión de amortiguadores nos quita el ruido de encima, permitiéndonos ignorar lo que va bien y actuar con precisión quirúrgica donde el flujo peligra.</p></div>
+
+            <h3>Aplicación</h3>
+            <div><p>En una Scale-up de SaaS, el Director de Operaciones aplica Buffer Management a los despliegues de infraestructura. Si el despliegue de nuevos servidores (restricción) tiene un amortiguador de tiempo de 48 horas para configuraciones previas, y las tareas de seguridad están tardando 40 horas (entrando en zona roja), el COO recibe una alerta automática. Esto permite reasignar ingenieros de seguridad para desbloquear el flujo antes de que el despliegue se detenga, garantizando que el SLA (Service Level Agreement) con el cliente no se vea afectado.</p></div>
+        </article>
+        </body></html>

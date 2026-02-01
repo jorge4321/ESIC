@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>12 - Planificación Agregada - Estrategias de persecución de la demanda.</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #f4f4f9; color: #333; margin: 0; padding: 20px; line-height: 1.6; position: relative; }
+        header { background: #2c3e50; color: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; text-align:center; }
+        h1 { margin: 0; font-size: 1.5rem; }
+
+        /* Estilo del botón Atrás */
+        .btn-atras {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #7f8c8d;
+            color: white;
+            padding: 8px 15px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            transition: background 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+        .btn-atras:hover { background: #95a5a6; }
+
+        .subtema {
+            background: white;
+            padding: 40px;
+            margin-bottom: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        h2 { color: #2980b9; border-bottom: 2px solid #eee; padding-bottom: 10px; margin-top: 0; }
+        h3 { color: #7f8c8d; font-size: 0.9em; text-transform: uppercase; margin-top: 30px; letter-spacing: 1px; border-left: 3px solid #d4af37; padding-left: 10px; }
+
+        .diagrama-box {
+            text-align: center;
+            margin: 30px 0;
+            padding: 20px;
+            background: #fafafa;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 150px;
+        }
+
+        p { margin-bottom: 1rem; }
+        strong { color: #2c3e50; font-weight: 600; }
+        code { background: #f0f0f0; padding: 2px 5px; border-radius: 3px; font-family: monospace; color: #c0392b; }
+        ul { padding-left: 20px; }
+        li { margin-bottom: 0.5rem; }
+    </style>
+</head>
+<body>
+    <button onclick="window.history.back()" class="btn-atras">Atrás</button>
+    <header><h1>12 - Planificación Agregada - Estrategias de persecución de la demanda.</h1></header>
+    <main>
+
+        <article class="subtema">
+            <h2>Sincronización de la Fuerza Laboral: Contratación y Despido</h2>
+
+            <h3>Historia</h3>
+            <div><p>La estrategia de persecución mediante el ajuste de la fuerza laboral tiene sus raíces en la era de la producción en masa post-Revolución Industrial, pero cobró relevancia académica con el desarrollo de la investigación operativa tras la Segunda Guerra Mundial. Inicialmente, las empresas operaban con plantillas fijas (estrategias de nivelación), pero la volatilidad de los mercados globales en los años 70 y 80 obligó a los directores de operaciones a buscar una mayor agilidad. Con la llegada del pensamiento Lean y el Just-In-Time de Toyota, se popularizó la idea de 'producir lo que se necesita cuando se necesita'. En el contexto actual de Digital Business, esta evolución se ha acelerado gracias al análisis de Big Data, que permite predecir picos de demanda con mayor precisión, permitiendo que la gestión de recursos humanos se convierta en una variable de ajuste casi quirúrgica para evitar el exceso de capacidad o la rotura de stock.</p></div>
+
+            <h3>Descripción Formal</h3>
+            <div><p>La estrategia de persecución (Chase Strategy) busca igualar la tasa de producción con la tasa de demanda para cada período. Técnicamente, esto se logra ajustando el número de empleados mediante contrataciones cuando la demanda sube y despidos cuando baja. El objetivo principal es minimizar los costes de mantenimiento de inventario, operando idealmente con un inventario de seguridad cercano a cero. Matemáticamente, el número de trabajadores necesarios en el periodo 't' se calcula como (Demanda prevista en t / Productividad por trabajador en t). </p>
+<p>Por ejemplo, supongamos una empresa de desarrollo de software que trabaja por proyectos. Si en el Trimestre 1 se requieren 10,000 horas de programación y cada programador rinde 500 horas, se necesitan 20 empleados. Si en el Trimestre 2 la demanda cae a 5,000 horas, la empresa despediría a 10 trabajadores. </p>
+<p>Los costes asociados a esta estrategia incluyen: 
+1. Costes de contratación: Publicidad de vacantes, entrevistas, onboarding y formación técnica.
+2. Costes de despido: Indemnizaciones legales, gestión administrativa y el impacto negativo en la moral del equipo restante (supervivientes).
+3. Curva de aprendizaje: Los nuevos empleados suelen ser menos productivos inicialmente, lo que debe integrarse en el modelo de capacidad.
+Esta estrategia es altamente eficiente en entornos donde los costes de almacenamiento son prohibitivos o el producto es altamente perecedero (o servicios digitales donde la capacidad no se puede almacenar).</p></div>
+
+            <div class="diagrama-box">
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg style="max-width: 80%; max-height: 350px; height: auto; width: auto;" data-width="620pt" data-height="352pt"
+ viewBox="0.00 0.00 620.00 352.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 348)">
+<title>G</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-348 616,-348 616,4 -4,4"/>
+<!-- Start -->
+<g id="node1" class="node">
+<title>Start</title>
+<polygon fill="#f9f9f9" stroke="black" points="377.5,-344 121.5,-344 121.5,-308 377.5,-308 377.5,-344"/>
+<text text-anchor="middle" x="249.5" y="-322.3" font-family="Helvetica,sans-Serif" font-size="14.00">Inicio: Previsión de Demanda Período T</text>
+</g>
+<!-- Compare -->
+<g id="node2" class="node">
+<title>Compare</title>
+<polygon fill="#f9f9f9" stroke="black" points="249.5,-271 46.23,-253 249.5,-235 452.77,-253 249.5,-271"/>
+<text text-anchor="middle" x="249.5" y="-249.3" font-family="Helvetica,sans-Serif" font-size="14.00">¿Capacidad Actual == Demanda?</text>
+</g>
+<!-- Start&#45;&gt;Compare -->
+<g id="edge1" class="edge">
+<title>Start&#45;&gt;Compare</title>
+<path fill="none" stroke="black" d="M249.5,-307.81C249.5,-299.79 249.5,-290.05 249.5,-281.07"/>
+<polygon fill="black" stroke="black" points="253,-281.03 249.5,-271.03 246,-281.03 253,-281.03"/>
+</g>
+<!-- Maintain -->
+<g id="node3" class="node">
+<title>Maintain</title>
+<polygon fill="#f9f9f9" stroke="black" points="125,-183 0,-183 0,-147 125,-147 125,-183"/>
+<text text-anchor="middle" x="62.5" y="-161.3" font-family="Helvetica,sans-Serif" font-size="14.00">Mantener Plantilla</text>
+</g>
+<!-- Compare&#45;&gt;Maintain -->
+<g id="edge2" class="edge">
+<title>Compare&#45;&gt;Maintain</title>
+<path fill="none" stroke="black" d="M218.2,-237.61C188.36,-223.88 143.05,-203.04 108.98,-187.38"/>
+<polygon fill="black" stroke="black" points="110.25,-184.11 99.7,-183.11 107.32,-190.47 110.25,-184.11"/>
+<text text-anchor="middle" x="179.5" y="-205.8" font-family="Times,serif" font-size="14.00">Sí</text>
+</g>
+<!-- Hire -->
+<g id="node4" class="node">
+<title>Hire</title>
+<polygon fill="#f9f9f9" stroke="black" points="355.5,-184 143.5,-184 143.5,-146 355.5,-146 355.5,-184"/>
+<text text-anchor="middle" x="249.5" y="-168.8" font-family="Helvetica,sans-Serif" font-size="14.00">Contratar Personal</text>
+<text text-anchor="middle" x="249.5" y="-153.8" font-family="Helvetica,sans-Serif" font-size="14.00">(Incurrir en costes de formación)</text>
+</g>
+<!-- Compare&#45;&gt;Hire -->
+<g id="edge3" class="edge">
+<title>Compare&#45;&gt;Hire</title>
+<path fill="none" stroke="black" d="M249.5,-234.6C249.5,-223.06 249.5,-207.65 249.5,-194.36"/>
+<polygon fill="black" stroke="black" points="253,-194.27 249.5,-184.27 246,-194.27 253,-194.27"/>
+<text text-anchor="middle" x="312.5" y="-205.8" font-family="Times,serif" font-size="14.00">Demanda &gt; Capacidad</text>
+</g>
+<!-- Fire -->
+<g id="node5" class="node">
+<title>Fire</title>
+<polygon fill="#f9f9f9" stroke="black" points="612,-184 373,-184 373,-146 612,-146 612,-184"/>
+<text text-anchor="middle" x="492.5" y="-168.8" font-family="Helvetica,sans-Serif" font-size="14.00">Reducir Plantilla</text>
+<text text-anchor="middle" x="492.5" y="-153.8" font-family="Helvetica,sans-Serif" font-size="14.00">(Incurrir en costes de indemnización)</text>
+</g>
+<!-- Compare&#45;&gt;Fire -->
+<g id="edge4" class="edge">
+<title>Compare&#45;&gt;Fire</title>
+<path fill="none" stroke="black" d="M302.91,-239.68C326.64,-233.69 354.74,-225.86 379.5,-217 402.35,-208.83 426.99,-197.96 447.41,-188.36"/>
+<polygon fill="black" stroke="black" points="448.94,-191.51 456.47,-184.05 445.94,-185.19 448.94,-191.51"/>
+<text text-anchor="middle" x="476.5" y="-205.8" font-family="Times,serif" font-size="14.00">Demanda &lt; Capacidad</text>
+</g>
+<!-- Produce -->
+<g id="node6" class="node">
+<title>Produce</title>
+<polygon fill="#f9f9f9" stroke="black" points="359,-109 140,-109 140,-73 359,-73 359,-109"/>
+<text text-anchor="middle" x="249.5" y="-87.3" font-family="Helvetica,sans-Serif" font-size="14.00">Ejecutar Producción Sincronizada</text>
+</g>
+<!-- Maintain&#45;&gt;Produce -->
+<g id="edge7" class="edge">
+<title>Maintain&#45;&gt;Produce</title>
+<path fill="none" stroke="black" d="M106.82,-146.94C133.39,-136.71 167.36,-123.63 195.49,-112.79"/>
+<polygon fill="black" stroke="black" points="197.1,-115.92 205.18,-109.07 194.59,-109.39 197.1,-115.92"/>
+</g>
+<!-- Hire&#45;&gt;Produce -->
+<g id="edge5" class="edge">
+<title>Hire&#45;&gt;Produce</title>
+<path fill="none" stroke="black" d="M249.5,-145.83C249.5,-137.89 249.5,-128.41 249.5,-119.63"/>
+<polygon fill="black" stroke="black" points="253,-119.42 249.5,-109.42 246,-119.42 253,-119.42"/>
+</g>
+<!-- Fire&#45;&gt;Produce -->
+<g id="edge6" class="edge">
+<title>Fire&#45;&gt;Produce</title>
+<path fill="none" stroke="black" d="M431.49,-145.92C396.67,-135.61 352.94,-122.65 317.08,-112.02"/>
+<polygon fill="black" stroke="black" points="317.77,-108.58 307.18,-109.09 315.78,-115.29 317.77,-108.58"/>
+</g>
+<!-- End -->
+<g id="node7" class="node">
+<title>End</title>
+<polygon fill="#f9f9f9" stroke="black" points="315.5,-36 183.5,-36 183.5,0 315.5,0 315.5,-36"/>
+<text text-anchor="middle" x="249.5" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">Inventario Final = 0</text>
+</g>
+<!-- Produce&#45;&gt;End -->
+<g id="edge8" class="edge">
+<title>Produce&#45;&gt;End</title>
+<path fill="none" stroke="black" d="M249.5,-72.81C249.5,-64.79 249.5,-55.05 249.5,-46.07"/>
+<polygon fill="black" stroke="black" points="253,-46.03 249.5,-36.03 246,-46.03 253,-46.03"/>
+</g>
+</g>
+</svg>
+
+            </div>
+            <p style="font-size:0.8em; color:#999; text-align:center; margin-top:-20px; margin-bottom:30px;">
+                <em>Figura: Diagrama generado automáticamente mediante Graphviz</em>
+            </p>
+
+            <h3>Intuición</h3>
+            <div><p>Imagina que eres el dueño de una heladería en una ciudad turística. En verano, la cola de clientes da la vuelta a la manzana; en invierno, apenas entra una persona por hora. Si mantienes el mismo número de camareros todo el año, en invierno perderás dinero pagando sueldos por gente que está cruzada de brazos, y en verano perderás ventas porque el servicio será lento. La estrategia de persecución es el sentido común aplicado a escala industrial: contratas refuerzos justo antes de que llegue el calor y reduces la plantilla cuando empieza a refrescar. El concepto clave es la 'elasticidad operativa'. En lugar de intentar convencer al cliente de que compre helados en invierno (gestión de demanda), tú cambias tu estructura interna para que siempre 'encaje' perfectamente con el tamaño del mercado actual. Es como una sombra que sigue fielmente los movimientos del cuerpo; la sombra (producción) no intenta liderar, solo reacciona con precisión al cuerpo (demanda).</p></div>
+
+            <h3>Aplicación</h3>
+            <div><p>En el entorno profesional de un Director de Operaciones (COO), esta estrategia es vital en centros logísticos de e-commerce durante eventos como el 'Black Friday' o el 'Cyber Monday'. Gigantes como Amazon o DHL utilizan modelos de persecución contratando a miles de empleados temporales para cubrir el pico de noviembre y diciembre. Otro caso de uso real es la industria de la consultoría tecnológica (outsourcing), donde las plantillas de los proyectos se dimensionan estrictamente según los hitos aprobados por el cliente. Si un contrato termina, la empresa de servicios debe reasignar o prescindir de esos consultores para no incurrir en 'bench' (tiempo improductivo), que es el equivalente al inventario ocioso en manufactura. El director de operaciones debe equilibrar el ahorro de costes con el riesgo de perder talento crítico que podría ser difícil de re-contratar cuando la demanda vuelva a subir.</p></div>
+        </article>
+        
+        <article class="subtema">
+            <h2>Flexibilidad Horaria: Horas Extra y Tiempo Ocioso</h2>
+
+            <h3>Historia</h3>
+            <div><p>A medida que las legislaciones laborales se volvieron más rígidas en Europa y Asia durante la segunda mitad del siglo XX, el despido y la contratación frecuente se volvieron costosos y complejos. Esto dio lugar a la evolución de la planificación agregada hacia métodos que mantienen una fuerza laboral estable pero flexible en su output. Durante la crisis del petróleo de 1973, muchas empresas descubrieron que era más rentable mantener a los trabajadores expertos y variar sus horas que perder capital humano. En el mundo digital, esta flexibilidad se ha transformado en el concepto de 'disponibilidad bajo demanda' y el uso de turnos rotativos dinámicos, permitidos por herramientas de software que gestionan la jornada laboral de forma algorítmica.</p></div>
+
+            <h3>Descripción Formal</h3>
+            <div><p>Esta variante de la estrategia de persecución mantiene constante el número de empleados (headcount) pero varía la utilización de los mismos. El ajuste se realiza mediante: 
+1. Horas Extraordinarias (Overtime): Se solicita a los empleados trabajar más allá de su jornada estándar para aumentar la capacidad ante picos de demanda. El coste es superior al de la hora ordinaria (típicamente 1.5x).
+2. Tiempo Ocioso o Reducción de Jornada (Undertime): Cuando la demanda es baja, la empresa absorbe el coste del salario sin que haya producción equivalente, o utiliza ese tiempo para formación, mantenimiento o proyectos internos.</p>
+<p>Ejemplo técnico: Si una planta produce 1,000 unidades/mes con 10 empleados en jornada normal, y la demanda sube a 1,200 unidades, el Director de Operaciones puede autorizar un 20% de horas extra en lugar de contratar a 2 personas más. 
+Limitaciones: Existe un límite físico y legal para las horas extra (riesgo de fatiga, errores y accidentes). Además, si el tiempo ocioso es recurrente, el coste fijo de la mano de obra destruye el margen de beneficio. Es una estrategia de corto plazo para suavizar fluctuaciones menores dentro de una tendencia de persecución general.</p></div>
+
+            <div class="diagrama-box">
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg style="max-width: 80%; max-height: 350px; height: auto; width: auto;" data-width="975pt" data-height="102pt"
+ viewBox="0.00 0.00 975.43 102.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 98)">
+<title>G</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-98 971.43,-98 971.43,4 -4,4"/>
+<!-- Demand -->
+<g id="node1" class="node">
+<title>Demand</title>
+<polygon fill="#f9f9f9" stroke="black" points="130.5,-92 2.5,-92 2.5,-56 130.5,-56 130.5,-92"/>
+<text text-anchor="middle" x="66.5" y="-70.3" font-family="Helvetica,sans-Serif" font-size="14.00">Demanda Variable</text>
+</g>
+<!-- Check -->
+<g id="node3" class="node">
+<title>Check</title>
+<polygon fill="#f9f9f9" stroke="black" points="372.21,-65 169.79,-47 372.21,-29 574.64,-47 372.21,-65"/>
+<text text-anchor="middle" x="372.21" y="-43.3" font-family="Helvetica,sans-Serif" font-size="14.00">¿Demanda &gt; Capacidad Normal?</text>
+</g>
+<!-- Demand&#45;&gt;Check -->
+<g id="edge1" class="edge">
+<title>Demand&#45;&gt;Check</title>
+<path fill="none" stroke="black" d="M130.8,-68.37C168.22,-65.05 216.66,-60.74 260.25,-56.86"/>
+<polygon fill="black" stroke="black" points="260.69,-60.34 270.34,-55.97 260.07,-53.37 260.69,-60.34"/>
+</g>
+<!-- Staff -->
+<g id="node2" class="node">
+<title>Staff</title>
+<polygon fill="#f9f9f9" stroke="black" points="133,-38 0,-38 0,-2 133,-2 133,-38"/>
+<text text-anchor="middle" x="66.5" y="-16.3" font-family="Helvetica,sans-Serif" font-size="14.00">Fuerza Laboral Fija</text>
+</g>
+<!-- Staff&#45;&gt;Check -->
+<g id="edge2" class="edge">
+<title>Staff&#45;&gt;Check</title>
+<path fill="none" stroke="black" d="M133.03,-25.83C170.08,-29.12 217.4,-33.33 260.08,-37.12"/>
+<polygon fill="black" stroke="black" points="259.98,-40.62 270.25,-38.02 260.6,-33.65 259.98,-40.62"/>
+</g>
+<!-- OT -->
+<g id="node4" class="node">
+<title>OT</title>
+<polygon fill="#f9f9f9" stroke="black" points="793.93,-94 645.93,-94 645.93,-56 793.93,-56 793.93,-94"/>
+<text text-anchor="middle" x="719.93" y="-78.8" font-family="Helvetica,sans-Serif" font-size="14.00">Horas Extraordinarias</text>
+<text text-anchor="middle" x="719.93" y="-63.8" font-family="Helvetica,sans-Serif" font-size="14.00">(Mayor coste unitario)</text>
+</g>
+<!-- Check&#45;&gt;OT -->
+<g id="edge3" class="edge">
+<title>Check&#45;&gt;OT</title>
+<path fill="none" stroke="black" d="M478.82,-55.55C529.14,-59.63 588.47,-64.43 635.56,-68.25"/>
+<polygon fill="black" stroke="black" points="635.47,-71.75 645.72,-69.07 636.03,-64.77 635.47,-71.75"/>
+<text text-anchor="middle" x="600.93" y="-68.8" font-family="Times,serif" font-size="14.00">Sí</text>
+</g>
+<!-- Idle -->
+<g id="node5" class="node">
+<title>Idle</title>
+<polygon fill="#f9f9f9" stroke="black" points="812.43,-38 627.43,-38 627.43,0 812.43,0 812.43,-38"/>
+<text text-anchor="middle" x="719.93" y="-22.8" font-family="Helvetica,sans-Serif" font-size="14.00">Tiempo Ocioso / Formación</text>
+<text text-anchor="middle" x="719.93" y="-7.8" font-family="Helvetica,sans-Serif" font-size="14.00">(Coste de oportunidad)</text>
+</g>
+<!-- Check&#45;&gt;Idle -->
+<g id="edge4" class="edge">
+<title>Check&#45;&gt;Idle</title>
+<path fill="none" stroke="black" d="M478.82,-38.45C522.85,-34.88 573.77,-30.76 617.36,-27.23"/>
+<polygon fill="black" stroke="black" points="617.73,-30.71 627.41,-26.41 617.16,-23.73 617.73,-30.71"/>
+<text text-anchor="middle" x="600.93" y="-31.8" font-family="Times,serif" font-size="14.00">No</text>
+</g>
+<!-- Output -->
+<g id="node6" class="node">
+<title>Output</title>
+<polygon fill="#f9f9f9" stroke="black" points="967.43,-64 849.43,-64 849.43,-28 967.43,-28 967.43,-64"/>
+<text text-anchor="middle" x="908.43" y="-42.3" font-family="Helvetica,sans-Serif" font-size="14.00">Ajuste de Output</text>
+</g>
+<!-- OT&#45;&gt;Output -->
+<g id="edge5" class="edge">
+<title>OT&#45;&gt;Output</title>
+<path fill="none" stroke="black" d="M794.1,-63.62C808.95,-61.31 824.5,-58.9 839.16,-56.62"/>
+<polygon fill="black" stroke="black" points="839.81,-60.06 849.15,-55.06 838.73,-53.14 839.81,-60.06"/>
+</g>
+<!-- Idle&#45;&gt;Output -->
+<g id="edge6" class="edge">
+<title>Idle&#45;&gt;Output</title>
+<path fill="none" stroke="black" d="M812.54,-32.26C821.54,-33.57 830.57,-34.87 839.28,-36.13"/>
+<polygon fill="black" stroke="black" points="838.94,-39.62 849.34,-37.59 839.94,-32.69 838.94,-39.62"/>
+</g>
+</g>
+</svg>
+
+            </div>
+            <p style="font-size:0.8em; color:#999; text-align:center; margin-top:-20px; margin-bottom:30px;">
+                <em>Figura: Diagrama generado automáticamente mediante Graphviz</em>
+            </p>
+
+            <h3>Intuición</h3>
+            <div><p>Imagina un acordeón. El instrumento tiene un tamaño base, pero puede estirarse para dejar entrar aire o comprimirse para soltarlo. Los trabajadores son el acordeón. En lugar de comprar más instrumentos cuando la música requiere más volumen (contratar), simplemente estiras el que ya tienes (horas extra). Cuando la música es suave, lo comprimes (tiempo ocioso). ¿Por qué hacer esto? Porque tus trabajadores ya conocen el oficio, confías en ellos y están integrados en tu cultura. Es mucho más rápido pedirle a alguien que se quede dos horas más que buscar a un desconocido en LinkedIn, entrevistarlo y enseñarle dónde están las herramientas. Sin embargo, si estiras demasiado el acordeón, las cuerdas se rompen; si lo mantienes cerrado mucho tiempo, se llena de polvo.</p></div>
+
+            <h3>Aplicación</h3>
+            <div><p>Un Director de Operaciones en una agencia de marketing digital aplica esto constantemente durante las campañas de lanzamiento de productos de sus clientes. No contrata nuevos diseñadores para una campaña de una semana; en su lugar, el equipo trabaja horas extra para cumplir con los plazos (deadlines). Inversamente, en periodos valle como agosto, se fomenta el tiempo ocioso productivo: los empleados dedican tiempo a investigar nuevas herramientas de IA o a mejorar procesos internos. También es común en servicios de atención al cliente (Call Centers), donde se utilizan 'turnos partidos' o bolsas de horas para cubrir las franjas horarias de mayor tráfico de llamadas sin necesidad de ampliar la plantilla total.</p></div>
+        </article>
+        
+        <article class="subtema">
+            <h2>Externalización y Subcontratación (Outsourcing)</h2>
+
+            <h3>Historia</h3>
+            <div><p>La subcontratación como herramienta de planificación agregada explotó en la década de los 90 con la globalización de las cadenas de suministro. Con la llegada de Internet, la capacidad de transferir procesos de negocio a terceros (BPO - Business Process Outsourcing) se convirtió en una norma estratégica. Lo que antes era una táctica para piezas menores de manufactura, pasó a ser una estrategia de 'Asset Light' para empresas de negocios digitales. Hoy, el concepto ha evolucionado hacia la 'Gig Economy' y el 'Cloud Sourcing', donde la capacidad de procesamiento de datos o la mano de obra se alquila en tiempo real a proveedores externos como Amazon Web Services o plataformas de freelancing global.</p></div>
+
+            <h3>Descripción Formal</h3>
+            <div><p>En la estrategia de persecución por subcontratación, la empresa mantiene una capacidad interna nivelada (mínima o media) y delega el exceso de demanda a proveedores externos. El coste de subcontratación suele ser más alto por unidad que el coste de producción propia, pero se ahorra la inversión en activos fijos (maquinaria, oficinas) y los riesgos asociados a la contratación laboral directa. </p>
+<p>Aspectos críticos:
+1. Calidad: Es más difícil controlar los estándares de un tercero.
+2. Plazos: La empresa depende de la programación de producción de su proveedor.
+3. Pérdida de Know-How: Si se subcontrata el core business, la empresa pierde ventaja competitiva a largo plazo.</p>
+<p>Fórmula de decisión: Se subcontrata si el Coste de Subcontratación &lt; (Coste de Producción Interna + Coste de Almacenamiento + Coste de Penalización por Retraso). En Digital Business, esto se traduce en usar APIs de terceros o servicios en la nube para gestionar picos de tráfico web en lugar de comprar servidores propios.</p></div>
+
+            <div class="diagrama-box">
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg style="max-width: 80%; max-height: 350px; height: auto; width: auto;" data-width="370pt" data-height="385pt"
+ viewBox="0.00 0.00 370.00 385.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 381)">
+<title>G</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-381 366,-381 366,4 -4,4"/>
+<!-- Req -->
+<g id="node1" class="node">
+<title>Req</title>
+<polygon fill="#f9f9f9" stroke="black" points="261.5,-377 34.5,-377 34.5,-341 261.5,-341 261.5,-377"/>
+<text text-anchor="middle" x="148" y="-355.3" font-family="Helvetica,sans-Serif" font-size="14.00">Requerimiento de Capacidad Extra</text>
+</g>
+<!-- Core -->
+<g id="node2" class="node">
+<title>Core</title>
+<polygon fill="#f9f9f9" stroke="black" points="148,-304 21.31,-286 148,-268 274.69,-286 148,-304"/>
+<text text-anchor="middle" x="148" y="-282.3" font-family="Helvetica,sans-Serif" font-size="14.00">¿Es actividad Core?</text>
+</g>
+<!-- Req&#45;&gt;Core -->
+<g id="edge1" class="edge">
+<title>Req&#45;&gt;Core</title>
+<path fill="none" stroke="black" d="M148,-340.81C148,-332.79 148,-323.05 148,-314.07"/>
+<polygon fill="black" stroke="black" points="151.5,-314.03 148,-304.03 144.5,-314.03 151.5,-314.03"/>
+</g>
+<!-- Internal -->
+<g id="node3" class="node">
+<title>Internal</title>
+<polygon fill="#f9f9f9" stroke="black" points="238,-163 0,-163 0,-127 238,-127 238,-163"/>
+<text text-anchor="middle" x="119" y="-141.3" font-family="Helvetica,sans-Serif" font-size="14.00">Expandir Internamente (Horas Extra)</text>
+</g>
+<!-- Core&#45;&gt;Internal -->
+<g id="edge2" class="edge">
+<title>Core&#45;&gt;Internal</title>
+<path fill="none" stroke="black" d="M144.5,-268.23C139.59,-244.67 130.58,-201.49 124.69,-173.27"/>
+<polygon fill="black" stroke="black" points="128.07,-172.34 122.6,-163.26 121.22,-173.77 128.07,-172.34"/>
+<text text-anchor="middle" x="147" y="-238.8" font-family="Times,serif" font-size="14.00">Sí</text>
+</g>
+<!-- Outsource -->
+<g id="node4" class="node">
+<title>Outsource</title>
+<polygon fill="#f9f9f9" stroke="black" points="326.5,-217 165.5,-217 165.5,-181 326.5,-181 326.5,-217"/>
+<text text-anchor="middle" x="246" y="-195.3" font-family="Helvetica,sans-Serif" font-size="14.00">Subcontratar a Terceros</text>
+</g>
+<!-- Core&#45;&gt;Outsource -->
+<g id="edge3" class="edge">
+<title>Core&#45;&gt;Outsource</title>
+<path fill="none" stroke="black" d="M165.07,-270.19C179.68,-257.52 201,-239.03 218.09,-224.21"/>
+<polygon fill="black" stroke="black" points="220.83,-226.47 226.09,-217.27 216.24,-221.18 220.83,-226.47"/>
+<text text-anchor="middle" x="211.5" y="-238.8" font-family="Times,serif" font-size="14.00">No</text>
+</g>
+<!-- Deliver -->
+<g id="node6" class="node">
+<title>Deliver</title>
+<polygon fill="#f9f9f9" stroke="black" points="192,-36 68,-36 68,0 192,0 192,-36"/>
+<text text-anchor="middle" x="130" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">Entrega al Cliente</text>
+</g>
+<!-- Internal&#45;&gt;Deliver -->
+<g id="edge5" class="edge">
+<title>Internal&#45;&gt;Deliver</title>
+<path fill="none" stroke="black" d="M120.51,-126.88C122.33,-106.15 125.43,-70.95 127.59,-46.42"/>
+<polygon fill="black" stroke="black" points="131.09,-46.58 128.48,-36.31 124.11,-45.97 131.09,-46.58"/>
+</g>
+<!-- Quality -->
+<g id="node5" class="node">
+<title>Quality</title>
+<polygon fill="#f9f9f9" stroke="black" points="362,-109 146,-109 146,-73 362,-73 362,-109"/>
+<text text-anchor="middle" x="254" y="-87.3" font-family="Helvetica,sans-Serif" font-size="14.00">Control de Calidad del Proveedor</text>
+</g>
+<!-- Outsource&#45;&gt;Quality -->
+<g id="edge4" class="edge">
+<title>Outsource&#45;&gt;Quality</title>
+<path fill="none" stroke="black" d="M247.29,-180.97C248.54,-164.38 250.46,-138.88 251.93,-119.43"/>
+<polygon fill="black" stroke="black" points="255.43,-119.58 252.69,-109.34 248.45,-119.05 255.43,-119.58"/>
+</g>
+<!-- Quality&#45;&gt;Deliver -->
+<g id="edge6" class="edge">
+<title>Quality&#45;&gt;Deliver</title>
+<path fill="none" stroke="black" d="M224.3,-72.99C207.7,-63.49 186.82,-51.54 168.93,-41.29"/>
+<polygon fill="black" stroke="black" points="170.31,-38.05 159.89,-36.11 166.83,-44.12 170.31,-38.05"/>
+</g>
+</g>
+</svg>
+
+            </div>
+            <p style="font-size:0.8em; color:#999; text-align:center; margin-top:-20px; margin-bottom:30px;">
+                <em>Figura: Diagrama generado automáticamente mediante Graphviz</em>
+            </p>
+
+            <h3>Intuición</h3>
+            <div><p>Es como organizar una gran cena en casa. Tienes tus propios platos y cubiertos para 4 personas (tu capacidad fija). Si un día invitas a 20 personas, tienes dos opciones: comprar 16 platos nuevos que luego guardarán polvo en el armario (contratar/invertir), o llamar a un catering que traiga todo lo necesario y se lo lleve al terminar (subcontratar). El catering es más caro por plato que lavar los tuyos propios, pero te ahorra el espacio de almacenamiento y la inversión inicial. En los negocios digitales, la subcontratación es el botón de 'turbo': te permite crecer instantáneamente para aprovechar una oportunidad de mercado sin engordar tu estructura permanente.</p></div>
+
+            <h3>Aplicación</h3>
+            <div><p>Un Director de Operaciones en una startup de entrega de comida a domicilio utiliza la subcontratación de forma intensiva. En lugar de tener una flota propia de repartidores con contrato fijo, utilizan colaboradores externos que se activan según la demanda del momento (modelo de plataforma). Otro ejemplo claro es el desarrollo de software: una empresa puede tener su equipo interno de arquitectura (core), pero subcontrata el testing o la entrada de datos a empresas en otros husos horarios para aprovechar las 24 horas del día. Esto permite que la empresa sea extremadamente ágil, escalando su capacidad de procesamiento de pedidos o desarrollo de código hacia arriba o hacia abajo casi en tiempo real.</p></div>
+        </article>
+        </body></html>

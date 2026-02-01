@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>10 - Gestión de Inventarios - Modelo de cantidad económica de pedido (EOQ)</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #f4f4f9; color: #333; margin: 0; padding: 20px; line-height: 1.6; position: relative; }
+        header { background: #2c3e50; color: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; text-align:center; }
+        h1 { margin: 0; font-size: 1.5rem; }
+
+        /* Estilo del botón Atrás */
+        .btn-atras {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #7f8c8d;
+            color: white;
+            padding: 8px 15px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            transition: background 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+        .btn-atras:hover { background: #95a5a6; }
+
+        .subtema {
+            background: white;
+            padding: 40px;
+            margin-bottom: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        h2 { color: #2980b9; border-bottom: 2px solid #eee; padding-bottom: 10px; margin-top: 0; }
+        h3 { color: #7f8c8d; font-size: 0.9em; text-transform: uppercase; margin-top: 30px; letter-spacing: 1px; border-left: 3px solid #d4af37; padding-left: 10px; }
+
+        .diagrama-box {
+            text-align: center;
+            margin: 30px 0;
+            padding: 20px;
+            background: #fafafa;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 150px;
+        }
+
+        p { margin-bottom: 1rem; }
+        strong { color: #2c3e50; font-weight: 600; }
+        code { background: #f0f0f0; padding: 2px 5px; border-radius: 3px; font-family: monospace; color: #c0392b; }
+        ul { padding-left: 20px; }
+        li { margin-bottom: 0.5rem; }
+    </style>
+</head>
+<body>
+    <button onclick="window.history.back()" class="btn-atras">Atrás</button>
+    <header><h1>10 - Gestión de Inventarios - Modelo de cantidad económica de pedido (EOQ)</h1></header>
+    <main>
+
+        <article class="subtema">
+            <h2>Fundamentos del Modelo EOQ Clásico (Fórmula de Harris-Wilson)</h2>
+
+            <h3>Historia</h3>
+            <div><p>El modelo de Cantidad Económica de Pedido (EOQ) tiene sus raíces a principios del siglo XX, marcando el nacimiento de la gestión científica de inventarios. Fue desarrollado originalmente por Ford Whitman Harris en 1913, un ingeniero de Westinghouse Electric Corporation, aunque a menudo se asocia con R.H. Wilson, quien lo aplicó extensamente en consultoría años después. En el contexto de la Segunda Revolución Industrial, las empresas pasaban de una producción artesanal a una producción en masa, enfrentándose al dilema de cuánto material almacenar sin asfixiar la caja. Antes de Harris, las decisiones de compra eran puramente intuitivas. Su trabajo introdujo el cálculo diferencial para optimizar el equilibrio entre los costes de pedido y los costes de mantenimiento. Para un estudiante de Digital Business, entender el EOQ es fundamental porque representa la primera vez que los datos y las matemáticas se utilizaron para resolver un problema logístico, sentando las bases de los algoritmos de optimización actuales en e-commerce.</p></div>
+
+            <h3>Descripción Formal</h3>
+            <div><p>El modelo EOQ busca determinar la cantidad de pedido que minimiza el coste total de inventario. Los costes totales se componen de dos variables contrapuestas: el coste de emisión de pedidos (S) y el coste de posesión o mantenimiento (H). La fórmula matemática es Q* = sqrt((2 * D * S) / H), donde D es la demanda anual, S es el coste fijo por pedido y H es el coste de mantener una unidad en inventario por año. El modelo asume que la demanda es constante, el tiempo de entrega es conocido y no hay descuentos por volumen.</p>
+<p>Ejemplo Técnico: Una tienda online de gadgets (Digital Business) vende 12.000 unidades anuales de un smartwatch específico. El coste de realizar cada pedido al proveedor en China (gestión administrativa, aduanas, transporte fijo) es de 100€ (S). El coste de almacenar cada smartwatch en su almacén logístico (coste de oportunidad del capital + alquiler + seguro) es de 5€ por unidad al año (H). 
+Cálculo: Q* = sqrt((2 * 12.000 * 100) / 5) = sqrt(2.400.000 / 5) = sqrt(480.000) ≈ 693 unidades. </p>
+<p>Esto significa que, para ser eficiente, el director de operaciones debe realizar pedidos de aproximadamente 693 unidades. Si pide más, el coste de almacenamiento sube excesivamente; si pide menos, el coste de realizar pedidos frecuentes penaliza la rentabilidad. Este equilibrio es el 'punto dulce' de la eficiencia operativa.</p></div>
+
+            <div class="diagrama-box">
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg style="max-width: 80%; max-height: 350px; height: auto; width: auto;" data-width="506pt" data-height="188pt"
+ viewBox="0.00 0.00 506.00 188.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 184)">
+<title>G</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-184 502,-184 502,4 -4,4"/>
+<!-- CostePedido -->
+<g id="node1" class="node">
+<title>CostePedido</title>
+<polygon fill="#f9f9f9" stroke="black" points="138,-180 0,-180 0,-144 138,-144 138,-180"/>
+<text text-anchor="middle" x="69" y="-158.3" font-family="Helvetica,sans-Serif" font-size="14.00">Coste de Pedido (S)</text>
+</g>
+<!-- Formula -->
+<g id="node4" class="node">
+<title>Formula</title>
+<ellipse fill="#e1f5fe" stroke="black" cx="250" cy="-90" rx="90.98" ry="18"/>
+<text text-anchor="middle" x="250" y="-86.3" font-family="Helvetica,sans-Serif" font-size="14.00">Q* = sqrt((2*D*S)/H)</text>
+</g>
+<!-- CostePedido&#45;&gt;Formula -->
+<g id="edge1" class="edge">
+<title>CostePedido&#45;&gt;Formula</title>
+<path fill="none" stroke="black" d="M113.28,-143.88C139.87,-133.59 173.73,-120.5 201.1,-109.91"/>
+<polygon fill="black" stroke="black" points="202.43,-113.15 210.49,-106.28 199.9,-106.62 202.43,-113.15"/>
+</g>
+<!-- CosteMantenimiento -->
+<g id="node2" class="node">
+<title>CosteMantenimiento</title>
+<polygon fill="#f9f9f9" stroke="black" points="343.5,-180 156.5,-180 156.5,-144 343.5,-144 343.5,-180"/>
+<text text-anchor="middle" x="250" y="-158.3" font-family="Helvetica,sans-Serif" font-size="14.00">Coste de Mantenimiento (H)</text>
+</g>
+<!-- CosteMantenimiento&#45;&gt;Formula -->
+<g id="edge2" class="edge">
+<title>CosteMantenimiento&#45;&gt;Formula</title>
+<path fill="none" stroke="black" d="M250,-143.7C250,-135.98 250,-126.71 250,-118.11"/>
+<polygon fill="black" stroke="black" points="253.5,-118.1 250,-108.1 246.5,-118.1 253.5,-118.1"/>
+</g>
+<!-- Demanda -->
+<g id="node3" class="node">
+<title>Demanda</title>
+<polygon fill="#f9f9f9" stroke="black" points="498,-180 362,-180 362,-144 498,-144 498,-180"/>
+<text text-anchor="middle" x="430" y="-158.3" font-family="Helvetica,sans-Serif" font-size="14.00">Demanda Anual (D)</text>
+</g>
+<!-- Demanda&#45;&gt;Formula -->
+<g id="edge3" class="edge">
+<title>Demanda&#45;&gt;Formula</title>
+<path fill="none" stroke="black" d="M385.97,-143.88C359.53,-133.59 325.85,-120.5 298.63,-109.91"/>
+<polygon fill="black" stroke="black" points="299.88,-106.64 289.29,-106.28 297.34,-113.17 299.88,-106.64"/>
+</g>
+<!-- Resultado -->
+<g id="node5" class="node">
+<title>Resultado</title>
+<polygon fill="#f9f9f9" stroke="black" points="342,-36 158,-36 158,0 342,0 342,-36"/>
+<text text-anchor="middle" x="250" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">Cantidad Óptima de Pedido</text>
+</g>
+<!-- Formula&#45;&gt;Resultado -->
+<g id="edge4" class="edge">
+<title>Formula&#45;&gt;Resultado</title>
+<path fill="none" stroke="black" d="M250,-71.7C250,-63.98 250,-54.71 250,-46.11"/>
+<polygon fill="black" stroke="black" points="253.5,-46.1 250,-36.1 246.5,-46.1 253.5,-46.1"/>
+</g>
+</g>
+</svg>
+
+            </div>
+            <p style="font-size:0.8em; color:#999; text-align:center; margin-top:-20px; margin-bottom:30px;">
+                <em>Figura: Diagrama generado automáticamente mediante Graphviz</em>
+            </p>
+
+            <h3>Intuición</h3>
+            <div><p>Imagina que eres un estudiante que consume mucha leche. Tienes dos opciones extremas: ir al supermercado cada vez que quieras un vaso (el coste de transporte y tiempo sería altísimo, aunque nunca se te estropearía la leche) o comprar 100 cartones de una vez (irías una sola vez al súper, pero necesitarías una nevera gigante y cara, y parte de la leche podría caducar). El EOQ es la herramienta que te dice exactamente cuántos cartones comprar para que la suma de 'gastos de gasolina al súper' y 'gastos de electricidad/espacio de la nevera' sea la mínima posible. En el mundo de los negocios digitales, donde el flujo de caja es rey, el EOQ evita que 'mueras de éxito' por tener todo tu dinero atrapado en estanterías de un almacén o que pierdas márgenes por pagar demasiados envíos logísticos.</p></div>
+
+            <h3>Aplicación</h3>
+            <div><p>Un Director de Operaciones en una startup de e-commerce utiliza el EOQ para parametrizar su software de ERP o SGA (Sistema de Gestión de Almacenes). En el entorno profesional, este modelo se aplica para: 1. Automatizar la reposición de stock en plataformas como Shopify o Magento mediante plugins de gestión de inventario. 2. Optimizar el capital circulante (Working Capital), asegurando que el dinero de los inversores no esté inmovilizado innecesariamente. 3. Negociar con proveedores logísticos (3PL) al conocer exactamente cuántos pedidos se realizarán al año. En negocios SaaS que venden hardware (como datáfonos o routers), el EOQ ayuda a planificar las compras a fabricantes OEM en Asia, alineando la logística con las previsiones de ventas del equipo de marketing.</p></div>
+        </article>
+        
+        <article class="subtema">
+            <h2>Punto de Pedido (ROP) y Stock de Seguridad</h2>
+
+            <h3>Historia</h3>
+            <div><p>Históricamente, el EOQ resolvía el 'cuánto', pero dejaba sin respuesta el 'cuándo'. Con la expansión del comercio global tras la Segunda Guerra Mundial y la variabilidad en los tiempos de transporte marítimo, los directores de operaciones se dieron cuenta de que la demanda no es constante y los proveedores no siempre cumplen. En la década de 1950, se integraron conceptos estadísticos de probabilidad en la gestión de stocks. Surgió la necesidad de un 'colchón' para evitar el desabastecimiento (stockout), especialmente en industrias críticas. Con la llegada de la era digital y el 'Just-in-Time' popularizado por Toyota, el Punto de Pedido evolucionó de ser una marca física en un estante a ser un trigger algorítmico en tiempo real basado en el Big Data y la previsión de la demanda (Demand Forecasting).</p></div>
+
+            <h3>Descripción Formal</h3>
+            <div><p>El Punto de Pedido (Reorder Point - ROP) es el nivel de inventario en el cual se debe emitir una nueva orden de compra. Su fórmula básica es ROP = d * L, donde 'd' es la demanda media diaria y 'L' es el lead time o tiempo de entrega en días. Sin embargo, en entornos reales existe incertidumbre, por lo que se añade el Stock de Seguridad (SS). La fórmula completa es ROP = (d * L) + SS. El SS se calcula como Z * σL, donde Z es el valor de la distribución normal para un nivel de servicio deseado (ej. 95%) y σL es la desviación estándar de la demanda durante el lead time.</p>
+<p>Ejemplo Técnico: Una empresa de suscripción de café online vende 50 paquetes diarios (d). El proveedor tarda 10 días en entregar el pedido (L). Si no hubiera incertidumbre, el ROP sería 500 unidades. Pero si la empresa quiere un nivel de servicio del 95% (Z=1.645) y la variabilidad de la demanda es de 10 unidades diarias, el Stock de Seguridad sería aproximadamente 52 unidades (simplificando el cálculo de desviación). El ROP final sería 552. En el momento en que el sistema detecta que quedan 552 paquetes, lanza automáticamente el pedido de compra al proveedor.</p></div>
+
+            <div class="diagrama-box">
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg style="max-width: 80%; max-height: 350px; height: auto; width: auto;" data-width="304pt" data-height="204pt"
+ viewBox="0.00 0.00 304.00 204.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 200)">
+<title>G</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-200 300,-200 300,4 -4,4"/>
+<!-- StockActual -->
+<g id="node1" class="node">
+<title>StockActual</title>
+<polygon fill="#f9f9f9" stroke="black" points="256,-196 33,-196 33,-160 256,-160 256,-196"/>
+<text text-anchor="middle" x="144.5" y="-174.3" font-family="Helvetica,sans-Serif" font-size="14.00">Monitorización Stock Tiempo Real</text>
+</g>
+<!-- Decisión -->
+<g id="node2" class="node">
+<title>Decisión</title>
+<polygon fill="#fff9c4" stroke="black" points="144.5,-123 34.4,-105 144.5,-87 254.6,-105 144.5,-123"/>
+<text text-anchor="middle" x="144.5" y="-101.3" font-family="Helvetica,sans-Serif" font-size="14.00">¿Stock &lt;= ROP?</text>
+</g>
+<!-- StockActual&#45;&gt;Decisión -->
+<g id="edge1" class="edge">
+<title>StockActual&#45;&gt;Decisión</title>
+<path fill="none" stroke="black" d="M144.5,-159.81C144.5,-151.79 144.5,-142.05 144.5,-133.07"/>
+<polygon fill="black" stroke="black" points="148,-133.03 144.5,-123.03 141,-133.03 148,-133.03"/>
+</g>
+<!-- Pedido -->
+<g id="node3" class="node">
+<title>Pedido</title>
+<polygon fill="#c8e6c9" stroke="black" points="133,-36 0,-36 0,0 133,0 133,-36"/>
+<text text-anchor="middle" x="66.5" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">Lanzar Pedido (Q*)</text>
+</g>
+<!-- Decisión&#45;&gt;Pedido -->
+<g id="edge2" class="edge">
+<title>Decisión&#45;&gt;Pedido</title>
+<path fill="none" stroke="black" d="M130.91,-89.19C119.5,-76.75 102.93,-58.7 89.46,-44.02"/>
+<polygon fill="black" stroke="black" points="91.69,-41.27 82.35,-36.27 86.53,-46.01 91.69,-41.27"/>
+<text text-anchor="middle" x="117" y="-57.8" font-family="Times,serif" font-size="14.00">SÍ</text>
+</g>
+<!-- Esperar -->
+<g id="node4" class="node">
+<title>Esperar</title>
+<polygon fill="#f9f9f9" stroke="black" points="296,-36 151,-36 151,0 296,0 296,-36"/>
+<text text-anchor="middle" x="223.5" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">Seguir Monitorizando</text>
+</g>
+<!-- Decisión&#45;&gt;Esperar -->
+<g id="edge3" class="edge">
+<title>Decisión&#45;&gt;Esperar</title>
+<path fill="none" stroke="black" d="M158.26,-89.19C169.93,-76.64 186.91,-58.37 200.62,-43.62"/>
+<polygon fill="black" stroke="black" points="203.2,-45.98 207.45,-36.27 198.08,-41.21 203.2,-45.98"/>
+<text text-anchor="middle" x="198.5" y="-57.8" font-family="Times,serif" font-size="14.00">NO</text>
+</g>
+</g>
+</svg>
+
+            </div>
+            <p style="font-size:0.8em; color:#999; text-align:center; margin-top:-20px; margin-bottom:30px;">
+                <em>Figura: Diagrama generado automáticamente mediante Graphviz</em>
+            </p>
+
+            <h3>Intuición</h3>
+            <div><p>Imagina que estás conduciendo un coche. El Punto de Pedido es esa luz de reserva que se enciende en el salpicadero. No se enciende cuando el tanque está vacío, sino cuando queda lo suficiente para llegar a la próxima gasolinera. El 'Stock de Seguridad' es ese margen extra que dejas por si hay un atasco o por si la gasolinera que esperabas encontrar está cerrada. En Digital Business, el ROP es tu sistema de alerta temprana: te dice que si no pides ahora mismo, mañana no tendrás producto que enviar a tus clientes de Amazon Prime, lo que arruinaría tu posicionamiento y reputación.</p></div>
+
+            <h3>Aplicación</h3>
+            <div><p>El director de operaciones de un 'Quick Commerce' (como Glovo o Getir) aplica el ROP para gestionar micro-hubs urbanos. Dado que el espacio es limitado y el Lead Time es muy corto (pocas horas), los ROPs son extremadamente dinámicos y se ajustan mediante IA según el día de la semana o eventos (ej. un partido de fútbol). En la gestión profesional, esto evita: 1. Pérdida de ventas por falta de stock. 2. Penalizaciones en marketplaces por no cumplir tiempos de envío. 3. Obsolescencia de productos perecederos al no pedir antes de lo necesario.</p></div>
+        </article>
+        
+        <article class="subtema">
+            <h2>EOQ con Descuentos por Cantidad y Análisis de Sensibilidad</h2>
+
+            <h3>Historia</h3>
+            <div><p>En el mundo real, los proveedores rara vez mantienen un precio fijo; incentivan las compras grandes mediante economías de escala. El modelo EOQ original fue criticado por ser demasiado rígido para la negociación comercial. A medida que las cadenas de suministro se globalizaron en los años 80 y 90, los departamentos de compras y operaciones tuvieron que fusionar sus criterios. Las plataformas B2B de hoy (como Alibaba) ofrecen estructuras de precios por tramos (tier pricing). Esto obligó a evolucionar el EOQ hacia un modelo de Coste Total que incluye el valor del producto. En el ecosistema digital, donde los márgenes suelen ser ajustados debido a la alta comparabilidad de precios en Google Shopping, el análisis de sensibilidad y los descuentos por volumen son la clave para la supervivencia financiera.</p></div>
+
+            <h3>Descripción Formal</h3>
+            <div><p>El modelo de descuentos por cantidad requiere calcular el Coste Total (CT) para cada tramo de precio ofrecido por el proveedor. CT = (D * P) + (D/Q * S) + (Q/2 * H), donde P es el precio unitario. El proceso implica: 1. Calcular el Q<em> para el precio más bajo. Si es factible (está dentro del rango del descuento), esa es la cantidad óptima. 2. Si no es factible, calcular el CT para el Q</em> de cada tramo y para los puntos de ruptura (la cantidad mínima necesaria para obtener el descuento). </p>
+<p>Ejemplo Técnico: Un mayorista de componentes electrónicos ofrece: 
+- 1 a 499 unidades: 10€/ud.
+- 500 a 999 unidades: 9€/ud.
+- +1000 unidades: 8€/ud.
+El director de operaciones no solo debe mirar el ahorro de 1€ o 2€ por pieza, sino cuánto subirá el coste de almacenamiento al comprar 1000 unidades de golpe. El análisis de sensibilidad, por otro lado, estudia cómo cambia el Q* si, por ejemplo, los costes de energía suben y el coste de mantenimiento (H) aumenta un 20%. Si el modelo es 'robusto', pequeños cambios en las variables no deberían cambiar drásticamente la decisión de compra.</p></div>
+
+            <div class="diagrama-box">
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg style="max-width: 80%; max-height: 350px; height: auto; width: auto;" data-width="673pt" data-height="152pt"
+ viewBox="0.00 0.00 673.48 152.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 148)">
+<title>G</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-148 669.48,-148 669.48,4 -4,4"/>
+<!-- Tramo1 -->
+<g id="node1" class="node">
+<title>Tramo1</title>
+<polygon fill="#f9f9f9" stroke="black" points="141,-144 0,-144 0,-108 141,-108 141,-144"/>
+<text text-anchor="middle" x="70.5" y="-122.3" font-family="Helvetica,sans-Serif" font-size="14.00">Calcular CT Precio 1</text>
+</g>
+<!-- Comparar -->
+<g id="node4" class="node">
+<title>Comparar</title>
+<polygon fill="#fff9c4" stroke="black" points="327.74,-90 176.76,-72 327.74,-54 478.73,-72 327.74,-90"/>
+<text text-anchor="middle" x="327.74" y="-68.3" font-family="Helvetica,sans-Serif" font-size="14.00">¿Cuál es el CT mínimo?</text>
+</g>
+<!-- Tramo1&#45;&gt;Comparar -->
+<g id="edge1" class="edge">
+<title>Tramo1&#45;&gt;Comparar</title>
+<path fill="none" stroke="black" d="M141.25,-111.24C179.02,-103.25 225.38,-93.44 262.31,-85.63"/>
+<polygon fill="black" stroke="black" points="263.4,-88.98 272.46,-83.49 261.95,-82.13 263.4,-88.98"/>
+</g>
+<!-- Tramo2 -->
+<g id="node2" class="node">
+<title>Tramo2</title>
+<polygon fill="#f9f9f9" stroke="black" points="141,-90 0,-90 0,-54 141,-54 141,-90"/>
+<text text-anchor="middle" x="70.5" y="-68.3" font-family="Helvetica,sans-Serif" font-size="14.00">Calcular CT Precio 2</text>
+</g>
+<!-- Tramo2&#45;&gt;Comparar -->
+<g id="edge2" class="edge">
+<title>Tramo2&#45;&gt;Comparar</title>
+<path fill="none" stroke="black" d="M141.25,-72C149.31,-72 157.76,-72 166.43,-72"/>
+<polygon fill="black" stroke="black" points="166.7,-75.5 176.7,-72 166.7,-68.5 166.7,-75.5"/>
+</g>
+<!-- Tramo3 -->
+<g id="node3" class="node">
+<title>Tramo3</title>
+<polygon fill="#f9f9f9" stroke="black" points="141,-36 0,-36 0,0 141,0 141,-36"/>
+<text text-anchor="middle" x="70.5" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">Calcular CT Precio 3</text>
+</g>
+<!-- Tramo3&#45;&gt;Comparar -->
+<g id="edge3" class="edge">
+<title>Tramo3&#45;&gt;Comparar</title>
+<path fill="none" stroke="black" d="M141.25,-32.76C179.02,-40.75 225.38,-50.56 262.31,-58.37"/>
+<polygon fill="black" stroke="black" points="261.95,-61.87 272.46,-60.51 263.4,-55.02 261.95,-61.87"/>
+</g>
+<!-- Elegir -->
+<g id="node5" class="node">
+<title>Elegir</title>
+<polygon fill="#f9f9f9" stroke="black" points="665.48,-90 514.48,-90 514.48,-54 665.48,-54 665.48,-90"/>
+<text text-anchor="middle" x="589.98" y="-68.3" font-family="Helvetica,sans-Serif" font-size="14.00">Seleccionar Q Óptimo</text>
+</g>
+<!-- Comparar&#45;&gt;Elegir -->
+<g id="edge4" class="edge">
+<title>Comparar&#45;&gt;Elegir</title>
+<path fill="none" stroke="black" d="M478.62,-72C487.37,-72 496.01,-72 504.35,-72"/>
+<polygon fill="black" stroke="black" points="504.38,-75.5 514.38,-72 504.38,-68.5 504.38,-75.5"/>
+</g>
+</g>
+</svg>
+
+            </div>
+            <p style="font-size:0.8em; color:#999; text-align:center; margin-top:-20px; margin-bottom:30px;">
+                <em>Figura: Diagrama generado automáticamente mediante Graphviz</em>
+            </p>
+
+            <h3>Intuición</h3>
+            <div><p>Es la clásica oferta del supermercado: 'La segunda unidad al 50%'. ¿Realmente necesitas dos champús? Si tienes espacio en el baño y vas a usarlo, el ahorro compensa. Pero si vives en un micro-piso y el segundo bote te estorba o el dinero te hace falta para pagar el alquiler de este mes, la oferta no es tan buena. En una empresa digital, el descuento por volumen es una tentación que puede 'matar' tu flujo de caja. El EOQ con descuentos es el juez imparcial que te dice si el ahorro en el precio de compra es mayor que el castigo de tener un almacén lleno de productos que tardarán meses en venderse.</p></div>
+
+            <h3>Aplicación</h3>
+            <div><p>Un Director de Operaciones en un entorno profesional usa este análisis para negociaciones estratégicas de compras (Sourcing). Es vital para: 1. Decidir campañas de 'Stock-up' antes de temporadas altas como el Black Friday. 2. Evaluar proveedores: ¿Es mejor un proveedor local caro pero que permite pedidos pequeños (EOQ bajo) o uno asiático barato que exige grandes volúmenes (EOQ alto)? 3. Gestión del riesgo: El análisis de sensibilidad permite saber qué tan expuesta está la rentabilidad de la empresa ante subidas en los tipos de interés (que afectan a H) o en el precio de los combustibles (que afectan a S).</p></div>
+        </article>
+        </body></html>

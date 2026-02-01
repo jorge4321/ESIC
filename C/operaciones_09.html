@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>9 - Previsión de la Demanda - Modelos de series temporales (Medias móviles, Alisado exponencial)..</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #f4f4f9; color: #333; margin: 0; padding: 20px; line-height: 1.6; position: relative; }
+        header { background: #2c3e50; color: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; text-align:center; }
+        h1 { margin: 0; font-size: 1.5rem; }
+
+        /* Estilo del botón Atrás */
+        .btn-atras {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #7f8c8d;
+            color: white;
+            padding: 8px 15px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            transition: background 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+        .btn-atras:hover { background: #95a5a6; }
+
+        .subtema {
+            background: white;
+            padding: 40px;
+            margin-bottom: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        h2 { color: #2980b9; border-bottom: 2px solid #eee; padding-bottom: 10px; margin-top: 0; }
+        h3 { color: #7f8c8d; font-size: 0.9em; text-transform: uppercase; margin-top: 30px; letter-spacing: 1px; border-left: 3px solid #d4af37; padding-left: 10px; }
+
+        .diagrama-box {
+            text-align: center;
+            margin: 30px 0;
+            padding: 20px;
+            background: #fafafa;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 150px;
+        }
+
+        p { margin-bottom: 1rem; }
+        strong { color: #2c3e50; font-weight: 600; }
+        code { background: #f0f0f0; padding: 2px 5px; border-radius: 3px; font-family: monospace; color: #c0392b; }
+        ul { padding-left: 20px; }
+        li { margin-bottom: 0.5rem; }
+    </style>
+</head>
+<body>
+    <button onclick="window.history.back()" class="btn-atras">Atrás</button>
+    <header><h1>9 - Previsión de la Demanda - Modelos de series temporales (Medias móviles, Alisado exponencial)..</h1></header>
+    <main>
+
+        <article class="subtema">
+            <h2>Media Móvil Simple (Simple Moving Average - SMA)</h2>
+
+            <h3>Historia</h3>
+            <div><p>La técnica de la media móvil tiene sus raíces en la estadística descriptiva del siglo XIX, pero su aplicación formal en la dirección de operaciones despegó tras la Segunda Guerra Mundial, durante la era del 'Scientific Management'. Con la expansión de la producción en masa, las empresas necesitaban un método sencillo para filtrar el 'ruido' o las fluctuaciones aleatorias de la demanda diaria y ver la tendencia subyacente. Antes de la llegada de la informática de alta velocidad, este método era el estándar de oro debido a su baja carga computacional. En la década de 1950, se convirtió en una herramienta fundamental para los planificadores de inventarios que buscaban estabilizar las líneas de producción frente a pedidos erráticos. A lo largo de las décadas, ha pasado de ser un cálculo manual en libros de contabilidad a ser la base de los algoritmos de suavizado en los sistemas ERP (Enterprise Resource Planning) modernos, manteniendo su relevancia por su transparencia y facilidad de interpretación para los directores que operan en entornos de demanda estable.</p></div>
+
+            <h3>Descripción Formal</h3>
+            <div><p>La Media Móvil Simple (SMA) es un método de pronóstico que calcula el promedio de los datos de un número específico de períodos recientes para predecir el siguiente período. Matemáticamente, se define como: F_{t+1} = (A_t + A_{t-1} + ... + A_{t-n+1}) / n, donde 'F' es el pronóstico, 'A' son las demandas reales pasadas y 'n' es el número de períodos incluidos en el promedio. El valor de 'n' es crítico: un 'n' pequeño hace que el pronóstico sea muy sensible a los cambios recientes (reactivo), mientras que un 'n' grande suaviza mucho las fluctuaciones (estable), pero tarda más en reaccionar a cambios reales en la tendencia. </p>
+<p>Ejemplo detallado: Supongamos una startup de Digital Business que vende suscripciones de software. Las ventas reales de los últimos 4 meses han sido: Enero=100, Febrero=120, Marzo=110, Abril=130. Si decidimos usar una SMA de 3 meses (n=3) para predecir Mayo: 
+1. Tomamos los últimos 3 datos: Febrero (120), Marzo (110) y Abril (130). 
+2. Sumamos: 120 + 110 + 130 = 360. 
+3. Dividimos por n=3: 360 / 3 = 120. 
+El pronóstico para Mayo es de 120 unidades. Si el dato real de Mayo resultara ser 150, para Junio calcularíamos la media de Marzo (110), Abril (130) y Mayo (150), resultando en 130. Este método asume que la demanda futura será similar al promedio del pasado reciente, ignorando tendencias fuertes o estacionalidades marcadas si el 'n' es demasiado elevado.</p></div>
+
+            <div class="diagrama-box">
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg style="max-width: 80%; max-height: 350px; height: auto; width: auto;" data-width="861pt" data-height="44pt"
+ viewBox="0.00 0.00 861.00 44.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 40)">
+<title>G</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-40 857,-40 857,4 -4,4"/>
+<!-- Historial -->
+<g id="node1" class="node">
+<title>Historial</title>
+<polygon fill="#f9f9f9" stroke="black" points="148,-36 0,-36 0,0 148,0 148,-36"/>
+<text text-anchor="middle" x="74" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">Datos Históricos (A_t)</text>
+</g>
+<!-- Ventana -->
+<g id="node2" class="node">
+<title>Ventana</title>
+<polygon fill="#f9f9f9" stroke="black" points="345,-36 184,-36 184,0 345,0 345,-36"/>
+<text text-anchor="middle" x="264.5" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">Seleccionar &#39;n&#39; períodos</text>
+</g>
+<!-- Historial&#45;&gt;Ventana -->
+<g id="edge1" class="edge">
+<title>Historial&#45;&gt;Ventana</title>
+<path fill="none" stroke="black" d="M148.15,-18C156.55,-18 165.2,-18 173.79,-18"/>
+<polygon fill="black" stroke="black" points="173.83,-21.5 183.83,-18 173.83,-14.5 173.83,-21.5"/>
+</g>
+<!-- Suma -->
+<g id="node3" class="node">
+<title>Suma</title>
+<polygon fill="#f9f9f9" stroke="black" points="558,-36 381,-36 381,0 558,0 558,-36"/>
+<text text-anchor="middle" x="469.5" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">Sumar Demanda Reciente</text>
+</g>
+<!-- Ventana&#45;&gt;Suma -->
+<g id="edge2" class="edge">
+<title>Ventana&#45;&gt;Suma</title>
+<path fill="none" stroke="black" d="M345.15,-18C353.53,-18 362.12,-18 370.68,-18"/>
+<polygon fill="black" stroke="black" points="370.69,-21.5 380.69,-18 370.69,-14.5 370.69,-21.5"/>
+</g>
+<!-- Promedio -->
+<g id="node4" class="node">
+<title>Promedio</title>
+<polygon fill="#f9f9f9" stroke="black" points="689,-36 594,-36 594,0 689,0 689,-36"/>
+<text text-anchor="middle" x="641.5" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">Dividir por &#39;n&#39;</text>
+</g>
+<!-- Suma&#45;&gt;Promedio -->
+<g id="edge3" class="edge">
+<title>Suma&#45;&gt;Promedio</title>
+<path fill="none" stroke="black" d="M558.49,-18C567.03,-18 575.54,-18 583.66,-18"/>
+<polygon fill="black" stroke="black" points="583.71,-21.5 593.71,-18 583.71,-14.5 583.71,-21.5"/>
+</g>
+<!-- Forecast -->
+<g id="node5" class="node">
+<title>Forecast</title>
+<polygon fill="#f9f9f9" stroke="black" points="853,-36 725,-36 725,0 853,0 853,-36"/>
+<text text-anchor="middle" x="789" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">Pronóstico F_{t+1}</text>
+</g>
+<!-- Promedio&#45;&gt;Forecast -->
+<g id="edge4" class="edge">
+<title>Promedio&#45;&gt;Forecast</title>
+<path fill="none" stroke="black" d="M689.34,-18C697.46,-18 706.07,-18 714.7,-18"/>
+<polygon fill="black" stroke="black" points="714.8,-21.5 724.8,-18 714.8,-14.5 714.8,-21.5"/>
+</g>
+</g>
+</svg>
+
+            </div>
+            <p style="font-size:0.8em; color:#999; text-align:center; margin-top:-20px; margin-bottom:30px;">
+                <em>Figura: Diagrama generado automáticamente mediante Graphviz</em>
+            </p>
+
+            <h3>Intuición</h3>
+            <div><p>Imagina que estás conduciendo un coche y quieres predecir la velocidad a la que irás en el próximo minuto basándote únicamente en lo que has hecho recientemente. Si miras el velocímetro cada 10 segundos y calculas el promedio de los últimos 6 registros, tendrás una idea clara de tu velocidad de crucero, ignorando si por un momento pisaste un poco más el acelerador para adelantar o si frenaste levemente por un bache. La Media Móvil Simple funciona exactamente así: es una 'ventana deslizante' que se mueve a través del tiempo. Su objetivo principal es eliminar los picos y valles accidentales (el 'ruido') para que el Director de Operaciones pueda ver la señal real de la demanda. Es la herramienta ideal para productos 'comodín' o servicios con demanda constante, donde no esperamos grandes sorpresas. La lógica detrás de este modelo es que el pasado más reciente es un buen predictor del futuro inmediato, siempre que el entorno sea lo suficientemente estable como para que los promedios no pierdan sentido ante cambios bruscos de dirección.</p></div>
+
+            <h3>Aplicación</h3>
+            <div><p>En el entorno profesional de un Director de Operaciones, la Media Móvil Simple se aplica frecuentemente en la gestión de inventarios de productos de baja volatilidad o 'clase C' en un análisis ABC. Por ejemplo, en un almacén de e-commerce que vende consumibles de oficina (papel, tóner), la demanda no suele sufrir choques drásticos. El director utiliza una SMA de 6 o 12 meses para definir los niveles de stock de seguridad y los puntos de pedido. Si el promedio móvil indica 500 unidades y el tiempo de entrega del proveedor es constante, se puede planificar la logística sin riesgo de rotura de stock. También es vital en la planificación de personal en centros de atención al cliente (call centers) para determinar el número de operadores necesarios en turnos normales, basándose en el promedio de llamadas de las últimas semanas, permitiendo una asignación de recursos eficiente sin sobrecostos por picos de demanda mal interpretados.</p></div>
+        </article>
+        
+        <article class="subtema">
+            <h2>Media Móvil Ponderada (Weighted Moving Average - WMA)</h2>
+
+            <h3>Historia</h3>
+            <div><p>A medida que los mercados se volvieron más dinámicos en la década de 1960 y 1970, los directores de operaciones notaron una debilidad crítica en la Media Móvil Simple: trataba un dato de hace seis meses con la misma importancia que el dato de ayer. Con la aceleración del consumo y la aparición de ciclos de vida de producto más cortos, surgió la necesidad de dar más peso a la información más reciente. La Media Móvil Ponderada evolucionó como una respuesta técnica para aumentar la reactividad de los modelos sin perder la capacidad de suavizado. Este refinamiento permitió a las empresas industriales de la época, especialmente en sectores como la automoción y la electrónica incipiente, ajustar sus planes de producción de manera más ágil ante cambios en las preferencias del consumidor. Fue el puente necesario antes de la popularización de modelos matemáticos más complejos asistidos por ordenador, permitiendo una personalización del pronóstico basada en el juicio experto del gestor.</p></div>
+
+            <h3>Descripción Formal</h3>
+            <div><p>La Media Móvil Ponderada (WMA) asigna pesos específicos a cada punto de datos histórico, permitiendo que ciertos periodos influyan más en el resultado final que otros. La fórmula es: F_{t+1} = Σ (Peso_i * Demanda_i), donde la suma de todos los pesos debe ser igual a 1 (100%). Normalmente, se asignan pesos más altos a los datos más recientes. </p>
+<p>Ejemplo detallado: Un Director de Operaciones digitales analiza las descargas de una App en los últimos 3 meses: Marzo=4000, Abril=5000, Mayo=7000. Decide aplicar una WMA de 3 meses con los siguientes pesos: Mayo (mes más reciente) = 0.5, Abril = 0.3, Marzo = 0.2. 
+1. Cálculo: (7000 * 0.5) + (5000 * 0.3) + (4000 * 0.2). 
+2. Operación: 3500 + 1500 + 800 = 5800. 
+El pronóstico para Junio es de 5800 descargas. 
+Si hubiéramos usado una Media Móvil Simple, el resultado habría sido (4000+5000+7000)/3 = 5333. La WMA arroja un resultado más alto (5800) porque 'valora' más el crecimiento reciente de mayo. La selección de los pesos es subjetiva y depende del conocimiento del mercado del director; por ejemplo, si se sabe que hubo una campaña de marketing en el último mes, se le puede dar un peso mayor para capturar esa tracción inmediatamente en la cadena de suministro.</p></div>
+
+            <div class="diagrama-box">
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg style="max-width: 80%; max-height: 350px; height: auto; width: auto;" data-width="919pt" data-height="46pt"
+ viewBox="0.00 0.00 919.00 46.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 42)">
+<title>G</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-42 915,-42 915,4 -4,4"/>
+<!-- Data -->
+<g id="node1" class="node">
+<title>Data</title>
+<polygon fill="#f9f9f9" stroke="black" points="179,-37 0,-37 0,-1 179,-1 179,-37"/>
+<text text-anchor="middle" x="89.5" y="-15.3" font-family="Helvetica,sans-Serif" font-size="14.00">Datos Recientes (t, t&#45;1, t&#45;2)</text>
+</g>
+<!-- Weights -->
+<g id="node2" class="node">
+<title>Weights</title>
+<polygon fill="#f9f9f9" stroke="black" points="402,-38 215,-38 215,0 402,0 402,-38"/>
+<text text-anchor="middle" x="308.5" y="-22.8" font-family="Helvetica,sans-Serif" font-size="14.00">Asignar Pesos (w1, w2, w3) </text>
+<text text-anchor="middle" x="308.5" y="-7.8" font-family="Helvetica,sans-Serif" font-size="14.00"> Suma = 1.0</text>
+</g>
+<!-- Data&#45;&gt;Weights -->
+<g id="edge1" class="edge">
+<title>Data&#45;&gt;Weights</title>
+<path fill="none" stroke="black" d="M179.08,-19C187.58,-19 196.26,-19 204.89,-19"/>
+<polygon fill="black" stroke="black" points="204.98,-22.5 214.98,-19 204.98,-15.5 204.98,-22.5"/>
+</g>
+<!-- Mul -->
+<g id="node3" class="node">
+<title>Mul</title>
+<polygon fill="#f9f9f9" stroke="black" points="592,-37 438,-37 438,-1 592,-1 592,-37"/>
+<text text-anchor="middle" x="515" y="-15.3" font-family="Helvetica,sans-Serif" font-size="14.00">Multiplicar Dato * Peso</text>
+</g>
+<!-- Weights&#45;&gt;Mul -->
+<g id="edge2" class="edge">
+<title>Weights&#45;&gt;Mul</title>
+<path fill="none" stroke="black" d="M402.18,-19C410.67,-19 419.25,-19 427.68,-19"/>
+<polygon fill="black" stroke="black" points="427.87,-22.5 437.87,-19 427.87,-15.5 427.87,-22.5"/>
+</g>
+<!-- SumaW -->
+<g id="node4" class="node">
+<title>SumaW</title>
+<polygon fill="#f9f9f9" stroke="black" points="756,-37 628,-37 628,-1 756,-1 756,-37"/>
+<text text-anchor="middle" x="692" y="-15.3" font-family="Helvetica,sans-Serif" font-size="14.00">Sumar Resultados</text>
+</g>
+<!-- Mul&#45;&gt;SumaW -->
+<g id="edge3" class="edge">
+<title>Mul&#45;&gt;SumaW</title>
+<path fill="none" stroke="black" d="M592.25,-19C600.7,-19 609.29,-19 617.69,-19"/>
+<polygon fill="black" stroke="black" points="617.84,-22.5 627.84,-19 617.84,-15.5 617.84,-22.5"/>
+</g>
+<!-- Result -->
+<g id="node5" class="node">
+<title>Result</title>
+<polygon fill="#f9f9f9" stroke="black" points="911,-37 792,-37 792,-1 911,-1 911,-37"/>
+<text text-anchor="middle" x="851.5" y="-15.3" font-family="Helvetica,sans-Serif" font-size="14.00">Pronóstico WMA</text>
+</g>
+<!-- SumaW&#45;&gt;Result -->
+<g id="edge4" class="edge">
+<title>SumaW&#45;&gt;Result</title>
+<path fill="none" stroke="black" d="M756.15,-19C764.55,-19 773.19,-19 781.68,-19"/>
+<polygon fill="black" stroke="black" points="781.93,-22.5 791.93,-19 781.93,-15.5 781.93,-22.5"/>
+</g>
+</g>
+</svg>
+
+            </div>
+            <p style="font-size:0.8em; color:#999; text-align:center; margin-top:-20px; margin-bottom:30px;">
+                <em>Figura: Diagrama generado automáticamente mediante Graphviz</em>
+            </p>
+
+            <h3>Intuición</h3>
+            <div><p>Imagina que eres un crítico gastronómico calificando un restaurante. El restaurante ha estado abierto 10 años. ¿Le darías la misma importancia a la calidad de la comida que servían en 2014 que a la que sirvieron anoche? Probablemente no. La cena de anoche es mucho más representativa de lo que recibirás mañana. La Media Móvil Ponderada es ese juicio experto aplicado a los números. Nos permite decir: 'El pasado es importante, pero el pasado cercano es MUCHO más importante'. Al asignar pesos, el Director de Operaciones puede ajustar la 'velocidad' del modelo. Si el mercado está cambiando muy rápido, le damos casi todo el peso al último dato. Si el mercado es más calmado, distribuimos el peso de forma más equitativa. Es una forma de inyectar inteligencia y contexto de negocio en un cálculo matemático sencillo, permitiendo que el pronóstico 'sienta' el pulso actual del negocio digital.</p></div>
+
+            <h3>Aplicación</h3>
+            <div><p>La WMA es fundamental en sectores de moda 'fast-fashion' y lanzamientos de productos tecnológicos (gadgets). Un Director de Operaciones en una empresa como Zara o una marca de accesorios para smartphones utiliza pesos mayores para las ventas de la última semana al planificar la reposición de inventario, ya que la demanda de estos productos puede volverse obsoleta en cuestión de días. También se aplica en la gestión de servicios cloud; si el tráfico de una plataforma aumentó drásticamente en los últimos dos días debido a una tendencia en redes sociales, el Director de Operaciones aplicará una WMA para escalar la capacidad de los servidores, dando prioridad a esos últimos datos para no quedarse corto en la infraestructura necesaria para el día siguiente.</p></div>
+        </article>
+        
+        <article class="subtema">
+            <h2>Alisado Exponencial Simple (Simple Exponential Smoothing - SES)</h2>
+
+            <h3>Historia</h3>
+            <div><p>El Alisado Exponencial fue desarrollado por Robert G. Brown durante la década de 1950 mientras trabajaba como analista de investigación operativa para la Marina de los Estados Unidos. El problema que Brown intentaba resolver era logístico: la Marina necesitaba predecir la demanda de miles de piezas de repuesto, pero las computadoras de la época tenían una memoria extremadamente limitada. Guardar todo el historial de ventas para calcular medias móviles era imposible. Brown ideó un sistema que solo requería tres datos: el pronóstico del periodo anterior, la demanda real del periodo anterior y una constante de suavizado (alfa). Este avance revolucionó la gestión de inventarios, permitiendo realizar previsiones masivas con recursos computacionales mínimos. Con el tiempo, este modelo se expandió a la empresa privada, convirtiéndose en el componente básico de los sistemas modernos de 'demand sensing' debido a su elegancia matemática y su capacidad de auto-corrección.</p></div>
+
+            <h3>Descripción Formal</h3>
+            <div><p>El Alisado Exponencial Simple (SES) es un método de promedio móvil ponderado donde los pesos disminuyen exponencialmente a medida que los datos son más antiguos. La fórmula clave es: F_t = F_{t-1} + α(A_{t-1} - F_{t-1}), donde 'α' (alfa) es una constante de suavizado entre 0 y 1. La expresión (A_{t-1} - F_{t-1}) representa el error de pronóstico del periodo anterior. Por tanto, el nuevo pronóstico es el antiguo ajustado por una fracción del error cometido. </p>
+<p>Ejemplo detallado: Una plataforma de e-learning quiere predecir las horas de visionado para la próxima semana. El pronóstico para esta semana era de 500 horas (F_{t-1}), pero la demanda real fue de 600 horas (A_{t-1}). El Director de Operaciones elige un α = 0.3. 
+1. Identificar el error: Real - Pronóstico = 600 - 500 = 100. 
+2. Aplicar el factor de ajuste: α * Error = 0.3 * 100 = 30. 
+3. Nuevo Pronóstico: F_t = 500 + 30 = 530 horas. 
+Si el α fuera más alto (ej. 0.8), el ajuste sería de 80, resultando en un pronóstico de 580 (mucho más cerca de la realidad reciente). Un α bajo (0.1) daría 510, manteniendo el pronóstico más estable y menos influenciado por la sorpresa de las 600 horas. Este modelo es excelente para series de datos que no presentan una tendencia clara o estacionalidad, centrándose en el nivel actual de la demanda.</p></div>
+
+            <div class="diagrama-box">
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg style="max-width: 80%; max-height: 350px; height: auto; width: auto;" data-width="435pt" data-height="277pt"
+ viewBox="0.00 0.00 434.50 277.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 273)">
+<title>G</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-273 430.5,-273 430.5,4 -4,4"/>
+<!-- Prev -->
+<g id="node1" class="node">
+<title>Prev</title>
+<polygon fill="#f9f9f9" stroke="black" points="184,-269 0,-269 0,-233 184,-233 184,-269"/>
+<text text-anchor="middle" x="92" y="-247.3" font-family="Helvetica,sans-Serif" font-size="14.00">Pronóstico Anterior (F_{t&#45;1})</text>
+</g>
+<!-- Error -->
+<g id="node3" class="node">
+<title>Error</title>
+<polygon fill="#f9f9f9" stroke="black" points="363,-196 183,-196 183,-160 363,-160 363,-196"/>
+<text text-anchor="middle" x="273" y="-174.3" font-family="Helvetica,sans-Serif" font-size="14.00">Calcular Error (Real &#45; Prev)</text>
+</g>
+<!-- Prev&#45;&gt;Error -->
+<g id="edge1" class="edge">
+<title>Prev&#45;&gt;Error</title>
+<path fill="none" stroke="black" d="M135.35,-232.99C160.69,-223.06 192.86,-210.43 219.74,-199.89"/>
+<polygon fill="black" stroke="black" points="221.34,-203.02 229.37,-196.11 218.78,-196.51 221.34,-203.02"/>
+</g>
+<!-- Real -->
+<g id="node2" class="node">
+<title>Real</title>
+<polygon fill="#f9f9f9" stroke="black" points="363.5,-269 202.5,-269 202.5,-233 363.5,-233 363.5,-269"/>
+<text text-anchor="middle" x="283" y="-247.3" font-family="Helvetica,sans-Serif" font-size="14.00">Demanda Real (A_{t&#45;1})</text>
+</g>
+<!-- Real&#45;&gt;Error -->
+<g id="edge2" class="edge">
+<title>Real&#45;&gt;Error</title>
+<path fill="none" stroke="black" d="M280.58,-232.81C279.45,-224.79 278.08,-215.05 276.81,-206.07"/>
+<polygon fill="black" stroke="black" points="280.26,-205.44 275.4,-196.03 273.33,-206.42 280.26,-205.44"/>
+</g>
+<!-- Alpha -->
+<g id="node4" class="node">
+<title>Alpha</title>
+<polygon fill="#f9f9f9" stroke="black" points="426.5,-109 119.5,-109 119.5,-73 426.5,-73 426.5,-109"/>
+<text text-anchor="middle" x="273" y="-87.3" font-family="Helvetica,sans-Serif" font-size="14.00">¿Qué tan reactivos somos? (Multiplicar por Alfa)</text>
+</g>
+<!-- Error&#45;&gt;Alpha -->
+<g id="edge3" class="edge">
+<title>Error&#45;&gt;Alpha</title>
+<path fill="none" stroke="black" d="M273,-159.8C273,-148.16 273,-132.55 273,-119.24"/>
+<polygon fill="black" stroke="black" points="276.5,-119.18 273,-109.18 269.5,-119.18 276.5,-119.18"/>
+</g>
+<!-- New -->
+<g id="node5" class="node">
+<title>New</title>
+<polygon fill="#f9f9f9" stroke="black" points="181.5,-36 26.5,-36 26.5,0 181.5,0 181.5,-36"/>
+<text text-anchor="middle" x="104" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">Nuevo Pronóstico (F_t)</text>
+</g>
+<!-- Alpha&#45;&gt;New -->
+<g id="edge4" class="edge">
+<title>Alpha&#45;&gt;New</title>
+<path fill="none" stroke="black" d="M232.52,-72.99C208.97,-63.1 179.09,-50.54 154.06,-40.03"/>
+<polygon fill="black" stroke="black" points="155.31,-36.76 144.74,-36.11 152.6,-43.21 155.31,-36.76"/>
+</g>
+<!-- New&#45;&gt;Prev -->
+<g id="edge5" class="edge">
+<title>New&#45;&gt;Prev</title>
+<path fill="none" stroke="black" d="M103.1,-36.25C101.04,-76.03 95.92,-174.49 93.42,-222.63"/>
+<polygon fill="black" stroke="black" points="89.93,-222.47 92.9,-232.64 96.92,-222.83 89.93,-222.47"/>
+<text text-anchor="middle" x="149.5" y="-130.8" font-family="Times,serif" font-size="14.00">Iteración siguiente</text>
+</g>
+</g>
+</svg>
+
+            </div>
+            <p style="font-size:0.8em; color:#999; text-align:center; margin-top:-20px; margin-bottom:30px;">
+                <em>Figura: Diagrama generado automáticamente mediante Graphviz</em>
+            </p>
+
+            <h3>Intuición</h3>
+            <div><p>El Alisado Exponencial es como aprender de tus errores de forma sistemática. Imagina que intentas encestar una pelota. En el primer tiro, te quedas corto. En el segundo tiro, ajustas tu fuerza basándote en cuánto te faltó en el anterior. No necesitas recordar todos tus tiros de hace un año; solo necesitas recordar cómo fue tu último tiro y qué tan lejos estuviste del objetivo. La constante 'alfa' representa tu 'velocidad de aprendizaje'. Si alfa es alto, eres muy sensible a tu último error y cambias tu comportamiento rápidamente. Si alfa es bajo, eres más precavido y prefieres mantener tu estrategia a menos que el error se repita constantemente. Es un mecanismo de retroalimentación (feedback loop) constante que permite al Director de Operaciones mantener los niveles de servicio alineados con la realidad sin necesidad de procesar bases de datos gigantescas cada vez.</p></div>
+
+            <h3>Aplicación</h3>
+            <div><p>En el Digital Business, el SES es el caballo de batalla para pronósticos de corto plazo con alta frecuencia de datos. Se utiliza en el 'Dynamic Pricing' (precios dinámicos) de aerolíneas o apps de transporte para ajustar la oferta basándose en la demanda de la última hora. También es vital en la gestión de inventarios de almacenes automatizados de 'micro-fulfillment', donde el sistema debe decidir cada pocos minutos cuánto stock mover a las estanterías de picking. Un Director de Operaciones lo utilizará para suavizar la demanda de servicios de suscripción mensual donde el churn (tasa de cancelación) fluctúa levemente, permitiendo predecir los ingresos recurrentes (MRR) del próximo mes con una precisión que se auto-corrige automáticamente según los resultados reales del mes en curso.</p></div>
+        </article>
+        </body></html>

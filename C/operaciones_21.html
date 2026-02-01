@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>21 - Tecnología y Futuro - sistemas de fabricación flexible (FMS).</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #f4f4f9; color: #333; margin: 0; padding: 20px; line-height: 1.6; position: relative; }
+        header { background: #2c3e50; color: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; text-align:center; }
+        h1 { margin: 0; font-size: 1.5rem; }
+
+        /* Estilo del botón Atrás */
+        .btn-atras {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #7f8c8d;
+            color: white;
+            padding: 8px 15px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            transition: background 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+        .btn-atras:hover { background: #95a5a6; }
+
+        .subtema {
+            background: white;
+            padding: 40px;
+            margin-bottom: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        h2 { color: #2980b9; border-bottom: 2px solid #eee; padding-bottom: 10px; margin-top: 0; }
+        h3 { color: #7f8c8d; font-size: 0.9em; text-transform: uppercase; margin-top: 30px; letter-spacing: 1px; border-left: 3px solid #d4af37; padding-left: 10px; }
+
+        .diagrama-box {
+            text-align: center;
+            margin: 30px 0;
+            padding: 20px;
+            background: #fafafa;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 150px;
+        }
+
+        p { margin-bottom: 1rem; }
+        strong { color: #2c3e50; font-weight: 600; }
+        code { background: #f0f0f0; padding: 2px 5px; border-radius: 3px; font-family: monospace; color: #c0392b; }
+        ul { padding-left: 20px; }
+        li { margin-bottom: 0.5rem; }
+    </style>
+</head>
+<body>
+    <button onclick="window.history.back()" class="btn-atras">Atrás</button>
+    <header><h1>21 - Tecnología y Futuro - sistemas de fabricación flexible (FMS).</h1></header>
+    <main>
+
+        <article class="subtema">
+            <h2>Arquitectura y Componentes de un FMS: El Ecosistema Integrado</h2>
+
+            <h3>Historia</h3>
+            <div><p>El concepto de Sistema de Fabricación Flexible (FMS) se remonta a finales de la década de 1960, cuando David Williamson, un ingeniero británico, patentó el System 24. Sin embargo, no fue hasta la década de los 80 cuando la convergencia entre la informática industrial y la maquinaria CNC (Control Numérico Computarizado) permitió su implementación real. Originalmente, las fábricas operaban bajo el paradigma de la producción en masa de Henry Ford, donde la eficiencia dependía de la repetitividad extrema. Con la llegada de la globalización y la fragmentación de los mercados, las empresas empezaron a demandar sistemas que pudieran adaptarse a cambios en el diseño del producto sin detener la línea. La evolución del FMS ha pasado de simples celdas automatizadas a ecosistemas ciberfísicos interconectados. Hoy, para un estudiante de Digital Business, el FMS representa la transición física de la economía de escala a la economía de alcance, permitiendo que el hardware se comporte con la agilidad del software.</p></div>
+
+            <h3>Descripción Formal</h3>
+            <div><p>Un FMS se define como una configuración de máquinas de procesamiento interconectadas mediante un sistema de manipulación de materiales y controladas por un sistema informático central. Sus componentes críticos incluyen: 1. Estaciones de trabajo: Generalmente máquinas CNC que realizan operaciones de mecanizado, ensamblaje o inspección. 2. Sistema de manejo de materiales: Dispositivos como AGVs (Vehículos de Guiado Automático) o robots colaborativos que trasladan piezas entre estaciones. 3. Sistema de control central: El 'cerebro' que coordina el flujo de trabajo, la carga de máquinas y la secuenciación. Por ejemplo, en una planta de motores, un FMS puede procesar simultáneamente bloques de cilindros para un motor V6 y piezas para un motor eléctrico. Si una máquina falla, el controlador central redirige la pieza a otra estación capaz de realizar la misma tarea. Esto maximiza la utilización del capital y reduce el inventario en proceso (WIP). La flexibilidad se mide en dos dimensiones: flexibilidad de máquina (facilidad para cambiar de tipo de operación) y flexibilidad de ruta (capacidad de usar múltiples caminos para completar un producto).</p></div>
+
+            <div class="diagrama-box">
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg style="max-width: 80%; max-height: 350px; height: auto; width: auto;" data-width="661pt" data-height="129pt"
+ viewBox="0.00 0.00 661.00 129.06" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 125.06)">
+<title>G</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-125.06 657,-125.06 657,4 -4,4"/>
+<!-- Central_Control -->
+<g id="node1" class="node">
+<title>Central_Control</title>
+<polygon fill="#f9f9f9" stroke="black" points="144,-68.06 0,-68.06 0,-30.06 144,-30.06 144,-68.06"/>
+<text text-anchor="middle" x="72" y="-52.86" font-family="Helvetica,sans-Serif" font-size="14.00">Controlador Central</text>
+<text text-anchor="middle" x="72" y="-37.86" font-family="Helvetica,sans-Serif" font-size="14.00">(Software ERP/MES)</text>
+</g>
+<!-- AGV_System -->
+<g id="node2" class="node">
+<title>AGV_System</title>
+<polygon fill="#f9f9f9" stroke="black" points="335,-68.06 181,-68.06 181,-30.06 335,-30.06 335,-68.06"/>
+<text text-anchor="middle" x="258" y="-52.86" font-family="Helvetica,sans-Serif" font-size="14.00">Sistema de Transporte</text>
+<text text-anchor="middle" x="258" y="-37.86" font-family="Helvetica,sans-Serif" font-size="14.00">(AGVs/Robots)</text>
+</g>
+<!-- Central_Control&#45;&gt;AGV_System -->
+<g id="edge1" class="edge">
+<title>Central_Control&#45;&gt;AGV_System</title>
+<path fill="none" stroke="black" d="M144.14,-49.06C152.88,-49.06 161.89,-49.06 170.83,-49.06"/>
+<polygon fill="black" stroke="black" points="170.87,-52.56 180.87,-49.06 170.87,-45.56 170.87,-52.56"/>
+</g>
+<!-- Station_A -->
+<g id="node3" class="node">
+<title>Station_A</title>
+<polygon fill="#f9f9f9" stroke="black" points="485,-121.06 372,-121.06 372,-85.06 485,-85.06 485,-121.06"/>
+<text text-anchor="middle" x="428.5" y="-99.36" font-family="Helvetica,sans-Serif" font-size="14.00">Estación CNC 1</text>
+</g>
+<!-- AGV_System&#45;&gt;Station_A -->
+<g id="edge2" class="edge">
+<title>AGV_System&#45;&gt;Station_A</title>
+<path fill="none" stroke="black" d="M318.41,-68.1C332.49,-72.61 347.6,-77.45 361.95,-82.05"/>
+<polygon fill="black" stroke="black" points="361.14,-85.47 371.73,-85.19 363.28,-78.8 361.14,-85.47"/>
+</g>
+<!-- Station_B -->
+<g id="node4" class="node">
+<title>Station_B</title>
+<polygon fill="#f9f9f9" stroke="black" points="485,-67.06 372,-67.06 372,-31.06 485,-31.06 485,-67.06"/>
+<text text-anchor="middle" x="428.5" y="-45.36" font-family="Helvetica,sans-Serif" font-size="14.00">Estación CNC 2</text>
+</g>
+<!-- AGV_System&#45;&gt;Station_B -->
+<g id="edge3" class="edge">
+<title>AGV_System&#45;&gt;Station_B</title>
+<path fill="none" stroke="black" d="M335.36,-49.06C344.03,-49.06 352.81,-49.06 361.33,-49.06"/>
+<polygon fill="black" stroke="black" points="361.57,-52.56 371.57,-49.06 361.57,-45.56 361.57,-52.56"/>
+</g>
+<!-- Station_C -->
+<g id="node5" class="node">
+<title>Station_C</title>
+<polygon fill="#f9f9f9" stroke="black" points="653,-67.06 522,-67.06 522,-31.06 653,-31.06 653,-67.06"/>
+<text text-anchor="middle" x="587.5" y="-45.36" font-family="Helvetica,sans-Serif" font-size="14.00">Inspección Calidad</text>
+</g>
+<!-- Station_A&#45;&gt;Station_C -->
+<g id="edge4" class="edge">
+<title>Station_A&#45;&gt;Station_C</title>
+<path fill="none" stroke="black" d="M482.22,-84.93C495.75,-80.27 510.44,-75.22 524.4,-70.42"/>
+<polygon fill="black" stroke="black" points="525.61,-73.71 533.92,-67.14 523.33,-67.09 525.61,-73.71"/>
+</g>
+<!-- Station_B&#45;&gt;Station_C -->
+<g id="edge5" class="edge">
+<title>Station_B&#45;&gt;Station_C</title>
+<path fill="none" stroke="black" d="M485.29,-49.06C493.88,-49.06 502.85,-49.06 511.76,-49.06"/>
+<polygon fill="black" stroke="black" points="511.77,-52.56 521.77,-49.06 511.77,-45.56 511.77,-52.56"/>
+</g>
+<!-- Station_C&#45;&gt;AGV_System -->
+<g id="edge6" class="edge">
+<title>Station_C&#45;&gt;AGV_System</title>
+<path fill="none" stroke="black" d="M552.33,-30.97C533.13,-21.83 508.38,-11.71 485,-7.06 435.74,2.73 421.43,1.83 372,-7.06 350.77,-10.88 328.31,-18.43 309.06,-26.09"/>
+<polygon fill="black" stroke="black" points="307.53,-22.94 299.6,-29.97 310.18,-29.42 307.53,-22.94"/>
+<text text-anchor="middle" x="428.5" y="-10.86" font-family="Times,serif" font-size="14.00">Feedback</text>
+</g>
+</g>
+</svg>
+
+            </div>
+            <p style="font-size:0.8em; color:#999; text-align:center; margin-top:-20px; margin-bottom:30px;">
+                <em>Figura: Diagrama generado automáticamente mediante Graphviz</em>
+            </p>
+
+            <h3>Intuición</h3>
+            <div><p>Imagina que entras en una cocina profesional donde, en lugar de que cada cocinero haga siempre el mismo plato, tienes robots de cocina que pueden transformarse de freidora a horno en segundos. Además, las bandejas de comida se mueven solas por cintas inteligentes buscando al cocinero que esté libre en ese momento. Si un cliente pide un cambio de último minuto en su receta, el sistema no se colapsa; simplemente reasigna los recursos. El 'por qué' del FMS es eliminar el dilema entre eficiencia y variedad. Históricamente, si querías ser eficiente, tenías que hacer siempre lo mismo. Si querías variedad, eras lento y caro. El FMS rompe esta barrera permitiendo que la fábrica sea como un servidor en la nube: puedes ejecutar diferentes 'aplicaciones' (productos) sobre el mismo hardware físico sin necesidad de reconfigurar todo el sistema manualmente cada vez.</p></div>
+
+            <h3>Aplicación</h3>
+            <div><p>En el entorno de un Director de Operaciones (COO), la aplicación de un FMS es estratégica para la gestión del ciclo de vida del producto. Un caso real se da en la industria aeroespacial, donde el volumen de producción es bajo pero la complejidad y el valor son altísimos. Un COO utiliza FMS para fabricar componentes de turbinas con variaciones mínimas de diseño sin incurrir en costes de cambio de herramientas (set-up costs). Otra aplicación crítica es la respuesta a la demanda volátil: si el departamento de marketing detecta que el modelo 'A' se vende más que el 'B', el COO puede ordenar al FMS que cambie el mix de producción instantáneamente. Esto reduce drásticamente el riesgo de obsolescencia de stock y mejora el flujo de caja. En Digital Business, el FMS es el habilitador físico para modelos de negocio basados en 'Make-to-Order' (fabricación bajo pedido) escalables.</p></div>
+        </article>
+        
+        <article class="subtema">
+            <h2>Gestión de la Variabilidad y Personalización Masiva</h2>
+
+            <h3>Historia</h3>
+            <div><p>La personalización masiva fue teorizada por Stanley Davis en 1987 y popularizada por Joseph Pine. Tradicionalmente, la personalización era un lujo artesanal. Con la madurez de los sistemas FMS en los años 90 y 2000, las empresas descubrieron que podían ofrecer productos personalizados a precios competitivos. Empresas como Dell en informática o BMW en automoción utilizaron la flexibilidad de sus sistemas de producción para permitir que los clientes 'configuraran' sus pedidos. En la era digital actual, esto ha evolucionado hacia la 'hiper-personalización', donde los datos de los usuarios alimentan directamente las órdenes de fabricación. El FMS ha pasado de ser una ventaja competitiva en eficiencia a ser el requisito mínimo para sobrevivir en mercados donde el consumidor exige exclusividad. La historia del FMS es, en esencia, la historia de cómo la tecnología devolvió el poder de elección al consumidor sin sacrificar la viabilidad económica de las empresas.</p></div>
+
+            <h3>Descripción Formal</h3>
+            <div><p>La gestión de la variabilidad en un FMS se apoya en la reducción de los tiempos de preparación (set-up) y el uso de utillajes universales. Formalmente, un FMS permite gestionar tres tipos de variabilidad: 1. Variabilidad de producto (mix): Producir diferentes ítems en el mismo periodo. 2. Variabilidad de volumen: Ajustar la escala de producción sin perder eficiencia. 3. Variabilidad de diseño: Introducir cambios en el producto mediante actualizaciones de software en las máquinas CNC. Un ejemplo técnico es el uso de 'pallets' inteligentes que llevan chips RFID. Cuando el pallet llega a una estación, la máquina lee las instrucciones específicas de esa pieza y carga automáticamente el programa necesario. Esto permite que el tamaño de lote económico (EOQ) sea igual a uno (1). Matemáticamente, esto minimiza el tiempo de ciclo total (Throughput Time) al eliminar las esperas por cambio de formato, lo que impacta directamente en el cálculo de la OEE (Efectividad Global del Equipo).</p></div>
+
+            <div class="diagrama-box">
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg style="max-width: 80%; max-height: 350px; height: auto; width: auto;" data-width="301pt" data-height="354pt"
+ viewBox="0.00 0.00 300.95 354.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 350)">
+<title>G</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-350 296.95,-350 296.95,4 -4,4"/>
+<!-- Order -->
+<g id="node1" class="node">
+<title>Order</title>
+<polygon fill="#f9f9f9" stroke="black" points="211.5,-346 100.5,-346 100.5,-308 211.5,-308 211.5,-346"/>
+<text text-anchor="middle" x="156" y="-330.8" font-family="Helvetica,sans-Serif" font-size="14.00">Pedido Cliente</text>
+<text text-anchor="middle" x="156" y="-315.8" font-family="Helvetica,sans-Serif" font-size="14.00">(Personalizado)</text>
+</g>
+<!-- Logic -->
+<g id="node2" class="node">
+<title>Logic</title>
+<polygon fill="#f9f9f9" stroke="black" points="156,-271 19.09,-253 156,-235 292.91,-253 156,-271"/>
+<text text-anchor="middle" x="156" y="-249.3" font-family="Helvetica,sans-Serif" font-size="14.00">¿Recurso Disponible?</text>
+</g>
+<!-- Order&#45;&gt;Logic -->
+<g id="edge1" class="edge">
+<title>Order&#45;&gt;Logic</title>
+<path fill="none" stroke="black" d="M156,-307.83C156,-299.89 156,-290.41 156,-281.63"/>
+<polygon fill="black" stroke="black" points="159.5,-281.42 156,-271.42 152.5,-281.42 159.5,-281.42"/>
+</g>
+<!-- Config -->
+<g id="node3" class="node">
+<title>Config</title>
+<polygon fill="#f9f9f9" stroke="black" points="140,-184 0,-184 0,-146 140,-146 140,-184"/>
+<text text-anchor="middle" x="70" y="-168.8" font-family="Helvetica,sans-Serif" font-size="14.00">Carga Configuración</text>
+<text text-anchor="middle" x="70" y="-153.8" font-family="Helvetica,sans-Serif" font-size="14.00">Software en CNC</text>
+</g>
+<!-- Logic&#45;&gt;Config -->
+<g id="edge2" class="edge">
+<title>Logic&#45;&gt;Config</title>
+<path fill="none" stroke="black" d="M140.62,-236.62C128.12,-224.12 110.2,-206.2 95.55,-191.55"/>
+<polygon fill="black" stroke="black" points="97.77,-188.82 88.23,-184.23 92.82,-193.77 97.77,-188.82"/>
+<text text-anchor="middle" x="127.5" y="-205.8" font-family="Times,serif" font-size="14.00">SI</text>
+</g>
+<!-- Wait -->
+<g id="node6" class="node">
+<title>Wait</title>
+<polygon fill="#f9f9f9" stroke="black" points="212,-183 158,-183 158,-147 212,-147 212,-183"/>
+<text text-anchor="middle" x="185" y="-161.3" font-family="Helvetica,sans-Serif" font-size="14.00">Wait</text>
+</g>
+<!-- Logic&#45;&gt;Wait -->
+<g id="edge3" class="edge">
+<title>Logic&#45;&gt;Wait</title>
+<path fill="none" stroke="black" d="M161.59,-235.42C165.67,-223.32 171.29,-206.67 175.99,-192.71"/>
+<polygon fill="black" stroke="black" points="179.35,-193.71 179.23,-183.12 172.72,-191.48 179.35,-193.71"/>
+<text text-anchor="middle" x="182" y="-205.8" font-family="Times,serif" font-size="14.00">NO</text>
+</g>
+<!-- Prod -->
+<g id="node4" class="node">
+<title>Prod</title>
+<polygon fill="#f9f9f9" stroke="black" points="132.5,-109 7.5,-109 7.5,-73 132.5,-73 132.5,-109"/>
+<text text-anchor="middle" x="70" y="-87.3" font-family="Helvetica,sans-Serif" font-size="14.00">Producción Lote 1</text>
+</g>
+<!-- Config&#45;&gt;Prod -->
+<g id="edge4" class="edge">
+<title>Config&#45;&gt;Prod</title>
+<path fill="none" stroke="black" d="M70,-145.83C70,-137.89 70,-128.41 70,-119.63"/>
+<polygon fill="black" stroke="black" points="73.5,-119.42 70,-109.42 66.5,-119.42 73.5,-119.42"/>
+</g>
+<!-- Logistics -->
+<g id="node5" class="node">
+<title>Logistics</title>
+<polygon fill="#f9f9f9" stroke="black" points="125,-36 15,-36 15,0 125,0 125,-36"/>
+<text text-anchor="middle" x="70" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">Entrega Directa</text>
+</g>
+<!-- Prod&#45;&gt;Logistics -->
+<g id="edge5" class="edge">
+<title>Prod&#45;&gt;Logistics</title>
+<path fill="none" stroke="black" d="M70,-72.81C70,-64.79 70,-55.05 70,-46.07"/>
+<polygon fill="black" stroke="black" points="73.5,-46.03 70,-36.03 66.5,-46.03 73.5,-46.03"/>
+</g>
+</g>
+</svg>
+
+            </div>
+            <p style="font-size:0.8em; color:#999; text-align:center; margin-top:-20px; margin-bottom:30px;">
+                <em>Figura: Diagrama generado automáticamente mediante Graphviz</em>
+            </p>
+
+            <h3>Intuición</h3>
+            <div><p>Piensa en el FMS como una impresora de oficina moderna frente a una antigua imprenta de tipos móviles. En la antigua imprenta, cambiar de un libro a otro llevaba días de trabajo manual. En la impresora moderna, puedes imprimir un informe financiero, luego una foto y después un ticket, simplemente enviando un archivo digital diferente. El hardware es el mismo, pero el output cambia instantáneamente. La personalización masiva es el resultado de llevar esa lógica de la impresora a una fábrica de coches o de zapatillas. El 'por qué' es sencillo: en el mundo digital, el valor está en la relevancia para el usuario. Si tu proceso de fabricación no permite esa relevancia a coste bajo, tu modelo de negocio digital tendrá un cuello de botella físico insalvable.</p></div>
+
+            <h3>Aplicación</h3>
+            <div><p>Para un Director de Operaciones en el sector retail o e-commerce de gama alta, el FMS permite implementar estrategias de 'Inventario Cero'. En lugar de fabricar 10.000 unidades y esperar que se vendan, se fabrican las unidades según se reciben los pedidos web. Un caso de uso profesional es la industria de la ortodoncia invisible (como Invisalign). Cada set de alineadores es único para cada paciente. Sin un FMS altamente automatizado y digitalizado, sería imposible producir millones de piezas únicas con precisión micrométrica y costes controlados. El director de operaciones gestiona aquí no solo máquinas, sino un flujo de datos que va desde el escaneado 3D del cliente hasta la máquina de fabricación flexible, eliminando intermediarios y optimizando el margen operativo.</p></div>
+        </article>
+        
+        <article class="subtema">
+            <h2>Integración de IA y Gemelos Digitales en FMS</h2>
+
+            <h3>Historia</h3>
+            <div><p>La integración de la Inteligencia Artificial (IA) en los FMS marca el inicio de lo que conocemos como Industria 4.0. A principios de la década de 2010, el gobierno alemán lanzó esta iniciativa para digitalizar la producción. Los Gemelos Digitales (Digital Twins), concepto popularizado por Michael Grieves en 2002, se convirtieron en la herramienta perfecta para los FMS. Al principio, los FMS eran sistemas 'rígidos en su flexibilidad', es decir, seguían reglas programadas. Con la llegada del Big Data y el Machine Learning en la última década, los FMS han pasado a ser 'sistemas autónomos'. Ya no solo siguen una ruta predefinida, sino que pueden predecir fallos en las máquinas antes de que ocurran y reconfigurar el flujo de trabajo en tiempo real para evitar cuellos de botella. Para un experto en Digital Business, esta es la culminación de la convergencia IT/OT (Tecnologías de la Información y Tecnologías de la Operación).</p></div>
+
+            <h3>Descripción Formal</h3>
+            <div><p>La integración avanzada se basa en tres pilares: 1. Sensores IoT: Capturan datos en tiempo real de temperatura, vibración y velocidad de cada componente del FMS. 2. Gemelo Digital: Una réplica virtual que corre simulaciones en paralelo al proceso físico para predecir resultados. 3. Algoritmos de Optimización: IA que resuelve problemas de programación (scheduling) NP-duros en milisegundos. Por ejemplo, en una planta de ensamblaje de electrónica, la IA puede detectar que una soldadora está perdiendo precisión. El Gemelo Digital simula el impacto de un fallo y, automáticamente, el sistema redirige la producción a una línea secundaria mientras programa un mantenimiento preventivo. Esto transforma el mantenimiento de reactivo/preventivo a predictivo/prescriptivo. La conexión con el Digital Business es total: el estado de la fábrica es un dato más en el cuadro de mando (dashboard) del negocio, permitiendo promesas de entrega (ATP - Available to Promise) mucho más precisas.</p></div>
+
+            <div class="diagrama-box">
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg style="max-width: 80%; max-height: 350px; height: auto; width: auto;" data-width="644pt" data-height="81pt"
+ viewBox="0.00 0.00 644.00 81.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 77)">
+<title>G</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-77 640,-77 640,4 -4,4"/>
+<!-- Physical -->
+<g id="node1" class="node">
+<title>Physical</title>
+<polygon fill="#f9f9f9" stroke="black" points="86,-38 0,-38 0,0 86,0 86,-38"/>
+<text text-anchor="middle" x="43" y="-22.8" font-family="Helvetica,sans-Serif" font-size="14.00">FMS Físico</text>
+<text text-anchor="middle" x="43" y="-7.8" font-family="Helvetica,sans-Serif" font-size="14.00">(Sensores)</text>
+</g>
+<!-- Data -->
+<g id="node2" class="node">
+<title>Data</title>
+<polygon fill="#f9f9f9" stroke="black" points="227,-73 123,-73 123,-35 227,-35 227,-73"/>
+<text text-anchor="middle" x="175" y="-57.8" font-family="Helvetica,sans-Serif" font-size="14.00">Flujo de Datos</text>
+<text text-anchor="middle" x="175" y="-42.8" font-family="Helvetica,sans-Serif" font-size="14.00">(IoT/Cloud)</text>
+</g>
+<!-- Physical&#45;&gt;Data -->
+<g id="edge1" class="edge">
+<title>Physical&#45;&gt;Data</title>
+<path fill="none" stroke="black" d="M86.21,-30.36C94.81,-32.68 104.02,-35.16 113.13,-37.61"/>
+<polygon fill="black" stroke="black" points="112.36,-41.03 122.93,-40.25 114.18,-34.27 112.36,-41.03"/>
+</g>
+<!-- Twin -->
+<g id="node3" class="node">
+<title>Twin</title>
+<polygon fill="#f9f9f9" stroke="black" points="494,-73 387,-73 387,-35 494,-35 494,-73"/>
+<text text-anchor="middle" x="440.5" y="-57.8" font-family="Helvetica,sans-Serif" font-size="14.00">Gemelo Digital</text>
+<text text-anchor="middle" x="440.5" y="-42.8" font-family="Helvetica,sans-Serif" font-size="14.00">(Simulación)</text>
+</g>
+<!-- Data&#45;&gt;Twin -->
+<g id="edge2" class="edge">
+<title>Data&#45;&gt;Twin</title>
+<path fill="none" stroke="black" d="M227.12,-54C269.83,-54 330.92,-54 376.63,-54"/>
+<polygon fill="black" stroke="black" points="376.72,-57.5 386.72,-54 376.72,-50.5 376.72,-57.5"/>
+</g>
+<!-- AI -->
+<g id="node4" class="node">
+<title>AI</title>
+<polygon fill="#f9f9f9" stroke="black" points="636,-38 531,-38 531,0 636,0 636,-38"/>
+<text text-anchor="middle" x="583.5" y="-22.8" font-family="Helvetica,sans-Serif" font-size="14.00">IA</text>
+<text text-anchor="middle" x="583.5" y="-7.8" font-family="Helvetica,sans-Serif" font-size="14.00">(Optimización)</text>
+</g>
+<!-- Twin&#45;&gt;AI -->
+<g id="edge3" class="edge">
+<title>Twin&#45;&gt;AI</title>
+<path fill="none" stroke="black" d="M494,-40.97C502.86,-38.77 512.12,-36.47 521.17,-34.22"/>
+<polygon fill="black" stroke="black" points="522.03,-37.62 530.89,-31.81 520.34,-30.82 522.03,-37.62"/>
+</g>
+<!-- AI&#45;&gt;Physical -->
+<g id="edge4" class="edge">
+<title>AI&#45;&gt;Physical</title>
+<path fill="none" stroke="black" d="M530.74,-19C428.06,-19 199.66,-19 96.44,-19"/>
+<polygon fill="black" stroke="black" points="96.26,-15.5 86.26,-19 96.26,-22.5 96.26,-15.5"/>
+<text text-anchor="middle" x="307" y="-22.8" font-family="Times,serif" font-size="14.00">Ajustes en tiempo real</text>
+</g>
+</g>
+</svg>
+
+            </div>
+            <p style="font-size:0.8em; color:#999; text-align:center; margin-top:-20px; margin-bottom:30px;">
+                <em>Figura: Diagrama generado automáticamente mediante Graphviz</em>
+            </p>
+
+            <h3>Intuición</h3>
+            <div><p>Imagina que tu coche no solo te avisa de que se ha quedado sin gasolina, sino que tiene un 'doble digital' que sabe exactamente cuándo se va a pinchar una rueda basándose en cómo conduces y por qué calles pasas. Antes de que ocurra, el coche ya ha pedido la cita en el taller y ha ajustado tu agenda de trabajo. Eso es lo que hace la IA y el Gemelo Digital en un FMS. Es pasar de una fábrica que 'obedece' a una fábrica que 'piensa' y 'se anticipa'. El beneficio no es solo producir más, sino eliminar la incertidumbre. En los negocios, la incertidumbre es coste. Al usar IA, el FMS se convierte en una ventaja competitiva defensiva (reduce costes por fallos) y ofensiva (permite una agilidad que la competencia no puede seguir).</p></div>
+
+            <h3>Aplicación</h3>
+            <div></div>
+        </article>
+        </body></html>

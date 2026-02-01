@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>5 - Capacidad de Producción - Cálculo de capacidad productiva.</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #f4f4f9; color: #333; margin: 0; padding: 20px; line-height: 1.6; position: relative; }
+        header { background: #2c3e50; color: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; text-align:center; }
+        h1 { margin: 0; font-size: 1.5rem; }
+
+        /* Estilo del botón Atrás */
+        .btn-atras {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #7f8c8d;
+            color: white;
+            padding: 8px 15px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            transition: background 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+        .btn-atras:hover { background: #95a5a6; }
+
+        .subtema {
+            background: white;
+            padding: 40px;
+            margin-bottom: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        h2 { color: #2980b9; border-bottom: 2px solid #eee; padding-bottom: 10px; margin-top: 0; }
+        h3 { color: #7f8c8d; font-size: 0.9em; text-transform: uppercase; margin-top: 30px; letter-spacing: 1px; border-left: 3px solid #d4af37; padding-left: 10px; }
+
+        .diagrama-box {
+            text-align: center;
+            margin: 30px 0;
+            padding: 20px;
+            background: #fafafa;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 150px;
+        }
+
+        p { margin-bottom: 1rem; }
+        strong { color: #2c3e50; font-weight: 600; }
+        code { background: #f0f0f0; padding: 2px 5px; border-radius: 3px; font-family: monospace; color: #c0392b; }
+        ul { padding-left: 20px; }
+        li { margin-bottom: 0.5rem; }
+    </style>
+</head>
+<body>
+    <button onclick="window.history.back()" class="btn-atras">Atrás</button>
+    <header><h1>5 - Capacidad de Producción - Cálculo de capacidad productiva.</h1></header>
+    <main>
+
+        <article class="subtema">
+            <h2>Taxonomía de la Capacidad: Teórica, Efectiva y Real</h2>
+
+            <h3>Historia</h3>
+            <div><p>La evolución del concepto de capacidad productiva se remonta a la Primera Revolución Industrial, donde la preocupación principal era la producción en masa y la maximización de la salida de máquinas de vapor. Sin embargo, no fue hasta principios del siglo XX, con la administración científica de Frederick Taylor y Henry Ford, cuando se empezó a distinguir entre lo que una máquina 'podía' hacer y lo que 'realmente' hacía. En la década de 1950, con el surgimiento del Lean Manufacturing en Toyota, el enfoque cambió: ya no se trataba solo de producir al máximo, sino de entender las pérdidas inherentes al sistema. En el contexto actual de Digital Business, esta taxonomía se ha trasladado de las plantas físicas a los centros de datos y servicios en la nube (SaaS), donde la capacidad de procesamiento y el ancho de banda se miden bajo los mismos principios de diseño frente a ejecución real para evitar el desperdicio de recursos costosos.</p></div>
+
+            <h3>Descripción Formal</h3>
+            <div><p>El cálculo de la capacidad productiva se divide en tres niveles fundamentales que permiten a los directores de operaciones diagnosticar la salud de un sistema. 1) Capacidad de Diseño (Teórica): Es la salida máxima teórica de un sistema en un período determinado bajo condiciones ideales. Se expresa generalmente como una tasa, por ejemplo, un servidor procesando 1.000 transacciones por segundo (TPS) 24/7 sin mantenimiento. 2) Capacidad Efectiva: Es la capacidad que una empresa espera alcanzar dadas sus restricciones operativas actuales (mantenimiento programado, cambios de turno, mezcla de productos). Si el servidor requiere 2 horas de mantenimiento diario, su capacidad efectiva cae. 3) Salida Real: Es la capacidad alcanzada de facto durante un periodo. Ejemplo numérico: Una planta de ensamblaje de tablets tiene una capacidad de diseño de 500 unidades/día. Debido a paradas programadas y formación, su capacidad efectiva es de 420 unidades. Si un día hay un fallo eléctrico y solo producen 380, esa es su salida real. Fórmulas clave: Utilización = (Salida Real / Capacidad de Diseño) y Eficiencia = (Salida Real / Capacidad Efectiva). Estos indicadores permiten identificar si el problema radica en la planificación o en la ejecución técnica.</p></div>
+
+            <div class="diagrama-box">
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg style="max-width: 80%; max-height: 350px; height: auto; width: auto;" data-width="483pt" data-height="255pt"
+ viewBox="0.00 0.00 482.99 255.48" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 251.48)">
+<title>G</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-251.48 478.99,-251.48 478.99,4 -4,4"/>
+<!-- C_DIS -->
+<g id="node1" class="node">
+<title>C_DIS</title>
+<polygon fill="#f9f9f9" stroke="black" points="146,-239.61 0,-239.61 0,-201.61 146,-201.61 146,-239.61"/>
+<text text-anchor="middle" x="73" y="-224.41" font-family="Helvetica,sans-Serif" font-size="14.00">Capacidad de Diseño</text>
+<text text-anchor="middle" x="73" y="-209.41" font-family="Helvetica,sans-Serif" font-size="14.00">(Máximo Teórico)</text>
+</g>
+<!-- C_EFE -->
+<g id="node2" class="node">
+<title>C_EFE</title>
+<polygon fill="#f9f9f9" stroke="black" points="259,-134.87 95,-134.87 95,-96.87 259,-96.87 259,-134.87"/>
+<text text-anchor="middle" x="177" y="-119.67" font-family="Helvetica,sans-Serif" font-size="14.00">Capacidad Efectiva</text>
+<text text-anchor="middle" x="177" y="-104.67" font-family="Helvetica,sans-Serif" font-size="14.00">(Planificada/Restringida)</text>
+</g>
+<!-- C_DIS&#45;&gt;C_EFE -->
+<g id="edge1" class="edge">
+<title>C_DIS&#45;&gt;C_EFE</title>
+<path fill="none" stroke="black" d="M91.59,-201.24C108.16,-184.88 132.56,-160.77 151.05,-142.51"/>
+<polygon fill="black" stroke="black" points="153.91,-144.6 158.57,-135.08 148.99,-139.62 153.91,-144.6"/>
+<text text-anchor="middle" x="151" y="-164.54" font-family="Times,serif" font-size="14.00">Menos</text>
+</g>
+<!-- S_REA -->
+<g id="node3" class="node">
+<title>S_REA</title>
+<polygon fill="#f9f9f9" stroke="black" points="349,-38 203,-38 203,0 349,0 349,-38"/>
+<text text-anchor="middle" x="276" y="-22.8" font-family="Helvetica,sans-Serif" font-size="14.00">Salida Real</text>
+<text text-anchor="middle" x="276" y="-7.8" font-family="Helvetica,sans-Serif" font-size="14.00">(Resultado Obtenido)</text>
+</g>
+<!-- C_EFE&#45;&gt;S_REA -->
+<g id="edge3" class="edge">
+<title>C_EFE&#45;&gt;S_REA</title>
+<path fill="none" stroke="black" d="M196.09,-96.58C211.29,-82.01 232.74,-61.45 249.59,-45.31"/>
+<polygon fill="black" stroke="black" points="252.17,-47.68 256.97,-38.24 247.33,-42.63 252.17,-47.68"/>
+<text text-anchor="middle" x="257" y="-59.8" font-family="Times,serif" font-size="14.00">Menos</text>
+</g>
+<!-- PERD_EST -->
+<g id="node4" class="node">
+<title>PERD_EST</title>
+<ellipse fill="#f9f9f9" stroke="red" cx="281" cy="-220.61" rx="116.85" ry="26.74"/>
+<text text-anchor="middle" x="281" y="-224.41" font-family="Helvetica,sans-Serif" font-size="14.00">Pérdidas Estructurales</text>
+<text text-anchor="middle" x="281" y="-209.41" font-family="Helvetica,sans-Serif" font-size="14.00">(Mantenimiento, Turnos)</text>
+</g>
+<!-- PERD_EST&#45;&gt;C_EFE -->
+<g id="edge2" class="edge">
+<title>PERD_EST&#45;&gt;C_EFE</title>
+<path fill="none" stroke="black" d="M255.29,-194.21C239.27,-178.38 218.72,-158.09 202.7,-142.26"/>
+<polygon fill="black" stroke="black" points="204.81,-139.42 195.24,-134.89 199.89,-144.4 204.81,-139.42"/>
+</g>
+<!-- PERD_OPE -->
+<g id="node5" class="node">
+<title>PERD_OPE</title>
+<ellipse fill="#f9f9f9" stroke="red" cx="376" cy="-115.87" rx="98.99" ry="26.74"/>
+<text text-anchor="middle" x="376" y="-119.67" font-family="Helvetica,sans-Serif" font-size="14.00">Pérdidas Operativas</text>
+<text text-anchor="middle" x="376" y="-104.67" font-family="Helvetica,sans-Serif" font-size="14.00">(Averías, Errores)</text>
+</g>
+<!-- PERD_OPE&#45;&gt;S_REA -->
+<g id="edge4" class="edge">
+<title>PERD_OPE&#45;&gt;S_REA</title>
+<path fill="none" stroke="black" d="M349.73,-89.94C335.14,-76.11 317.05,-58.94 302.43,-45.08"/>
+<polygon fill="black" stroke="black" points="304.81,-42.51 295.15,-38.17 299.99,-47.59 304.81,-42.51"/>
+</g>
+</g>
+</svg>
+
+            </div>
+            <p style="font-size:0.8em; color:#999; text-align:center; margin-top:-20px; margin-bottom:30px;">
+                <em>Figura: Diagrama generado automáticamente mediante Graphviz</em>
+            </p>
+
+            <h3>Intuición</h3>
+            <div><p>Imagina que eres un corredor de maratón. Tu 'Capacidad de Diseño' es tu velocidad máxima en una cinta de correr durante 10 segundos: es lo que tu cuerpo puede hacer en condiciones perfectas. Tu 'Capacidad Efectiva' es el ritmo que planeas mantener durante la carrera real, sabiendo que habrá cuestas, que debes beber agua y que el clima afectará tu rendimiento. Finalmente, tu 'Salida Real' es el tiempo que marcas al cruzar la meta, el cual pudo verse afectado porque te desabrochaste un zapato o te sentiste cansado. En los negocios digitales, entender esto es vital: no puedes prometer a tus clientes el 100% de tu capacidad de diseño porque la realidad operativa (bugs, actualizaciones, latencia) siempre consumirá una parte. El objetivo no es que la salida real sea igual a la de diseño, sino que la salida real se acerque lo máximo posible a la efectiva, lo que indicaría una gestión operativa excelente.</p></div>
+
+            <h3>Aplicación</h3>
+            <div><p>Un Director de Operaciones en una plataforma de E-commerce utiliza estos cálculos para el 'Black Friday'. Debe conocer la capacidad de diseño de su infraestructura de servidores para evitar caídas del sistema. Si la capacidad de diseño es de 100,000 usuarios concurrentes, pero la configuración de seguridad y balanceo de carga (capacidad efectiva) solo permite 80,000, el director debe decidir si escala horizontalmente en la nube. En el entorno profesional, estos cálculos justifican inversiones en CAPEX (bienes de capital). Si la eficiencia es alta (cerca del 95%) pero la demanda sigue superando la producción, es señal inequívoca de que se necesita comprar más maquinaria o contratar más servidores. Por el contrario, si la utilización es baja, el director debe buscar formas de aumentar la demanda o reducir costes fijos eliminando exceso de capacidad.</p></div>
+        </article>
+        
+        <article class="subtema">
+            <h2>Teoría de las Limitaciones (TOC) y Cuellos de Botella</h2>
+
+            <h3>Historia</h3>
+            <div><p>La Teoría de las Limitaciones (Theory of Constraints) fue popularizada por el Dr. Eliyahu M. Goldratt en su bestseller de 1984, 'La Meta'. Antes de Goldratt, la gestión de operaciones intentaba optimizar cada máquina o departamento de forma individual (optimización local). Goldratt revolucionó el pensamiento administrativo al demostrar que optimizar un recurso que no es un cuello de botella es una pérdida de tiempo y dinero. Argumentó que cualquier sistema complejo, desde una fábrica de automóviles hasta el desarrollo de software, es como una cadena: su resistencia total está determinada por el eslabón más débil. En la era digital, esta teoría es la base de metodologías como Kanban y DevOps, donde el flujo de valor se gestiona identificando y eliminando fricciones en el pipeline de entrega.</p></div>
+
+            <h3>Descripción Formal</h3>
+            <div><p>Un cuello de botella es cualquier recurso cuya capacidad es menor que la demanda colocada sobre él. Matemáticamente, la capacidad total de un proceso secuencial es igual a la capacidad del paso más lento. Si tenemos tres procesos: A (10 unidades/hora), B (5 unidades/hora) y C (8 unidades/hora), la capacidad del sistema completo es de 5 unidades/hora. Cualquier esfuerzo por mejorar A o C es inútil si no se mejora B. Goldratt propone 5 pasos para el cálculo y gestión: 1) Identificar la limitación. 2) Explotar la limitación (asegurar que no pierda tiempo). 3) Subordinar todo lo demás a la limitación (no producir más de lo que el cuello de botella puede procesar para evitar inventario acumulado). 4) Elevar la limitación (invertir en más capacidad para ese punto). 5) Si el cuello de botella se ha roto, volver al paso 1. En negocios digitales, el cuello de botella suele ser el talento especializado (ej. arquitectos de datos) o APIs con límites de llamadas (Rate Limiting).</p></div>
+
+            <div class="diagrama-box">
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg style="max-width: 80%; max-height: 350px; height: auto; width: auto;" data-width="574pt" data-height="61pt"
+ viewBox="0.00 0.00 574.00 61.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 57)">
+<title>G</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-57 570,-57 570,4 -4,4"/>
+<!-- P1 -->
+<g id="node1" class="node">
+<title>P1</title>
+<polygon fill="#f9f9f9" stroke="black" points="174,-45.5 90,-45.5 90,-7.5 174,-7.5 174,-45.5"/>
+<text text-anchor="middle" x="132" y="-30.3" font-family="Helvetica,sans-Serif" font-size="14.00">Proceso A</text>
+<text text-anchor="middle" x="132" y="-15.3" font-family="Helvetica,sans-Serif" font-size="14.00">(Cap: 10/h)</text>
+</g>
+<!-- P2 -->
+<g id="node2" class="node">
+<title>P2</title>
+<polygon fill="#ffcccc" stroke="black" points="356,-53 210,-53 210,0 356,0 356,-53"/>
+<text text-anchor="middle" x="283" y="-37.8" font-family="Helvetica,sans-Serif" font-size="14.00">Proceso B</text>
+<text text-anchor="middle" x="283" y="-22.8" font-family="Helvetica,sans-Serif" font-size="14.00">(CUELLO BOTELLA)</text>
+<text text-anchor="middle" x="283" y="-7.8" font-family="Helvetica,sans-Serif" font-size="14.00">(Cap: 5/h)</text>
+</g>
+<!-- P1&#45;&gt;P2 -->
+<g id="edge2" class="edge">
+<title>P1&#45;&gt;P2</title>
+<path fill="none" stroke="black" d="M174.11,-26.5C182.18,-26.5 190.92,-26.5 199.8,-26.5"/>
+<polygon fill="black" stroke="black" points="199.86,-30 209.86,-26.5 199.86,-23 199.86,-30"/>
+</g>
+<!-- P3 -->
+<g id="node3" class="node">
+<title>P3</title>
+<polygon fill="#f9f9f9" stroke="black" points="472,-45.5 392,-45.5 392,-7.5 472,-7.5 472,-45.5"/>
+<text text-anchor="middle" x="432" y="-30.3" font-family="Helvetica,sans-Serif" font-size="14.00">Proceso C</text>
+<text text-anchor="middle" x="432" y="-15.3" font-family="Helvetica,sans-Serif" font-size="14.00">(Cap: 8/h)</text>
+</g>
+<!-- P2&#45;&gt;P3 -->
+<g id="edge3" class="edge">
+<title>P2&#45;&gt;P3</title>
+<path fill="none" stroke="black" d="M356.21,-26.5C364.89,-26.5 373.59,-26.5 381.83,-26.5"/>
+<polygon fill="black" stroke="black" points="381.99,-30 391.99,-26.5 381.99,-23 381.99,-30"/>
+</g>
+<!-- OUT -->
+<g id="node5" class="node">
+<title>OUT</title>
+<polygon fill="#f9f9f9" stroke="black" points="566,-44.5 508,-44.5 508,-8.5 566,-8.5 566,-44.5"/>
+<text text-anchor="middle" x="537" y="-22.8" font-family="Helvetica,sans-Serif" font-size="14.00">Output</text>
+</g>
+<!-- P3&#45;&gt;OUT -->
+<g id="edge4" class="edge">
+<title>P3&#45;&gt;OUT</title>
+<path fill="none" stroke="black" d="M472.23,-26.5C480.55,-26.5 489.32,-26.5 497.6,-26.5"/>
+<polygon fill="black" stroke="black" points="497.76,-30 507.76,-26.5 497.76,-23 497.76,-30"/>
+</g>
+<!-- IN -->
+<g id="node4" class="node">
+<title>IN</title>
+<polygon fill="#f9f9f9" stroke="black" points="54,-44.5 0,-44.5 0,-8.5 54,-8.5 54,-44.5"/>
+<text text-anchor="middle" x="27" y="-22.8" font-family="Helvetica,sans-Serif" font-size="14.00">Input</text>
+</g>
+<!-- IN&#45;&gt;P1 -->
+<g id="edge1" class="edge">
+<title>IN&#45;&gt;P1</title>
+<path fill="none" stroke="black" d="M54.26,-26.5C62.05,-26.5 70.88,-26.5 79.69,-26.5"/>
+<polygon fill="black" stroke="black" points="79.97,-30 89.97,-26.5 79.97,-23 79.97,-30"/>
+</g>
+</g>
+</svg>
+
+            </div>
+            <p style="font-size:0.8em; color:#999; text-align:center; margin-top:-20px; margin-bottom:30px;">
+                <em>Figura: Diagrama generado automáticamente mediante Graphviz</em>
+            </p>
+
+            <h3>Intuición</h3>
+            <div><p>Imagina una autopista de cuatro carriles que de repente se reduce a uno solo debido a obras. No importa lo rápido que circulen los coches en los cuatro carriles previos; el flujo total de vehículos que llegan al otro lado estará dictado únicamente por la velocidad del único carril abierto. Ese carril único es el cuello de botella. Si intentas meter más coches a la autopista (aumentar la producción en etapas tempranas), lo único que lograrás es un atasco masivo (exceso de inventario o trabajo en curso/WIP). Para un director de operaciones, la intuición clave es que 'un minuto perdido en un cuello de botella es un minuto perdido en todo el sistema', mientras que 'un minuto ganado en un recurso que no es cuello de botella es un espejismo', ya que no aumentará la facturación final.</p></div>
+
+            <h3>Aplicación</h3>
+            <div></div>
+        </article>
+        
+        <article class="subtema">
+            <h2>Cálculo de Requerimientos de Capacidad (Rough-Cut Capacity Planning)</h2>
+
+            <h3>Historia</h3>
+            <div><p>El planeamiento de capacidad a groso modo (RCCP) surgió con la integración de los sistemas MRP (Material Requirements Planning) en los años 70 y 80. Originalmente, las empresas calculaban qué materiales necesitaban pero olvidaban calcular si tenían las máquinas o el personal suficiente para procesarlos. El RCCP se convirtió en el puente entre el Plan Maestro de Producción (MPS) y la capacidad real de la planta. Con la llegada de los ERPs modernos (SAP, Oracle) y el Big Data, el cálculo de requerimientos ha pasado de ser una estimación manual a modelos predictivos basados en algoritmos que consideran variables en tiempo real, permitiendo a las empresas de Digital Business ajustar su capacidad de manera elástica.</p></div>
+
+            <h3>Descripción Formal</h3>
+            <div><p>El cálculo de requerimientos consiste en determinar la cantidad de recursos (horas-hombre, horas-máquina, créditos de computación) necesarios para cumplir con una demanda proyectada. El proceso formal implica: 1) Definir el Plan Maestro de Producción (qué queremos vender). 2) Utilizar el Perfil de Recursos, que detalla cuánto tiempo de cada recurso clave consume una unidad de producto. 3) Multiplicar la cantidad de productos por el tiempo unitario. Ejemplo: Si para procesar un pedido digital se requieren 0.5 horas de atención al cliente y 0.1 horas de validación técnica, y esperamos 1,000 pedidos: Necesidad = (1,000 * 0.5) + (1,000 * 0.1) = 600 horas totales. Si nuestra capacidad efectiva por trabajador es de 140 horas al mes, necesitaremos 600 / 140 = 4.28 (5 personas). Este cálculo permite prever déficits de capacidad antes de que ocurran y decidir entre subcontratar, contratar o renegociar plazos de entrega.</p></div>
+
+            <div class="diagrama-box">
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg style="max-width: 80%; max-height: 350px; height: auto; width: auto;" data-width="460pt" data-height="281pt"
+ viewBox="0.00 0.00 459.50 281.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 277)">
+<title>G</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-277 455.5,-277 455.5,4 -4,4"/>
+<!-- DEM -->
+<g id="node1" class="node">
+<title>DEM</title>
+<polygon fill="#f9f9f9" stroke="black" points="162,-272 0,-272 0,-236 162,-236 162,-272"/>
+<text text-anchor="middle" x="81" y="-250.3" font-family="Helvetica,sans-Serif" font-size="14.00">Pronóstico de Demanda</text>
+</g>
+<!-- REQ -->
+<g id="node3" class="node">
+<title>REQ</title>
+<polygon fill="#f9f9f9" stroke="black" points="238.5,-198 85.5,-198 85.5,-160 238.5,-160 238.5,-198"/>
+<text text-anchor="middle" x="162" y="-182.8" font-family="Helvetica,sans-Serif" font-size="14.00">Cálculo de Carga Total</text>
+<text text-anchor="middle" x="162" y="-167.8" font-family="Helvetica,sans-Serif" font-size="14.00">(Demanda x Tiempo)</text>
+</g>
+<!-- DEM&#45;&gt;REQ -->
+<g id="edge1" class="edge">
+<title>DEM&#45;&gt;REQ</title>
+<path fill="none" stroke="black" d="M100.2,-235.7C110.38,-226.52 123.08,-215.07 134.32,-204.95"/>
+<polygon fill="black" stroke="black" points="136.73,-207.49 141.81,-198.19 132.04,-202.29 136.73,-207.49"/>
+</g>
+<!-- PERFIL -->
+<g id="node2" class="node">
+<title>PERFIL</title>
+<polygon fill="#f9f9f9" stroke="black" points="307.5,-273 180.5,-273 180.5,-235 307.5,-235 307.5,-273"/>
+<text text-anchor="middle" x="244" y="-257.8" font-family="Helvetica,sans-Serif" font-size="14.00">Perfil de Recursos</text>
+<text text-anchor="middle" x="244" y="-242.8" font-family="Helvetica,sans-Serif" font-size="14.00">(Tiempo/Unidad)</text>
+</g>
+<!-- PERFIL&#45;&gt;REQ -->
+<g id="edge2" class="edge">
+<title>PERFIL&#45;&gt;REQ</title>
+<path fill="none" stroke="black" d="M223.73,-234.96C213.58,-225.92 201.13,-214.83 190.07,-204.99"/>
+<polygon fill="black" stroke="black" points="192.12,-202.13 182.32,-198.09 187.46,-207.35 192.12,-202.13"/>
+</g>
+<!-- DECISION -->
+<g id="node5" class="node">
+<title>DECISION</title>
+<polygon fill="#fff2cc" stroke="black" points="246,-123 109.09,-105 246,-87 382.91,-105 246,-123"/>
+<text text-anchor="middle" x="246" y="-101.3" font-family="Helvetica,sans-Serif" font-size="14.00">¿Carga &gt; Capacidad?</text>
+</g>
+<!-- REQ&#45;&gt;DECISION -->
+<g id="edge3" class="edge">
+<title>REQ&#45;&gt;DECISION</title>
+<path fill="none" stroke="black" d="M183.2,-159.83C194.65,-150.02 208.86,-137.83 220.87,-127.54"/>
+<polygon fill="black" stroke="black" points="223.45,-129.94 228.77,-120.77 218.9,-124.62 223.45,-129.94"/>
+</g>
+<!-- CAP_ACT -->
+<g id="node4" class="node">
+<title>CAP_ACT</title>
+<polygon fill="#f9f9f9" stroke="black" points="405,-197 257,-197 257,-161 405,-161 405,-197"/>
+<text text-anchor="middle" x="331" y="-175.3" font-family="Helvetica,sans-Serif" font-size="14.00">Capacidad Disponible</text>
+</g>
+<!-- CAP_ACT&#45;&gt;DECISION -->
+<g id="edge4" class="edge">
+<title>CAP_ACT&#45;&gt;DECISION</title>
+<path fill="none" stroke="black" d="M310.86,-160.94C299.02,-150.91 283.94,-138.14 271.3,-127.43"/>
+<polygon fill="black" stroke="black" points="273.3,-124.54 263.41,-120.75 268.78,-129.88 273.3,-124.54"/>
+</g>
+<!-- ACC_1 -->
+<g id="node6" class="node">
+<title>ACC_1</title>
+<polygon fill="#f9f9f9" stroke="black" points="242,-36 32,-36 32,0 242,0 242,-36"/>
+<text text-anchor="middle" x="137" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">Contratar / Invertir / Outsourcing</text>
+</g>
+<!-- DECISION&#45;&gt;ACC_1 -->
+<g id="edge5" class="edge">
+<title>DECISION&#45;&gt;ACC_1</title>
+<path fill="none" stroke="black" d="M227.01,-89.19C210.54,-76.35 186.41,-57.53 167.27,-42.61"/>
+<polygon fill="black" stroke="black" points="169.19,-39.66 159.15,-36.27 164.88,-45.18 169.19,-39.66"/>
+<text text-anchor="middle" x="205.5" y="-57.8" font-family="Times,serif" font-size="14.00">SÍ</text>
+</g>
+<!-- ACC_2 -->
+<g id="node7" class="node">
+<title>ACC_2</title>
+<polygon fill="#f9f9f9" stroke="black" points="451.5,-36 260.5,-36 260.5,0 451.5,0 451.5,-36"/>
+<text text-anchor="middle" x="356" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">Optimizar / Buscar Eficiencia</text>
+</g>
+<!-- DECISION&#45;&gt;ACC_2 -->
+<g id="edge6" class="edge">
+<title>DECISION&#45;&gt;ACC_2</title>
+<path fill="none" stroke="black" d="M265.16,-89.19C281.86,-76.29 306.36,-57.36 325.71,-42.41"/>
+<polygon fill="black" stroke="black" points="327.88,-45.16 333.65,-36.27 323.6,-39.62 327.88,-45.16"/>
+<text text-anchor="middle" x="317" y="-57.8" font-family="Times,serif" font-size="14.00">NO</text>
+</g>
+</g>
+</svg>
+
+            </div>
+            <p style="font-size:0.8em; color:#999; text-align:center; margin-top:-20px; margin-bottom:30px;">
+                <em>Figura: Diagrama generado automáticamente mediante Graphviz</em>
+            </p>
+
+            <h3>Intuición</h3>
+            <div><p>Es como planear una cena para 20 personas. Primero decides el menú (Plan Maestro). Luego sabes que cada plato de pasta tarda 10 minutos en prepararse y solo tienes 2 fogones. El cálculo de requerimientos te dirá si con esos 2 fogones puedes tener la cena lista en una hora o si tus invitados cenarán a medianoche. Si el cálculo dice que necesitas 4 fogones, tienes un 'gap' de capacidad. Tienes tres opciones: comprar otra estufa (inversión), pedirle a un vecino que cocine algo (outsourcing) o cambiar el menú por algo que no requiera fuego (cambio de procesos). En los negocios, el RCCP evita el estrés operativo y el incumplimiento de las promesas al cliente.</p></div>
+
+            <h3>Aplicación</h3>
+            <div><p>Un Director de Operaciones en un Marketplace de servicios (como Uber o Fiverr) utiliza el cálculo de requerimientos para equilibrar la oferta y la demanda. Si el marketing prevé un aumento del 30% en la demanda debido a una campaña, el director debe calcular cuántos 'partners' o proveedores de servicio deben estar activos para mantener los niveles de servicio (SLA). En el ámbito de la consultoría digital, se usa para el 'Resource Leveling': asegurar que los consultores no tengan semanas de 80 horas seguidas de semanas de 10 horas. Profesionalmente, dominar este cálculo permite al director presentar planes de escalabilidad sólidos ante el comité de dirección o inversores, demostrando que el crecimiento está respaldado por una infraestructura operativa viable.</p></div>
+        </article>
+        </body></html>

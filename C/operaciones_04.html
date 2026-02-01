@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>4 - Diseño del Sistema - estudio de tiempos/métodos.</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #f4f4f9; color: #333; margin: 0; padding: 20px; line-height: 1.6; position: relative; }
+        header { background: #2c3e50; color: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; text-align:center; }
+        h1 { margin: 0; font-size: 1.5rem; }
+
+        /* Estilo del botón Atrás */
+        .btn-atras {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #7f8c8d;
+            color: white;
+            padding: 8px 15px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            transition: background 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+        .btn-atras:hover { background: #95a5a6; }
+
+        .subtema {
+            background: white;
+            padding: 40px;
+            margin-bottom: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        h2 { color: #2980b9; border-bottom: 2px solid #eee; padding-bottom: 10px; margin-top: 0; }
+        h3 { color: #7f8c8d; font-size: 0.9em; text-transform: uppercase; margin-top: 30px; letter-spacing: 1px; border-left: 3px solid #d4af37; padding-left: 10px; }
+
+        .diagrama-box {
+            text-align: center;
+            margin: 30px 0;
+            padding: 20px;
+            background: #fafafa;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 150px;
+        }
+
+        p { margin-bottom: 1rem; }
+        strong { color: #2c3e50; font-weight: 600; }
+        code { background: #f0f0f0; padding: 2px 5px; border-radius: 3px; font-family: monospace; color: #c0392b; }
+        ul { padding-left: 20px; }
+        li { margin-bottom: 0.5rem; }
+    </style>
+</head>
+<body>
+    <button onclick="window.history.back()" class="btn-atras">Atrás</button>
+    <header><h1>4 - Diseño del Sistema - estudio de tiempos/métodos.</h1></header>
+    <main>
+
+        <article class="subtema">
+            <h2>Ingeniería de Métodos y Simplificación del Trabajo</h2>
+
+            <h3>Historia</h3>
+            <div><p>La ingeniería de métodos tiene sus raíces a principios del siglo XX, impulsada principalmente por Frank y Lillian Gilbreth. Mientras Frederick Taylor se centraba en el 'cuánto tiempo', los Gilbreth se obsesionaron con el 'cómo'. Desarrollaron el concepto de 'Therbligs', que son los 17 movimientos fundamentales requeridos para realizar cualquier tarea manual. Frank, que comenzó como albañil, notó que cada trabajador usaba movimientos diferentes para colocar un ladrillo. Al estandarizar el método más eficiente, redujo los movimientos de 18 a 4.5, triplicando la productividad. Durante la Segunda Guerra Mundial, estas técnicas evolucionaron hacia la metodología TWI (Training Within Industry) y posteriormente se integraron en el Sistema de Producción Toyota (TPS), donde la simplificación del trabajo se convirtió en el pilar fundamental para la eliminación de desperdicios (Muda) y el diseño de sistemas de flujo continuo en entornos industriales y de servicios.</p></div>
+
+            <h3>Descripción Formal</h3>
+            <div><p>La Ingeniería de Métodos es el registro y examen crítico sistemático de los modos de realizar actividades, con el fin de efectuar mejoras. El procedimiento formal sigue la metodología 'SREDIM': Seleccionar el trabajo, Registrar los hechos, Examinar críticamente, Idear el método más práctico, Mantener el nuevo estándar. Un concepto técnico central es el análisis ECRS: Eliminar (tareas innecesarias), Combinar (operaciones que pueden hacerse juntas), Reordenar (cambiar la secuencia para ganar fluidez) y Simplificar (hacer la tarea restante más fácil). Por ejemplo, en un centro de distribución de e-commerce, el registro del método mediante un Cursograma Analítico podría revelar que un operario camina 50 metros para buscar etiquetas. Al 'Reordenar' el layout y colocar la impresora de etiquetas en la estación de embalaje, se 'Elimina' el transporte innecesario. Otro ejemplo técnico es el uso del Diagrama Bimanual para estaciones de ensamblaje de hardware, donde se analizan los micromovimientos de ambas manos para asegurar que trabajen simétricamente y no existan tiempos de espera de una mano sobre la otra.</p></div>
+
+            <div class="diagrama-box">
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg style="max-width: 80%; max-height: 350px; height: auto; width: auto;" data-width="292pt" data-height="350pt"
+ viewBox="0.00 0.00 292.35 350.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 346)">
+<title>G</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-346 288.35,-346 288.35,4 -4,4"/>
+<!-- S1 -->
+<g id="node1" class="node">
+<title>S1</title>
+<polygon fill="#f9f9f9" stroke="black" points="235.35,-342 95.35,-342 95.35,-306 235.35,-306 235.35,-342"/>
+<text text-anchor="middle" x="165.35" y="-320.3" font-family="Helvetica,sans-Serif" font-size="14.00">Seleccionar Proceso</text>
+</g>
+<!-- S2 -->
+<g id="node2" class="node">
+<title>S2</title>
+<polygon fill="#f9f9f9" stroke="black" points="245.85,-269 84.85,-269 84.85,-233 245.85,-233 245.85,-269"/>
+<text text-anchor="middle" x="165.35" y="-247.3" font-family="Helvetica,sans-Serif" font-size="14.00">Registrar Método Actual</text>
+</g>
+<!-- S1&#45;&gt;S2 -->
+<g id="edge1" class="edge">
+<title>S1&#45;&gt;S2</title>
+<path fill="none" stroke="black" d="M165.35,-305.81C165.35,-297.79 165.35,-288.05 165.35,-279.07"/>
+<polygon fill="black" stroke="black" points="168.85,-279.03 165.35,-269.03 161.85,-279.03 168.85,-279.03"/>
+</g>
+<!-- S3 -->
+<g id="node3" class="node">
+<title>S3</title>
+<polygon fill="#f9f9f9" stroke="black" points="98.35,-196 0.15,-178 98.35,-160 196.55,-178 98.35,-196"/>
+<text text-anchor="middle" x="98.35" y="-174.3" font-family="Helvetica,sans-Serif" font-size="14.00">¿Aporta Valor?</text>
+</g>
+<!-- S2&#45;&gt;S3 -->
+<g id="edge2" class="edge">
+<title>S2&#45;&gt;S3</title>
+<path fill="none" stroke="black" d="M149.13,-232.81C140.12,-223.26 128.81,-211.28 119.15,-201.05"/>
+<polygon fill="black" stroke="black" points="121.56,-198.5 112.16,-193.63 116.47,-203.31 121.56,-198.5"/>
+</g>
+<!-- S4 -->
+<g id="node4" class="node">
+<title>S4</title>
+<polygon fill="#f9f9f9" stroke="black" points="284.35,-109 180.35,-109 180.35,-73 284.35,-73 284.35,-109"/>
+<text text-anchor="middle" x="232.35" y="-87.3" font-family="Helvetica,sans-Serif" font-size="14.00">Eliminar Tarea</text>
+</g>
+<!-- S3&#45;&gt;S4 -->
+<g id="edge3" class="edge">
+<title>S3&#45;&gt;S4</title>
+<path fill="none" stroke="black" d="M119.29,-163.72C139.87,-150.66 171.7,-130.47 196.35,-114.84"/>
+<polygon fill="black" stroke="black" points="198.5,-117.62 205.07,-109.3 194.75,-111.7 198.5,-117.62"/>
+<text text-anchor="middle" x="181.85" y="-130.8" font-family="Times,serif" font-size="14.00">No</text>
+</g>
+<!-- S5 -->
+<g id="node5" class="node">
+<title>S5</title>
+<polygon fill="#f9f9f9" stroke="black" points="161.85,-109 18.85,-109 18.85,-73 161.85,-73 161.85,-109"/>
+<text text-anchor="middle" x="90.35" y="-87.3" font-family="Helvetica,sans-Serif" font-size="14.00">Combinar/Reordenar</text>
+</g>
+<!-- S3&#45;&gt;S5 -->
+<g id="edge4" class="edge">
+<title>S3&#45;&gt;S5</title>
+<path fill="none" stroke="black" d="M96.77,-160.21C95.67,-148.52 94.18,-132.69 92.91,-119.22"/>
+<polygon fill="black" stroke="black" points="96.38,-118.68 91.95,-109.05 89.41,-119.33 96.38,-118.68"/>
+<text text-anchor="middle" x="101.35" y="-130.8" font-family="Times,serif" font-size="14.00">Sí</text>
+</g>
+<!-- S4&#45;&gt;S2 -->
+<g id="edge6" class="edge">
+<title>S4&#45;&gt;S2</title>
+<path fill="none" stroke="black" d="M229.95,-109.26C226.53,-130.48 219.1,-167.22 205.35,-196 200.55,-206.05 193.76,-216.12 187.14,-224.79"/>
+<polygon fill="black" stroke="black" points="184.39,-222.62 180.92,-232.63 189.88,-226.97 184.39,-222.62"/>
+<text text-anchor="middle" x="233.35" y="-174.3" font-family="Times,serif" font-size="14.00">Iterar</text>
+</g>
+<!-- S6 -->
+<g id="node6" class="node">
+<title>S6</title>
+<polygon fill="#f9f9f9" stroke="black" points="175.35,-36 5.35,-36 5.35,0 175.35,0 175.35,-36"/>
+<text text-anchor="middle" x="90.35" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">Simplificar y Estandarizar</text>
+</g>
+<!-- S5&#45;&gt;S6 -->
+<g id="edge5" class="edge">
+<title>S5&#45;&gt;S6</title>
+<path fill="none" stroke="black" d="M90.35,-72.81C90.35,-64.79 90.35,-55.05 90.35,-46.07"/>
+<polygon fill="black" stroke="black" points="93.85,-46.03 90.35,-36.03 86.85,-46.03 93.85,-46.03"/>
+</g>
+</g>
+</svg>
+
+            </div>
+            <p style="font-size:0.8em; color:#999; text-align:center; margin-top:-20px; margin-bottom:30px;">
+                <em>Figura: Diagrama generado automáticamente mediante Graphviz</em>
+            </p>
+
+            <h3>Intuición</h3>
+            <div><p>Imagina que estás preparando un café por la mañana. Si tienes el café en una habitación, el agua en otra y la cafetera en una tercera, estás perdiendo energía y tiempo de forma absurda. La Ingeniería de Métodos es simplemente el arte de organizar tu cocina para que todo fluya sin esfuerzo. No se trata de trabajar más rápido o sudar más; se trata de trabajar de forma más inteligente eliminando todo aquello que no aporta valor al resultado final. Es la diferencia entre correr un maratón con pesas en los tobillos o hacerlo con el mejor calzado técnico. En el mundo del Digital Business, esto significa mirar un proceso administrativo o de desarrollo de software y preguntar: '¿Por qué hacemos este paso?', '¿Es realmente necesario?'. Si la respuesta es 'porque siempre se ha hecho así', es una oportunidad de oro para simplificar.</p></div>
+
+            <h3>Aplicación</h3>
+            <div></div>
+        </article>
+        
+        <article class="subtema">
+            <h2>Estudio de Tiempos: Cronometraje y Estándares</h2>
+
+            <h3>Historia</h3>
+            <div><p>El estudio de tiempos fue formalizado por Frederick Winslow Taylor a finales del siglo XIX como parte de su 'Administración Científica'. Taylor buscaba sustituir las reglas empíricas de los trabajadores por métodos científicos basados en la medición precisa con cronómetro. Su objetivo era encontrar 'The One Best Way' (la mejor forma única) y establecer un 'tiempo estándar' justo para una jornada laboral. A pesar de las críticas iniciales sobre la deshumanización del trabajo, la disciplina evolucionó para incluir factores humanos, fatiga y necesidades personales. Con el tiempo, el cronómetro físico fue reemplazado por grabaciones de vídeo y software de análisis de tiempos, permitiendo mediciones mucho más precisas y menos intrusivas, integrándose hoy en sistemas de gestión de almacenes (WMS) que calculan la productividad en tiempo real.</p></div>
+
+            <h3>Descripción Formal</h3>
+            <div><p>El estudio de tiempos por cronometraje consiste en determinar el tiempo que requiere un trabajador calificado, trabajando a un ritmo normal, para realizar una tarea específica. El proceso técnico requiere: 1. Descomponer la tarea en elementos breves y medibles. 2. Cronometrar múltiples ciclos (Tiempos Observados - TO). 3. Calificar la actuación del operario (Factor de Calificación - FC), donde 1.0 es el ritmo normal. 4. Calcular el Tiempo Normal (TN = TO x FC). 5. Aplicar Suplementos o Tolerancias (K) por fatiga, necesidades personales o demoras inevitables. El Tiempo Estándar final es TE = TN x (1 + K). Por ejemplo, si un operario tarda 10 minutos en promedio (TO), pero trabaja a un ritmo un 10% más rápido que el promedio (FC = 1.10), el TN es 11 minutos. Si se asigna un 15% de suplementos (K = 0.15), el Tiempo Estándar será de 12.65 minutos por unidad. Este estándar es vital para la planificación de la capacidad, el costeo de productos y el diseño de sistemas de incentivos.</p></div>
+
+            <div class="diagrama-box">
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg style="max-width: 80%; max-height: 350px; height: auto; width: auto;" data-width="1055pt" data-height="44pt"
+ viewBox="0.00 0.00 1054.62 44.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 40)">
+<title>G</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-40 1050.62,-40 1050.62,4 -4,4"/>
+<!-- T1 -->
+<g id="node1" class="node">
+<title>T1</title>
+<polygon fill="#f9f9f9" stroke="black" points="113,-36 0,-36 0,0 113,0 113,-36"/>
+<text text-anchor="middle" x="56.5" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">Observar Ciclos</text>
+</g>
+<!-- T2 -->
+<g id="node2" class="node">
+<title>T2</title>
+<polygon fill="#f9f9f9" stroke="black" points="286,-36 150,-36 150,0 286,0 286,-36"/>
+<text text-anchor="middle" x="218" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">Calificar Ritmo (FC)</text>
+</g>
+<!-- T1&#45;&gt;T2 -->
+<g id="edge1" class="edge">
+<title>T1&#45;&gt;T2</title>
+<path fill="none" stroke="black" d="M113.29,-18C121.84,-18 130.79,-18 139.71,-18"/>
+<polygon fill="black" stroke="black" points="139.73,-21.5 149.73,-18 139.73,-14.5 139.73,-21.5"/>
+</g>
+<!-- T3 -->
+<g id="node3" class="node">
+<title>T3</title>
+<polygon fill="#f9f9f9" stroke="black" points="498,-36 323,-36 323,0 498,0 498,-36"/>
+<text text-anchor="middle" x="410.5" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">Tiempo Normal (TO x FC)</text>
+</g>
+<!-- T2&#45;&gt;T3 -->
+<g id="edge2" class="edge">
+<title>T2&#45;&gt;T3</title>
+<path fill="none" stroke="black" d="M286.16,-18C294.8,-18 303.78,-18 312.78,-18"/>
+<polygon fill="black" stroke="black" points="312.92,-21.5 322.92,-18 312.92,-14.5 312.92,-21.5"/>
+</g>
+<!-- T4 -->
+<g id="node4" class="node">
+<title>T4</title>
+<polygon fill="#f9f9f9" stroke="black" points="679.31,-36 535.19,-18 679.31,0 823.42,-18 679.31,-36"/>
+<text text-anchor="middle" x="679.31" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">¿Aplicar Suplementos?</text>
+</g>
+<!-- T3&#45;&gt;T4 -->
+<g id="edge3" class="edge">
+<title>T3&#45;&gt;T4</title>
+<path fill="none" stroke="black" d="M498.12,-18C506.75,-18 515.67,-18 524.72,-18"/>
+<polygon fill="black" stroke="black" points="524.98,-21.5 534.98,-18 524.98,-14.5 524.98,-21.5"/>
+</g>
+<!-- T5 -->
+<g id="node5" class="node">
+<title>T5</title>
+<polygon fill="#f9f9f9" stroke="black" points="1046.62,-36 926.62,-36 926.62,0 1046.62,0 1046.62,-36"/>
+<text text-anchor="middle" x="986.62" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">Tiempo Estándar</text>
+</g>
+<!-- T4&#45;&gt;T5 -->
+<g id="edge4" class="edge">
+<title>T4&#45;&gt;T5</title>
+<path fill="none" stroke="black" d="M823.58,-18C855.72,-18 888.43,-18 915.96,-18"/>
+<polygon fill="black" stroke="black" points="916.24,-21.5 926.24,-18 916.24,-14.5 916.24,-21.5"/>
+<text text-anchor="middle" x="875.12" y="-21.8" font-family="Times,serif" font-size="14.00">TN * (1+K)</text>
+</g>
+</g>
+</svg>
+
+            </div>
+            <p style="font-size:0.8em; color:#999; text-align:center; margin-top:-20px; margin-bottom:30px;">
+                <em>Figura: Diagrama generado automáticamente mediante Graphviz</em>
+            </p>
+
+            <h3>Intuición</h3>
+            <div><p>Establecer un tiempo estándar es como fijar el 'par' en un campo de golf o el tiempo récord en una vuelta de Fórmula 1. No se trata de cronometrar al trabajador más rápido ni al más lento, sino de definir cuánto debería tardar una persona competente bajo condiciones normales sin agotarse. Si no medimos, no podemos gestionar. ¿Cómo sabríamos si tenemos suficiente personal para el Black Friday si no sabemos cuántos segundos tarda un operario en empaquetar un pedido? El estudio de tiempos nos da la 'moneda de cambio' de la producción: el tiempo. Nos permite predecir el futuro, calcular costes y asegurar que la carga de trabajo sea justa y sostenible, evitando el estrés por metas imposibles o la ineficiencia por falta de objetivos claros.</p></div>
+
+            <h3>Aplicación</h3>
+            <div></div>
+        </article>
+        
+        <article class="subtema">
+            <h2>Muestreo de Trabajo y Tiempos Predeterminados (MTM)</h2>
+
+            <h3>Historia</h3>
+            <div><p>El Muestreo de Trabajo fue introducido por L.H.C. Tippett en 1934 en la industria textil británica. Surgió de la necesidad de medir actividades que no son repetitivas o ciclos de larga duración donde el cronometraje es impráctico. Paralelamente, surgieron los sistemas de Tiempos Predeterminados, como el MTM (Methods-Time Measurement), desarrollados tras la Segunda Guerra Mundial por Maynard y Stegemerten. Estos sistemas buscaban eliminar la subjetividad de 'calificar el ritmo' del operario, asignando tiempos estándar pre-calculados a micromovimientos básicos basándose en tablas universales. Hoy en día, estos conceptos se han digitalizado, utilizando Inteligencia Artificial y visión artificial para realizar muestreos automáticos y predecir tiempos de ejecución en tareas de alta complejidad técnica o logística.</p></div>
+
+            <h3>Descripción Formal</h3>
+            <div><p>El Muestreo de Trabajo es una técnica estadística que consiste en realizar un gran número de observaciones instantáneas y aleatorias sobre un grupo de máquinas o trabajadores para determinar qué porcentaje del tiempo se dedica a diversas actividades. La precisión depende del tamaño de la muestra (N), calculado con la fórmula N = (Z^2 * p * q) / e^2, donde p es la probabilidad de la actividad, e el error máximo y Z el nivel de confianza. Ejemplo: Un estudio de 500 observaciones revela que los programadores están 'codificando' el 70% del tiempo y en 'reuniones' el 30%. Por otro lado, los Sistemas de Tiempos Predeterminados (como MTM-1) descomponen una tarea en movimientos como 'Alcanzar', 'Girar', 'Agarrar'. Cada movimiento tiene un valor en TMU (Time Measurement Units, donde 1 TMU = 0.036 segundos). Si una tarea requiere 'Alcanzar' un objeto a 30 cm, la tabla MTM dicta exactamente cuántos TMU sumar, eliminando la necesidad de usar un cronómetro en el sitio.</p></div>
+
+            <div class="diagrama-box">
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg style="max-width: 80%; max-height: 350px; height: auto; width: auto;" data-width="275pt" data-height="364pt"
+ viewBox="0.00 0.00 274.56 364.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 360)">
+<title>G</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-360 270.56,-360 270.56,4 -4,4"/>
+<!-- M1 -->
+<g id="node1" class="node">
+<title>M1</title>
+<polygon fill="#f9f9f9" stroke="black" points="213.78,-356 52.78,-356 52.78,-320 213.78,-320 213.78,-356"/>
+<text text-anchor="middle" x="133.28" y="-334.3" font-family="Helvetica,sans-Serif" font-size="14.00">Definir Objetivos/Tareas</text>
+</g>
+<!-- M2 -->
+<g id="node2" class="node">
+<title>M2</title>
+<polygon fill="#f9f9f9" stroke="black" points="218.28,-283 48.28,-283 48.28,-247 218.28,-247 218.28,-283"/>
+<text text-anchor="middle" x="133.28" y="-261.3" font-family="Helvetica,sans-Serif" font-size="14.00">Observaciones Aleatorias</text>
+</g>
+<!-- M1&#45;&gt;M2 -->
+<g id="edge1" class="edge">
+<title>M1&#45;&gt;M2</title>
+<path fill="none" stroke="black" d="M133.28,-319.81C133.28,-311.79 133.28,-302.05 133.28,-293.07"/>
+<polygon fill="black" stroke="black" points="136.78,-293.03 133.28,-283.03 129.78,-293.03 136.78,-293.03"/>
+</g>
+<!-- M3 -->
+<g id="node3" class="node">
+<title>M3</title>
+<polygon fill="#f9f9f9" stroke="black" points="133.28,-196 0.22,-178 133.28,-160 266.33,-178 133.28,-196"/>
+<text text-anchor="middle" x="133.28" y="-174.3" font-family="Helvetica,sans-Serif" font-size="14.00">¿Muestra Suficiente?</text>
+</g>
+<!-- M2&#45;&gt;M3 -->
+<g id="edge2" class="edge">
+<title>M2&#45;&gt;M3</title>
+<path fill="none" stroke="black" d="M132.11,-246.92C131.77,-241.22 131.44,-234.84 131.28,-229 131.07,-221.65 131.22,-213.69 131.51,-206.33"/>
+<polygon fill="black" stroke="black" points="135.01,-206.28 132.01,-196.12 128.02,-205.94 135.01,-206.28"/>
+</g>
+<!-- M3&#45;&gt;M2 -->
+<g id="edge4" class="edge">
+<title>M3&#45;&gt;M2</title>
+<path fill="none" stroke="black" d="M133.28,-196.18C133.28,-207.81 133.28,-223.42 133.28,-236.73"/>
+<polygon fill="black" stroke="black" points="129.78,-236.8 133.28,-246.8 136.78,-236.8 129.78,-236.8"/>
+<text text-anchor="middle" x="141.78" y="-217.8" font-family="Times,serif" font-size="14.00">No</text>
+</g>
+<!-- M4 -->
+<g id="node4" class="node">
+<title>M4</title>
+<polygon fill="#f9f9f9" stroke="black" points="225.78,-109 40.78,-109 40.78,-73 225.78,-73 225.78,-109"/>
+<text text-anchor="middle" x="133.28" y="-87.3" font-family="Helvetica,sans-Serif" font-size="14.00">Cálculo de Proporciones (P)</text>
+</g>
+<!-- M3&#45;&gt;M4 -->
+<g id="edge3" class="edge">
+<title>M3&#45;&gt;M4</title>
+<path fill="none" stroke="black" d="M133.28,-159.8C133.28,-148.16 133.28,-132.55 133.28,-119.24"/>
+<polygon fill="black" stroke="black" points="136.78,-119.18 133.28,-109.18 129.78,-119.18 136.78,-119.18"/>
+<text text-anchor="middle" x="139.28" y="-130.8" font-family="Times,serif" font-size="14.00">Sí</text>
+</g>
+<!-- M5 -->
+<g id="node5" class="node">
+<title>M5</title>
+<polygon fill="#f9f9f9" stroke="black" points="213.28,-36 53.28,-36 53.28,0 213.28,0 213.28,-36"/>
+<text text-anchor="middle" x="133.28" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">Análisis de Ineficiencias</text>
+</g>
+<!-- M4&#45;&gt;M5 -->
+<g id="edge5" class="edge">
+<title>M4&#45;&gt;M5</title>
+<path fill="none" stroke="black" d="M133.28,-72.81C133.28,-64.79 133.28,-55.05 133.28,-46.07"/>
+<polygon fill="black" stroke="black" points="136.78,-46.03 133.28,-36.03 129.78,-46.03 136.78,-46.03"/>
+</g>
+</g>
+</svg>
+
+            </div>
+            <p style="font-size:0.8em; color:#999; text-align:center; margin-top:-20px; margin-bottom:30px;">
+                <em>Figura: Diagrama generado automáticamente mediante Graphviz</em>
+            </p>
+
+            <h3>Intuición</h3>
+            <div><p>El muestreo de trabajo es como sacar 100 fotos aleatorias de una oficina durante un mes. Si en 60 fotos la gente está trabajando y en 40 no, puedes inferir estadísticamente que la utilización es del 60% sin haber estado allí vigilando cada segundo. Es una herramienta de diagnóstico poderosa para procesos no lineales. Los tiempos predeterminados (MTM), por su parte, son como los bloques de LEGO: cada pieza tiene un tamaño fijo. Si sabes qué piezas (movimientos) necesitas para construir algo, puedes saber cuánto medirá el total (tiempo total) antes de empezar a construirlo. Es ingeniería predictiva pura: diseñar el tiempo antes de que el trabajo ocurra.</p></div>
+
+            <h3>Aplicación</h3>
+            <div></div>
+        </article>
+        </body></html>

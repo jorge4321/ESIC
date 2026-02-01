@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>15 - Filosofías de Producción - Principios del pensamiento Lean.</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #f4f4f9; color: #333; margin: 0; padding: 20px; line-height: 1.6; position: relative; }
+        header { background: #2c3e50; color: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; text-align:center; }
+        h1 { margin: 0; font-size: 1.5rem; }
+
+        /* Estilo del botón Atrás */
+        .btn-atras {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #7f8c8d;
+            color: white;
+            padding: 8px 15px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            transition: background 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+        .btn-atras:hover { background: #95a5a6; }
+
+        .subtema {
+            background: white;
+            padding: 40px;
+            margin-bottom: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        h2 { color: #2980b9; border-bottom: 2px solid #eee; padding-bottom: 10px; margin-top: 0; }
+        h3 { color: #7f8c8d; font-size: 0.9em; text-transform: uppercase; margin-top: 30px; letter-spacing: 1px; border-left: 3px solid #d4af37; padding-left: 10px; }
+
+        .diagrama-box {
+            text-align: center;
+            margin: 30px 0;
+            padding: 20px;
+            background: #fafafa;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 150px;
+        }
+
+        p { margin-bottom: 1rem; }
+        strong { color: #2c3e50; font-weight: 600; }
+        code { background: #f0f0f0; padding: 2px 5px; border-radius: 3px; font-family: monospace; color: #c0392b; }
+        ul { padding-left: 20px; }
+        li { margin-bottom: 0.5rem; }
+    </style>
+</head>
+<body>
+    <button onclick="window.history.back()" class="btn-atras">Atrás</button>
+    <header><h1>15 - Filosofías de Producción - Principios del pensamiento Lean.</h1></header>
+    <main>
+
+        <article class="subtema">
+            <h2>Identificación y Eliminación del Desperdicio (Muda)</h2>
+
+            <h3>Historia</h3>
+            <div><p>El concepto de 'Muda' o desperdicio tiene sus raíces en el Sistema de Producción Toyota (TPS), desarrollado tras la Segunda Guerra Mundial por Taiichi Ohno y Shigeo Shingo. En un Japón devastado y con recursos limitados, Toyota no podía permitirse el lujo del modelo de producción en masa de Ford, que generaba grandes inventarios y productos defectuosos. Ohno observó los supermercados estadounidenses y se inspiró en su eficiencia de reposición. Identificó que cualquier actividad que consume recursos pero no añade valor para el cliente final es un desperdicio. Originalmente se definieron siete desperdicios, a los que más tarde se añadió el talento no utilizado. Esta filosofía transformó a Toyota de una pequeña fábrica de telares en el líder mundial de la automoción, demostrando que la eficiencia no viene de trabajar más duro, sino de eliminar lo innecesario.</p></div>
+
+            <h3>Descripción Formal</h3>
+            <div><p>En el marco del Pensamiento Lean, se definen ocho tipos de desperdicios (Muda) que deben ser eliminados sistemáticamente para optimizar las operaciones. 1. Sobreproducción: Producir más de lo requerido o antes de que se necesite. 2. Tiempo de espera: Periodos de inactividad de operarios o maquinaria por falta de materiales o información. 3. Transporte: Movimiento innecesario de productos o materiales entre procesos. 4. Exceso de procesado: Realizar tareas que el cliente no valora o utilizar herramientas más complejas de lo necesario. 5. Inventario: Exceso de stock de materia prima, trabajo en curso (WIP) o producto terminado. 6. Movimiento: Desplazamientos innecesarios del personal dentro del área de trabajo. 7. Defectos: Errores que requieren reprocesamiento o desecho. 8. Talento no utilizado: No aprovechar la capacidad intelectual y creativa de los empleados. Ejemplo: En un entorno de 'Digital Business', la sobreproducción puede manifestarse como el desarrollo de funcionalidades de software que los usuarios nunca utilizan (estimado en un 60% en proyectos tradicionales). El 'tiempo de espera' se traduce en latencias de aprobación entre departamentos que detienen el flujo de valor hacia el cliente final.</p></div>
+
+            <div class="diagrama-box">
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg style="max-width: 80%; max-height: 350px; height: auto; width: auto;" data-width="427pt" data-height="334pt"
+ viewBox="0.00 0.00 426.50 334.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 330)">
+<title>G</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-330 422.5,-330 422.5,4 -4,4"/>
+<!-- start -->
+<g id="node1" class="node">
+<title>start</title>
+<polygon fill="#f9f9f9" stroke="black" points="231,-326 111,-326 111,-290 231,-290 231,-326"/>
+<text text-anchor="middle" x="171" y="-304.3" font-family="Helvetica,sans-Serif" font-size="14.00">Inicio de Proceso</text>
+</g>
+<!-- check_value -->
+<g id="node2" class="node">
+<title>check_value</title>
+<polygon fill="#f9f9f9" stroke="black" points="171,-253 0,-215 171,-177 342,-215 171,-253"/>
+<text text-anchor="middle" x="171" y="-218.8" font-family="Helvetica,sans-Serif" font-size="14.00">¿La actividad añade valor</text>
+<text text-anchor="middle" x="171" y="-203.8" font-family="Helvetica,sans-Serif" font-size="14.00">percibido por el cliente?</text>
+</g>
+<!-- start&#45;&gt;check_value -->
+<g id="edge1" class="edge">
+<title>start&#45;&gt;check_value</title>
+<path fill="none" stroke="black" d="M171,-289.88C171,-282.25 171,-272.83 171,-263.31"/>
+<polygon fill="black" stroke="black" points="174.5,-263.02 171,-253.02 167.5,-263.02 174.5,-263.02"/>
+</g>
+<!-- keep -->
+<g id="node4" class="node">
+<title>keep</title>
+<polygon fill="#ccffcc" stroke="black" points="227,-117.5 79,-117.5 79,-81.5 227,-81.5 227,-117.5"/>
+<text text-anchor="middle" x="153" y="-95.8" font-family="Helvetica,sans-Serif" font-size="14.00">Optimizar y Mantener</text>
+</g>
+<!-- check_value&#45;&gt;keep -->
+<g id="edge2" class="edge">
+<title>check_value&#45;&gt;keep</title>
+<path fill="none" stroke="black" d="M165.3,-178.09C162.74,-161.89 159.75,-143.06 157.36,-128"/>
+<polygon fill="black" stroke="black" points="160.77,-127.13 155.74,-117.8 153.85,-128.22 160.77,-127.13"/>
+<text text-anchor="middle" x="168.5" y="-147.8" font-family="Times,serif" font-size="14.00">SÍ</text>
+</g>
+<!-- type_waste -->
+<g id="node5" class="node">
+<title>type_waste</title>
+<polygon fill="#f9f9f9" stroke="black" points="418.5,-126 245.5,-126 245.5,-73 418.5,-73 418.5,-126"/>
+<text text-anchor="middle" x="332" y="-110.8" font-family="Helvetica,sans-Serif" font-size="14.00">Identificar tipo:</text>
+<text text-anchor="middle" x="332" y="-95.8" font-family="Helvetica,sans-Serif" font-size="14.00">Sobreproducción, Espera,</text>
+<text text-anchor="middle" x="332" y="-80.8" font-family="Helvetica,sans-Serif" font-size="14.00">Defectos, etc.</text>
+</g>
+<!-- check_value&#45;&gt;type_waste -->
+<g id="edge3" class="edge">
+<title>check_value&#45;&gt;type_waste</title>
+<path fill="none" stroke="black" d="M211.21,-185.65C234.37,-169.32 263.53,-148.77 287.4,-131.95"/>
+<polygon fill="black" stroke="black" points="289.44,-134.79 295.6,-126.16 285.41,-129.06 289.44,-134.79"/>
+<text text-anchor="middle" x="275" y="-147.8" font-family="Times,serif" font-size="14.00">NO</text>
+</g>
+<!-- remove -->
+<g id="node3" class="node">
+<title>remove</title>
+<polygon fill="#ffcccc" stroke="black" points="396,-36 268,-36 268,0 396,0 396,-36"/>
+<text text-anchor="middle" x="332" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">ELIMINAR (Muda)</text>
+</g>
+<!-- type_waste&#45;&gt;remove -->
+<g id="edge4" class="edge">
+<title>type_waste&#45;&gt;remove</title>
+<path fill="none" stroke="black" d="M332,-72.91C332,-64.48 332,-55.08 332,-46.52"/>
+<polygon fill="black" stroke="black" points="335.5,-46.26 332,-36.26 328.5,-46.26 335.5,-46.26"/>
+</g>
+</g>
+</svg>
+
+            </div>
+            <p style="font-size:0.8em; color:#999; text-align:center; margin-top:-20px; margin-bottom:30px;">
+                <em>Figura: Diagrama generado automáticamente mediante Graphviz</em>
+            </p>
+
+            <h3>Intuición</h3>
+            <div><p>Imagina que estás cocinando una cena para amigos. El desperdicio sería comprar ingredientes que no vas a usar (inventario), cocinar tres platos que nadie pidió (sobreproducción), caminar diez veces a la despensa porque olvidaste algo (movimiento) o tener que tirar la comida porque se quemó (defectos). El pensamiento Lean nos dice que para ser un chef excepcional, no necesitas la cocina más grande, sino asegurarte de que cada movimiento que hagas y cada euro que gastes termine directamente en el plato y sea disfrutado por tus invitados. En el mundo de los negocios, 'Muda' es todo aquello por lo que tu cliente, si supiera que existe, se negaría a pagar.</p></div>
+
+            <h3>Aplicación</h3>
+            <div><p>Un Director de Operaciones en una startup de e-commerce aplica este principio analizando el 'Lead Time' desde que se hace un pedido hasta que se entrega. Si el producto pasa el 80% del tiempo parado en un almacén esperando ser empaquetado, el DO identifica un desperdicio de 'espera' e 'inventario'. Al implementar un sistema de picking optimizado y reducir los lotes de envío, disminuye costes operativos y mejora la satisfacción del cliente. También lo aplica en procesos administrativos, eliminando firmas redundantes en flujos de aprobación digital que solo añaden burocracia sin mejorar la seguridad del proceso.</p></div>
+        </article>
+        
+        <article class="subtema">
+            <h2>Flujo de Valor y Sistemas Pull (Just-in-Time)</h2>
+
+            <h3>Historia</h3>
+            <div><p>Históricamente, la industria operaba bajo sistemas 'Push' (empujar), donde la producción se basaba en previsiones a largo plazo y se 'empujaba' el producto hacia el mercado, creando stocks masivos. El cambio hacia el sistema 'Pull' (tirar) fue la piedra angular de la revolución JIT (Just-in-Time). Esta evolución fue impulsada por la necesidad de adaptabilidad. En la década de 1970, durante la crisis del petróleo, las empresas con sistemas Push colapsaron ante el cambio repentino de la demanda, mientras que las empresas Lean que utilizaban sistemas Pull pudieron ajustar su producción casi instantáneamente. El concepto evolucionó desde las tarjetas físicas (Kanban) en las fábricas de Nagoya hasta los actuales sistemas de orquestación de servicios en la nube y arquitecturas de microservicios en negocios digitales.</p></div>
+
+            <h3>Descripción Formal</h3>
+            <div><p>El Flujo de Valor comprende todas las acciones (tanto de valor añadido como de no valor añadido) necesarias para llevar un producto desde su concepto hasta el cliente. El principio Lean dicta que una vez identificado el valor, este debe fluir sin interrupciones. El sistema 'Pull' significa que nadie aguas arriba debe producir nada hasta que el cliente aguas abajo lo solicite. La métrica clave aquí es el Takt Time (el ritmo de la demanda del cliente). Ejemplo técnico: En la gestión de operaciones de un SaaS (Software as a Service), el flujo de valor se optimiza mediante CI/CD (Continuous Integration/Continuous Deployment). En lugar de lanzar una gran actualización anual (Push), se lanzan pequeñas mejoras basadas en el feedback real del usuario (Pull). Se utiliza el concepto de 'Supermercado' de datos o servicios, donde el proceso posterior retira lo que necesita y el proceso anterior solo repone lo consumido, manteniendo el inventario de 'trabajo en curso' al mínimo posible.</p></div>
+
+            <div class="diagrama-box">
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg style="max-width: 80%; max-height: 350px; height: auto; width: auto;" data-width="811pt" data-height="132pt"
+ viewBox="0.00 0.00 811.00 132.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 128)">
+<title>G</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-128 807,-128 807,4 -4,4"/>
+<!-- cliente -->
+<g id="node1" class="node">
+<title>cliente</title>
+<polygon fill="#e1f5fe" stroke="black" points="131,-40 0,-40 0,-4 131,-4 131,-40"/>
+<text text-anchor="middle" x="65.5" y="-18.3" font-family="Helvetica,sans-Serif" font-size="14.00">Cliente (Demanda)</text>
+</g>
+<!-- kanban -->
+<g id="node2" class="node">
+<title>kanban</title>
+<polygon fill="#f9f9f9" stroke="black" points="353.5,-70 216.5,-70 216.5,-34 353.5,-34 353.5,-70"/>
+<text text-anchor="middle" x="285" y="-48.3" font-family="Helvetica,sans-Serif" font-size="14.00">Señal Pull (Kanban)</text>
+</g>
+<!-- cliente&#45;&gt;kanban -->
+<g id="edge1" class="edge">
+<title>cliente&#45;&gt;kanban</title>
+<path fill="none" stroke="black" d="M131.17,-30.92C154.72,-34.17 181.59,-37.87 206.17,-41.26"/>
+<polygon fill="black" stroke="black" points="205.8,-44.75 216.18,-42.65 206.75,-37.81 205.8,-44.75"/>
+<text text-anchor="middle" x="168" y="-41.8" font-family="Times,serif" font-size="14.00">Pedido</text>
+</g>
+<!-- prod -->
+<g id="node3" class="node">
+<title>prod</title>
+<polygon fill="#f9f9f9" stroke="black" points="649,-70 495,-70 495,-34 649,-34 649,-70"/>
+<text text-anchor="middle" x="572" y="-48.3" font-family="Helvetica,sans-Serif" font-size="14.00">Producción / Ejecución</text>
+</g>
+<!-- kanban&#45;&gt;prod -->
+<g id="edge2" class="edge">
+<title>kanban&#45;&gt;prod</title>
+<path fill="none" stroke="black" d="M353.54,-52C392.77,-52 442.61,-52 484.67,-52"/>
+<polygon fill="black" stroke="black" points="484.9,-55.5 494.9,-52 484.9,-48.5 484.9,-55.5"/>
+</g>
+<!-- flujo -->
+<g id="node5" class="node">
+<title>flujo</title>
+<polygon fill="#f9f9f9" stroke="black" points="803,-36 686,-36 686,0 803,0 803,-36"/>
+<text text-anchor="middle" x="744.5" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">Entrega de Valor</text>
+</g>
+<!-- prod&#45;&gt;flujo -->
+<g id="edge4" class="edge">
+<title>prod&#45;&gt;flujo</title>
+<path fill="none" stroke="black" d="M649.27,-36.79C658.23,-35 667.32,-33.19 676.14,-31.43"/>
+<polygon fill="black" stroke="black" points="676.84,-34.86 685.96,-29.47 675.47,-28 676.84,-34.86"/>
+</g>
+<!-- mat -->
+<g id="node4" class="node">
+<title>mat</title>
+<polygon fill="#f9f9f9" stroke="black" points="365,-124 205,-124 205,-88 365,-88 365,-124"/>
+<text text-anchor="middle" x="285" y="-102.3" font-family="Helvetica,sans-Serif" font-size="14.00">Suministro Just&#45;in&#45;Time</text>
+</g>
+<!-- mat&#45;&gt;prod -->
+<g id="edge3" class="edge">
+<title>mat&#45;&gt;prod</title>
+<path fill="none" stroke="black" d="M365.01,-91.03C402.21,-83.98 446.67,-75.56 484.74,-68.34"/>
+<polygon fill="black" stroke="black" points="485.61,-71.74 494.79,-66.44 484.31,-64.86 485.61,-71.74"/>
+<text text-anchor="middle" x="430" y="-89.8" font-family="Times,serif" font-size="14.00">Solo lo necesario</text>
+</g>
+<!-- flujo&#45;&gt;cliente -->
+<g id="edge5" class="edge">
+<title>flujo&#45;&gt;cliente</title>
+<path fill="none" stroke="black" d="M685.98,-18.34C563.66,-19.06 277.82,-20.75 141.45,-21.56"/>
+<polygon fill="black" stroke="black" points="141.09,-18.06 131.11,-21.62 141.13,-25.06 141.09,-18.06"/>
+</g>
+</g>
+</svg>
+
+            </div>
+            <p style="font-size:0.8em; color:#999; text-align:center; margin-top:-20px; margin-bottom:30px;">
+                <em>Figura: Diagrama generado automáticamente mediante Graphviz</em>
+            </p>
+
+            <h3>Intuición</h3>
+            <div><p>Piensa en la diferencia entre un buffet libre y un restaurante a la carta. En el buffet (Push), la comida se prepara con antelación esperando que alguien la coma; a menudo hay sobras y la calidad baja. En el restaurante a la carta (Pull), la cocina solo empieza a trabajar cuando entra un pedido. Esto garantiza frescura, reduce desperdicio y permite personalizar el plato. El 'Flujo' es como un río: queremos que el agua (tu producto) corra suavemente sin presas (cuellos de botella) ni remolinos (reprocesos). Si el cliente no bebe agua, el río no debe desbordarse; simplemente se regula el caudal en la fuente.</p></div>
+
+            <h3>Aplicación</h3>
+            <div><p>Un Director de Operaciones en una empresa de servicios financieros digitales utiliza tableros Kanban para gestionar el flujo de solicitudes de préstamos. En lugar de permitir que los analistas acumulen cientos de expedientes en su bandeja de entrada (lo que causaría retrasos y errores), establece límites de WIP (Work In Progress). Solo cuando un analista termina un expediente, 'tira' del siguiente. Esto reduce el tiempo de respuesta total (Cycle Time) y permite detectar inmediatamente dónde se está atascando el flujo, permitiendo una asignación dinámica de recursos según la demanda real del mercado.</p></div>
+        </article>
+        
+        <article class="subtema">
+            <h2>Mejora Continua (Kaizen) y Respeto por las Personas</h2>
+
+            <h3>Historia</h3>
+            <div><p>Kaizen proviene de las palabras japonesas 'Kai' (cambio) y 'Zen' (bueno). Tras la ocupación de Japón, expertos estadounidenses como W. Edwards Deming enseñaron métodos de control estadístico de calidad que, fusionados con la cultura japonesa de disciplina y colectivismo, dieron lugar al Kaizen. A diferencia de la innovación radical (Kaikaku), el Kaizen se centra en mejoras pequeñas y constantes. Sin embargo, el pilar más olvidado pero crítico es el 'Respeto por las Personas'. Toyota entendió que los operarios de la línea de montaje eran quienes mejor conocían los problemas. Se les otorgó el poder de detener la producción (Jidoka) si detectaban un error. Esta democratización de la eficiencia fue revolucionaria, pasando de un modelo donde 'unos piensan y otros ejecutan' a un modelo donde 'todos piensan para ejecutar mejor'.</p></div>
+
+            <h3>Descripción Formal</h3>
+            <div><p>El ciclo PDCA (Plan-Do-Check-Act) es la herramienta operativa del Kaizen. 1. Plan: Identificar una oportunidad y planificar el cambio. 2. Do: Implementar la mejora a pequeña escala. 3. Check: Verificar los resultados mediante datos. 4. Act: Estandarizar el cambio si fue exitoso o comenzar de nuevo. El 'Respeto por las Personas' implica seguridad psicológica, formación continua y el concepto de 'Gemba' (ir al lugar real donde ocurren las cosas). Ejemplo: En una operación de atención al cliente digital, el Kaizen no consiste en comprar una IA costosa cada 5 años, sino en que los agentes de soporte sugieran diariamente pequeños cambios en las plantillas de respuesta o en la interfaz de la base de conocimientos, reduciendo los segundos de resolución de forma incremental pero constante.</p></div>
+
+            <div class="diagrama-box">
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg style="max-width: 80%; max-height: 350px; height: auto; width: auto;" data-width="407pt" data-height="510pt"
+ viewBox="0.00 0.00 407.39 510.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 506)">
+<title>G</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-506 403.39,-506 403.39,4 -4,4"/>
+<!-- plan -->
+<g id="node1" class="node">
+<title>plan</title>
+<polygon fill="#f9f9f9" stroke="black" points="294.39,-356 174.39,-356 174.39,-320 294.39,-320 294.39,-356"/>
+<text text-anchor="middle" x="234.39" y="-334.3" font-family="Helvetica,sans-Serif" font-size="14.00">PLAN (Planificar)</text>
+</g>
+<!-- do -->
+<g id="node2" class="node">
+<title>do</title>
+<polygon fill="#f9f9f9" stroke="black" points="203.39,-283 103.39,-283 103.39,-247 203.39,-247 203.39,-283"/>
+<text text-anchor="middle" x="153.39" y="-261.3" font-family="Helvetica,sans-Serif" font-size="14.00">DO (Ejecutar)</text>
+</g>
+<!-- plan&#45;&gt;do -->
+<g id="edge3" class="edge">
+<title>plan&#45;&gt;do</title>
+<path fill="none" stroke="black" d="M214.78,-319.81C204.53,-310.83 191.83,-299.69 180.64,-289.89"/>
+<polygon fill="black" stroke="black" points="182.64,-286.99 172.82,-283.03 178.03,-292.25 182.64,-286.99"/>
+</g>
+<!-- check -->
+<g id="node3" class="node">
+<title>check</title>
+<polygon fill="#f9f9f9" stroke="black" points="205.89,-196 80.89,-196 80.89,-160 205.89,-160 205.89,-196"/>
+<text text-anchor="middle" x="143.39" y="-174.3" font-family="Helvetica,sans-Serif" font-size="14.00">CHECK (Verificar)</text>
+</g>
+<!-- do&#45;&gt;check -->
+<g id="edge4" class="edge">
+<title>do&#45;&gt;check</title>
+<path fill="none" stroke="black" d="M151.36,-246.8C150,-235.16 148.16,-219.55 146.59,-206.24"/>
+<polygon fill="black" stroke="black" points="150.05,-205.7 145.41,-196.18 143.1,-206.52 150.05,-205.7"/>
+</g>
+<!-- success -->
+<g id="node5" class="node">
+<title>success</title>
+<polygon fill="#f9f9f9" stroke="black" points="143.39,-123 0.11,-105 143.39,-87 286.67,-105 143.39,-123"/>
+<text text-anchor="middle" x="143.39" y="-101.3" font-family="Helvetica,sans-Serif" font-size="14.00">¿Resultados positivos?</text>
+</g>
+<!-- check&#45;&gt;success -->
+<g id="edge5" class="edge">
+<title>check&#45;&gt;success</title>
+<path fill="none" stroke="black" d="M143.39,-159.81C143.39,-151.79 143.39,-142.05 143.39,-133.07"/>
+<polygon fill="black" stroke="black" points="146.89,-133.03 143.39,-123.03 139.89,-133.03 146.89,-133.03"/>
+</g>
+<!-- act -->
+<g id="node4" class="node">
+<title>act</title>
+<polygon fill="#f9f9f9" stroke="black" points="295.39,-36 163.39,-36 163.39,0 295.39,0 295.39,-36"/>
+<text text-anchor="middle" x="229.39" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">ACT (Estandarizar)</text>
+</g>
+<!-- act&#45;&gt;plan -->
+<g id="edge8" class="edge">
+<title>act&#45;&gt;plan</title>
+<path fill="none" stroke="black" d="M263.47,-36.02C287.12,-50.49 314.39,-73.74 314.39,-104 314.39,-266 314.39,-266 314.39,-266 314.39,-286.75 299.15,-302.91 281.98,-314.53"/>
+<polygon fill="black" stroke="black" points="280.07,-311.6 273.45,-319.88 283.78,-317.53 280.07,-311.6"/>
+<text text-anchor="middle" x="356.89" y="-174.3" font-family="Times,serif" font-size="14.00">Siguiente Ciclo</text>
+</g>
+<!-- success&#45;&gt;plan -->
+<g id="edge7" class="edge">
+<title>success&#45;&gt;plan</title>
+<path fill="none" stroke="black" d="M170.83,-119.65C186.29,-128.84 204.45,-142.49 214.39,-160 241.17,-207.15 240.65,-272.76 237.66,-309.41"/>
+<polygon fill="black" stroke="black" points="234.13,-309.52 236.68,-319.81 241.1,-310.18 234.13,-309.52"/>
+<text text-anchor="middle" x="246.39" y="-217.8" font-family="Times,serif" font-size="14.00">NO</text>
+</g>
+<!-- success&#45;&gt;act -->
+<g id="edge6" class="edge">
+<title>success&#45;&gt;act</title>
+<path fill="none" stroke="black" d="M158.76,-88.8C171.52,-76.2 189.89,-58.03 204.71,-43.4"/>
+<polygon fill="black" stroke="black" points="207.43,-45.63 212.08,-36.11 202.5,-40.65 207.43,-45.63"/>
+<text text-anchor="middle" x="198.89" y="-57.8" font-family="Times,serif" font-size="14.00">SÍ</text>
+</g>
+<!-- gemba -->
+<g id="node6" class="node">
+<title>gemba</title>
+<polygon fill="#f9f9f9" stroke="black" points="323.39,-429 145.39,-429 145.39,-393 323.39,-393 323.39,-429"/>
+<text text-anchor="middle" x="234.39" y="-407.3" font-family="Helvetica,sans-Serif" font-size="14.00">Gemba: Observación Real</text>
+</g>
+<!-- gemba&#45;&gt;plan -->
+<g id="edge2" class="edge">
+<title>gemba&#45;&gt;plan</title>
+<path fill="none" stroke="black" d="M234.39,-392.81C234.39,-384.79 234.39,-375.05 234.39,-366.07"/>
+<polygon fill="black" stroke="black" points="237.89,-366.03 234.39,-356.03 230.89,-366.03 237.89,-366.03"/>
+</g>
+<!-- people -->
+<g id="node7" class="node">
+<title>people</title>
+<polygon fill="#f9f9f9" stroke="black" points="313.39,-502 155.39,-502 155.39,-466 313.39,-466 313.39,-502"/>
+<text text-anchor="middle" x="234.39" y="-480.3" font-family="Helvetica,sans-Serif" font-size="14.00">Respeto y Participación</text>
+</g>
+<!-- people&#45;&gt;gemba -->
+<g id="edge1" class="edge">
+<title>people&#45;&gt;gemba</title>
+<path fill="none" stroke="black" d="M234.39,-465.81C234.39,-457.79 234.39,-448.05 234.39,-439.07"/>
+<polygon fill="black" stroke="black" points="237.89,-439.03 234.39,-429.03 230.89,-439.03 237.89,-439.03"/>
+</g>
+</g>
+</svg>
+
+            </div>
+            <p style="font-size:0.8em; color:#999; text-align:center; margin-top:-20px; margin-bottom:30px;">
+                <em>Figura: Diagrama generado automáticamente mediante Graphviz</em>
+            </p>
+
+            <h3>Intuición</h3>
+            <div><p>Imagina que quieres correr un maratón. La innovación radical sería intentar correr los 42km hoy mismo sin preparación; probablemente fallarías. El Kaizen es salir a caminar 15 minutos hoy, y mañana 16, y pasado 17. Es la magia del interés compuesto aplicado a la gestión empresarial. Pero para que esto funcione, el corredor (el empleado) debe sentirse valorado y escuchado. Si el entrenador (el jefe) ignora el dolor de pies del corredor, el plan fallará. El respeto significa entender que la mejor tecnología del mundo es inútil sin el compromiso y la inteligencia de quienes la operan.</p></div>
+
+            <h3>Aplicación</h3>
+            <div><p>Un Director de Operaciones en una plataforma de Logtech organiza 'Caminatas Gemba' semanales, donde los desarrolladores de software visitan los almacenes para ver cómo los transportistas usan su App. Al observar las dificultades reales (falta de luz, guantes que dificultan el uso táctil), surgen ideas de mejora inmediata. Se implementa un sistema de 'andón' digital donde cualquier empleado puede reportar un error en el proceso logístico. El DO no castiga el error, sino que lo celebra como una oportunidad de aprendizaje, fomentando una cultura de transparencia y optimización constante del rendimiento operativo.</p></div>
+        </article>
+        </body></html>

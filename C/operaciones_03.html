@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3 - Diseño del Sistema - Diagramas de flujo de proceso.</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #f4f4f9; color: #333; margin: 0; padding: 20px; line-height: 1.6; position: relative; }
+        header { background: #2c3e50; color: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; text-align:center; }
+        h1 { margin: 0; font-size: 1.5rem; }
+
+        /* Estilo del botón Atrás */
+        .btn-atras {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #7f8c8d;
+            color: white;
+            padding: 8px 15px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            transition: background 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+        .btn-atras:hover { background: #95a5a6; }
+
+        .subtema {
+            background: white;
+            padding: 40px;
+            margin-bottom: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        h2 { color: #2980b9; border-bottom: 2px solid #eee; padding-bottom: 10px; margin-top: 0; }
+        h3 { color: #7f8c8d; font-size: 0.9em; text-transform: uppercase; margin-top: 30px; letter-spacing: 1px; border-left: 3px solid #d4af37; padding-left: 10px; }
+
+        .diagrama-box {
+            text-align: center;
+            margin: 30px 0;
+            padding: 20px;
+            background: #fafafa;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 150px;
+        }
+
+        p { margin-bottom: 1rem; }
+        strong { color: #2c3e50; font-weight: 600; }
+        code { background: #f0f0f0; padding: 2px 5px; border-radius: 3px; font-family: monospace; color: #c0392b; }
+        ul { padding-left: 20px; }
+        li { margin-bottom: 0.5rem; }
+    </style>
+</head>
+<body>
+    <button onclick="window.history.back()" class="btn-atras">Atrás</button>
+    <header><h1>3 - Diseño del Sistema - Diagramas de flujo de proceso.</h1></header>
+    <main>
+
+        <article class="subtema">
+            <h2>Mapeo de Procesos Estándar (ANSI/ASME)</h2>
+
+            <h3>Historia</h3>
+            <div><p>La historia del mapeo de procesos se remonta a 1921, cuando Frank Gilbreth, un pionero de la ingeniería industrial, presentó los 'Process Charts' ante la Sociedad Americana de Ingenieros Mecánicos (ASME). Gilbreth buscaba una forma de visualizar el trabajo para identificar movimientos innecesarios. Originalmente, estos diagramas se centraban exclusivamente en el flujo físico de materiales en fábricas. Sin embargo, con el auge de la administración científica de Taylor y el posterior desarrollo de los estándares ANSI en 1947, la técnica evolucionó para incluir procesos administrativos. En la era del Digital Business, esta herramienta ha trascendido lo físico para convertirse en el pilar del diseño de algoritmos y flujos de usuario (User Flows). Lo que comenzó como un estudio de tiempos y movimientos en líneas de montaje es hoy el lenguaje universal para explicar cómo una organización crea valor paso a paso, permitiendo a los directores de operaciones documentar el 'status quo' antes de proponer innovaciones disruptivas.</p></div>
+
+            <h3>Descripción Formal</h3>
+            <div><p>El mapeo de procesos bajo estándares ANSI/ASME utiliza una simbología técnica para representar la secuencia lógica de actividades. Los componentes principales son: el óvalo (inicio/fin), el rectángulo (operación o tarea), el rombo (punto de decisión o bifurcación lógica) y la flecha (dirección del flujo). Técnicamente, un diagrama de flujo de proceso debe ser exhaustivo y evitar la ambigüedad, asegurando que cada 'input' se transforme en un 'output' específico. Por ejemplo, en una operación de e-commerce, el proceso comienza con la 'Recepción del pedido' (Rectángulo). Inmediatamente, se llega a un rombo de decisión: '¿Hay stock disponible?'. Si la respuesta es 'No', se activa un subproceso de 'Notificación al cliente y Reorden'; si es 'Sí', se procede al 'Picking y Packing'. El rigor técnico exige que cada salida de un rombo de decisión esté claramente etiquetada (Sí/No, A/B). Otro ejemplo es el flujo de procesamiento de pagos en una pasarela digital (Stripe o PayPal), donde se deben mapear las validaciones de seguridad (3DS), las autorizaciones bancarias y la confirmación final de la transacción. Un diseño de sistema robusto minimiza los bucles infinitos y asegura que cada paso añada valor o cumpla un requisito regulatorio.</p></div>
+
+            <div class="diagrama-box">
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg style="max-width: 80%; max-height: 350px; height: auto; width: auto;" data-width="329pt" data-height="350pt"
+ viewBox="0.00 0.00 329.04 350.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 346)">
+<title>G</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-346 325.04,-346 325.04,4 -4,4"/>
+<!-- start -->
+<g id="node1" class="node">
+<title>start</title>
+<ellipse fill="#f9f9f9" stroke="black" cx="166.04" cy="-324" rx="100.18" ry="18"/>
+<text text-anchor="middle" x="166.04" y="-320.3" font-family="Helvetica,sans-Serif" font-size="14.00">Inicio: Pedido Recibido</text>
+</g>
+<!-- stock -->
+<g id="node2" class="node">
+<title>stock</title>
+<polygon fill="#f9f9f9" stroke="black" points="166.04,-269 79.74,-251 166.04,-233 252.34,-251 166.04,-269"/>
+<text text-anchor="middle" x="166.04" y="-247.3" font-family="Helvetica,sans-Serif" font-size="14.00">¿Hay Stock?</text>
+</g>
+<!-- start&#45;&gt;stock -->
+<g id="edge1" class="edge">
+<title>start&#45;&gt;stock</title>
+<path fill="none" stroke="black" d="M166.04,-305.81C166.04,-297.79 166.04,-288.05 166.04,-279.07"/>
+<polygon fill="black" stroke="black" points="169.54,-279.03 166.04,-269.03 162.54,-279.03 169.54,-279.03"/>
+</g>
+<!-- prep -->
+<g id="node3" class="node">
+<title>prep</title>
+<polygon fill="#f9f9f9" stroke="black" points="146.54,-182 31.54,-182 31.54,-146 146.54,-146 146.54,-182"/>
+<text text-anchor="middle" x="89.04" y="-160.3" font-family="Helvetica,sans-Serif" font-size="14.00">Preparar Pedido</text>
+</g>
+<!-- stock&#45;&gt;prep -->
+<g id="edge2" class="edge">
+<title>stock&#45;&gt;prep</title>
+<path fill="none" stroke="black" d="M152.98,-235.58C141.58,-223 124.79,-204.47 111.28,-189.55"/>
+<polygon fill="black" stroke="black" points="113.87,-187.19 104.56,-182.13 108.68,-191.89 113.87,-187.19"/>
+<text text-anchor="middle" x="139.54" y="-203.8" font-family="Times,serif" font-size="14.00">SI</text>
+</g>
+<!-- cancel -->
+<g id="node4" class="node">
+<title>cancel</title>
+<polygon fill="#f9f9f9" stroke="black" points="321.04,-182 165.04,-182 165.04,-146 321.04,-146 321.04,-182"/>
+<text text-anchor="middle" x="243.04" y="-160.3" font-family="Helvetica,sans-Serif" font-size="14.00">Notificar Falta de Stock</text>
+</g>
+<!-- stock&#45;&gt;cancel -->
+<g id="edge3" class="edge">
+<title>stock&#45;&gt;cancel</title>
+<path fill="none" stroke="black" d="M179.1,-235.58C190.5,-223 207.29,-204.47 220.8,-189.55"/>
+<polygon fill="black" stroke="black" points="223.4,-191.89 227.52,-182.13 218.22,-187.19 223.4,-191.89"/>
+<text text-anchor="middle" x="219.04" y="-203.8" font-family="Times,serif" font-size="14.00">NO</text>
+</g>
+<!-- shipping -->
+<g id="node5" class="node">
+<title>shipping</title>
+<polygon fill="#f9f9f9" stroke="black" points="143.54,-109 34.54,-109 34.54,-73 143.54,-73 143.54,-109"/>
+<text text-anchor="middle" x="89.04" y="-87.3" font-family="Helvetica,sans-Serif" font-size="14.00">Envío Logístico</text>
+</g>
+<!-- prep&#45;&gt;shipping -->
+<g id="edge4" class="edge">
+<title>prep&#45;&gt;shipping</title>
+<path fill="none" stroke="black" d="M89.04,-145.81C89.04,-137.79 89.04,-128.05 89.04,-119.07"/>
+<polygon fill="black" stroke="black" points="92.54,-119.03 89.04,-109.03 85.54,-119.03 92.54,-119.03"/>
+</g>
+<!-- end -->
+<g id="node6" class="node">
+<title>end</title>
+<ellipse fill="#f9f9f9" stroke="black" cx="89.04" cy="-18" rx="89.08" ry="18"/>
+<text text-anchor="middle" x="89.04" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">Fin: Pedido Enviado</text>
+</g>
+<!-- shipping&#45;&gt;end -->
+<g id="edge5" class="edge">
+<title>shipping&#45;&gt;end</title>
+<path fill="none" stroke="black" d="M89.04,-72.81C89.04,-64.79 89.04,-55.05 89.04,-46.07"/>
+<polygon fill="black" stroke="black" points="92.54,-46.03 89.04,-36.03 85.54,-46.03 92.54,-46.03"/>
+</g>
+</g>
+</svg>
+
+            </div>
+            <p style="font-size:0.8em; color:#999; text-align:center; margin-top:-20px; margin-bottom:30px;">
+                <em>Figura: Diagrama generado automáticamente mediante Graphviz</em>
+            </p>
+
+            <h3>Intuición</h3>
+            <div><p>Para entender un diagrama de flujo, imagina que estás dándole instrucciones a un GPS para que alguien que no conoce tu empresa pueda navegar por ella sin perderse. La intuición detrás de esta herramienta no es solo 'dibujar cajitas', sino forzar al cerebro a pensar en términos de causalidad: 'si pasa esto, entonces ocurre aquello'. En el entorno de Digital Business, donde los procesos ocurren en servidores invisibles o a través de interfaces de software, el diagrama de flujo hace visible lo invisible. Es la arquitectura del sentido común. Nos ayuda a detectar dónde estamos complicando las cosas innecesariamente. Si un diagrama tiene demasiadas flechas cruzándose o rombos de decisión consecutivos, es una señal intuitiva de que el proceso es frágil o ineficiente. Básicamente, es el mapa que permite al Director de Operaciones ver el esqueleto del negocio, identificando qué partes son vitales y cuáles son grasa sobrante que puede ser eliminada mediante la automatización.</p></div>
+
+            <h3>Aplicación</h3>
+            <div><p>En el entorno profesional, un Director de Operaciones utiliza estos diagramas para la estandarización de procesos y la formación de equipos. Un caso de uso crítico es el 'Onboarding de Clientes' en una plataforma SaaS. El director mapea desde que el usuario se registra hasta que realiza su primera acción de valor (Aha! Moment). Si el diagrama revela que hay 15 pasos antes de que el usuario vea valor, la operación está en riesgo de abandono (churn). Otra aplicación vital es en la gestión de crisis: tener diagramas de flujo para 'Respuesta ante Incidentes de Ciberseguridad' permite que el equipo actúe mecánicamente bajo presión, siguiendo rutas de decisión predefinidas (ej. ¿Se han filtrado datos? -&gt; Sí -&gt; Notificar a Legal; No -&gt; Restaurar Backup). En el diseño de sistemas logísticos, se usan para optimizar la 'Última Milla', definiendo qué hacer si el repartidor no encuentra al destinatario, eliminando la improvisación que genera costes operativos imprevistos.</p></div>
+        </article>
+        
+        <article class="subtema">
+            <h2>Diagramas de Carriles (Swimlane Diagrams)</h2>
+
+            <h3>Historia</h3>
+            <div><p>Los diagramas de carriles, también conocidos como diagramas funcionales cruzados, fueron popularizados por Geary Rummler y Alan Brache a finales de los años 80 en su obra 'Improving Performance'. A diferencia de los diagramas de flujo tradicionales, que se centran en 'qué' se hace, los Swimlanes introdujeron la dimensión de 'quién' es el responsable de cada tarea. Surgieron de la necesidad de gestionar organizaciones cada vez más complejas y departamentalizadas, donde los procesos 'se caían' en los traspasos (hand-offs) de un departamento a otro. En el contexto de la transformación digital, los Swimlanes han evolucionado para incluir no solo departamentos humanos, sino también sistemas de software o bots de RPA (Robotic Process Automation) como actores independientes en el flujo, permitiendo visualizar la interacción humano-máquina en los procesos de negocio modernos.</p></div>
+
+            <h3>Descripción Formal</h3>
+            <div><p>Técnicamente, un diagrama de Swimlane organiza las actividades en bandas horizontales o verticales denominadas 'carriles'. Cada carril representa una entidad funcional (Ventas, IT, Logística, Cliente). La clave técnica de este diagrama es el análisis de las interfaces: el momento exacto en que una flecha cruza de un carril a otro. Este cruce representa un traspaso de información o responsabilidad que, operativamente, suele ser un punto de fricción o demora. Por ejemplo, en el proceso de 'Aprobación de Crédito' de un banco digital, el flujo inicia en el carril del 'Cliente' (envía datos), cruza al carril de 'Algoritmo de Scoring' (valida datos), y si el riesgo es alto, cruza al carril de 'Analista de Riesgos' (revisión manual). El diagrama debe especificar los tiempos de espera entre carriles, ya que la suma de estos tiempos suele representar el 80% del tiempo total del proceso (Lead Time). En Digital Business, se utilizan para diseñar el Service Blueprint, integrando procesos de front-end (visibles al cliente) con los de back-end (procesos internos).</p></div>
+
+            <div class="diagrama-box">
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg style="max-width: 80%; max-height: 350px; height: auto; width: auto;" data-width="777pt" data-height="114pt"
+ viewBox="0.00 0.00 776.54 114.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 110)">
+<title>G</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-110 772.54,-110 772.54,4 -4,4"/>
+<g id="clust1" class="cluster">
+<title>cluster_0</title>
+<polygon fill="lightgrey" stroke="lightgrey" points="8,-23 8,-98 286,-98 286,-23 8,-23"/>
+<text text-anchor="middle" x="147" y="-82.8" font-family="Times,serif" font-size="14.00">Departamento de Ventas</text>
+</g>
+<g id="clust2" class="cluster">
+<title>cluster_1</title>
+<polygon fill="lightblue" stroke="lightblue" points="385,-8 385,-83 599.54,-83 599.54,-8 385,-8"/>
+<text text-anchor="middle" x="492.27" y="-67.8" font-family="Times,serif" font-size="14.00">Departamento Legal</text>
+</g>
+<g id="clust3" class="cluster">
+<title>cluster_2</title>
+<polygon fill="lightyellow" stroke="lightyellow" points="632.54,-8 632.54,-83 760.54,-83 760.54,-8 632.54,-8"/>
+<text text-anchor="middle" x="696.54" y="-67.8" font-family="Times,serif" font-size="14.00">Cliente</text>
+</g>
+<!-- v1 -->
+<g id="node1" class="node">
+<title>v1</title>
+<polygon fill="transparent" stroke="white" points="121,-67 16,-67 16,-31 121,-31 121,-67"/>
+<text text-anchor="middle" x="68.5" y="-45.3" font-family="Helvetica,sans-Serif" font-size="14.00">Registrar Lead</text>
+</g>
+<!-- v2 -->
+<g id="node2" class="node">
+<title>v2</title>
+<polygon fill="transparent" stroke="white" points="278,-67 158,-67 158,-31 278,-31 278,-67"/>
+<text text-anchor="middle" x="218" y="-45.3" font-family="Helvetica,sans-Serif" font-size="14.00">Enviar Propuesta</text>
+</g>
+<!-- v1&#45;&gt;v2 -->
+<g id="edge1" class="edge">
+<title>v1&#45;&gt;v2</title>
+<path fill="none" stroke="black" d="M121.09,-49C129.72,-49 138.8,-49 147.79,-49"/>
+<polygon fill="black" stroke="black" points="147.87,-52.5 157.87,-49 147.87,-45.5 147.87,-52.5"/>
+</g>
+<!-- l1 -->
+<g id="node3" class="node">
+<title>l1</title>
+<polygon fill="transparent" stroke="white" points="492.27,-52 393.23,-34 492.27,-16 591.31,-34 492.27,-52"/>
+<text text-anchor="middle" x="492.27" y="-30.3" font-family="Helvetica,sans-Serif" font-size="14.00">¿Contrato OK?</text>
+</g>
+<!-- v2&#45;&gt;l1 -->
+<g id="edge2" class="edge">
+<title>v2&#45;&gt;l1</title>
+<path fill="none" stroke="black" d="M278.08,-45.75C315.43,-43.69 364.32,-40.99 405.85,-38.71"/>
+<polygon fill="black" stroke="black" points="406.18,-42.19 415.97,-38.15 405.79,-35.2 406.18,-42.19"/>
+</g>
+<!-- l1&#45;&gt;v2 -->
+<g id="edge4" class="edge">
+<title>l1&#45;&gt;v2</title>
+<path fill="none" stroke="black" d="M444.37,-24.61C404.6,-18.14 346.19,-12.16 296,-21 287.54,-22.49 278.79,-24.83 270.36,-27.55"/>
+<polygon fill="black" stroke="black" points="268.96,-24.32 260.63,-30.87 271.23,-30.95 268.96,-24.32"/>
+<text text-anchor="middle" x="335.5" y="-24.8" font-family="Times,serif" font-size="14.00">NO (Corregir)</text>
+</g>
+<!-- c1 -->
+<g id="node4" class="node">
+<title>c1</title>
+<polygon fill="transparent" stroke="white" points="752.54,-52 640.54,-52 640.54,-16 752.54,-16 752.54,-52"/>
+<text text-anchor="middle" x="696.54" y="-30.3" font-family="Helvetica,sans-Serif" font-size="14.00">Firmar Contrato</text>
+</g>
+<!-- l1&#45;&gt;c1 -->
+<g id="edge3" class="edge">
+<title>l1&#45;&gt;c1</title>
+<path fill="none" stroke="black" d="M591.44,-34C604.57,-34 617.77,-34 630.15,-34"/>
+<polygon fill="black" stroke="black" points="630.34,-37.5 640.34,-34 630.34,-30.5 630.34,-37.5"/>
+<text text-anchor="middle" x="616.04" y="-37.8" font-family="Times,serif" font-size="14.00">SI</text>
+</g>
+</g>
+</svg>
+
+            </div>
+            <p style="font-size:0.8em; color:#999; text-align:center; margin-top:-20px; margin-bottom:30px;">
+                <em>Figura: Diagrama generado automáticamente mediante Graphviz</em>
+            </p>
+
+            <h3>Intuición</h3>
+            <div><p>La intuición detrás de los Swimlanes es similar a una carrera de relevos en atletismo. No importa qué tan rápido corra cada atleta individualmente; si el testigo se cae durante el traspaso de un corredor a otro, la carrera se pierde. En una empresa, los fallos rara vez ocurren dentro de un departamento, sino en el 'espacio en blanco' entre ellos. El diagrama de carriles nos obliga a ver la organización no como un organigrama jerárquico de 'jefes y subordinados', sino como una red de promesas y entregas entre colegas. Ayuda a eliminar la mentalidad de silo ('ese no es mi problema') al mostrar visualmente cómo el trabajo de uno depende del otro. Para un estudiante de negocios digitales, es la herramienta perfecta para entender la coreografía necesaria para que una experiencia de usuario sea fluida, asegurando que Marketing, Producto y Atención al Cliente bailen al mismo ritmo.</p></div>
+
+            <h3>Aplicación</h3>
+            <div><p>Un Director de Operaciones aplica los Swimlanes para optimizar el 'Time-to-Market'. Por ejemplo, en el lanzamiento de una nueva funcionalidad en una App, se mapean los carriles de 'Diseño UX', 'Desarrollo Backend', 'QA (Testing)' y 'Compliance Legal'. El diagrama permite identificar si el equipo de Legal es un cuello de botella sistémico porque el proceso entra y sale de su carril constantemente. Otro caso común es la 'Gestión de Devoluciones' en retail: el flujo viaja del carril del 'Cliente' al 'Transportista', luego al 'Almacén' para inspección, y finalmente a 'Finanzas' para el reembolso. Al visualizar esto, el director puede decidir automatizar el paso de Almacén a Finanzas mediante un ERP, eliminando un paso manual y acelerando el servicio. Es fundamental para definir los Acuerdos de Nivel de Servicio (SLAs) entre departamentos internos.</p></div>
+        </article>
+        
+        <article class="subtema">
+            <h2>Value Stream Mapping (VSM)</h2>
+
+            <h3>Historia</h3>
+            <div><p>El Value Stream Mapping (Mapa del Flujo de Valor) tiene sus raíces en el Sistema de Producción de Toyota, donde se conocía como 'Material and Information Flow Mapping'. Fue popularizado en occidente por James Womack y Daniel Jones en los años 90 a través del movimiento Lean. Originalmente diseñado para entornos de manufactura pesada para visualizar el flujo de piezas, el VSM se diferenciaba de otros diagramas al incluir no solo los pasos del proceso, sino también los flujos de información que los activan y los datos métricos de desempeño (tiempos de ciclo, inventarios, esperas). Con la digitalización, el VSM se ha adaptado a la 'Economía de la Atención' y al desarrollo de software (Lean IT), permitiendo a las empresas tecnológicas identificar el 'desperdicio digital' (esperas por aprobación de código, redundancia de datos, exceso de funcionalidades no utilizadas).</p></div>
+
+            <h3>Descripción Formal</h3>
+            <div><p>Técnicamente, el VSM es una herramienta diagnóstica que representa el flujo de materiales e información de extremo a extremo (desde el proveedor hasta el cliente). Se compone de tres partes: el flujo de información (parte superior), el flujo de procesos (parte media) y la línea de tiempo (parte inferior). En la línea de tiempo se distingue el 'Value-Added Time' (tiempo de procesamiento real) del 'Non-Value-Added Time' (tiempo de espera o transporte). Un concepto clave es el 'Takt Time' (el ritmo al que el mercado demanda un producto). Por ejemplo, si un banco procesa hipotecas, el VSM mostrará que el tiempo total (Lead Time) es de 30 días, pero el tiempo de trabajo real sobre el expediente es solo de 4 horas. El resto son esperas en bandejas de entrada. El VSM utiliza iconos estandarizados para inventario (triángulos), envíos (camiones o rayos de datos) y control de producción (cajas de planificación). Su objetivo es diseñar un 'Estado Futuro' donde se eliminen los 'Muda' (desperdicios), optimizando el flujo de valor global en lugar de mejorar pasos aislados.</p></div>
+
+            <div class="diagrama-box">
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg style="max-width: 80%; max-height: 350px; height: auto; width: auto;" data-width="562pt" data-height="214pt"
+ viewBox="0.00 0.00 561.96 213.50" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 209.5)">
+<title>G</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-209.5 557.96,-209.5 557.96,4 -4,4"/>
+<!-- supplier -->
+<g id="node1" class="node">
+<title>supplier</title>
+<polygon fill="#f2f2f2" stroke="black" points="79,-126 0,-126 0,-122 -4,-122 -4,-118 0,-118 0,-98 -4,-98 -4,-94 0,-94 0,-90 79,-90 79,-126"/>
+<polyline fill="none" stroke="black" points="0,-122 4,-122 4,-118 0,-118 "/>
+<polyline fill="none" stroke="black" points="0,-98 4,-98 4,-94 0,-94 "/>
+<text text-anchor="middle" x="39.5" y="-104.3" font-family="Helvetica,sans-Serif" font-size="14.00">Proveedor</text>
+</g>
+<!-- process1 -->
+<g id="node2" class="node">
+<title>process1</title>
+<polygon fill="#f2f2f2" stroke="black" points="256.5,-134.5 161.5,-134.5 161.5,-81.5 256.5,-81.5 256.5,-134.5"/>
+<text text-anchor="middle" x="209" y="-119.3" font-family="Helvetica,sans-Serif" font-size="14.00">Proceso 1</text>
+<text text-anchor="middle" x="209" y="-104.3" font-family="Helvetica,sans-Serif" font-size="14.00">C/T: 5m</text>
+<text text-anchor="middle" x="209" y="-89.3" font-family="Helvetica,sans-Serif" font-size="14.00">Uptime: 90%</text>
+</g>
+<!-- supplier&#45;&gt;process1 -->
+<g id="edge1" class="edge">
+<title>supplier&#45;&gt;process1</title>
+<path fill="none" stroke="black" d="M79.35,-108C100.65,-108 127.45,-108 151.07,-108"/>
+<polygon fill="black" stroke="black" points="151.31,-111.5 161.31,-108 151.31,-104.5 151.31,-111.5"/>
+</g>
+<!-- inv1 -->
+<g id="node3" class="node">
+<title>inv1</title>
+<polygon fill="#f2f2f2" stroke="black" points="446.48,-161.98 339.02,-81.01 553.94,-81.01 446.48,-161.98"/>
+<text text-anchor="middle" x="446.48" y="-111.8" font-family="Helvetica,sans-Serif" font-size="14.00">Inventario</text>
+<text text-anchor="middle" x="446.48" y="-96.8" font-family="Helvetica,sans-Serif" font-size="14.00">2 días</text>
+</g>
+<!-- process1&#45;&gt;inv1 -->
+<g id="edge2" class="edge">
+<title>process1&#45;&gt;inv1</title>
+<path fill="none" stroke="black" d="M256.52,-108C287.28,-108 328.41,-108 364.45,-108"/>
+<polygon fill="black" stroke="black" points="364.46,-111.5 374.46,-108 364.46,-104.5 364.46,-111.5"/>
+</g>
+<!-- process2 -->
+<g id="node4" class="node">
+<title>process2</title>
+<polygon fill="#f2f2f2" stroke="black" points="256.5,-54.5 161.5,-54.5 161.5,-1.5 256.5,-1.5 256.5,-54.5"/>
+<text text-anchor="middle" x="209" y="-39.3" font-family="Helvetica,sans-Serif" font-size="14.00">Proceso 2</text>
+<text text-anchor="middle" x="209" y="-24.3" font-family="Helvetica,sans-Serif" font-size="14.00">C/T: 10m</text>
+<text text-anchor="middle" x="209" y="-9.3" font-family="Helvetica,sans-Serif" font-size="14.00">Uptime: 80%</text>
+</g>
+<!-- inv1&#45;&gt;process2 -->
+<g id="edge3" class="edge">
+<title>inv1&#45;&gt;process2</title>
+<path fill="none" stroke="black" d="M365.65,-80.88C333.02,-69.79 296.04,-57.23 266.31,-47.13"/>
+<polygon fill="black" stroke="black" points="267.12,-43.71 256.52,-43.81 264.87,-50.34 267.12,-43.71"/>
+</g>
+<!-- customer -->
+<g id="node5" class="node">
+<title>customer</title>
+<polygon fill="#f2f2f2" stroke="black" points="475.98,-36 416.98,-36 416.98,-32 412.98,-32 412.98,-28 416.98,-28 416.98,-8 412.98,-8 412.98,-4 416.98,-4 416.98,0 475.98,0 475.98,-36"/>
+<polyline fill="none" stroke="black" points="416.98,-32 420.98,-32 420.98,-28 416.98,-28 "/>
+<polyline fill="none" stroke="black" points="416.98,-8 420.98,-8 420.98,-4 416.98,-4 "/>
+<text text-anchor="middle" x="446.48" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">Cliente</text>
+</g>
+<!-- process2&#45;&gt;customer -->
+<g id="edge4" class="edge">
+<title>process2&#45;&gt;customer</title>
+<path fill="none" stroke="black" d="M256.52,-26.02C300.42,-24.16 365.47,-21.4 406.65,-19.65"/>
+<polygon fill="black" stroke="black" points="406.99,-23.14 416.83,-19.22 406.69,-16.14 406.99,-23.14"/>
+</g>
+<!-- timeline -->
+<g id="node6" class="node">
+<title>timeline</title>
+<polygon fill="#f2f2f2" stroke="transparent" points="303,-205.5 115,-205.5 115,-152.5 303,-152.5 303,-205.5"/>
+<text text-anchor="middle" x="209" y="-190.3" font-family="Helvetica,sans-Serif" font-size="14.00">Línea de Tiempo:</text>
+<text text-anchor="middle" x="209" y="-175.3" font-family="Helvetica,sans-Serif" font-size="14.00">Total Lead Time: 2 días 15m</text>
+<text text-anchor="middle" x="209" y="-160.3" font-family="Helvetica,sans-Serif" font-size="14.00">Value Added: 15m</text>
+</g>
+</g>
+</svg>
+
+            </div>
+            <p style="font-size:0.8em; color:#999; text-align:center; margin-top:-20px; margin-bottom:30px;">
+                <em>Figura: Diagrama generado automáticamente mediante Graphviz</em>
+            </p>
+
+            <h3>Intuición</h3>
+            <div><p>La intuición del VSM es 'ver el bosque, no solo los árboles'. Mientras que un diagrama de flujo estándar te dice cómo se hace una tarea, el VSM te dice si esa tarea debería existir en absoluto. Es la diferencia entre eficiencia (hacer bien las cosas) y eficacia (hacer las cosas correctas). Imagina una tubería: puedes tener las válvulas más modernas del mundo (eficiencia local), pero si la tubería está llena de óxido y sedimentos, el agua no llegará al final con presión. El VSM identifica dónde está el 'óxido' (el desperdicio). Para un profesional de Digital Business, esto significa entender que de nada sirve tener un equipo de programadores ultra-rápidos si el código que escriben tarda tres semanas en ser aprobado por el departamento de seguridad. El VSM nos enseña que el valor fluye; cualquier cosa que detenga ese flujo es un coste oculto.</p></div>
+
+            <h3>Aplicación</h3>
+            <div><p>En el rol de un Director de Operaciones, el VSM es fundamental para la reingeniería de procesos complejos. Un caso de aplicación real es el análisis del 'Ciclo de Vida de Desarrollo de Software' (SDLC). Al mapear el flujo de valor, se puede descubrir que los desarrolladores pasan el 40% de su tiempo esperando a que los entornos de prueba estén disponibles. Otro uso es en la optimización de la cadena de suministro global de un e-commerce: analizando desde la orden de compra a la fábrica en Asia hasta la entrega al cliente final en España, el VSM revela que el cuello de botella no está en el transporte marítimo, sino en el despacho de aduanas. Al identificar esto, el director puede decidir contratar un agente aduanero digital que automatice el papeleo, reduciendo el Lead Time total en un 20%. Es la herramienta definitiva para priorizar inversiones en tecnología basadas en el impacto real en el cliente.</p></div>
+        </article>
+        </body></html>

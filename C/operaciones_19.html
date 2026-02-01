@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>19 - Gestión de Esperas - Modelos básicos de líneas de espera (M/M/1).</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #f4f4f9; color: #333; margin: 0; padding: 20px; line-height: 1.6; position: relative; }
+        header { background: #2c3e50; color: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; text-align:center; }
+        h1 { margin: 0; font-size: 1.5rem; }
+
+        /* Estilo del botón Atrás */
+        .btn-atras {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #7f8c8d;
+            color: white;
+            padding: 8px 15px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            transition: background 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+        .btn-atras:hover { background: #95a5a6; }
+
+        .subtema {
+            background: white;
+            padding: 40px;
+            margin-bottom: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        h2 { color: #2980b9; border-bottom: 2px solid #eee; padding-bottom: 10px; margin-top: 0; }
+        h3 { color: #7f8c8d; font-size: 0.9em; text-transform: uppercase; margin-top: 30px; letter-spacing: 1px; border-left: 3px solid #d4af37; padding-left: 10px; }
+
+        .diagrama-box {
+            text-align: center;
+            margin: 30px 0;
+            padding: 20px;
+            background: #fafafa;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 150px;
+        }
+
+        p { margin-bottom: 1rem; }
+        strong { color: #2c3e50; font-weight: 600; }
+        code { background: #f0f0f0; padding: 2px 5px; border-radius: 3px; font-family: monospace; color: #c0392b; }
+        ul { padding-left: 20px; }
+        li { margin-bottom: 0.5rem; }
+    </style>
+</head>
+<body>
+    <button onclick="window.history.back()" class="btn-atras">Atrás</button>
+    <header><h1>19 - Gestión de Esperas - Modelos básicos de líneas de espera (M/M/1).</h1></header>
+    <main>
+
+        <article class="subtema">
+            <h2>Fundamentos de la Teoría de Colas y Procesos de Llegada (Poisson)</h2>
+
+            <h3>Historia</h3>
+            <div><p>La teoría de colas nació a principios del siglo XX, específicamente en 1909, de la mano del ingeniero danés Agner Krarup Erlang. Erlang trabajaba para la Copenhagen Telephone Company y se enfrentaba al reto de determinar cuántas líneas telefónicas eran necesarias para atender las llamadas entrantes sin que los usuarios sufrieran esperas excesivas. Su trabajo pionero sentó las bases matemáticas para analizar sistemas de congestión. Erlang descubrió que las llamadas llegaban de forma aleatoria e independiente, lo que le llevó a modelar las llegadas mediante la distribución de Poisson. A lo largo de las décadas de 1950 y 1960, con el auge de la investigación operativa tras la Segunda Guerra Mundial, estos modelos se expandieron desde la telefonía hasta la fabricación industrial, el tráfico aéreo y, finalmente, la computación moderna. Hoy en día, en el contexto del Digital Business, estos principios son la base para gestionar el tráfico en servidores web y la latencia en transacciones blockchain.</p></div>
+
+            <h3>Descripción Formal</h3>
+            <div><p>El modelo M/M/1 es la forma más básica de la notación de Kendall. La primera 'M' representa una llegada de tipo Markoviana (proceso de Poisson), donde el tiempo entre llegadas sigue una distribución exponencial. La segunda 'M' indica que el tiempo de servicio también sigue una distribución exponencial. El '1' designa que existe un único servidor. Definimos 'lambda' (λ) como la tasa media de llegadas (clientes/tiempo) y 'mu' (μ) como la tasa media de servicio (clientes/tiempo). Para que el sistema sea estable, se debe cumplir que lambda sea menor que mu (λ &lt; μ); de lo contrario, la cola crecería indefinidamente. Las medidas clave incluyen: 1) Intensidad de tráfico (rho = λ / μ), que representa el porcentaje de uso del servidor. 2) Número medio de clientes en el sistema (L = λ / (μ - λ)). 3) Tiempo medio de espera en el sistema (W = 1 / (μ - λ)). Ejemplo: Un e-commerce recibe una media de 40 pedidos por hora (λ = 40). El sistema de procesamiento puede gestionar 50 pedidos por hora (μ = 50). La utilización es del 80% (40/50). El número medio de pedidos procesándose o esperando es L = 40 / (50 - 40) = 4 pedidos. El tiempo medio que un pedido pasa en el sistema es W = 1 / (50 - 40) = 0.1 horas (6 minutos).</p></div>
+
+            <div class="diagrama-box">
+                
+            </div>
+            <p style="font-size:0.8em; color:#999; text-align:center; margin-top:-20px; margin-bottom:30px;">
+                <em>Figura: Diagrama generado automáticamente mediante Graphviz</em>
+            </p>
+
+            <h3>Intuición</h3>
+            <div><p>La esencia de la gestión de esperas reside en entender que la variabilidad es la enemiga de la eficiencia. Si los clientes llegaran exactamente cada 10 minutos y el servicio durara exactamente 9 minutos, no habría colas. Sin embargo, en la vida real y en los negocios digitales, las personas (o los paquetes de datos) llegan en ráfagas aleatorias. A veces llegan tres a la vez y luego nadie durante media hora. El modelo M/M/1 nos enseña que, aunque tengamos capacidad de sobra en promedio (por ejemplo, pudiendo atender a 10 personas cuando solo llegan 8), la aleatoriedad creará momentos de saturación. La 'intuición crítica' para un director de operaciones es comprender que a medida que la utilización del sistema (rho) se acerca al 100%, el tiempo de espera no crece de forma lineal, sino exponencial. Un pequeño incremento en la demanda cuando ya estamos al 90% de capacidad puede triplicar el tiempo de espera del cliente, degradando masivamente la experiencia de usuario.</p></div>
+
+            <h3>Aplicación</h3>
+            <div><p>En el entorno de un Director de Operaciones Digitales, el modelo M/M/1 se aplica directamente en el dimensionamiento de servicios de atención al cliente (Helpdesks) de un solo nivel o en la configuración de microservicios en la nube. Por ejemplo, al diseñar una pasarela de pagos que procesa transacciones de forma secuencial, el director debe decidir qué capacidad de procesamiento (μ) contratar. Si el coste de pérdida de un cliente por espera excesiva es alto (tasa de abandono de carrito), el director utilizará las fórmulas de M/M/1 para encontrar el equilibrio económico entre el coste de un servidor más rápido y el coste de oportunidad de los clientes que se van. También se aplica en logística de 'last-mile' para puntos de recogida únicos donde la llegada de repartidores es estocástica. El modelo permite predecir cuándo el sistema colapsará ante una campaña de marketing agresiva que eleve λ por encima de los valores habituales.</p></div>
+        </article>
+        
+        <article class="subtema">
+            <h2>Medidas de Desempeño y la Ley de Little</h2>
+
+            <h3>Historia</h3>
+            <div><p>John Little, profesor del MIT, formuló en 1961 una de las leyes más potentes y elegantes de la gestión de operaciones: L = λW. Aunque parece una obviedad algebraica, su demostración fue un hito porque demostró que la relación entre el inventario (L), la tasa de entrada (λ) y el tiempo de flujo (W) es independiente de la distribución de probabilidad del servicio o de las llegadas. Históricamente, esto permitió a los directores de fábricas y servicios simplificar drásticamente sus cálculos. Antes de Little, se pensaba que para calcular el tiempo medio de espera se necesitaba conocer detalladamente la desviación estándar de cada proceso. La Ley de Little unificó la visión de la cadena de suministro, permitiendo que conceptos de la física y la estadística se aplicaran directamente a la rentabilidad empresarial y al flujo de caja.</p></div>
+
+            <h3>Descripción Formal</h3>
+            <div><p>Las medidas de desempeño en un sistema M/M/1 se dividen en medidas de 'Longitud' (L) y de 'Tiempo' (W). L_q representa el número medio de clientes esperando en la cola (sin contar al que está siendo atendido), mientras que L_s es el número medio de clientes en el sistema total. De igual forma, W_q es el tiempo medio de espera en cola y W_s es el tiempo total en el sistema (espera + servicio). Las fórmulas fundamentales son: 1) L_q = λ² / [μ(μ - λ)]. 2) W_q = λ / [μ(μ - λ)]. 3) L_s = λ / (μ - λ). 4) W_s = 1 / (μ - λ). Ejemplo práctico: Una oficina bancaria digital tiene un bot que valida identidades. Llegan 15 validaciones por minuto (λ=15) y el bot procesa 20 por minuto (μ=20). El tiempo medio que una validación espera solo en la cola es W_q = 15 / [20(20 - 15)] = 15 / 100 = 0.15 minutos (9 segundos). El número de validaciones esperando en cola es L_q = 15² / [20(20 - 15)] = 225 / 100 = 2.25 validaciones. Si el director de operaciones quiere reducir el tiempo total en el sistema a la mitad, puede ver mediante estas fórmulas que debe aumentar μ o reducir la variabilidad del proceso.</p></div>
+
+            <div class="diagrama-box">
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg style="max-width: 80%; max-height: 350px; height: auto; width: auto;" data-width="491pt" data-height="222pt"
+ viewBox="0.00 0.00 490.82 222.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 218)">
+<title>G</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-218 486.82,-218 486.82,4 -4,4"/>
+<!-- CheckSLA -->
+<g id="node1" class="node">
+<title>CheckSLA</title>
+<polygon fill="#fff9c4" stroke="black" points="304.5,-214 126.37,-196 304.5,-178 482.63,-196 304.5,-214"/>
+<text text-anchor="middle" x="304.5" y="-192.3" font-family="Helvetica,sans-Serif" font-size="14.00">¿W_s actual &gt; SLA Objetivo?</text>
+</g>
+<!-- InvestInMu -->
+<g id="node2" class="node">
+<title>InvestInMu</title>
+<polygon fill="#c8e6c9" stroke="black" points="185,-127 0,-127 0,-89 185,-89 185,-127"/>
+<text text-anchor="middle" x="92.5" y="-111.8" font-family="Helvetica,sans-Serif" font-size="14.00">Aumentar Capacidad (μ)</text>
+<text text-anchor="middle" x="92.5" y="-96.8" font-family="Helvetica,sans-Serif" font-size="14.00">(Más personal o tecnología)</text>
+</g>
+<!-- CheckSLA&#45;&gt;InvestInMu -->
+<g id="edge1" class="edge">
+<title>CheckSLA&#45;&gt;InvestInMu</title>
+<path fill="none" stroke="black" d="M270.91,-181.37C237.54,-167.84 185.84,-146.86 146.67,-130.97"/>
+<polygon fill="black" stroke="black" points="147.58,-127.57 137,-127.05 144.95,-134.05 147.58,-127.57"/>
+<text text-anchor="middle" x="224" y="-148.8" font-family="Times,serif" font-size="14.00">SÍ</text>
+</g>
+<!-- Monitor -->
+<g id="node4" class="node">
+<title>Monitor</title>
+<ellipse fill="#f9f9f9" stroke="black" cx="304.5" cy="-108" rx="101.28" ry="18"/>
+<text text-anchor="middle" x="304.5" y="-104.3" font-family="Helvetica,sans-Serif" font-size="14.00">Monitorizar y Mantener</text>
+</g>
+<!-- CheckSLA&#45;&gt;Monitor -->
+<g id="edge2" class="edge">
+<title>CheckSLA&#45;&gt;Monitor</title>
+<path fill="none" stroke="black" d="M304.5,-177.6C304.5,-165.75 304.5,-149.82 304.5,-136.29"/>
+<polygon fill="black" stroke="black" points="308,-136.08 304.5,-126.08 301,-136.08 308,-136.08"/>
+<text text-anchor="middle" x="314.5" y="-148.8" font-family="Times,serif" font-size="14.00">NO</text>
+</g>
+<!-- AnalyzeLambda -->
+<g id="node3" class="node">
+<title>AnalyzeLambda</title>
+<polygon fill="#e1f5fe" stroke="black" points="344,-38 183,-38 183,0 344,0 344,-38"/>
+<text text-anchor="middle" x="263.5" y="-22.8" font-family="Helvetica,sans-Serif" font-size="14.00">Gestionar Demanda (λ)</text>
+<text text-anchor="middle" x="263.5" y="-7.8" font-family="Helvetica,sans-Serif" font-size="14.00">(Precios o citas previas)</text>
+</g>
+<!-- InvestInMu&#45;&gt;AnalyzeLambda -->
+<g id="edge3" class="edge">
+<title>InvestInMu&#45;&gt;AnalyzeLambda</title>
+<path fill="none" stroke="black" d="M127.93,-88.97C154.41,-75.5 190.79,-56.99 219.19,-42.54"/>
+<polygon fill="black" stroke="black" points="220.79,-45.66 228.11,-38 217.61,-39.42 220.79,-45.66"/>
+<text text-anchor="middle" x="235" y="-59.8" font-family="Times,serif" font-size="14.00">Si μ es muy cara</text>
+</g>
+<!-- AnalyzeLambda&#45;&gt;CheckSLA -->
+<g id="edge4" class="edge">
+<title>AnalyzeLambda&#45;&gt;CheckSLA</title>
+<path fill="none" stroke="black" d="M344.04,-37.86C371.14,-48.13 398.53,-64.14 414.5,-89 437.64,-125.02 387.86,-157.76 347.92,-177.04"/>
+<polygon fill="black" stroke="black" points="346.39,-173.89 338.81,-181.29 349.35,-180.23 346.39,-173.89"/>
+</g>
+</g>
+</svg>
+
+            </div>
+            <p style="font-size:0.8em; color:#999; text-align:center; margin-top:-20px; margin-bottom:30px;">
+                <em>Figura: Diagrama generado automáticamente mediante Graphviz</em>
+            </p>
+
+            <h3>Intuición</h3>
+            <div><p>Para entender estas medidas, imagine que el sistema es una bañera. El grifo que vierte agua es la tasa de llegada (λ), el nivel del agua es el inventario de clientes (L) y el desagüe es el servidor (μ). La Ley de Little nos dice que, si queremos que el agua pase menos tiempo en la bañera (W), solo tenemos dos opciones: o cerramos un poco el grifo (reducimos λ) o ampliamos el desagüe (aumentamos μ). Lo más valioso de esta intuición es reconocer que el inventario y el tiempo son dos caras de la misma moneda. En el Digital Business, tener 'muchos pedidos pendientes' es exactamente lo mismo que tener 'clientes esperando mucho tiempo'. Reducir el trabajo en curso (WIP) es la forma más directa y barata de acelerar la entrega de valor al cliente final.</p></div>
+
+            <h3>Aplicación</h3>
+            <div><p>Un Director de Operaciones utiliza estas medidas para establecer los Service Level Agreements (SLA). Por ejemplo, si el SLA de una plataforma SaaS promete que las incidencias técnicas se resolverán en menos de 2 horas, el director usa la fórmula de W_s para calcular cuántos ingenieros de soporte (servidores) necesita basándose en el volumen histórico de tickets (λ). Si los cálculos muestran un W_s de 3 horas, el director sabe que está en riesgo de incumplir contrato. Además, estas métricas sirven para justificar inversiones en automatización: si un nuevo software aumenta μ de 10 a 15 tareas/hora, el impacto en la reducción de L_q puede cuantificarse en ahorro de costes operativos y mejora de la satisfacción del cliente (NPS).</p></div>
+        </article>
+        
+        <article class="subtema">
+            <h2>Optimización de Capacidad y Psicología de la Espera</h2>
+
+            <h3>Historia</h3>
+            <div><p>A medida que los modelos matemáticos se perfeccionaron, los expertos notaron que el tiempo 'objetivo' (el cronometrado) no siempre coincidía con el tiempo 'subjetivo' (el percibido por el cliente). En 1985, David Maister publicó su influyente artículo 'The Psychology of Waiting Lines'. Maister observó que las esperas injustas parecen más largas que las justas, y que el tiempo desocupado parece más largo que el ocupado. En el mundo digital, esto llevó a la creación de barras de progreso y pantallas de carga animadas. La evolución del concepto pasó de 'cómo hacer la cola más corta' (matemáticas) a 'cómo hacer que la cola se sienta más corta' (psicología), integrando ambos enfoques en la Dirección de Operaciones moderna para maximizar el Customer Lifetime Value.</p></div>
+
+            <h3>Descripción Formal</h3>
+            <div><p>La optimización de la capacidad implica minimizar el Coste Total (TC), que es la suma del Coste de Proporcionar Servicio (Cs) y el Coste de Espera (Cw). TC = (Cs * s) + (Cw * L), donde 's' es el número de servidores. En un modelo M/M/1, buscamos el valor de μ que minimiza esta ecuación. El coste de espera (Cw) es a menudo difícil de calcular, ya que incluye el coste de oportunidad, la pérdida de reputación y el abandono. Un modelo formal de optimización debe considerar: 1) Costes lineales de capacidad. 2) Costes de espera basados en el tiempo total del cliente en el sistema. 3) El impacto de la variabilidad (σ) en el tiempo de servicio. Por ejemplo, si un servidor rápido cuesta 100€/hora y el tiempo de espera del cliente se valora en 50€/hora, el director de operaciones debe calcular el punto de equilibrio donde una unidad extra de velocidad en μ ya no compensa la reducción marginal en L.</p></div>
+
+            <div class="diagrama-box">
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg style="max-width: 80%; max-height: 350px; height: auto; width: auto;" data-width="805pt" data-height="152pt"
+ viewBox="0.00 0.00 804.51 152.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 148)">
+<title>G</title>
+<polygon fill="transparent" stroke="transparent" points="-4,4 -4,-148 800.51,-148 800.51,4 -4,4"/>
+<!-- WaitTime -->
+<g id="node1" class="node">
+<title>WaitTime</title>
+<polygon fill="#f9f9f9" stroke="black" points="200,-144 0,-144 0,-108 200,-108 200,-144"/>
+<text text-anchor="middle" x="100" y="-122.3" font-family="Helvetica,sans-Serif" font-size="14.00">Tiempo de Espera Real (W_s)</text>
+</g>
+<!-- Perception -->
+<g id="node2" class="node">
+<title>Perception</title>
+<polygon fill="#fff9c4" stroke="black" points="415.71,-90 275.79,-72 415.71,-54 555.64,-72 415.71,-90"/>
+<text text-anchor="middle" x="415.71" y="-68.3" font-family="Helvetica,sans-Serif" font-size="14.00">Percepción del Cliente</text>
+</g>
+<!-- WaitTime&#45;&gt;Perception -->
+<g id="edge1" class="edge">
+<title>WaitTime&#45;&gt;Perception</title>
+<path fill="none" stroke="black" d="M200.26,-108.91C247.29,-100.82 302.34,-91.34 344.89,-84.02"/>
+<polygon fill="black" stroke="black" points="345.61,-87.45 354.87,-82.3 344.43,-80.55 345.61,-87.45"/>
+</g>
+<!-- Value -->
+<g id="node3" class="node">
+<title>Value</title>
+<ellipse fill="#c8e6c9" stroke="black" cx="694.46" cy="-72" rx="102.08" ry="18"/>
+<text text-anchor="middle" x="694.46" y="-68.3" font-family="Helvetica,sans-Serif" font-size="14.00">Satisfacción del Cliente</text>
+</g>
+<!-- Perception&#45;&gt;Value -->
+<g id="edge4" class="edge">
+<title>Perception&#45;&gt;Value</title>
+<path fill="none" stroke="black" d="M555.49,-72C564.41,-72 573.33,-72 582.09,-72"/>
+<polygon fill="black" stroke="black" points="582.31,-75.5 592.31,-72 582.31,-68.5 582.31,-75.5"/>
+</g>
+<!-- Transparency -->
+<g id="node4" class="node">
+<title>Transparency</title>
+<polygon fill="#e1f5fe" stroke="black" points="194,-90 6,-90 6,-54 194,-54 194,-90"/>
+<text text-anchor="middle" x="100" y="-68.3" font-family="Helvetica,sans-Serif" font-size="14.00">Información en Tiempo Real</text>
+</g>
+<!-- Transparency&#45;&gt;Perception -->
+<g id="edge2" class="edge">
+<title>Transparency&#45;&gt;Perception</title>
+<path fill="none" stroke="black" d="M194.27,-72C216.82,-72 241.47,-72 265.86,-72"/>
+<polygon fill="black" stroke="black" points="265.92,-75.5 275.92,-72 265.92,-68.5 265.92,-75.5"/>
+<text text-anchor="middle" x="238" y="-75.8" font-family="Times,serif" font-size="14.00">Mejora</text>
+</g>
+<!-- Entertainment -->
+<g id="node5" class="node">
+<title>Entertainment</title>
+<polygon fill="#e1f5fe" stroke="black" points="177,-36 23,-36 23,0 177,0 177,-36"/>
+<text text-anchor="middle" x="100" y="-14.3" font-family="Helvetica,sans-Serif" font-size="14.00">Contenido / UX Design</text>
+</g>
+<!-- Entertainment&#45;&gt;Perception -->
+<g id="edge3" class="edge">
+<title>Entertainment&#45;&gt;Perception</title>
+<path fill="none" stroke="black" d="M177.34,-31.14C228.5,-39.95 295.33,-51.45 345.04,-60.01"/>
+<polygon fill="black" stroke="black" points="344.62,-63.49 355.06,-61.73 345.8,-56.59 344.62,-63.49"/>
+<text text-anchor="middle" x="238" y="-48.8" font-family="Times,serif" font-size="14.00">Mejora</text>
+</g>
+</g>
+</svg>
+
+            </div>
+            <p style="font-size:0.8em; color:#999; text-align:center; margin-top:-20px; margin-bottom:30px;">
+                <em>Figura: Diagrama generado automáticamente mediante Graphviz</em>
+            </p>
+
+            <h3>Intuición</h3>
+            <div><p>La gestión de operaciones no es solo mover números; es gestionar expectativas. La intuición aquí es que el cliente perdona una espera si entiende por qué ocurre o si se le mantiene entretenido. En términos de sistemas, la 'espera en el túnel' (sin saber cuánto falta) es agónica. La transparencia actúa como un amortiguador de la insatisfacción. Si un sistema digital (como una App de delivery) muestra exactamente dónde está el repartidor, el valor percibido del servicio aumenta aunque el tiempo de entrega (W_s) sea el mismo. Para un Director de Operaciones, esto significa que a veces es más barato invertir en una interfaz de usuario que informe al cliente (gestión de la percepción) que en contratar a más personal para reducir el tiempo real en 30 segundos.</p></div>
+
+            <h3>Aplicación</h3>
+            <div><p>En el Digital Business, esto se traduce en estrategias de 'Smoothing' de la demanda. Si λ es muy alto en horas punta, el director de operaciones puede usar 'Dynamic Pricing' (como Uber) para reducir λ o incentivar a los clientes a usar el servicio en horas valle. Otra aplicación es el diseño de colas virtuales: en lugar de que el cliente espere conectado, el sistema le avisa cuando su proceso ha terminado (asincronía). Un Director de Operaciones de una Fintech, por ejemplo, aplicaría M/M/1 para decidir si automatizar un proceso de KYC (Know Your Customer). Si la automatización reduce μ a la mitad pero elimina la variabilidad, el beneficio en la experiencia del cliente es masivo, incluso si el coste operativo por transacción sube ligeramente.</p></div>
+        </article>
+        </body></html>

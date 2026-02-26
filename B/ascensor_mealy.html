@@ -89,7 +89,7 @@
                 <h2 class="text-lg font-semibold mb-2 text-indigo-900">Concepto de Mealy</h2>
                 <p class="text-sm text-slate-600 mb-4 text-justify">
                     A diferencia de Moore, en una <strong>Máquina de Mealy</strong> las salidas se generan <em>durante la transición</em> y dependen tanto del estado actual como de la entrada.<br>
-                    <strong>Nota:</strong> Como un ascensor solo sube o baja un piso por ciclo, para ir de P0 a P3 la entrada debe mantenerse en "3" durante 3 ciclos de reloj (ej: <code>333</code>).
+                    <strong>Nota:</strong> Como un ascensor solo sube o baja un piso por ciclo, para ir de P0 a P3 la entrada debe mantenerse en "3" durante un máximo de 3 ciclos de reloj (ej: <code>333</code>).
                 </p>
                 <div class="flex gap-4 text-sm font-mono bg-slate-100 p-3 rounded-lg border border-slate-200">
                     <div><span class="text-indigo-600 font-bold">↑</span> = Sube Motor</div>
@@ -99,11 +99,11 @@
             </div>
 
             <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 flex flex-col justify-center">
-                <label for="binaryInput" class="block text-sm font-medium text-slate-600 mb-1">Cinta de Entrada (Destinos por ciclo)</label>
+                <label for="binaryInput" class="block text-sm font-medium text-slate-600 mb-1">Cinta de Entrada (Destinos por ciclo, máx. 3)</label>
                 <div class="flex gap-2">
-                    <input type="text" id="binaryInput" value="33300" 
+                    <input type="text" id="binaryInput" value="333" maxlength="3"
                            class="w-full border-2 border-slate-300 rounded-lg px-4 py-2 font-mono text-lg focus:border-indigo-500 focus:outline-none transition-colors"
-                           placeholder="Ej. 1100">
+                           placeholder="Ej. 110">
                     <button id="btnSimular" onclick="startSimulation()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded-lg font-medium transition-colors shadow-sm whitespace-nowrap">
                         Simular
                     </button>
@@ -111,7 +111,7 @@
                         Reset
                     </button>
                 </div>
-                <div id="errorMsg" class="text-red-500 text-sm mt-2 hidden">Introduzca solo números entre 0 y 3.</div>
+                <div id="errorMsg" class="text-red-500 text-sm mt-2 hidden">Introduzca entre 1 y 3 números (sólo dígitos del 0 al 3).</div>
             </div>
         </div>
 
@@ -221,7 +221,7 @@
     </main>
 
     <footer class="text-center p-4 text-slate-500 text-sm mt-auto border-t border-slate-200">
-        Diseñado para simulaciones académicas - Teoría de Autómatas
+        Prof. Jorge López-Cifre, PhD - Simulación control ascensor - máquina de Mealy
     </footer>
 
     <script>
@@ -356,8 +356,8 @@
             const input = document.getElementById('binaryInput').value;
             const errorMsg = document.getElementById('errorMsg');
             
-            // Validación (Alfabeto {0,1,2,3})
-            if (!/^[0-3]+$/.test(input) && input !== "") {
+            // Validación (Alfabeto {0,1,2,3} y longitud máxima de 3)
+            if ((!/^[0-3]+$/.test(input) && input !== "") || input.length > 3) {
                 errorMsg.classList.remove('hidden');
                 return;
             }

@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AFD - Divisible por 3 | Prof. Jorge López Cifre</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        
+        /* Transiciones suaves para los elementos del SVG */
+        circle, path, text {
+            transition: all 0.3s ease-in-out;
+        }
+
+        /* Estilos inactivos por defecto */
+        .node-inactive { fill: #f8fafc; stroke: #64748b; stroke-width: 2; }
+        .edge-inactive { stroke: #94a3b8; stroke-width: 2; fill: none; }
+        .text-inactive { fill: #64748b; font-weight: normal; }
+        .marker-inactive { fill: #94a3b8; }
+
+        /* Estilos activos/resaltados (Verde/Naranja) */
+        .node-active { fill: #dcfce7; stroke: #16a34a; stroke-width: 4; }
+        .edge-active { stroke: #ea580c; stroke-width: 4; fill: none; }
+        .text-active { fill: #ea580c; font-weight: bold; font-size: 1.1em; }
+        .marker-active { fill: #ea580c; }
+
+        /* Cinta de procesamiento */
+        .tape-char {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            margin: 0 0.25rem;
+            border: 2px solid #cbd5e1;
+            border-radius: 0.5rem;
+            font-family: monospace;
+            font-size: 1.5rem;
+            background-color: white;
+            transition: all 0.3s ease;
+        }
+        .tape-active {
+            border-color: #ea580c;
+            background-color: #fff7ed;
+            color: #ea580c;
+            transform: translateY(-5px);
+            font-weight: bold;
+        }
+        .tape-processed {
+            border-color: #16a34a;
+            background-color: #f0fdf4;
+            color: #16a34a;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 min-h-screen text-slate-800 flex flex-col">
+
+    <!-- Header / Branding -->
+    <header class="bg-indigo-900 text-white p-6 shadow-md">
+        <div class="max-w-5xl mx-auto flex justify-between items-center">
+            <div>
+                <h1 class="text-2xl font-bold">Teoría de Autómatas y Lenguajes Formales</h1>
+                <p class="text-indigo-200 text-sm mt-1">Recurso Didáctico Interactivo - Prof. Jorge López Cifre</p>
+            </div>
+            <div class="text-right hidden md:block">
+                <span class="bg-indigo-800 px-3 py-1 rounded-full text-xs font-semibold">AFD: Múltiplos de 3</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow p-6 flex flex-col items-center max-w-5xl mx-auto w-full">
+        
+        <!-- Panel de Control -->
+        <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 w-full mb-6">
+            <h2 class="text-xl font-semibold mb-4 text-slate-700">Configuración de la Simulación</h2>
+            <div class="flex flex-col md:flex-row gap-4 items-end">
+                <div class="flex-grow">
+                    <label for="binaryInput" class="block text-sm font-medium text-slate-600 mb-1">Cadena binaria ($w$)</label>
+                    <input type="text" id="binaryInput" value="0011" 
+                           class="w-full border-2 border-slate-300 rounded-lg px-4 py-2 font-mono text-lg focus:border-indigo-500 focus:outline-none transition-colors"
+                           placeholder="Ej. 1010">
+                </div>
+                <div class="flex gap-2 w-full md:w-auto">
+                    <button id="btnSimular" onclick="startSimulation()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2.5 rounded-lg font-medium transition-colors w-full md:w-auto shadow-sm">
+                        Simular Paso a Paso
+                    </button>
+                    <button id="btnReiniciar" onclick="resetUI()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 px-4 py-2.5 rounded-lg font-medium transition-colors w-full md:w-auto">
+                        Reiniciar
+                    </button>
+                </div>
+            </div>
+            <div id="errorMsg" class="text-red-500 text-sm mt-2 hidden">Por favor, introduzca únicamente caracteres '0' y '1'.</div>
+        </div>
+
+        <!-- Área de Visualización (Cinta y Autómata) -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 w-full">
+            
+            <!-- Panel Lateral (Cinta y Resultados) -->
+            <div class="lg:col-span-1 flex flex-col gap-6">
+                
+                <!-- Cinta de entrada -->
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 flex-grow">
+                    <h3 class="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-4">Cinta de Entrada</h3>
+                    <div id="tapeContainer" class="flex flex-wrap justify-center gap-2 mb-6 min-h-[4rem]">
+                        <!-- Los caracteres se inyectarán aquí -->
+                    </div>
+                    
+                    <div class="border-t border-slate-100 pt-4 mt-auto">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-slate-600 font-medium">Estado actual:</span>
+                            <span id="lblEstado" class="font-mono bg-slate-100 px-2 py-1 rounded text-slate-700">q0</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-slate-600 font-medium">Valor actual mod 3:</span>
+                            <span id="lblResiduo" class="font-mono bg-slate-100 px-2 py-1 rounded text-slate-700">0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tarjeta de Resultado Final -->
+                <div id="resultCard" class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 hidden transition-all">
+                    <h3 class="text-center font-bold text-lg mb-2" id="resultTitle">Resultado</h3>
+                    <p class="text-center text-slate-600 text-sm" id="resultDesc"></p>
+                </div>
+
+            </div>
+
+            <!-- SVG FSM -->
+            <div class="lg:col-span-2 bg-white p-4 rounded-xl shadow-sm border border-slate-200 flex justify-center items-center overflow-x-auto">
+                <svg viewBox="0 0 600 450" class="w-full max-w-lg h-auto" id="fsmSvg">
+                    <defs>
+                        <!-- Flecha inactiva -->
+                        <marker id="arrow-inactive" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                            <path d="M 0 0 L 10 5 L 0 10 z" class="marker-inactive" />
+                        </marker>
+                        <!-- Flecha activa -->
+                        <marker id="arrow-active" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                            <path d="M 0 0 L 10 5 L 0 10 z" class="marker-active" />
+                        </marker>
+                    </defs>
+
+                    <!-- === EDGES (Transiciones) === -->
+                    <!-- q0 -> q0 (0) -->
+                    <path id="edge-q0-0" d="M 125 130 C 80 50, 30 150, 115 160" class="edge-inactive" marker-end="url(#arrow-inactive)" />
+                    <!-- q0 -> q1 (1) -->
+                    <path id="edge-q0-1" d="M 180 140 Q 300 100 415 140" class="edge-inactive" marker-end="url(#arrow-inactive)" />
+                    <!-- q1 -> q0 (1) -->
+                    <path id="edge-q1-1" d="M 420 160 Q 300 200 185 160" class="edge-inactive" marker-end="url(#arrow-inactive)" />
+                    <!-- q1 -> q2 (0) -->
+                    <path id="edge-q1-0" d="M 425 175 Q 400 260 325 305" class="edge-inactive" marker-end="url(#arrow-inactive)" />
+                    <!-- q2 -> q1 (0) -->
+                    <path id="edge-q2-0" d="M 325 325 Q 430 250 440 180" class="edge-inactive" marker-end="url(#arrow-inactive)" />
+                    <!-- q2 -> q2 (1) -->
+                    <path id="edge-q2-1" d="M 285 345 C 250 430, 350 430, 310 345" class="edge-inactive" marker-end="url(#arrow-inactive)" />
+
+                    <!-- === TEXT LABELS (Alfabeto en transiciones) === -->
+                    <text id="label-q0-0" x="70" y="90" class="text-inactive font-mono text-lg">0</text>
+                    <text id="label-q0-1" x="295" y="110" class="text-inactive font-mono text-lg">1</text>
+                    <text id="label-q1-1" x="295" y="195" class="text-inactive font-mono text-lg">1</text>
+                    <text id="label-q1-0" x="400" y="250" class="text-inactive font-mono text-lg">0</text>
+                    <text id="label-q2-0" x="350" y="270" class="text-inactive font-mono text-lg">0</text>
+                    <text id="label-q2-1" x="295" y="420" class="text-inactive font-mono text-lg">1</text>
+
+                    <!-- === NODES (Estados) === -->
+                    <!-- Estado q0 (Aceptación) -->
+                    <g id="group-q0">
+                        <circle id="node-q0" cx="150" cy="150" r="30" class="node-inactive" />
+                        <circle cx="150" cy="150" r="24" class="node-inactive" /> <!-- Círculo interno -->
+                        <text x="150" y="155" text-anchor="middle" class="font-mono font-semibold fill-slate-800">q0</text>
+                    </g>
+
+                    <!-- Estado q1 -->
+                    <g id="group-q1">
+                        <circle id="node-q1" cx="450" cy="150" r="30" class="node-inactive" />
+                        <text x="450" y="155" text-anchor="middle" class="font-mono font-semibold fill-slate-800">q1</text>
+                    </g>
+
+                    <!-- Estado q2 -->
+                    <g id="group-q2">
+                        <circle id="node-q2" cx="300" cy="320" r="30" class="node-inactive" />
+                        <text x="300" y="325" text-anchor="middle" class="font-mono font-semibold fill-slate-800">q2</text>
+                    </g>
+                </svg>
+            </div>
+        </div>
+    </main>
+
+    <footer class="text-center p-4 text-slate-500 text-sm">
+        Prof. Jorge López-Cifre, PhD - - - ( simulación de circuitos secuenciales )
+    </footer>
+
+    <script>
+        // Definición de la Máquina de Estados (AFD)
+        // La clave es el estado actual. El valor es un objeto que mapea {entrada: {estado_siguiente, id_arista}}
+        const fsm = {
+            'q0': { 
+                '0': { next: 'q0', edge: 'edge-q0-0', label: 'label-q0-0' }, 
+                '1': { next: 'q1', edge: 'edge-q0-1', label: 'label-q0-1' } 
+            },
+            'q1': { 
+                '0': { next: 'q2', edge: 'edge-q1-0', label: 'label-q1-0' }, 
+                '1': { next: 'q0', edge: 'edge-q1-1', label: 'label-q1-1' } 
+            },
+            'q2': { 
+                '0': { next: 'q1', edge: 'edge-q2-0', label: 'label-q2-0' }, 
+                '1': { next: 'q2', edge: 'edge-q2-1', label: 'label-q2-1' } 
+            }
+        };
+
+        let isRunning = false;
+        
+        // Utilidad para pausar la ejecución (ms)
+        const sleep = ms => new Promise(r => setTimeout(r, ms));
+
+        // Inicializar interfaz visual
+        function resetUI() {
+            if(isRunning) return; // Evitar reinicio en medio de simulación
+
+            document.getElementById('errorMsg').classList.add('hidden');
+            document.getElementById('resultCard').classList.add('hidden');
+            
+            // Limpiar Cinta
+            const input = document.getElementById('binaryInput').value;
+            const tapeContainer = document.getElementById('tapeContainer');
+            tapeContainer.innerHTML = '';
+            
+            if(/^[01]+$/.test(input) || input === '') {
+                for(let i=0; i<input.length; i++) {
+                    const span = document.createElement('span');
+                    span.className = 'tape-char text-slate-400';
+                    span.id = `tape-char-${i}`;
+                    span.innerText = input[i];
+                    tapeContainer.appendChild(span);
+                }
+            }
+
+            // Restaurar Estado Visual del SVG a inactivo
+            document.querySelectorAll('circle').forEach(el => {
+                el.classList.remove('node-active');
+                el.classList.add('node-inactive');
+            });
+            document.querySelectorAll('path').forEach(el => {
+                el.classList.remove('edge-active');
+                el.classList.add('edge-inactive');
+                el.setAttribute('marker-end', 'url(#arrow-inactive)');
+            });
+            document.querySelectorAll('text[id^="label-"]').forEach(el => {
+                el.classList.remove('text-active');
+                el.classList.add('text-inactive');
+            });
+
+            // Resaltar estado inicial (q0)
+            highlightNode('q0');
+            
+            // Actualizar labels
+            document.getElementById('lblEstado').innerText = 'q0';
+            document.getElementById('lblResiduo').innerText = '0';
+        }
+
+        // Funciones auxiliares para SVG CSS Toggle
+        function highlightNode(nodeId) {
+            const node = document.getElementById(`node-${nodeId}`);
+            if(node) {
+                node.classList.remove('node-inactive');
+                node.classList.add('node-active');
+            }
+            // Si es q0, resaltamos también el círculo interno de aceptación
+            if(nodeId === 'q0') {
+                const innerCircle = document.querySelector('#group-q0 circle:nth-child(2)');
+                if(innerCircle) {
+                    innerCircle.classList.remove('node-inactive');
+                    innerCircle.classList.add('node-active');
+                }
+            }
+        }
+
+        function removeHighlightNode(nodeId) {
+            const node = document.getElementById(`node-${nodeId}`);
+            if(node) {
+                node.classList.remove('node-active');
+                node.classList.add('node-inactive');
+            }
+            if(nodeId === 'q0') {
+                const innerCircle = document.querySelector('#group-q0 circle:nth-child(2)');
+                if(innerCircle) {
+                    innerCircle.classList.remove('node-active');
+                    innerCircle.classList.add('node-inactive');
+                }
+            }
+        }
+
+        function highlightEdge(edgeId, labelId) {
+            const edge = document.getElementById(edgeId);
+            const label = document.getElementById(labelId);
+            if(edge) {
+                edge.classList.remove('edge-inactive');
+                edge.classList.add('edge-active');
+                edge.setAttribute('marker-end', 'url(#arrow-active)');
+            }
+            if(label) {
+                label.classList.remove('text-inactive');
+                label.classList.add('text-active');
+            }
+        }
+
+        function removeHighlightEdge(edgeId, labelId) {
+            const edge = document.getElementById(edgeId);
+            const label = document.getElementById(labelId);
+            if(edge) {
+                edge.classList.remove('edge-active');
+                edge.classList.add('edge-inactive');
+                edge.setAttribute('marker-end', 'url(#arrow-inactive)');
+            }
+            if(label) {
+                label.classList.remove('text-active');
+                label.classList.add('text-inactive');
+            }
+        }
+
+        // Lógica principal de simulación
+        async function startSimulation() {
+            if(isRunning) return;
+            
+            const input = document.getElementById('binaryInput').value;
+            const errorMsg = document.getElementById('errorMsg');
+            
+            // Validación de entrada (Alfabeto {0,1})
+            if (!/^[01]+$/.test(input) && input !== "") {
+                errorMsg.classList.remove('hidden');
+                return;
+            }
+            
+            isRunning = true;
+            document.getElementById('btnSimular').disabled = true;
+            document.getElementById('btnSimular').classList.add('opacity-50', 'cursor-not-allowed');
+            document.getElementById('binaryInput').disabled = true;
+            
+            resetUI();
+
+            let currentState = 'q0';
+            
+            // Pausa inicial para apreciar el inicio
+            await sleep(500);
+
+            // Bucle principal: Leer cadena de izquierda a derecha
+            for (let i = 0; i < input.length; i++) {
+                const char = input[i];
+                const transition = fsm[currentState][char];
+                
+                // Resaltar en la cinta el caracter actual
+                const tapeCharEl = document.getElementById(`tape-char-${i}`);
+                if(tapeCharEl) {
+                    tapeCharEl.classList.remove('text-slate-400');
+                    tapeCharEl.classList.add('tape-active');
+                }
+
+                // 1. Resaltar la transición (flecha y etiqueta)
+                highlightEdge(transition.edge, transition.label);
+                
+                await sleep(1000); // Esperar que el alumno vea qué arista se tomó
+
+                // 2. Apagar la transición y el estado antiguo
+                removeHighlightEdge(transition.edge, transition.label);
+                removeHighlightNode(currentState);
+
+                // 3. Mover al nuevo estado y actualizar UI
+                currentState = transition.next;
+                highlightNode(currentState);
+                
+                document.getElementById('lblEstado').innerText = currentState;
+                // El número del estado equivale al residuo (q0->0, q1->1, q2->2)
+                document.getElementById('lblResiduo').innerText = currentState.replace('q', '');
+
+                // Marcar el caracter como ya procesado en la cinta
+                if(tapeCharEl) {
+                    tapeCharEl.classList.remove('tape-active');
+                    tapeCharEl.classList.add('tape-processed');
+                }
+
+                await sleep(600);
+            }
+
+            // Evaluar aceptación (El estado q0 es el único final)
+            const resultCard = document.getElementById('resultCard');
+            const resultTitle = document.getElementById('resultTitle');
+            const resultDesc = document.getElementById('resultDesc');
+            
+            resultCard.classList.remove('hidden', 'bg-red-50', 'bg-green-50', 'border-red-200', 'border-green-200');
+            
+            // Obtener el valor decimal de la cadena para mostrarlo
+            const decimalValue = input === "" ? 0 : parseInt(input, 2);
+
+            if (currentState === 'q0') {
+                resultCard.classList.add('bg-green-50', 'border-green-200');
+                resultTitle.innerText = "¡Cadena Aceptada!";
+                resultTitle.classList.add('text-green-700');
+                resultTitle.classList.remove('text-red-700');
+                resultDesc.innerHTML = `La máquina se detuvo en el estado de aceptación <b>q0</b>. <br>El valor decimal es <b>${decimalValue}</b>, que <b>SÍ</b> es divisible por 3.`;
+            } else {
+                resultCard.classList.add('bg-red-50', 'border-red-200');
+                resultTitle.innerText = "Cadena Rechazada";
+                resultTitle.classList.add('text-red-700');
+                resultTitle.classList.remove('text-green-700');
+                const residuo = currentState.replace('q', '');
+                resultDesc.innerHTML = `La máquina se detuvo en el estado <b>${currentState}</b>. <br>El valor decimal es <b>${decimalValue}</b>, que <b>NO</b> es divisible por 3 (deja un residuo de ${residuo}).`;
+            }
+
+            // Desbloquear controles
+            isRunning = false;
+            document.getElementById('btnSimular').disabled = false;
+            document.getElementById('btnSimular').classList.remove('opacity-50', 'cursor-not-allowed');
+            document.getElementById('binaryInput').disabled = false;
+        }
+
+        // Permitir inicio con "Enter"
+        document.getElementById('binaryInput').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter' && !isRunning) {
+                startSimulation();
+            }
+        });
+
+        // Inicialización al cargar la página
+        window.onload = resetUI;
+    </script>
+</body>
+</html>

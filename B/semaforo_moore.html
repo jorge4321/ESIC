@@ -1,0 +1,361 @@
+
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Máquina de Moore - Semáforo | Prof. Jorge López Cifre</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        
+        /* Transiciones suaves para los elementos del SVG */
+        circle, path, text { transition: all 0.3s ease-in-out; }
+
+        /* Estilos inactivos por defecto */
+        .node-inactive { fill: #f8fafc; stroke: #64748b; stroke-width: 2; }
+        .edge-inactive { stroke: #94a3b8; stroke-width: 2; fill: none; }
+        .text-inactive { fill: #64748b; font-weight: normal; }
+        .marker-inactive { fill: #94a3b8; }
+
+        /* Estilos activos/resaltados */
+        .node-active { fill: #dcfce7; stroke: #16a34a; stroke-width: 4; }
+        .edge-active { stroke: #ea580c; stroke-width: 4; fill: none; }
+        .text-active { fill: #ea580c; font-weight: bold; font-size: 1.1em; }
+        .marker-active { fill: #ea580c; }
+
+        /* Cinta de procesamiento */
+        .tape-char {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            width: 2.5rem;
+            height: 2.5rem;
+            margin: 0 0.25rem;
+            border: 2px solid #cbd5e1;
+            border-radius: 0.5rem;
+            font-family: monospace;
+            font-size: 1.25rem;
+            background-color: white;
+            transition: all 0.3s ease;
+        }
+        .tape-active {
+            border-color: #ea580c;
+            background-color: #fff7ed;
+            color: #ea580c;
+            transform: translateY(-5px);
+            font-weight: bold;
+        }
+        .tape-processed {
+            border-color: #16a34a;
+            background-color: #f0fdf4;
+            color: #16a34a;
+        }
+        
+        /* Animación para los elementos de salida generados */
+        @keyframes popIn {
+            0% { transform: scale(0.5); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .output-char {
+            animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            background-color: #f1f5f9; 
+            border-color: #94a3b8; 
+        }
+    </style>
+</head>
+<body class="bg-slate-50 min-h-screen text-slate-800 flex flex-col">
+
+    <!-- Encabezado -->
+    <header class="bg-indigo-900 text-white p-6 shadow-md">
+        <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+            <div>
+                <h1 class="text-2xl font-bold">Teoría de Autómatas: Máquina de Moore Autónoma</h1>
+                <p class="text-indigo-200 text-sm mt-1">Simulación de Semáforo Autónomo - Prof. Jorge López Cifre</p>
+            </div>
+            <div class="flex gap-2 text-sm font-medium">
+                <span class="bg-indigo-800 px-3 py-1 rounded-md border border-indigo-700">Transiciones: Por Tiempo</span>
+                <span class="bg-indigo-800 px-3 py-1 rounded-md border border-indigo-700">Salidas: {🟢, 🟡, 🔴}</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow p-6 flex flex-col items-center max-w-6xl mx-auto w-full gap-6">
+        
+        <!-- Panel de Control y Explicación -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                <h2 class="text-lg font-semibold mb-2 text-indigo-900">Moore Autónomo (Temporizado)</h2>
+                <p class="text-sm text-slate-600 mb-4 text-justify">
+                    En esta variante de la <strong>Máquina de Moore</strong>, no hay entradas externas (como un botón peatonal). Las transiciones ocurren automáticamente al agotarse el temporizador de cada estado. La salida sigue dependiendo <em>únicamente del estado actual</em>.
+                </p>
+            </div>
+
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 flex flex-col justify-center">
+                <label class="block text-sm font-medium text-slate-600 mb-3">Configuración de Temporizadores (Segundos)</label>
+                <div class="flex gap-4 mb-4">
+                    <div class="w-1/3">
+                        <label class="text-xs text-slate-500 font-semibold uppercase">Verde</label>
+                        <input type="number" id="tVerde" value="3" min="1" class="w-full border-2 border-slate-300 rounded-lg px-3 py-1.5 font-mono text-center focus:border-green-500 focus:outline-none transition-colors">
+                    </div>
+                    <div class="w-1/3">
+                        <label class="text-xs text-slate-500 font-semibold uppercase">Amarillo</label>
+                        <input type="number" id="tAmarillo" value="1" min="1" class="w-full border-2 border-slate-300 rounded-lg px-3 py-1.5 font-mono text-center focus:border-yellow-500 focus:outline-none transition-colors">
+                    </div>
+                    <div class="w-1/3">
+                        <label class="text-xs text-slate-500 font-semibold uppercase">Rojo</label>
+                        <input type="number" id="tRojo" value="3" min="1" class="w-full border-2 border-slate-300 rounded-lg px-3 py-1.5 font-mono text-center focus:border-red-500 focus:outline-none transition-colors">
+                    </div>
+                </div>
+                <div class="flex gap-2">
+                    <button id="btnSimular" onclick="startSimulation()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded-lg font-medium transition-colors shadow-sm flex-grow">
+                        Iniciar Automático
+                    </button>
+                    <button id="btnDetener" onclick="stopSimulation()" class="hidden bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded-lg font-medium transition-colors shadow-sm flex-grow">
+                        Detener
+                    </button>
+                    <button id="btnReiniciar" onclick="resetUI()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 px-4 py-2 rounded-lg font-medium transition-colors">
+                        Reset
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Área Principal de Visualización -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 w-full">
+            
+            <!-- Panel Lateral (Cintas) -->
+            <div class="lg:col-span-5 flex flex-col gap-6">
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 flex-grow flex flex-col">
+                    
+                    <h3 class="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-2">Historial de Salidas ($Z$)</h3>
+                    <div id="outputTapeContainer" class="flex flex-wrap gap-1 min-h-[3rem] p-2 bg-slate-50 rounded-lg border border-dashed border-slate-300">
+                        <!-- Salidas inyectadas dinámicamente -->
+                    </div>
+                    <p class="text-xs text-slate-400 mt-2 italic text-center">Se muestran las últimas salidas generadas</p>
+                    
+                    <div class="border-t border-slate-100 pt-4 mt-auto space-y-2">
+                        <div class="flex justify-between items-center">
+                            <span class="text-slate-600 font-medium text-sm">Estado actual:</span>
+                            <span id="lblEstado" class="font-mono bg-indigo-100 px-3 py-1 rounded text-indigo-800 font-bold">qV</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-slate-600 font-medium text-sm">Color semáforo (Salida):</span>
+                            <span id="lblSalida" class="font-mono bg-slate-100 px-3 py-1 rounded text-slate-700">🟢</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Grafo SVG del Moore -->
+            <div class="lg:col-span-7 bg-white p-4 rounded-xl shadow-sm border border-slate-200 flex justify-center items-center overflow-x-auto min-h-[450px]">
+                <svg viewBox="0 0 600 450" class="w-full max-w-lg h-full" id="fsmSvg">
+                    <defs>
+                        <marker id="arrow-inactive" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                            <path d="M 0 0 L 10 5 L 0 10 z" class="marker-inactive" />
+                        </marker>
+                        <marker id="arrow-active" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                            <path d="M 0 0 L 10 5 L 0 10 z" class="marker-active" />
+                        </marker>
+                    </defs>
+
+                    <!-- === ARISTAS (Transiciones Temporizadas) === -->
+                    <!-- qV a qA -->
+                    <path id="edge-qv-qa" d="M 325 145 Q 380 230 425 295" class="edge-inactive" marker-end="url(#arrow-inactive)" />
+                    <text id="lbl-qv-qa" x="390" y="215" class="text-inactive font-mono text-sm bg-white">t(Verde)</text>
+
+                    <!-- qA a qR -->
+                    <path id="edge-qa-qr" d="M 410 320 L 190 320" class="edge-inactive" marker-end="url(#arrow-inactive)" />
+                    <text id="lbl-qa-qr" x="300" y="310" text-anchor="middle" class="text-inactive font-mono text-sm">t(Amarillo)</text>
+
+                    <!-- qR a qV -->
+                    <path id="edge-qr-qv" d="M 175 295 Q 220 230 275 145" class="edge-inactive" marker-end="url(#arrow-inactive)" />
+                    <text id="lbl-qr-qv" x="200" y="215" class="text-inactive font-mono text-sm">t(Rojo)</text>
+
+                    <!-- === NODOS (Estados de Moore: Estado / Salida) === -->
+                    <g id="group-qV">
+                        <circle id="node-qV" cx="300" cy="120" r="40" class="node-inactive" />
+                        <text x="300" y="125" text-anchor="middle" class="font-mono font-semibold fill-slate-800 text-sm">qV / 🟢</text>
+                    </g>
+                    
+                    <g id="group-qA">
+                        <circle id="node-qA" cx="450" cy="320" r="40" class="node-inactive" />
+                        <text x="450" y="325" text-anchor="middle" class="font-mono font-semibold fill-slate-800 text-sm">qA / 🟡</text>
+                    </g>
+
+                    <g id="group-qR">
+                        <circle id="node-qR" cx="150" cy="320" r="40" class="node-inactive" />
+                        <text x="150" y="325" text-anchor="middle" class="font-mono font-semibold fill-slate-800 text-sm">qR / 🔴</text>
+                    </g>
+                </svg>
+            </div>
+        </div>
+    </main>
+
+    <footer class="text-center p-4 text-slate-500 text-sm mt-auto border-t border-slate-200">
+        Diseñado para simulaciones académicas - Máquina de Moore Autónoma
+    </footer>
+
+    <script>
+        const mooreFSM = {
+            'qV': { out: '🟢', next: 'qA', edge: 'edge-qv-qa', label: 'lbl-qv-qa', timerId: 'tVerde' },
+            'qA': { out: '🟡', next: 'qR', edge: 'edge-qa-qr', label: 'lbl-qa-qr', timerId: 'tAmarillo' },
+            'qR': { out: '🔴', next: 'qV', edge: 'edge-qr-qv', label: 'lbl-qr-qv', timerId: 'tRojo' }
+        };
+
+        let isRunning = false;
+        let shouldStop = false;
+
+        async function sleepInterruptible(ms) {
+            const steps = Math.floor(ms / 100);
+            for(let i=0; i<steps; i++) {
+                if(shouldStop) return false;
+                await new Promise(r => setTimeout(r, 100));
+            }
+            return true;
+        }
+
+        function printOutput(outputValue) {
+            const outContainer = document.getElementById('outputTapeContainer');
+            const outSpan = document.createElement('span');
+            outSpan.className = 'tape-char output-char';
+            outSpan.innerText = outputValue;
+            outContainer.appendChild(outSpan);
+            
+            // Mantener un historial máximo de 12 para no saturar la vista
+            while(outContainer.children.length > 12) {
+                outContainer.removeChild(outContainer.firstChild);
+            }
+
+            document.getElementById('lblSalida').innerText = outputValue;
+        }
+
+        function resetUI() {
+            shouldStop = true;
+            isRunning = false;
+
+            document.getElementById('btnDetener').classList.add('hidden');
+            document.getElementById('btnSimular').classList.remove('hidden');
+            
+            const outContainer = document.getElementById('outputTapeContainer');
+            outContainer.innerHTML = '';
+
+            document.querySelectorAll('circle').forEach(el => {
+                el.classList.remove('node-active');
+                el.classList.add('node-inactive');
+            });
+            document.querySelectorAll('path').forEach(el => {
+                el.classList.remove('edge-active');
+                el.classList.add('edge-inactive');
+                if(el.getAttribute('marker-end')) el.setAttribute('marker-end', 'url(#arrow-inactive)');
+            });
+            document.querySelectorAll('text[id^="lbl-"]').forEach(el => {
+                el.classList.remove('text-active');
+                el.classList.add('text-inactive');
+            });
+
+            highlightNode('qV');
+            document.getElementById('lblEstado').innerText = 'qV';
+            printOutput(mooreFSM['qV'].out);
+        }
+
+        function highlightNode(nodeId) {
+            const node = document.getElementById(`node-${nodeId}`);
+            if(node) {
+                node.classList.remove('node-inactive');
+                node.classList.add('node-active');
+            }
+        }
+
+        function removeHighlightNode(nodeId) {
+            const node = document.getElementById(`node-${nodeId}`);
+            if(node) {
+                node.classList.remove('node-active');
+                node.classList.add('node-inactive');
+            }
+        }
+
+        function highlightEdge(edgeId, labelId) {
+            const edge = document.getElementById(edgeId);
+            const label = document.getElementById(labelId);
+            if(edge) {
+                edge.classList.remove('edge-inactive');
+                edge.classList.add('edge-active');
+                if(edge.getAttribute('marker-end')) edge.setAttribute('marker-end', 'url(#arrow-active)');
+            }
+            if(label) {
+                label.classList.remove('text-inactive');
+                label.classList.add('text-active');
+            }
+        }
+
+        function removeHighlightEdge(edgeId, labelId) {
+            const edge = document.getElementById(edgeId);
+            const label = document.getElementById(labelId);
+            if(edge) {
+                edge.classList.remove('edge-active');
+                edge.classList.add('edge-inactive');
+                if(edge.getAttribute('marker-end')) edge.setAttribute('marker-end', 'url(#arrow-inactive)');
+            }
+            if(label) {
+                label.classList.remove('text-active');
+                label.classList.add('text-inactive');
+            }
+        }
+
+        function stopSimulation() {
+            shouldStop = true;
+            isRunning = false;
+            document.getElementById('btnDetener').classList.add('hidden');
+            document.getElementById('btnSimular').classList.remove('hidden');
+        }
+
+        async function startSimulation() {
+            if(isRunning) return;
+            isRunning = true;
+            shouldStop = false;
+
+            document.getElementById('btnSimular').classList.add('hidden');
+            document.getElementById('btnDetener').classList.remove('hidden');
+
+            let currentState = document.getElementById('lblEstado').innerText;
+
+            // Bucle infinito hasta que se pulse Detener
+            while(!shouldStop) {
+                const stateInfo = mooreFSM[currentState];
+                
+                // Leer temporizador desde la UI (por defecto 1s si hay error)
+                const timerSeconds = Math.max(0.5, parseFloat(document.getElementById(stateInfo.timerId).value) || 1);
+                
+                highlightNode(currentState);
+                
+                // Solo imprimimos si la salida mostrada es diferente o acabamos de iniciar
+                if (document.getElementById('lblSalida').innerText !== stateInfo.out || document.getElementById('outputTapeContainer').children.length === 0) {
+                    printOutput(stateInfo.out);
+                }
+
+                // Esperar el tiempo configurado para este estado
+                const completed = await sleepInterruptible(timerSeconds * 1000);
+                if (!completed) break; // Si se pulsó detener, salimos del bucle
+
+                // Resaltar transición
+                highlightEdge(stateInfo.edge, stateInfo.label);
+                
+                // Pequeña pausa visual para que se vea el cambio de estado (500ms)
+                const transitionCompleted = await sleepInterruptible(500);
+                if (!transitionCompleted) break;
+
+                removeHighlightEdge(stateInfo.edge, stateInfo.label);
+                removeHighlightNode(currentState);
+
+                // Cambiar al siguiente estado
+                currentState = stateInfo.next;
+                document.getElementById('lblEstado').innerText = currentState;
+                printOutput(mooreFSM[currentState].out);
+            }
+        }
+
+        window.onload = resetUI;
+    </script>
+</body>
+</html>

@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulador de Autómata: Múltiplos de 4</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Estilos específicos para el SVG y las animaciones */
+        .state {
+            fill: white;
+            stroke: #4B5563; /* tailwind gray-600 */
+            stroke-width: 2;
+            transition: all 0.3s ease;
+        }
+        .state-text {
+            font-family: monospace;
+            font-size: 14px;
+            text-anchor: middle;
+            dominant-baseline: central;
+            pointer-events: none;
+        }
+        .transition-line {
+            stroke: #9CA3AF; /* tailwind gray-400 */
+            stroke-width: 2;
+            fill: none;
+            transition: stroke 0.3s ease;
+        }
+        .transition-label {
+            font-family: sans-serif;
+            font-size: 12px;
+            fill: #4B5563;
+        }
+        
+        /* Estado Activo */
+        .active-state {
+            fill: #FEF08A !important; /* tailwind yellow-200 */
+            stroke: #CA8A04 !important; /* tailwind yellow-600 */
+            stroke-width: 4px;
+            box-shadow: 0 0 10px rgba(202, 138, 4, 0.5);
+        }
+
+        /* Estados Finales Específicos */
+        .accept-state.active-state {
+            fill: #BBF7D0 !important; /* green-200 */
+            stroke: #16A34A !important; /* green-600 */
+        }
+        .reject-state.active-state {
+            fill: #FECACA !important; /* red-200 */
+            stroke: #DC2626 !important; /* red-600 */
+        }
+        
+        /* Animación de pulso para la entrada */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        .pulse-text {
+            animation: pulse 0.3s ease-in-out;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen flex flex-col items-center py-10 font-sans">
+
+    <div class="max-w-5xl w-full bg-white rounded-xl shadow-lg p-8">
+        <div class="text-center mb-8">
+            <h1 class="text-3xl font-bold text-gray-800 mb-2">Autómata Finito Determinista (AFD)</h1>
+            <p class="text-gray-600">Detecta cadenas <code class="bg-gray-100 px-1 rounded">w</code> de longitud 4 en <code class="bg-gray-100 px-1 rounded">Σ = {0,1}</code> que son divisibles por 4.</p>
+            <p class="text-sm text-gray-500 mt-1">(Recordatorio matemático: en binario, un número es divisible por 4 si y solo si termina en <strong>00</strong>)</p>
+        </div>
+
+        <!-- Contenedor del SVG -->
+        <div class="w-full overflow-x-auto border border-gray-200 rounded-lg bg-white mb-8 flex justify-center">
+            <svg width="900" height="400" viewBox="0 0 900 400" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <!-- Punta de flecha estándar -->
+                    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                        <path d="M 0 0 L 10 5 L 0 10 z" fill="#9CA3AF" />
+                    </marker>
+                    <!-- Punta de flecha activa (opcional para futuras mejoras) -->
+                    <marker id="arrow-active" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                        <path d="M 0 0 L 10 5 L 0 10 z" fill="#CA8A04" />
+                    </marker>
+                </defs>
+
+                <!-- Transiciones (Líneas) -->
+                <!-- q0 a q1 -->
+                <path d="M 75 200 L 175 200" class="transition-line" marker-end="url(#arrow)" />
+                <text x="125" y="190" class="transition-label" text-anchor="middle">0, 1</text>
+
+                <!-- q1 a q2 -->
+                <path d="M 225 200 L 325 200" class="transition-line" marker-end="url(#arrow)" />
+                <text x="275" y="190" class="transition-label" text-anchor="middle">0, 1</text>
+
+                <!-- q2 a q3 -->
+                <path d="M 371 189 L 479 111" class="transition-line" marker-end="url(#arrow)" />
+                <text x="415" y="140" class="transition-label" text-anchor="middle">0</text>
+
+                <!-- q2 a q4 -->
+                <path d="M 371 211 L 479 289" class="transition-line" marker-end="url(#arrow)" />
+                <text x="415" y="270" class="transition-label" text-anchor="middle">1</text>
+
+                <!-- q3 a qAcc -->
+                <path d="M 525 100 L 625 100" class="transition-line" marker-end="url(#arrow)" />
+                <text x="575" y="90" class="transition-label" text-anchor="middle">0</text>
+
+                <!-- q3 a qRej (diagonal cruzada) -->
+                <path d="M 515 119 L 635 281" class="transition-line" marker-end="url(#arrow)" />
+                <text x="585" y="180" class="transition-label" text-anchor="middle" fill="#DC2626">1</text>
+
+                <!-- q4 a qRej -->
+                <path d="M 525 300 L 625 300" class="transition-line" marker-end="url(#arrow)" />
+                <text x="575" y="290" class="transition-label" text-anchor="middle">0, 1</text>
+
+                <!-- qAcc a qTrap -->
+                <path d="M 671 111 L 779 189" class="transition-line" marker-end="url(#arrow)" />
+                <text x="735" y="140" class="transition-label" text-anchor="middle">0, 1</text>
+
+                <!-- qRej a qTrap -->
+                <path d="M 671 289 L 779 211" class="transition-line" marker-end="url(#arrow)" />
+                <text x="735" y="270" class="transition-label" text-anchor="middle">0, 1</text>
+
+                <!-- qTrap Bucle -->
+                <path d="M 820 185 C 870 120, 870 280, 820 215" class="transition-line" marker-end="url(#arrow)" fill="none" />
+                <text x="865" y="200" class="transition-label" text-anchor="middle">0, 1</text>
+
+                <!-- Flecha de Inicio -->
+                <path d="M 10 200 L 25 200" class="transition-line" marker-end="url(#arrow)" />
+                <text x="10" y="190" class="transition-label">Inicio</text>
+
+                <!-- Nodos (Estados) -->
+                <g id="node-q0">
+                    <circle cx="50" cy="200" r="25" class="state" id="q0" />
+                    <text x="50" y="200" class="state-text">q0</text>
+                </g>
+                <g id="node-q1">
+                    <circle cx="200" cy="200" r="25" class="state" id="q1" />
+                    <text x="200" y="200" class="state-text">q1</text>
+                </g>
+                <g id="node-q2">
+                    <circle cx="350" cy="200" r="25" class="state" id="q2" />
+                    <text x="350" y="200" class="state-text">q2</text>
+                </g>
+                <g id="node-q3">
+                    <circle cx="500" cy="100" r="25" class="state" id="q3" />
+                    <text x="500" y="100" class="state-text">q3</text>
+                </g>
+                <g id="node-q4">
+                    <circle cx="500" cy="300" r="25" class="state" id="q4" />
+                    <text x="500" y="300" class="state-text">q4</text>
+                </g>
+                <g id="node-qAcc">
+                    <!-- Doble círculo para estado de aceptación -->
+                    <circle cx="650" cy="100" r="29" class="state accept-state" fill="white" stroke="#4B5563" stroke-width="2"/>
+                    <circle cx="650" cy="100" r="24" class="state accept-state" id="qAcc" />
+                    <text x="650" y="100" class="state-text">qAcc</text>
+                </g>
+                <g id="node-qRej">
+                    <circle cx="650" cy="300" r="25" class="state reject-state" id="qRej" />
+                    <text x="650" y="300" class="state-text">qRej</text>
+                </g>
+                <g id="node-qTrap">
+                    <circle cx="800" cy="200" r="25" class="state reject-state" id="qTrap" />
+                    <text x="800" y="200" class="state-text">qTrap</text>
+                </g>
+            </svg>
+        </div>
+
+        <!-- Controles Interactivos -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <!-- Panel de Entrada -->
+            <div class="bg-gray-100 p-6 rounded-lg shadow-inner">
+                <h2 class="text-lg font-semibold text-gray-700 mb-4">Introduce la cadena bit a bit:</h2>
+                <div class="flex space-x-4 mb-6">
+                    <button onclick="inputBit('0')" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded transition duration-200 text-xl shadow-md disabled:opacity-50 disabled:cursor-not-allowed" id="btn-0">
+                        Entrada '0'
+                    </button>
+                    <button onclick="inputBit('1')" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded transition duration-200 text-xl shadow-md disabled:opacity-50 disabled:cursor-not-allowed" id="btn-1">
+                        Entrada '1'
+                    </button>
+                </div>
+                <button onclick="resetMachine()" class="w-full bg-gray-500 hover:bg-gray-600 text-white font-semibold py-2 px-4 rounded transition duration-200 shadow">
+                    Reiniciar Máquina
+                </button>
+            </div>
+
+            <!-- Panel de Estado -->
+            <div class="bg-white border-2 border-gray-200 p-6 rounded-lg flex flex-col justify-center">
+                <div class="mb-4">
+                    <span class="text-gray-600 font-semibold">Cadena actual (w): </span>
+                    <span id="display-string" class="text-2xl font-mono tracking-widest text-gray-900 bg-gray-100 px-3 py-1 rounded empty:hidden"></span>
+                    <span id="placeholder-string" class="text-gray-400 italic">Vacía</span>
+                </div>
+                <div class="mb-4">
+                    <span class="text-gray-600 font-semibold">Longitud: </span>
+                    <span id="display-length" class="text-lg font-bold">0</span> / 4
+                </div>
+                <div>
+                    <span class="text-gray-600 font-semibold">Estado de la cadena: </span>
+                    <div id="status-message" class="mt-2 text-lg font-bold text-blue-600 bg-blue-50 p-3 rounded text-center border border-blue-200">
+                        Esperando entrada...
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Tabla de transiciones del Autómata
+        const automata = {
+            'q0': { '0': 'q1', '1': 'q1' },
+            'q1': { '0': 'q2', '1': 'q2' },
+            'q2': { '0': 'q3', '1': 'q4' },
+            'q3': { '0': 'qAcc', '1': 'qRej' },
+            'q4': { '0': 'qRej', '1': 'qRej' },
+            'qAcc': { '0': 'qTrap', '1': 'qTrap' },
+            'qRej': { '0': 'qTrap', '1': 'qTrap' },
+            'qTrap': { '0': 'qTrap', '1': 'qTrap' }
+        };
+
+        // Variables de estado
+        let currentState = 'q0';
+        let currentString = '';
+
+        // Inicialización
+        window.onload = () => {
+            updateVisuals();
+        };
+
+        function inputBit(bit) {
+            // Actualizar lógica
+            currentState = automata[currentState][bit];
+            currentString += bit;
+
+            // Animar el texto
+            const displayStr = document.getElementById('display-string');
+            displayStr.classList.remove('pulse-text');
+            void displayStr.offsetWidth; // Trigger reflow para reiniciar animación
+            displayStr.classList.add('pulse-text');
+
+            updateVisuals();
+        }
+
+        function resetMachine() {
+            currentState = 'q0';
+            currentString = '';
+            updateVisuals();
+            
+            // Habilitar botones por si estaban deshabilitados
+            document.getElementById('btn-0').disabled = false;
+            document.getElementById('btn-1').disabled = false;
+        }
+
+        function updateVisuals() {
+            // 1. Actualizar texto de la cadena
+            const displayStr = document.getElementById('display-string');
+            const placeholderStr = document.getElementById('placeholder-string');
+            
+            if (currentString.length > 0) {
+                displayStr.textContent = currentString;
+                placeholderStr.style.display = 'none';
+            } else {
+                displayStr.textContent = '';
+                placeholderStr.style.display = 'inline';
+            }
+
+            document.getElementById('display-length').textContent = currentString.length;
+
+            // 2. Actualizar resaltado de los nodos en el SVG
+            // Quitar clase activa de todos
+            document.querySelectorAll('.state').forEach(el => {
+                el.classList.remove('active-state');
+            });
+            
+            // Añadir clase activa al estado actual
+            const activeNode = document.getElementById(currentState);
+            if(activeNode) {
+                activeNode.classList.add('active-state');
+            }
+
+            // Si es qAcc hay que resaltar también el círculo exterior
+            if (currentState === 'qAcc') {
+                document.querySelector('#node-qAcc circle:first-child').classList.add('active-state');
+            }
+
+            // 3. Actualizar el mensaje de estado
+            const statusBox = document.getElementById('status-message');
+            const len = currentString.length;
+
+            if (len === 0) {
+                statusBox.textContent = "Esperando entrada...";
+                statusBox.className = "mt-2 text-lg font-bold text-gray-600 bg-gray-100 p-3 rounded text-center border border-gray-200";
+            } else if (len < 4) {
+                statusBox.textContent = "Procesando... faltan " + (4 - len) + " bits.";
+                statusBox.className = "mt-2 text-lg font-bold text-blue-600 bg-blue-50 p-3 rounded text-center border border-blue-200";
+            } else if (len === 4) {
+                if (currentState === 'qAcc') {
+                    statusBox.innerHTML = "¡ACEPTADA! &#9989;<br><span class='text-sm font-normal'>Tiene 4 bits y es múltiplo de 4.</span>";
+                    statusBox.className = "mt-2 text-lg font-bold text-green-700 bg-green-100 p-3 rounded text-center border border-green-300 shadow-sm";
+                } else {
+                    statusBox.innerHTML = "RECHAZADA &#10060;<br><span class='text-sm font-normal'>Tiene 4 bits pero NO termina en 00.</span>";
+                    statusBox.className = "mt-2 text-lg font-bold text-red-700 bg-red-100 p-3 rounded text-center border border-red-300 shadow-sm";
+                }
+            } else {
+                statusBox.innerHTML = "ERROR / RECHAZADA &#10060;<br><span class='text-sm font-normal'>La longitud excedió los 4 bits.</span>";
+                statusBox.className = "mt-2 text-lg font-bold text-red-700 bg-red-100 p-3 rounded text-center border border-red-300 shadow-sm";
+                
+                // Opcional: Deshabilitar botones si ya cayó en la trampa
+                document.getElementById('btn-0').disabled = true;
+                document.getElementById('btn-1').disabled = true;
+            }
+        }
+    </script>
+</body>
+</html>

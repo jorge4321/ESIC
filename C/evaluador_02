@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dirección de Operaciones</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --success-color: #27ae60;
+            --bg-color: #ecf0f1;
+            --card-bg: #ffffff;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--primary-color);
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: var(--card-bg);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--secondary-color);
+            padding-bottom: 10px;
+        }
+
+        .selector-section {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 30px;
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        .form-group {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        select {
+            padding: 10px;
+            border: 1px solid #bdc3c7;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .rubrica-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+
+        .rubrica-table th, .rubrica-table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            vertical-align: top;
+        }
+
+        .rubrica-table th {
+            background-color: var(--primary-color);
+            color: white;
+            text-align: left;
+        }
+
+        .rubrica-table .dimension {
+            font-weight: bold;
+            background-color: #f8f9fa;
+            width: 20%;
+        }
+
+        .radio-container {
+            display: block;
+            position: relative;
+            padding-left: 25px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .radio-container input {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .checkmark {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 18px;
+            width: 18px;
+            background-color: #eee;
+            border-radius: 50%;
+            border: 1px solid #ccc;
+        }
+
+        .radio-container:hover input ~ .checkmark { background-color: #ccc; }
+        .radio-container input:checked ~ .checkmark { background-color: var(--secondary-color); }
+        .checkmark:after {
+            content: "";
+            position: absolute;
+            display: none;
+        }
+        .radio-container input:checked ~ .checkmark:after { display: block; }
+        .radio-container .checkmark:after {
+            top: 5px;
+            left: 5px;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: white;
+        }
+
+        .btn-submit {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background-color: var(--success-color);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .btn-submit:hover { background-color: #219a52; }
+        .btn-submit:disabled { background-color: #95a5a6; cursor: not-allowed; }
+
+        #mensaje {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 5px;
+            text-align: center;
+            font-weight: bold;
+            display: none;
+        }
+        .mensaje-exito { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .mensaje-error { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Exposiciones (Dirección de Operaciones)</h1>
+
+    <div class="selector-section">
+        <div class="form-group">
+            <label for="grupoSelect">Seleccionar Grupo:</label>
+            <select id="grupoSelect" onchange="actualizarAlumnos()">
+                <option value="">-- Elige un grupo --</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="alumnoSelect">Seleccionar Alumno:</label>
+            <select id="alumnoSelect">
+                <option value="">-- Primero elige un grupo --</option>
+            </select>
+        </div>
+    </div>
+
+    <form id="evalForm">
+        <table class="rubrica-table">
+            <thead>
+                <tr>
+                    <th>Dimensión y Peso</th>
+                    <th>Excelente (10 pts)</th>
+                    <th>Aceptable (7 pts)</th>
+                    <th>Inaceptable (4 pts)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Diapositivas -->
+                <tr>
+                    <td class="dimension">Diapositivas de Apoyo (30%)</td>
+                    <td>
+                        <label class="radio-container">
+                            <input type="radio" name="diapositivas" value="10" required> 10 Puntos
+                            <span class="checkmark"></span>
+                        </label>
+                        <ul style="list-style-type: none; padding: 0; margin: 10px 0 0 0;">
+                           <li>* El diseño es profesional.</li>
+                           <li>* Visualmente atractivo.</li>
+                           <li>* No está sobrecargado.</li>
+                           <li>* Los esquemas son claros.</li>
+                       </ul>                        
+                    </td>
+                    <td>
+                        <label class="radio-container">
+                            <input type="radio" name="diapositivas" value="7"> 7 Puntos
+                            <span class="checkmark"></span>
+                        </label>
+                        <ul style="list-style-type: none; padding: 0; margin: 10px 0 0 0;">
+                             <li>* Soporte visual correcto,</li>
+                             <li>pero algo denso en texto.</li>
+                             <li>* Gráficos carecen de claridad.</li>
+                        </ul> 
+                    </td>
+                    <td>
+                        <label class="radio-container">
+                            <input type="radio" name="diapositivas" value="4"> 4 Puntos
+                            <span class="checkmark"></span>
+                        </label>
+                        <ul style="list-style-type: none; padding: 0; margin: 10px 0 0 0;">
+                             <li>* Confusas, saturadas de texto.</li>
+                             <li>* No sirven como apoyo, sino</li>
+                             <li>como mero guion de lectura.</li>
+                        </ul>
+                    </td>
+                </tr>
+
+                <!-- Exposición -->
+                <tr>
+                    <td class="dimension">Exposición (Verbal/No Verbal) (30%)</td>
+                    <td>
+                        <label class="radio-container">
+                            <input type="radio" name="exposicion" value="10" required> 10 Puntos
+                            <span class="checkmark"></span>
+                        </label>
+                        <ul style="list-style-type: none; padding: 0; margin: 10px 0 0 0;">
+                             <li>* Proyecta seguridad.</li>
+                             <li>* Contacto visual constante.</li>
+                             <li>* Postura abierta.</li>
+                             <li>* Fluye natural.</li>
+                        </ul>
+                    </td>
+                    <td>
+                        <label class="radio-container">
+                            <input type="radio" name="exposicion" value="7"> 7 Puntos
+                            <span class="checkmark"></span>
+                        </label>
+                        <ul style="list-style-type: none; padding: 0; margin: 10px 0 0 0;">
+                             <li>* Comunicación adecuada, pero</li>
+                             <li>depende excesivamente de notas.</li>
+                             <li>* Ritmo monótono o dubitativo.</li>
+                        </ul>
+                    </td>
+                    <td>
+                        <label class="radio-container">
+                            <input type="radio" name="exposicion" value="4"> 4 Puntos
+                            <span class="checkmark"></span>
+                        </label>
+                        <ul style="list-style-type: none; padding: 0; margin: 10px 0 0 0;">
+                             <li>Penalización:</li>
+                             <li>Se limita a leer literalmente un texto.</li>
+                        </ul>
+                    </td>
+                </tr>
+
+                <!-- Conocimiento -->
+                <tr>
+                    <td class="dimension">Conocimiento y Defensa (40%)</td>
+                    <td>
+                        <label class="radio-container">
+                            <input type="radio" name="conocimiento" value="10" required> 10 Puntos
+                            <span class="checkmark"></span>
+                        </label>
+                        <ul style="list-style-type: none; padding: 0; margin: 10px 0 0 0;">
+                             <li>* Dominio absoluto.</li>
+                             <li>* Conecta teoría con el sector.</li>
+                             <li>* Argumentos técnicos sólidos.</li>
+                        </ul>
+                    </td>
+                    <td>
+                        <label class="radio-container">
+                            <input type="radio" name="conocimiento" value="7"> 7 Puntos
+                            <span class="checkmark"></span>
+                        </label>
+                        <ul style="list-style-type: none; padding: 0; margin: 10px 0 0 0;">
+                             <li>* Comprende conceptos básicos,</li>
+                             <li>pero titubea ante preguntas.</li>
+                        </ul>
+                    </td>
+                    <td>
+                        <label class="radio-container">
+                            <input type="radio" name="conocimiento" value="4"> 4 Puntos
+                            <span class="checkmark"></span>
+                        </label>
+                        <ul style="list-style-type: none; padding: 0; margin: 10px 0 0 0;">
+                             <li>* Confunde conceptos clave.</li>
+                             <li>* Incapaz de defender propuestas.</li>
+                             <li>* Respuestas incoherentes.</li>
+                        </ul>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <button type="button" class="btn-submit" id="btnGuardar" onclick="enviarDatos()">Guardar Calificación</button>
+    </form>
+
+    <div id="mensaje"></div>
+</div>
+
+<script>
+    // --- IMPORTANTE: PEGA AQUÍ TU URL DE GOOGLE APPS SCRIPT ---
+    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyiY4P6zjDE1dMjJtKzKGds1HRaAIqjWbKVi1gDpQsNGjopf_C0kfdO2A4UeFXyTI4K/exec';
+
+    // --- REEMPLAZA ESTO CON TUS DATOS DEL CSV ---
+    const datosAlumnos = {
+        "Grupo 1 - elefante": ["Arranz Barcones, Irene", "Fort Sanz, Miguel", "Hidalgo Pradera, Juan", "Rubal Sotomayor, Maria"],
+        "Grupo 2 - tortuga": ["Alba Relaño, Gonzalo", "González García, Ana", "Hubert Grabb, Nayara", "Roth Téllez, Francisco"],
+        "Grupo 3 - mono": ["Huertas Alarcón, Javier", "Ren, Guanwei", "Sánchez Peña, Fran"],
+        "Grupo 4 - sardina": ["Barrena Rodríguez, C...", "Barrena Rodríguez, L...", "Franco Nebreda, Al..."],
+        "Grupo 5 - gato": ["Enriquez Recio, Juan", "Jiménez Solera, Mar...", "Rodriguez Murillo, G...", "Yturriaga Delgado, E..."]
+    };
+
+    // Inicializar Grupos
+    window.onload = function() {
+        const grupoSelect = document.getElementById("grupoSelect");
+        for (const grupo in datosAlumnos) {
+            let option = document.createElement("option");
+            option.value = grupo;
+            option.text = grupo;
+            grupoSelect.appendChild(option);
+        }
+    }
+
+    // Actualizar Alumnos según el grupo
+    function actualizarAlumnos() {
+        const grupoSelect = document.getElementById("grupoSelect");
+        const alumnoSelect = document.getElementById("alumnoSelect");
+        const grupoSeleccionado = grupoSelect.value;
+
+        // Limpiar alumnos anteriores
+        alumnoSelect.innerHTML = '<option value="">-- Selecciona alumno --</option>';
+
+        if (grupoSeleccionado && datosAlumnos[grupoSeleccionado]) {
+            datosAlumnos[grupoSeleccionado].forEach(function(alumno) {
+                let option = document.createElement("option");
+                option.value = alumno;
+                option.text = alumno;
+                alumnoSelect.appendChild(option);
+            });
+        }
+    }
+
+    // Enviar datos a Google Sheets
+    function enviarDatos() {
+        const grupo = document.getElementById("grupoSelect").value;
+        const alumno = document.getElementById("alumnoSelect").value;
+        
+        // Obtener valores de los radio buttons
+        const d1 = document.querySelector('input[name="diapositivas"]:checked');
+        const d2 = document.querySelector('input[name="exposicion"]:checked');
+        const d3 = document.querySelector('input[name="conocimiento"]:checked');
+
+        const mensajeDiv = document.getElementById("mensaje");
+        const btnGuardar = document.getElementById("btnGuardar");
+
+        // Validaciones básicas
+        if (!grupo || !alumno) {
+            mostrarMensaje("Por favor, selecciona un grupo y un alumno.", "error");
+            return;
+        }
+        if (!d1 || !d2 || !d3) {
+            mostrarMensaje("Por favor, selecciona una puntuación para las 3 dimensiones.", "error");
+            return;
+        }
+
+        // Preparar objeto a enviar
+        const payload = {
+            grupo: grupo,
+            alumno: alumno,
+            diapositivas: parseInt(d1.value),
+            exposicion: parseInt(d2.value),
+            conocimiento: parseInt(d3.value)
+        };
+
+        // UI Feedback: deshabilitar botón y mostrar 'Cargando...'
+        btnGuardar.disabled = true;
+        btnGuardar.innerText = "Guardando en Drive...";
+        mensajeDiv.style.display = "none";
+
+        // Hacer la petición POST al script
+        fetch(APPS_SCRIPT_URL, {
+            method: 'POST',
+            body: JSON.stringify(payload),
+            headers: {
+                'Content-Type': 'text/plain;charset=utf-8', 
+                // Se usa text/plain para evitar problemas de CORS en Apps Script
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === "success") {
+                mostrarMensaje(`✅ Nota de ${alumno} guardada. Nota Final: ${data.nota.toFixed(2)}`, "exito");
+                
+                // Limpiar selecciones de radio buttons para el siguiente alumno
+                document.querySelectorAll('input[type="radio"]').forEach(radio => radio.checked = false);
+            } else {
+                mostrarMensaje("Error al guardar: " + data.mensaje, "error");
+            }
+        })
+        .catch(error => {
+            mostrarMensaje("Error de conexión: " + error, "error");
+        })
+        .finally(() => {
+            // Restaurar botón
+            btnGuardar.disabled = false;
+            btnGuardar.innerText = "Guardar Calificación";
+        });
+    }
+
+    function mostrarMensaje(texto, tipo) {
+        const div = document.getElementById("mensaje");
+        div.innerText = texto;
+        div.className = tipo === "exito" ? "mensaje-exito" : "mensaje-error";
+        div.style.display = "block";
+    }
+</script>
+
+</body>
+</html>

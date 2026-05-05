@@ -318,88 +318,39 @@
 
 <script>
     // --- IMPORTANTE: PEGA AQUÍ TU URL DE GOOGLE APPS SCRIPT ---
-    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyiY4P6zjDE1dMjJtKzKGds1HRaAIqjWbKVi1gDpQsNGjopf_C0kfdO2A4UeFXyTI4K/exec';
+    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw07IaN4CIb2fLq6cMUcoo1PThagShXkrniarK-l0NPKhaQp1shwYzkEy3fsAGS1gNP/exec';
 
     // --- REEMPLAZA ESTO CON TUS DATOS DEL CSV ---
-    const datosAlumnos = {
-    "Grupo 1 - Manufactura Textil (Fast Fashion)": [
-        "Aguilera Barrios, Ibi",
-        "Blanco Jorge, Alberto",
-        "Martín Navarro, Álvaro",
-        "Martínez Rojo, Jaime",
-        "Nolasco Moreno, Álvaro"
+   const datosAlumnos = {
+    "Grupo 1": [
+        "Arranz Barcones, Irene",
+        "Fort Sanz, Miguel",
+        "Hidalgo Pradera, Juan",
+        "Rubal Sotomayor, Máximo"
     ],
-    "Grupo 2 - Aerolíneas (Ground Handling)": [
-        "Almenar Murillo, Jaime",
-        "Belchín Gómez, Pablo",
-        "Montero Vera, Javier",
-        "Rodríguez García, Íñigo"
+    "Grupo 2": [
+        "Alba Relaño, Gonzalo",
+        "González García, Amalia",
+        "Hubert Grabb, Nayara",
+        "Roth Téllez, Francisco Martín"
     ],
-    "Grupo 3 - Logística E-commerce:": [
-        "Alonso Burrull, Javier",
-        "Campos Pineda, Gonzalo",
-        "Carballo Andreo, Diego",
-        "Chenzhou, Ángel",
-        "Mazo Gómez, Agustín",
-        "Sánchez Gil, Mauro Frank"
+    "Grupo 3": [
+        "Huertas Alarcón, Javier",
+        "Ren, Guanwei",
+        "Sánchez Peña, Francisco Javier"
     ],
-    "Grupo 4 - Energías Renovables (Instalaciones)": [
-        "Antón Jauregui, Máximo",
-        "Carreño Velázquez, Juan",
-        "Flores-calderón Lovaco, Juan",
-        "Mora Mediavilla, Alejandro",
-        "Palomino-llaguno García, Álvaro"
+    "Grupo 4": [
+        "Barrena Rodríguez, Gonzalo",
+        "Barrena Rodríguez, Lucas",
+        "Franco Nebreda, Alejandro"
     ],
-    "Grupo 5 - Sanidad (Urgencias de Hospital)": [
-        "Benjamins Paton, Victor",
-        "Jiang Jiang, Qinyu",
-        "Ulloa Gómez-sabaini, Rodrigo"
+    "Grupo 5": [
+        "Enriquez Recio, Juan",
+        "Yturriaga Delgado, Enrique"
     ],
-    "Grupo 6 - Banca Fintech (Onboarding)": [
-        "Berlanga Sainz, Marta",
-        "Cosy Madurga, Paula",
-        "Eceizabarrena Pueyo, Samuel",
-        "Murillo Rol, Raquel"
-    ],
-    "Grupo 7 - Industria Alimentaria (Dark Kitchen)": [
-        "Carrasquero Mouarrawi, Alec",
-        "Rocca Gogin, Estefano Alonso",
-        "Schlubach Carvallo, Carlos Miguel",
-        "Torres Parcerisas, Maximiliano Andrés",
-        "Ziyat Chami, Driss"
-    ],
-    "Grupo 8 - Automoción (Componentes)": [
-        "Castillejo Chico De Guzman, Maravillas De Jesús",
-        "Cores Cabrero, Daniela",
-        "Lastra Brussolo, Chloé"
-    ],
-    "Grupo 9 - Desarrollo de Software (SaaS)": [
-        "Navarro Cuevas, Gema",
-        "Prieto Garcia, Guillermo",
-        "Sánchez Magariños, Paula Beatriz",
-        "Sánchez Vila, Camila Antonia",
-        "Tintoré Zamorano, Pablo"
-    ],
-    "Grupo 10 - Call Center (Soporte Técnico)": [
-        "Quintero Carretero, Javier",
-        "Sanguino Ramos, Lucas",
-        "Velazquez- Gaztelu Ruiz, Diego"
-    ],
-    "Sin grupo asignado": [
-        "Alvarez Escalera, Eduardo",
-        "Balbás González, Javier",
-        "Chen, Jingyi",
-        "De Juan Fradejas, Arturo",
-        "De León García-legaz, Nicolás",
-        "Díaz Palencia, Jaime",
-        "Garcia Quinto, Jesús Enrique",
-        "Mur Figueroa, Pablo",
-        "Peñuela Ramos, Yoel",
-        "Quesada Benito, Isaac",
-        "San Miguel Trigo, Alonso",
-        "Sanchez Sánchez, Ignacio",
-        "Sanz Ayala, Jaime",
-        "Svensson Martin, Erik"
+    "Grupo 6": [
+        "Jiménez Solera, María",
+        "Rodríguez Murillo, Gabriela"
     ]
 };
     // Inicializar Grupos
